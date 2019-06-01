@@ -11,7 +11,7 @@
 #endif
 
 #ifndef LWLOG
-	#ifdef _WIN32
+	#ifdef LWLOG_PLATFORM_WINDOWS
 		#if defined(LWLOG_BUILD_DLL)
 			#define LWLOG __declspec(dllexport)
 		#elif !defined(LWLOG_BUILD_STATIC)
