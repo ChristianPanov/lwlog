@@ -47,7 +47,7 @@ namespace lwlog
 		std::string m_logLevel;
 		log_level m_logLevel_visibility = log_level::all;
 
-		std::map<std::string, std::string> m_patterns_data;
+		std::unordered_map<std::string, std::string> m_patterns_data;
 
 	private:
 		void print_formatted(const std::string& message, std::string pattern);

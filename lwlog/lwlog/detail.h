@@ -1,9 +1,9 @@
 #pragma once
 
-#include <vector>
-#include <unordered_set>
 #include <regex>
+#include <vector>
 #include <map>
+#include <unordered_set>
 
 namespace detail
 {

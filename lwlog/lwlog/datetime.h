@@ -1,9 +1,8 @@
 #pragma once
 
-#include <chrono>
-#include <sstream>
 #include <iomanip>
-#include <thread>
+#include <sstream>
+#include <chrono>
 #include <ctime>
 
 namespace lwlog

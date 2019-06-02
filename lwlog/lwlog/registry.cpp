@@ -1,6 +1,6 @@
 #include "registry.h"
+
 #include "lwlog.h"
-#include <iostream>
 
 namespace lwlog
 {
