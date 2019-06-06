@@ -1,2 +1,2 @@
 # lwlog
-Lightweight C++ logging library
+C++ logging library
