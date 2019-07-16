@@ -91,7 +91,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Sandbox.cpp" />
+    <ClCompile Include="Sandbox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lwlog\lwlog.vcxproj">

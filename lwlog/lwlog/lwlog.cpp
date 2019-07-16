@@ -2,124 +2,129 @@
 
 namespace lwlog
 {
-	logger::logger(const std::string& logger_name)
-		: m_loggerName(logger_name), m_pattern("[%d, %x] [%l] [%n]: %v")
+	logger::logger(std::string_view logger_name)
+		: m_loggerName(logger_name), m_pattern("[%d, %X] [%l] [%n]: %v"), 
+		m_logLevelVisibility(log_level::all)
 	{
-		if (registry::instance().is_registry_automatic() == true)
+		if (registry::is_registry_automatic() == true)
 		{
-			registry::instance().register_logger(this);
+			registry::register_logger(*this);
 		}
-	}
-
-	logger::~logger()
-	{
-	}
-
-	void logger::set_name(const std::string& logger_name)
-	{
-		m_loggerName = logger_name;
 	}
 
 	void logger::set_logLevel_visibility(log_level logLevel)
 	{
 		if (logLevel == log_level::all)
 		{
-			m_logLevel_visibility = log_level::info | log_level::warning | log_level::error
+			m_logLevelVisibility = log_level::info | log_level::warning | log_level::error
 				| log_level::critical | log_level::debug;
 		}
 		else if (logLevel == log_level::none)
 		{
-			m_logLevel_visibility = log_level::none;
+			m_logLevelVisibility = log_level::none;
 		}
 		else
 		{
-			m_logLevel_visibility = logLevel;
+			m_logLevelVisibility = logLevel;
 		}
 	}
 
-	void logger::set_pattern(const std::string& pattern)
+	void logger::set_pattern(std::string_view pattern)
 	{
 		m_pattern = pattern;
 	}
 
-	void logger::info(const std::string& message)
+	void logger::info(std::string_view message)
 	{
 		m_message = message;
 		m_logLevel = "info";
 
-		if (static_cast<std::underlying_type_t<log_level>>(m_logLevel_visibility)
+		if (static_cast<std::underlying_type_t<log_level>>(m_logLevelVisibility)
 			& static_cast<std::underlying_type_t<log_level>>(log_level::info))
 		{
-			print_formatted(message, m_pattern);
+			lwlog::print("{0} \n", format(m_message, m_pattern));
 		}
 	}
 
-	void logger::warning(const std::string& message)
+	void logger::warning(std::string_view message)
 	{
 		m_message = message;
 		m_logLevel = "warning";
 
-		if (static_cast<std::underlying_type_t<log_level>>(m_logLevel_visibility)
+		if (static_cast<std::underlying_type_t<log_level>>(m_logLevelVisibility)
 			& static_cast<std::underlying_type_t<log_level>>(log_level::warning))
 		{
-			print_formatted(message, m_pattern);
+			lwlog::print("{0} \n", format(m_message, m_pattern));
 		}
 	}
 
-	void logger::error(const std::string& message)
+	void logger::error(std::string_view message)
 	{
 		m_message = message;
 		m_logLevel = "error";
 
-		if (static_cast<std::underlying_type_t<log_level>>(m_logLevel_visibility)
+		if (static_cast<std::underlying_type_t<log_level>>(m_logLevelVisibility)
 			& static_cast<std::underlying_type_t<log_level>>(log_level::error))
 		{
-			print_formatted(message, m_pattern);
+			lwlog::print("{0} \n", format(m_message, m_pattern));
 		}
 	}
 
-	void logger::critical(const std::string& message)
+	void logger::critical(std::string_view message)
 	{
 		m_message = message;
 		m_logLevel = "critical";
 
-		if (static_cast<std::underlying_type_t<log_level>>(m_logLevel_visibility)
+		if (static_cast<std::underlying_type_t<log_level>>(m_logLevelVisibility)
 			& static_cast<std::underlying_type_t<log_level>>(log_level::critical))
 		{
-			print_formatted(message, m_pattern);
+			lwlog::print("{0} \n", format(m_message, m_pattern));
 		}
 	}
 
-	void logger::debug(const std::string& message)
+	void logger::debug(std::string_view message)
 	{
 		m_message = message;
 		m_logLevel = "debug";
 
-		if (static_cast<std::underlying_type_t<log_level>>(m_logLevel_visibility)
+		if (static_cast<std::underlying_type_t<log_level>>(m_logLevelVisibility)
 			& static_cast<std::underlying_type_t<log_level>>(log_level::debug))
 		{
-			print_formatted(message, m_pattern);
+			lwlog::print("{0} \n", format(m_message, m_pattern));
 		}
 	}
 
-	void logger::print_formatted(const std::string& message, std::string pattern)
+	std::string logger::format(std::string_view message, std::string pattern)
 	{
-		m_patterns_data.emplace("%d", datetime::get_current_date());
-		m_patterns_data.emplace("%L", std::string(1, toupper(m_logLevel[0])));
-		m_patterns_data.emplace("%l", m_logLevel);
-		m_patterns_data.emplace("%n", m_loggerName);
-		m_patterns_data.emplace("%v", message);
-		m_patterns_data.emplace("%x", datetime::get_current_time());
+		m_patternsData.emplace("%A", datetime::get_weekday_abbreviated());
+		m_patternsData.emplace("%a", datetime::get_weekday());
+		m_patternsData.emplace("%B", datetime::get_month_name_abbreviated());
+		m_patternsData.emplace("%b", datetime::get_month_name());
+		m_patternsData.emplace("%C", datetime::get_year_short());
+		m_patternsData.emplace("%c", datetime::get_year());
+		m_patternsData.emplace("%D", datetime::get_date_short());
+		m_patternsData.emplace("%d", datetime::get_date());
+		m_patternsData.emplace("%H", datetime::get_hour_24());
+		m_patternsData.emplace("%h", datetime::get_hour_12());
+		m_patternsData.emplace("%i", datetime::get_minute());
+		m_patternsData.emplace("%L", std::string(1, toupper(m_logLevel[0])));
+		m_patternsData.emplace("%l", m_logLevel);
+		m_patternsData.emplace("%M", datetime::get_day());
+		m_patternsData.emplace("%m", datetime::get_month());
+		m_patternsData.emplace("%n", m_loggerName);
+		m_patternsData.emplace("%s", datetime::get_second());
+		m_patternsData.emplace("%v", message);
+		m_patternsData.emplace("%x", datetime::get_time());
 
 		std::vector<std::string> pattern_string_tokens_vec;
 
-		std::regex rg("(\\%[DdLlnvx]{1})");
+		std::regex rg("(\\%[AaBbCcDdHhiLlMmnsvx]{1})");
 
 		detail::populate_vec_with_regex_matches_from_str(pattern_string_tokens_vec, rg, pattern);
 
 		for (int i = 0; i < pattern_string_tokens_vec.size(); ++i)
 		{
-			for (auto it = m_patterns_data.begin(); it != m_patterns_data.end(); ++it)
+			for (auto it = m_patternsData.begin(); it != m_patternsData.end(); ++it)
 			{
 				if (pattern_string_tokens_vec[i] == it->first)
 				{
@@ -128,7 +133,7 @@ namespace lwlog
 			}
 		}
 
-		print("{0} \n", pattern);
-		m_patterns_data.clear();
+		return pattern;
+		m_patternsData.clear();
 	}
 }

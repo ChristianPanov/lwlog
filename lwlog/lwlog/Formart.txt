@@ -1,0 +1,28 @@
+%À - Abbreviated weekday name			"Thu"
+%a - Full weekday name					"Thursday"
+
+%B - Abbreviated month name				"Aug"
+%b - Full month name					"August"
+
+%C - Year in 2 digits					"14"
+%c - Year in 4 digits					"2014"
+
+%D - Short MM/DD/YY date				"08/23/14"
+%d - YY/MM/DD date						"2014-08-23"
+
+%H - Hours in 24 format 00-23			"23"
+%h - Hours in 12 format 01-12			"11"
+
+%i - Minutes 00-59						"59"
+
+%L - Short log level of the message		"D", "I", etc
+%l - The log level of the message		"debug", "info", etc
+
+%M - Day of month 01-31					"23"
+%m - Month 01-12						"08"
+
+%s - Seconds 00-59						"58"
+
+%n - Logger's name						"some logger name"
+%v - The actual text to log				"some user text"
+%x - Time format (HH:MM:SS)				"23:55:59"

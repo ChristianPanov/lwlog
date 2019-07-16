@@ -7,7 +7,7 @@
 
 namespace detail
 {
-	static void populate_vec_with_regex_matches_from_str(std::vector<std::string>& v, std::regex rg, std::string& s)
+	static void populate_vec_with_regex_matches_from_str(std::vector<std::string>& v, std::regex rg, std::string s)
 	{
 		std::smatch matches;
 		std::string temp = s;
@@ -48,7 +48,7 @@ namespace detail
 	}
 
 	template<typename T, typename T1>
-	void string_to_numeric_vec(std::vector<T>& sv, std::vector<T1>& nv, const char* chars_to_remove)
+	void string_to_numeric_vec(std::vector<T> sv, std::vector<T1>& nv, const char* chars_to_remove)
 	{
 		for (int i = 0; i < sv.size(); ++i)
 		{
@@ -74,7 +74,7 @@ namespace detail
 		v.assign(s.begin(), s.end());
 	}
 
-	static void replace_in_string(std::string& s, const std::string& to_replace, const std::string& replace_with)
+	static void replace_in_string(std::string& s, std::string to_replace, std::string replace_with)
 	{
 		size_t index = 0;
 		while (true)

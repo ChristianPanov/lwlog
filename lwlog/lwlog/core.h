@@ -13,18 +13,17 @@
 #ifndef LWLOG
 	#ifdef LWLOG_PLATFORM_WINDOWS
 		#if defined(LWLOG_BUILD_DLL)
-			#define LWLOG __declspec(dllexport)
+			#define LWLOG_API __declspec(dllexport)
 		#elif !defined(LWLOG_BUILD_STATIC)
-			#define LWLOG __declspec(dllimport)
+			#define LWLOG_API __declspec(dllimport)
 		#else
-			#define LWLOG
+			#define LWLOG_API
 		#endif
 	#else
 		#if __GNUC__ >= 4
-			#define LWLOG __attribute__((visibility("default")))
+			#define LWLOG_API __attribute__((visibility("default")))
 		#else
-			#define LWLOG
+			#define LWLOG_API
 		#endif
 	#endif
 #endif
-
