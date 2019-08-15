@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 #include <regex>
 
 #include "detail.h"
@@ -11,26 +12,26 @@ namespace lwlog
 	template<typename... Args>
 	void print(std::string format_str, Args&& ... args)
 	{
-		std::vector<std::string> format_string_tokens_vec;
-		std::vector<int> format_numeric_tokens_vec;
+		std::vector<std::string> format_string_tokens;
+		std::vector<int> format_numeric_tokens;
 
-		std::vector<std::string> variadic_arguments_vec;
+		std::vector<std::string> variadic_arguments;
 
 		std::regex reg("(\\{\\d+\\})");
 
-		(detail::populate_vec_with_variadic_params(variadic_arguments_vec, std::forward<Args>(args)), ...);
-		detail::populate_vec_with_regex_matches_from_str(format_string_tokens_vec, reg, format_str);
+		(detail::populate_vec_with_variadic_params(variadic_arguments, std::forward<Args>(args)), ...);
+		detail::populate_vec_with_regex_matches_from_str(format_string_tokens, reg, format_str);
 
-		detail::remove_duplicates_in_vec(variadic_arguments_vec);
+		detail::remove_duplicates_in_vec(variadic_arguments);
 
-		detail::string_to_numeric_vec(format_string_tokens_vec, format_numeric_tokens_vec, "{}");
+		detail::string_to_numeric_vec(format_string_tokens, format_numeric_tokens, "{}");
 
-		for (int i = 0; i < format_string_tokens_vec.size(); ++i)
+		for (int i = 0; i < format_string_tokens.size(); ++i)
 		{
-			if (i < variadic_arguments_vec.size())
+			if (i < variadic_arguments.size())
 			{
-				detail::replace_in_string(format_str, format_string_tokens_vec[i],
-					variadic_arguments_vec[format_numeric_tokens_vec[i]]);
+				detail::replace_in_string(format_str, format_string_tokens[i],
+					variadic_arguments[format_numeric_tokens[i]]);
 			}
 			else
 			{

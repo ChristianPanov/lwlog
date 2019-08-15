@@ -48,10 +48,6 @@ namespace lwlog
 		std::string m_pattern;
 		std::string m_logLevel;
 		log_level m_logLevelVisibility;
-		std::unordered_map<std::string, std::string> m_patternsData;
-
-	private:
-		std::string format(std::string_view message, std::string pattern);
 
 	public:
 		logger() = delete;

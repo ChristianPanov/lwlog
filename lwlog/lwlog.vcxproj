@@ -95,17 +95,20 @@
     <ClInclude Include="lwlog\datetime.h" />
     <ClInclude Include="lwlog\detail.h" />
     <ClInclude Include="lwlog\dispatcher.h" />
+    <ClInclude Include="lwlog\formatter.h" />
     <ClInclude Include="lwlog\lwlog.h" />
     <ClInclude Include="lwlog\registry.h" />
     <ClInclude Include="lwlog\utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\dispatcher.cpp" />
+    <ClCompile Include="lwlog\formatter.cpp" />
     <ClCompile Include="lwlog\lwlog.cpp" />
     <ClCompile Include="lwlog\registry.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Formart.txt" />
+    <Text Include="Colors.txt" />
+    <Text Include="Format.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

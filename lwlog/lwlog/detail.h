@@ -7,14 +7,14 @@
 
 namespace detail
 {
-	static void populate_vec_with_regex_matches_from_str(std::vector<std::string>& v, std::regex rg, std::string s)
+	static void populate_vec_with_regex_matches_from_str(std::vector<std::string>& vec, std::regex rg, std::string str)
 	{
 		std::smatch matches;
-		std::string temp = s;
+		std::string temp = str;
 
 		while (std::regex_search(temp, matches, rg))
 		{
-			v.push_back(matches.str(1));
+			vec.push_back(matches.str(1));
 			temp = matches.suffix().str();
 		}
 	}
@@ -63,28 +63,28 @@ namespace detail
 	}
 
 	template<typename T>
-	void remove_duplicates_in_vec(std::vector<T>& v)
+	void remove_duplicates_in_vec(std::vector<T>& vec)
 	{
 		std::unordered_set<T> s;
-		for (const auto& i : v)
+		for (const auto& i : vec)
 		{
 			s.insert(i);
 		}
 
-		v.assign(s.begin(), s.end());
+		vec.assign(s.begin(), s.end());
 	}
 
-	static void replace_in_string(std::string& s, std::string to_replace, std::string replace_with)
+	static void replace_in_string(std::string& str, std::string to_replace, std::string replace_with)
 	{
 		size_t index = 0;
 		while (true)
 		{
-			index = s.find(to_replace, index);
+			index = str.find(to_replace, index);
 			if (index == std::string::npos)
 			{
 				break;
 			}
-			s.replace(index, to_replace.length(), replace_with);
+			str.replace(index, to_replace.length(), replace_with);
 			index += to_replace.length();
 		}
 	}
