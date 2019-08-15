@@ -5,16 +5,20 @@
 #include <regex>
 
 #include "core.h"
-#include "detail.h"
+#include "details.h"
+#include "datetime.h"
 
-class LWLOG_API formatter
+namespace lwlog
 {
-private:
-	static inline std::unordered_map<std::string, std::string> m_patternData = {};
-	static inline std::regex pattern_regex{ "(\\%[AaBbCcDdHhiLlMmnsvx]{1})" };
+	class LWLOG_API formatter
+	{
+	private:
+		static std::unordered_map<std::string, std::string> m_patternData;
+		static inline std::regex pattern_regex{ "(\\%\\w{1})" };
 
-public:
-	virtual ~formatter() = default;
-	static void update_pattern_data(std::string_view key, std::string_view value);
-	static std::string format(std::string_view message, std::string pattern);
-};
+	public:
+		virtual ~formatter() = default;
+		static void update_pattern_data(std::string_view key, std::string_view value);
+		static std::string format(std::string_view message, std::string pattern);
+	};
+}

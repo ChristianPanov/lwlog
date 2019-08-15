@@ -6,7 +6,6 @@
 #include <string_view>
 
 #include "core.h"
-#include "detail.h"
 #include "utilities.h"
 #include "datetime.h"
 #include "registry.h"
@@ -48,6 +47,13 @@ namespace lwlog
 		std::string m_pattern;
 		std::string m_logLevel;
 		log_level m_logLevelVisibility;
+
+		/*TODO: FIX IMMEDIATELY*/ 
+		std::unordered_map<std::string, std::string> m_patternData; 
+		/*TODO: FIX IMMEDIATELY*/ 
+
+	private:
+		void log(std::string_view message, log_level logLevel);
 
 	public:
 		logger() = delete;
