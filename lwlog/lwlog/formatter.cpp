@@ -1,7 +1,13 @@
 #include "formatter.h"
+#include "details.h"
+#include "datetime.h"
 
 namespace lwlog
 {
+	std::regex formatter::m_pattern_regex("(\\%\\w{1})");
+
+	std::vector<std::string> formatter::m_inserted_patternData_keys = {};
+
 	std::unordered_map<std::string, std::string> formatter::m_patternData =
 	{
 		{"%s", lwlog::datetime::get_second()},
@@ -21,16 +27,17 @@ namespace lwlog
 		{"%x", lwlog::datetime::get_time()}
 	};
 
-	void formatter::update_pattern_data(std::string_view key, std::string_view value)
+	void formatter::insert_pattern_data(std::string_view key, std::string_view value)
 	{
+		m_inserted_patternData_keys.emplace_back(key);
 		m_patternData.emplace(key, value);
 	}
 
-	std::string formatter::format(std::string_view message, std::string pattern)
+	std::string formatter::format(std::string_view message, std::string pattern, std::regex reg)
 	{
 		std::vector<std::string> pattern_string_tokens;
 
-		details::populate_vec_with_regex_matches_from_str(pattern_string_tokens, pattern_regex, pattern);
+		details::populate_vec_with_regex_matches_from_str(pattern_string_tokens, reg, pattern);
 
 		for (int i = 0; i < pattern_string_tokens.size(); ++i)
 		{
@@ -43,7 +50,11 @@ namespace lwlog
 			}
 		}
 
+		for (auto i : m_inserted_patternData_keys)
+		{
+			m_patternData.erase(i);
+		}
+
 		return pattern;
 	}
-
 }

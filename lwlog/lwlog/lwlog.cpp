@@ -1,5 +1,7 @@
 #include "lwlog.h"
+#include "registry.h"
 #include "formatter.h"
+#include "utilities.h"
 
 namespace lwlog
 {
@@ -7,7 +9,7 @@ namespace lwlog
 		: m_loggerName(logger_name), m_pattern("[%d, %x] [%l] [%n]: %v"),
 		m_logLevelVisibility(log_level::all)
 	{
-		formatter::update_pattern_data("%n", m_loggerName);
+		set_logLevel_visibility(m_logLevelVisibility);
 
 		if (registry::is_registry_automatic() == true)
 		{
@@ -41,9 +43,10 @@ namespace lwlog
 	{
 		m_message = message;
 
-		formatter::update_pattern_data("%v", m_message);
-		formatter::update_pattern_data("%l", m_logLevel);
-		formatter::update_pattern_data("%L", std::string(1, toupper(m_logLevel[0])));
+		formatter::insert_pattern_data("%n", m_loggerName);
+		formatter::insert_pattern_data("%v", m_message);
+		formatter::insert_pattern_data("%l", m_logLevel);
+		formatter::insert_pattern_data("%L", std::string(1, toupper(m_logLevel[0])));
 
 		if (static_cast<std::underlying_type_t<log_level>>(m_logLevelVisibility)
 			& static_cast<std::underlying_type_t<log_level>>(logLevel))

@@ -1,9 +1,12 @@
 #include "registry.h"
 #include "lwlog.h"
+#include "utilities.h"
 
 namespace lwlog
 {
-	std::unordered_map<std::string, const logger&> registry::m_loggers{};
+	std::map<std::string, const logger&> registry::m_loggers = {};
+
+	bool registry::m_automaticRegistry = true;
 
 	void registry::register_logger(const logger& new_logger)
 	{
@@ -12,14 +15,7 @@ namespace lwlog
 
 	void registry::drop(std::string logger_name)
 	{
-		for (auto it = m_loggers.begin(); it != m_loggers.end(); ++it)
-		{
-			if (it->first == logger_name)
-			{
-				m_loggers.erase(logger_name);
-				break;
-			}
-		}
+		m_loggers.erase(logger_name);
 	}
 
 	void registry::drop_all()

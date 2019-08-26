@@ -1,6 +1,7 @@
 #pragma once
 
-#include <unordered_map>
+#include <string>
+#include <map>
 
 #include "core.h"
 
@@ -11,8 +12,8 @@ namespace lwlog
 	class LWLOG_API registry final
 	{
 	private:
-		static std::unordered_map<std::string, const logger&> m_loggers;
-		static inline bool m_automaticRegistry = true;
+		static std::map<std::string, const logger&> m_loggers;
+		static bool m_automaticRegistry;
 
 	public:
 		registry() = delete;

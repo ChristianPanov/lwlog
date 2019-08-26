@@ -5,10 +5,9 @@
 #include <cctype>
 #include <string_view>
 
+#include <unordered_map>
+
 #include "core.h"
-#include "utilities.h"
-#include "datetime.h"
-#include "registry.h"
 
 namespace lwlog
 {
@@ -39,7 +38,7 @@ namespace lwlog
 			);
 	}
 
-	class LWLOG_API logger final
+	class LWLOG_API logger
 	{
 	private:
 		std::string m_message;
