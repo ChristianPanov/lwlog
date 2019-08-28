@@ -27,12 +27,11 @@ int main()
 
 	lwlog::registry::display_all_loggers();
 
-	console->set_logLevel_visibility(lwlog::log_level::all);
-	console->set_pattern("[%x] [%n] [%l]: %v");
-	{
-		Benchmark b;
-		console->debug("A test debug message");
-	}
+	console->set_logLevel_visibility(lwlog::log_level::info | lwlog::log_level::debug);
+	console->set_pattern("^br_red^[%x] [%n]^reset^ ^green^[%l]^reset^: ^underlined^^br_cyan^%v^reset^");
+
+	console->debug("A test debug message");
+	console->info("I'm god at programming. Love you kuci ;*");
 
 	core_logger->set_logLevel_visibility(lwlog::log_level::error | lwlog::log_level::critical);
 	core_logger->set_pattern("[%x] [%n] [%l]: %v");
