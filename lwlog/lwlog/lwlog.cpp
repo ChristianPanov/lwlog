@@ -43,15 +43,15 @@ namespace lwlog
 	{
 		m_message = message;
 
-		formatter::insert_pattern_data("%n", m_loggerName);
-		formatter::insert_pattern_data("%v", m_message);
-		formatter::insert_pattern_data("%l", m_logLevel);
-		formatter::insert_pattern_data("%L", std::string(1, toupper(m_logLevel[0])));
+		formatter::insert_pattern_data({"%logger_name%",	"%n" }, m_loggerName);
+		formatter::insert_pattern_data({"%message%",		"%v" }, m_message);
+		formatter::insert_pattern_data({"%log_level%",		"%l" }, m_logLevel);
+		formatter::insert_pattern_data({"%log_level_abr%",	"%L" }, std::string(1, toupper(m_logLevel[0])));
 
 		if (static_cast<std::underlying_type_t<log_level>>(m_logLevelVisibility)
 			& static_cast<std::underlying_type_t<log_level>>(logLevel))
 		{
-			lwlog::print("{0} \n", formatter::format(m_message, m_pattern));
+			lwlog::print("{0} \n", formatter::format(m_pattern));
 		}
 	}
 

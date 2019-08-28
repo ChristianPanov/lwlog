@@ -1,22 +1,27 @@
 #pragma once
 
-#include <regex>
+#include <string>
 #include <vector>
 #include <map>
 #include <unordered_set>
+#include <regex>
 
 namespace details
 {
-	static void populate_vec_with_regex_matches_from_str(std::vector<std::string>& vec, std::regex reg, std::string str)
+	static std::vector<std::string> populate_with_regex_matches_from_str(std::regex reg, std::string str)
 	{
 		std::smatch matches;
 		std::string temp = str;
+
+		std::vector<std::string> vec;
 
 		while (std::regex_search(temp, matches, reg))
 		{
 			vec.push_back(matches.str(1));
 			temp = matches.suffix().str();
 		}
+
+		return vec;
 	}
 
 	template<typename... Args>
@@ -88,4 +93,29 @@ namespace details
 			index += to_replace.length();
 		}
 	}
+
+	struct Key_Value
+	{
+		std::string key;
+		std::string value;
+
+		bool operator==(const Key_Value& other) const
+		{
+			return (key == other.key
+				&& value == other.value);
+		}
+	};
+}
+
+namespace std
+{
+	template <>
+	struct hash<details::Key_Value>
+	{
+		std::size_t operator()(const details::Key_Value& key_value) const
+		{
+			return ((std::hash< std::string>()(key_value.key)
+				^ (std::hash< std::string>()(key_value.value) << 1)) >> 1);
+		}
+	};
 }

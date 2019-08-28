@@ -1,10 +1,10 @@
 #include "lwlog/lwlog.h"
 #include "lwlog/registry.h"
 #include "lwlog/utilities.h"
+#include "lwlog/details.h"
+#include "lwlog/datetime.h"
 #include <chrono>
-#include <tuple>
-#include <map>
-#include <string>
+#include <unordered_map>
 
 #include "Benchmark.h"
 
@@ -29,14 +29,17 @@ int main()
 
 	console->set_logLevel_visibility(lwlog::log_level::all);
 	console->set_pattern("[%x] [%n] [%l]: %v");
-	console->debug("A test debug message");
+	{
+		Benchmark b;
+		console->debug("A test debug message");
+	}
 
 	core_logger->set_logLevel_visibility(lwlog::log_level::error | lwlog::log_level::critical);
 	core_logger->set_pattern("[%x] [%n] [%l]: %v");
 	core_logger->critical("A very critical message!");
 	core_logger->error("Error!");
 
-	core_logger3->set_pattern("[%a] [%n] [%l] [%L]: %v");
+	core_logger3->set_pattern("[%weekday%] [%logger_name%] [%log_level%] [%log_level_abr%]: %message%");
 	core_logger3->debug("Just debugging...");
 	core_logger3->warning("A warning!!!");
 

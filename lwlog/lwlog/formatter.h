@@ -4,7 +4,9 @@
 #include <vector>
 #include <unordered_map>
 #include <regex>
+#include <tuple>
 
+#include "details.h"
 #include "core.h"
 
 namespace lwlog
@@ -12,9 +14,8 @@ namespace lwlog
 	class LWLOG_API formatter
 	{
 	private:
-		static std::regex m_pattern_regex;
-		static std::vector<std::string> m_inserted_patternData_keys;
-		static std::unordered_map<std::string, std::string> m_patternData;
+		static std::unordered_map<details::Key_Value, std::string> m_patternData;
+		static std::vector<details::Key_Value> m_inserted_patternData_keys;
 
 	public:
 		formatter() = delete;
@@ -24,7 +25,7 @@ namespace lwlog
 		formatter& operator=(formatter&&) = delete;
 
 		virtual ~formatter() = default;
-		static void insert_pattern_data(std::string_view key, std::string_view value);
-		static std::string format(std::string_view message, std::string pattern, std::regex reg = m_pattern_regex);
+		static void insert_pattern_data(details::Key_Value key, std::string_view value);
+		static std::string format(std::string pattern);
 	};
 }
