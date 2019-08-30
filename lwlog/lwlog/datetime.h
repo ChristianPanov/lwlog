@@ -26,11 +26,11 @@ namespace lwlog::datetime
 	inline std::string get_hour_24()				{ return format_time("%H"); }
 	inline std::string get_hour_12()				{ return format_time("%I"); }
 	inline std::string get_weekday()				{ return format_time("%A"); }
-	inline std::string get_weekday_abbreviated()	{ return format_time("%a"); }
+	inline std::string get_weekday_abbreviated()			{ return format_time("%a"); }
 	inline std::string get_day()					{ return format_time("%d"); }
 	inline std::string get_month()					{ return format_time("%m"); }
 	inline std::string get_month_name()				{ return format_time("%B"); }
-	inline std::string get_month_name_abbreviated()	{ return format_time("%b"); }
+	inline std::string get_month_name_abbreviated()			{ return format_time("%b"); }
 	inline std::string get_year()					{ return format_time("%Y"); }
 	inline std::string get_year_short()				{ return format_time("%y"); }
 }
