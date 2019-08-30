@@ -3,8 +3,6 @@
 #include "lwlog/utilities.h"
 #include "lwlog/details.h"
 #include "lwlog/datetime.h"
-#include <chrono>
-#include <unordered_map>
 
 #include "Benchmark.h"
 
