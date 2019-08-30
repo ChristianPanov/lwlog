@@ -4,32 +4,33 @@
 #include <sstream>
 #include <chrono>
 #include <ctime>
+#include <string_view>
 
 namespace lwlog::datetime
 {
-	static std::string get_chrono(std::string format)
+	std::string format_time(std::string format)
 	{
 		auto now = std::chrono::system_clock::now();
 		auto in_time_t = std::chrono::system_clock::to_time_t(now);
 
 		std::stringstream ss;
-		ss << std::put_time(std::localtime(&in_time_t), format.c_str());
+		ss << std::put_time(std::gmtime(&in_time_t), format.c_str());
 		return ss.str();
 	}
 
-	static std::string get_time()					{ return get_chrono("%H:%M:%S"); }
-	static std::string get_date()					{ return get_chrono("%Y-%m-%d"); }
-	static std::string get_date_short()				{ return get_chrono("%m/%d/%y"); }
-	static std::string get_second()					{ return get_chrono("%S"); }
-	static std::string get_minute()					{ return get_chrono("%M"); }
-	static std::string get_hour_24()				{ return get_chrono("%H"); }
-	static std::string get_hour_12()				{ return get_chrono("%I"); }
-	static std::string get_weekday()				{ return get_chrono("%A"); }
-	static std::string get_weekday_abbreviated()	{ return get_chrono("%a"); }
-	static std::string get_day()					{ return get_chrono("%d"); }
-	static std::string get_month()					{ return get_chrono("%m"); }
-	static std::string get_month_name()				{ return get_chrono("%B"); }
-	static std::string get_month_name_abbreviated() { return get_chrono("%b"); }
-	static std::string get_year()					{ return get_chrono("%Y"); }
-	static std::string get_year_short()				{ return get_chrono("%y"); }
+	inline std::string get_time()					{ return format_time("%T"); }
+	inline std::string get_date()					{ return format_time("%F"); }
+	inline std::string get_date_short()				{ return format_time("%m/%d/%y"); }
+	inline std::string get_second()					{ return format_time("%S"); }
+	inline std::string get_minute()					{ return format_time("%M"); }
+	inline std::string get_hour_24()				{ return format_time("%H"); }
+	inline std::string get_hour_12()				{ return format_time("%I"); }
+	inline std::string get_weekday()				{ return format_time("%A"); }
+	inline std::string get_weekday_abbreviated()	{ return format_time("%a"); }
+	inline std::string get_day()					{ return format_time("%d"); }
+	inline std::string get_month()					{ return format_time("%m"); }
+	inline std::string get_month_name()				{ return format_time("%B"); }
+	inline std::string get_month_name_abbreviated()	{ return format_time("%b"); }
+	inline std::string get_year()					{ return format_time("%Y"); }
+	inline std::string get_year_short()				{ return format_time("%y"); }
 }

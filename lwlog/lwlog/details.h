@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 #include <vector>
 #include <map>
 #include <unordered_set>
@@ -22,6 +23,21 @@ namespace details
 		}
 
 		return vec;
+	}
+
+	static void replace_in_string(std::string& str, std::string_view to_replace, std::string_view replace_with)
+	{
+		size_t index = 0;
+		while (true)
+		{
+			index = str.find(to_replace, index);
+			if (index == std::string::npos)
+			{
+				break;
+			}
+			str.replace(index, to_replace.length(), replace_with);
+			index += to_replace.length();
+		}
 	}
 
 	template<typename... Args>
@@ -77,21 +93,6 @@ namespace details
 		}
 
 		vec.assign(s.begin(), s.end());
-	}
-
-	static void replace_in_string(std::string& str, std::string to_replace, std::string replace_with)
-	{
-		size_t index = 0;
-		while (true)
-		{
-			index = str.find(to_replace, index);
-			if (index == std::string::npos)
-			{
-				break;
-			}
-			str.replace(index, to_replace.length(), replace_with);
-			index += to_replace.length();
-		}
 	}
 
 	struct Key_Value

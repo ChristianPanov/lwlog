@@ -14,7 +14,7 @@ namespace lwlog
 	class LWLOG_API formatter
 	{
 	private:
-		static std::unordered_map<details::Key_Value, std::string> m_patternData;
+		static std::unordered_map<details::Key_Value, std::string_view> m_patternData;
 		static std::vector<details::Key_Value> m_inserted_patternData_keys;
 
 	public:

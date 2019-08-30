@@ -7,10 +7,10 @@
 
 #include "details.h"
 
-namespace lwlog
+namespace lwlog 
 {
 	template<typename... Args>
-	void print(std::string format_str, Args&& ... args)
+	void print(std::string format_str, Args&& ... args) 
 	{
 		std::regex reg("(\\{\\d+\\})");
 
@@ -25,14 +25,14 @@ namespace lwlog
 
 		details::string_to_numeric_vec(format_string_tokens, format_numeric_tokens, "{}");
 
-		for (int i = 0; i < format_string_tokens.size(); ++i)
+		for (int i = 0; i < format_string_tokens.size(); ++i) 
 		{
-			if (i < variadic_arguments.size())
+			if (i < variadic_arguments.size()) 
 			{
 				details::replace_in_string(format_str, format_string_tokens[i], 
 					variadic_arguments[format_numeric_tokens[i]]);
 			}
-			else
+			else 
 			{
 				break;
 			}

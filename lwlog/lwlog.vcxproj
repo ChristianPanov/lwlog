@@ -91,6 +91,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="lwlog\color.h" />
     <ClInclude Include="lwlog\core.h" />
     <ClInclude Include="lwlog\datetime.h" />
     <ClInclude Include="lwlog\details.h" />

@@ -5,11 +5,11 @@
 
 #include "core.h"
 
-namespace lwlog
+namespace lwlog 
 {
 	class logger;
 
-	class LWLOG_API registry final
+	class LWLOG_API registry final 
 	{
 	private:
 		static std::map<std::string, const logger&> m_loggers;
