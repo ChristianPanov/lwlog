@@ -7,7 +7,7 @@ namespace lwlog
 {
 	std::vector<details::Key_Value> formatter::m_inserted_patternData_keys = {};
 
-	std::unordered_map<details::Key_Value, std::string_view> formatter::m_patternData =
+	std::unordered_map<details::Key_Value, std::string> formatter::m_patternData =
 	{
 		{{"%seconds%",			"%s"}, lwlog::datetime::get_second()},
 		{{"%minute%",			"%i"}, lwlog::datetime::get_minute()},
@@ -70,7 +70,7 @@ namespace lwlog
 		{{						"^^"}, "^"}
 	};
 
-	void formatter::insert_pattern_data(details::Key_Value key, std::string_view value)
+	void formatter::insert_pattern_data(details::Key_Value key, std::string value)
 	{
 		m_inserted_patternData_keys.emplace_back(key);
 		m_patternData.emplace(key, value);

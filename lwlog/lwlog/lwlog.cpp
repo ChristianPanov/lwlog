@@ -6,8 +6,8 @@
 namespace lwlog
 {
 	logger::logger(std::string_view logger_name)
-		: m_loggerName(logger_name), m_pattern("[%d, %x] [%l] [%n]: %v")
-		, m_logLevelVisibility(log_level::all)
+		: m_loggerName(logger_name), m_pattern("[%d, %x] [%l] [%n]: %v"), 
+		m_logLevelVisibility(log_level::all)
 	{
 		set_logLevel_visibility(m_logLevelVisibility);
 
