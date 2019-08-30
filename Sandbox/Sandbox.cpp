@@ -33,7 +33,7 @@ int main()
 		Benchmark b;
 		console->debug("A test debug message");
 	}
-	console->info("I'm god at programming. Love you kuci ;*");
+	console->info("Some info log");
 
 	core_logger->set_logLevel_visibility(lwlog::log_level::error | lwlog::log_level::critical);
 	core_logger->set_pattern("[%x] [%n] [%l]: %v");
