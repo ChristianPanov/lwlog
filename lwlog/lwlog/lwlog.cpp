@@ -1,15 +1,18 @@
 #include "lwlog.h"
 #include "registry.h"
 #include "formatter.h"
-#include "utilities.h"
+#include "print.h"
 
 namespace lwlog
 {
 	logger::logger(std::string_view logger_name)
-		: m_loggerName(logger_name), m_pattern("[%d, %x] [%l] [%n]: %v"), 
-		m_logLevelVisibility(log_level::all)
+		: m_logger_name(logger_name)
+		, m_pattern("[%d, %x] [%l] [%n]: %v")
+		, m_level(level::all)
+		, m_backtrace_messages(0)
+		, m_is_backtrace_enabled(false)
 	{
-		set_logLevel_visibility(m_logLevelVisibility);
+		set_level_visibility(m_level);
 
 		if (registry::is_registry_automatic() == true)
 		{
@@ -17,20 +20,20 @@ namespace lwlog
 		}
 	}
 
-	void logger::set_logLevel_visibility(log_level logLevel)
+	void logger::set_level_visibility(level logLevel)
 	{
-		if (logLevel == log_level::all)
+		if (logLevel == level::all)
 		{
-			m_logLevelVisibility = log_level::info | log_level::warning | log_level::error
-				| log_level::critical | log_level::debug;
+			m_level = level::info | level::warning 
+				| level::error | level::critical | level::debug;
 		}
-		else if (logLevel == log_level::none)
+		else if (logLevel == level::none)
 		{
-			m_logLevelVisibility = log_level::none;
+			m_level = level::none;
 		}
 		else
 		{
-			m_logLevelVisibility = logLevel;
+			m_level = logLevel;
 		}
 	}
 
@@ -39,49 +42,88 @@ namespace lwlog
 		m_pattern = pattern;
 	}
 
-	void logger::log(std::string_view message, log_level logLevel)
+	void logger::backtrace(std::size_t buffer_size)
+	{
+		m_is_backtrace_enabled = true;
+		m_backtrace_buffer.reserve(buffer_size);
+	}
+
+	void logger::set_backtrace_stamp(std::string_view stamp)
+	{
+		m_backtrace_stamp = stamp;
+	}
+
+	void logger::display_backtrace()
+	{
+		for (const auto& i : m_backtrace_buffer)
+		{
+			lwlog::print("{0}{1}\n", m_backtrace_stamp, i);
+		}
+	}
+
+	void logger::delete_backtrace()
+	{
+		m_backtrace_messages = 0;
+		m_backtrace_buffer.clear();
+	}
+
+	void logger::push_in_backtrace_buffer(std::string_view message)
+	{
+		if (m_is_backtrace_enabled == true)
+		{
+			m_backtrace_messages++;
+			if (m_backtrace_messages <= m_backtrace_buffer.capacity())
+			{
+				m_backtrace_buffer.emplace_back(message);
+			}
+		}
+	}
+
+	void logger::log(std::string_view message, level log_level)
 	{
 		m_message = message;
 
-		formatter::insert_pattern_data({"%logger_name%",	"%n" }, m_loggerName);
-		formatter::insert_pattern_data({"%message%",		"%v" }, m_message);
-		formatter::insert_pattern_data({"%log_level%",		"%l" }, m_logLevel);
-		formatter::insert_pattern_data({"%log_level_abr%",	"%L" }, std::string(1, toupper(m_logLevel[0])));
+		formatter::insert_pattern_data({"%logger_name%",	"%n"}, m_logger_name);
+		formatter::insert_pattern_data({"%message%",		"%v"}, m_message);
+		formatter::insert_pattern_data({"%log_level%",		"%l"}, m_level_string);
+		formatter::insert_pattern_data({"%log_level_abr%",	"%L"}, std::string(1, toupper(m_level_string[0])));
 
-		if (static_cast<std::underlying_type_t<log_level>>(m_logLevelVisibility)
-			& static_cast<std::underlying_type_t<log_level>>(logLevel))
+		if (static_cast<std::underlying_type_t<level>>(m_level)
+			& static_cast<std::underlying_type_t<level>>(log_level))
 		{
 			lwlog::print("{0} \n", formatter::format(m_pattern));
 		}
+
+		push_in_backtrace_buffer(formatter::format(m_pattern));
 	}
 
 	void logger::info(std::string_view message)
 	{
-		m_logLevel = "info";
-		log(message, log_level::info);
+		m_level_string = "info";
+		log(message, level::info);
 	}
 
 	void logger::warning(std::string_view message)
 	{
-		m_logLevel = "warning";
-		log(message, log_level::warning);
+		m_level_string = "warning";
+		log(message, level::warning);
 	}
 
 	void logger::error(std::string_view message)
 	{
-		m_logLevel = "error";
-		log(message, log_level::error);
+		m_level_string = "error";
+		log(message, level::error);
 	}
 
 	void logger::critical(std::string_view message)
 	{
-		m_logLevel = "critical";
-		log(message, log_level::critical);
+		m_level_string = "critical";
+		log(message, level::critical);
 	}
 
 	void logger::debug(std::string_view message)
 	{
-		m_logLevel = "debug";
-		log(message, log_level::debug);
+		m_level_string = "debug";
+		log(message, level::debug);
 	}
 }

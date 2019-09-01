@@ -94,11 +94,12 @@
     <ClInclude Include="lwlog\color.h" />
     <ClInclude Include="lwlog\core.h" />
     <ClInclude Include="lwlog\datetime.h" />
-    <ClInclude Include="lwlog\details.h" />
+    <ClInclude Include="lwlog\details\duplex.h" />
+    <ClInclude Include="lwlog\details\utilities.h" />
     <ClInclude Include="lwlog\formatter.h" />
     <ClInclude Include="lwlog\lwlog.h" />
     <ClInclude Include="lwlog\registry.h" />
-    <ClInclude Include="lwlog\utilities.h" />
+    <ClInclude Include="lwlog\print.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\formatter.cpp" />

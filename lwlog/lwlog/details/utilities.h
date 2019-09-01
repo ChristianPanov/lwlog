@@ -7,7 +7,7 @@
 #include <unordered_set>
 #include <regex>
 
-namespace details
+namespace details::utilities
 {
 	static std::vector<std::string> populate_with_regex_matches_from_str(std::regex reg, std::string str)
 	{
@@ -41,11 +41,11 @@ namespace details
 	}
 
 	template<typename... Args>
-	void populate_vec_with_variadic_params(std::vector<std::string>& v, Args&&... args)
+	void populate_vec_with_variadic_params(std::vector<std::string>& v, Args&& ... args)
 	{
 		std::vector<std::string> vec =
 		{
-			[](auto && arg)
+			[](auto&& arg)
 			{
 				if constexpr (std::is_same_v<std::remove_reference_t<decltype(arg)>, char>)
 				{
@@ -94,29 +94,4 @@ namespace details
 
 		vec.assign(s.begin(), s.end());
 	}
-
-	struct Key_Value
-	{
-		std::string key;
-		std::string value;
-
-		bool operator==(const Key_Value& other) const
-		{
-			return (key == other.key
-				&& value == other.value);
-		}
-	};
-}
-
-namespace std
-{
-	template <>
-	struct hash<details::Key_Value>
-	{
-		std::size_t operator()(const details::Key_Value& key_value) const
-		{
-			return ((std::hash< std::string>()(key_value.key)
-				^ (std::hash< std::string>()(key_value.value) << 1)) >> 1);
-		}
-	};
 }

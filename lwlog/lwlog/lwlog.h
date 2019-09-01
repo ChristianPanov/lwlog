@@ -1,16 +1,15 @@
 #pragma once
 
-#include <iostream>
 #include <string>
-#include <cctype>
-#include <string_view>
+#include <vector>
 #include <unordered_map>
+#include <cctype>
 
 #include "core.h"
 
 namespace lwlog
 {
-	enum class log_level
+	enum class level
 	{
 		all =		(1 << 0),
 		info =		(1 << 1),
@@ -21,50 +20,35 @@ namespace lwlog
 		none =		(1 << 6)
 	};
 
-	static log_level operator |(log_level lhs, log_level rhs)
+	static level operator |(level lhs, level rhs)
 	{
-		return static_cast<log_level> (
-			static_cast<std::underlying_type<log_level>::type>(lhs)
-			| static_cast<std::underlying_type<log_level>::type>(rhs)
+		return static_cast<level> (
+			static_cast<std::underlying_type<level>::type>(lhs)
+			| static_cast<std::underlying_type<level>::type>(rhs)
 			);
 	}
 
-	static log_level operator &(log_level lhs, log_level rhs)
+	static level operator &(level lhs, level rhs)
 	{
-		return static_cast<log_level> (
-			static_cast<std::underlying_type<log_level>::type>(lhs)
-			& static_cast<std::underlying_type<log_level>::type>(rhs)
+		return static_cast<level> (
+			static_cast<std::underlying_type<level>::type>(lhs)
+			& static_cast<std::underlying_type<level>::type>(rhs)
 			);
 	}
 
 	class LWLOG_API logger
 	{
-	private:
-		std::string m_message;
-		std::string m_loggerName;
-		std::string m_pattern;
-		std::string m_logLevel;
-		log_level m_logLevelVisibility;
-
-		/*TODO: FIX IMMEDIATELY*/ 
-		std::unordered_map<std::string, std::string> m_patternData; 
-		/*TODO: FIX IMMEDIATELY*/ 
-
-	private:
-		void log(std::string_view message, log_level logLevel);
-
 	public:
-		logger() = delete;
-		logger(const logger&) = delete;
-		logger(logger&&) = delete;
-		logger& operator=(const logger&) = delete;
-		logger& operator=(logger&&) = delete;
-
 		explicit logger(std::string_view name);
 		virtual ~logger() = default;
 
-		void set_logLevel_visibility(log_level logLevel);
+		void set_level_visibility(level logLevel);
 		void set_pattern(std::string_view pattern);
+
+		void backtrace(std::size_t buffer_size);
+		void set_backtrace_stamp(std::string_view stamp);
+		void display_backtrace();
+		void delete_backtrace();
 
 		void info(std::string_view message);
 		void warning(std::string_view message);
@@ -72,7 +56,27 @@ namespace lwlog
 		void critical(std::string_view message);
 		void debug(std::string_view message);
 
-		inline std::string get_name() const { return m_loggerName; }
+		inline std::string get_name() const { return m_logger_name; }
 		inline std::string get_pattern() const { return m_pattern; }
+
+	private:
+		void log(std::string_view message, level log_level);
+		void push_in_backtrace_buffer(std::string_view message);
+
+	private:
+		std::vector<std::string> m_backtrace_buffer;
+		/*TODO: FIX IMMEDIATELY*/
+		std::unordered_map<std::string, std::string> REALLY_STRANGE_BUG;
+		/*TODO: FIX IMMEDIATELY*/
+
+	private:
+		std::string m_message;
+		std::string m_logger_name;
+		std::string m_pattern;
+		std::string m_level_string;
+		level m_level;
+		std::string m_backtrace_stamp;
+		int m_backtrace_messages;
+		bool m_is_backtrace_enabled;
 	};
 }

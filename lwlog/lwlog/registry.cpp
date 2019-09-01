@@ -1,10 +1,10 @@
 #include "registry.h"
 #include "lwlog.h"
-#include "utilities.h"
+#include "print.h"
 
 namespace lwlog
 {
-	std::map<std::string, const logger&> registry::m_loggers = {};
+	std::map<std::string, logger> registry::m_loggers = {};
 
 	bool registry::m_automaticRegistry = true;
 

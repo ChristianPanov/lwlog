@@ -1,0 +1,71 @@
+﻿  pch.cpp
+  lwlogTest.cpp
+  string_view is only available with C++17 or later.
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(43,24): error C2039:  'string_view': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\unordered_map(20): message :  see declaration of 'std'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(43,41): error C2061:  syntax error: identifier 'string_view'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(47,25): error C2039:  'string_view': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\unordered_map(20): message :  see declaration of 'std'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(47,37): error C2061:  syntax error: identifier 'string_view'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(50,33): error C2039:  'string_view': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\unordered_map(20): message :  see declaration of 'std'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(50,45): error C2061:  syntax error: identifier 'string_view'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(54,18): error C2039:  'string_view': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\unordered_map(20): message :  see declaration of 'std'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(54,30): error C2061:  syntax error: identifier 'string_view'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(55,21): error C2039:  'string_view': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\unordered_map(20): message :  see declaration of 'std'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(55,33): error C2061:  syntax error: identifier 'string_view'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(56,19): error C2039:  'string_view': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\unordered_map(20): message :  see declaration of 'std'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(56,31): error C2061:  syntax error: identifier 'string_view'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(57,22): error C2039:  'string_view': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\unordered_map(20): message :  see declaration of 'std'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(57,34): error C2061:  syntax error: identifier 'string_view'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(58,19): error C2039:  'string_view': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\unordered_map(20): message :  see declaration of 'std'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(58,31): error C2061:  syntax error: identifier 'string_view'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(64,17): error C2039:  'string_view': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\unordered_map(20): message :  see declaration of 'std'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(64,29): error C2061:  syntax error: identifier 'string_view'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(65,38): error C2039:  'string_view': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\unordered_map(20): message :  see declaration of 'std'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(65,50): error C2061:  syntax error: identifier 'string_view'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(68,46): warning C4251:  'lwlog::logger::m_backtrace_buffer': class 'std::vector<std::string,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'lwlog::logger'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(68,46): warning C4251:         with
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(68,46): warning C4251:         [
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(68,46): warning C4251:             _Ty=std::string
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(68,46): warning C4251:         ]
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(68): message :  see declaration of 'std::vector<std::string,std::allocator<_Ty>>'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(68): message :         with
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(68): message :         [
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(68): message :             _Ty=std::string
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(68): message :         ]
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(70,66): warning C4251:  'lwlog::logger::REALLY_STRANGE_BUG': class 'std::unordered_map<std::string,std::string,std::hash<_Kty>,std::equal_to<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>>' needs to have dll-interface to be used by clients of class 'lwlog::logger'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(70,66): warning C4251:         with
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(70,66): warning C4251:         [
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(70,66): warning C4251:             _Kty=std::string,
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(70,66): warning C4251:             _Ty=std::string
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(70,66): warning C4251:         ]
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(70): message :  see declaration of 'std::unordered_map<std::string,std::string,std::hash<_Kty>,std::equal_to<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>>'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(70): message :         with
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(70): message :         [
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(70): message :             _Kty=std::string,
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(70): message :             _Ty=std::string
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(70): message :         ]
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(74,24): warning C4251:  'lwlog::logger::m_message': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'lwlog::logger'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\xstring(4343): message :  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(75,27): warning C4251:  'lwlog::logger::m_loggerName': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'lwlog::logger'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\xstring(4343): message :  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(76,24): warning C4251:  'lwlog::logger::m_pattern': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'lwlog::logger'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\xstring(4343): message :  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(77,25): warning C4251:  'lwlog::logger::m_logLevel': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'lwlog::logger'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\xstring(4343): message :  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.h(79,32): warning C4251:  'lwlog::logger::m_backtrace_stamp': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'lwlog::logger'
+  formatter.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\xstring(4343): message :  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  lwlog.cpp
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\formatter.cpp(104,1): error C1010:  unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  registry.cpp
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\lwlog.cpp(130,1): error C1010:  unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+C:\Users\user\Documents\C++ Programs\Plain C++ Projects\lwlog\lwlogUnitTest\lwlog\registry.cpp(39,1): error C1010:  unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?

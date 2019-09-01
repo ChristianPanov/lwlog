@@ -1,7 +1,7 @@
 #pragma once
 
 #include <chrono>
-#include "lwlog/utilities.h"
+#include "lwlog/print.h"
 
 class Benchmark
 {
@@ -19,7 +19,7 @@ private:
 		auto duration = end - start;
 		double ms = duration * 0.001;
 
-		lwlog::print("{0}us ({1}ms)\n", duration, ms);
+		lwlog::print("{0}us\n", duration);
 	}
 
 public:

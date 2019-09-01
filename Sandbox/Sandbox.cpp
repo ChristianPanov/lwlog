@@ -1,13 +1,38 @@
 #include "lwlog/lwlog.h"
 #include "lwlog/registry.h"
-#include "lwlog/utilities.h"
-#include "lwlog/details.h"
 #include "lwlog/datetime.h"
+#include "lwlog/formatter.h"
+
+#include "lwlog/details/utilities.h"
+#include "lwlog/details/duplex.h"
+
+#include "lwlog/print.h"
 
 #include "Benchmark.h"
 
 int main()
 {
+	auto console = std::make_unique<lwlog::logger>("CONSOLE");
+	console->set_level_visibility(lwlog::level::info | lwlog::level::debug);
+	console->set_pattern("^br_red^[%x] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+
+	console->backtrace(32);
+	console->set_backtrace_stamp("[BACKTRACE]");
+
+	console->info("First info message");
+
+	console->debug("First debug message");
+	console->info("Second info message");
+	console->debug("Second info message");
+
+	lwlog::print("\n\n\n\n");
+
+	console->display_backtrace();
+
+	return 0;
+}
+
+/*
 	std::string str1 = "test";
 	std::string str2 = "for";
 
@@ -25,7 +50,7 @@ int main()
 
 	lwlog::registry::display_all_loggers();
 
-	console->set_logLevel_visibility(lwlog::log_level::info | lwlog::log_level::debug);
+	console->set_level_visibility(lwlog::level::info | lwlog::level::debug);
 	console->set_pattern("^br_red^[%x] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
 	{
 		Benchmark b;
@@ -33,7 +58,7 @@ int main()
 	}
 	console->info("Some info log");
 
-	core_logger->set_logLevel_visibility(lwlog::log_level::error | lwlog::log_level::critical);
+	core_logger->set_level_visibility(lwlog::level::error | lwlog::level::critical);
 	core_logger->set_pattern("[%x] [%n] [%l]: %v");
 	core_logger->critical("A very critical message!");
 	core_logger->error("Error!");
@@ -41,6 +66,4 @@ int main()
 	core_logger3->set_pattern("[%weekday%] [%logger_name%] [%log_level%] [%log_level_abr%]: %message%");
 	core_logger3->debug("Just debugging...");
 	core_logger3->warning("A warning!!!");
-
-	return 0;
-}
+*/

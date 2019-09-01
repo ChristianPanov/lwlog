@@ -1,13 +1,15 @@
 #include "formatter.h"
 #include "datetime.h"
 #include "color.h"
-#include "utilities.h"
+#include "details/utilities.h"
+
+#include "print.h"
 
 namespace lwlog
 {
-	std::vector<details::Key_Value> formatter::m_inserted_patternData_keys = {};
+	std::vector<details::duplex<std::string, std::string>> formatter::m_inserted_pattern_data_keys = {};
 
-	std::unordered_map<details::Key_Value, std::string> formatter::m_patternData =
+	std::unordered_map<details::duplex<std::string, std::string>, std::string> formatter::m_pattern_data =
 	{
 		{{"%seconds%",			"%s"}, lwlog::datetime::get_second()},
 		{{"%minute%",			"%i"}, lwlog::datetime::get_minute()},
@@ -25,7 +27,7 @@ namespace lwlog
 		{{"%date%",				"%d"}, lwlog::datetime::get_date()},
 		{{"%time%",				"%x"}, lwlog::datetime::get_time()},
 
-		{{"^black^"					}, lwlog::color::foreground_black()},
+		{{"^black^",				}, lwlog::color::foreground_black()},
 		{{"^red^"					}, lwlog::color::foreground_red()},
 		{{"^green^"					}, lwlog::color::foreground_green()},
 		{{"^yellow^"				}, lwlog::color::foreground_yellow()},
@@ -70,37 +72,32 @@ namespace lwlog
 		{{						"^^"}, "^"}
 	};
 
-	void formatter::insert_pattern_data(details::Key_Value key, std::string value)
+	std::string formatter::format(std::string pattern) 
 	{
-		m_inserted_patternData_keys.emplace_back(key);
-		m_patternData.emplace(key, value);
-	}
-
-	std::string formatter::format(std::string pattern)
-	{
-		for (auto const& [key, value] : m_patternData)
+		for (const auto& [duplex_key, value] : m_pattern_data)
 		{
-			auto& [verbose, shortened] = key;
-			if (!verbose.empty())
+			auto& [verbose, shortened] = duplex_key;
+			if (!verbose.empty()) 
 			{
-				details::replace_in_string(pattern, verbose, value);
+				details::utilities::replace_in_string(pattern, verbose, value);
 			}
 		}
 
-		for (auto const& [key, value] : m_patternData)
+		for (const auto& [duplex_key, value] : m_pattern_data)
 		{
-			auto& [verbose, shortened] = key;
-			if (!shortened.empty())
+			auto& [verbose, shortened] = duplex_key;
+			if (!shortened.empty()) 
 			{
-				details::replace_in_string(pattern, shortened, value);
+				details::utilities::replace_in_string(pattern, shortened, value);
 			}
-		}
-
-		for (auto& i : m_inserted_patternData_keys)
-		{
-			m_patternData.erase(i);
 		}
 
 		return pattern;
+	}
+
+	void formatter::insert_pattern_data(details::duplex<std::string, std::string> duplex_key, std::string_view value)
+	{
+		m_inserted_pattern_data_keys.emplace_back(duplex_key);
+		m_pattern_data.insert_or_assign(duplex_key, value);
 	}
 }
