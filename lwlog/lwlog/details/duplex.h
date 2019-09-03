@@ -5,15 +5,60 @@
 namespace details
 {
 	template <typename First = std::string_view, typename Second = std::string_view>
-	struct duplex
+	class duplex
 	{
+
+	public:
 		First first;
 		Second second;
 
-		bool operator==(const duplex& other) const
+		bool operator==(const duplex<First, Second>& dup) const
 		{
-			return (first == other.first
-				&& second == other.second);
+			return (first == dup.first
+				&& second == dup.second);
+		}
+
+		template<typename T>
+		friend bool operator==(const T& t, const duplex& dup)
+		{
+			if constexpr (std::is_convertible_v <T, First>)
+			{
+				if (t == dup.first)
+				{
+					return true;
+				}
+			}
+
+			if constexpr (std::is_convertible_v <T, Second>)
+			{
+				if (t == dup.second)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		template<typename T>
+		friend bool operator==(const duplex& dup, const T& t)
+		{
+			if constexpr (std::is_convertible_v <T, First>)
+			{
+				if (t == dup.first)
+				{
+					return true;
+				}
+			}
+
+			if constexpr (std::is_convertible_v <T, Second>) {
+				if (t == dup.second)
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 	};
 

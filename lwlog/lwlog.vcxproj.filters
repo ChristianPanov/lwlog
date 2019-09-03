@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="details">
+      <UniqueIdentifier>{8B788209-F757-01A5-0070-8C7B6CCE6706}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lwlog\color.h" />
+    <ClInclude Include="lwlog\core.h" />
+    <ClInclude Include="lwlog\datetime.h" />
+    <ClInclude Include="lwlog\details\duplex.h">
+      <Filter>details</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\details\utilities.h">
+      <Filter>details</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\formatter.h" />
+    <ClInclude Include="lwlog\lwlog.h" />
+    <ClInclude Include="lwlog\print.h" />
+    <ClInclude Include="lwlog\registry.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="lwlog\formatter.cpp" />
+    <ClCompile Include="lwlog\lwlog.cpp" />
+    <ClCompile Include="lwlog\registry.cpp" />
+  </ItemGroup>
+</Project>
