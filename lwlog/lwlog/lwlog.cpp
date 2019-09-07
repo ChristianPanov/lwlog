@@ -126,4 +126,14 @@ namespace lwlog
 		m_level_string = "debug";
 		log(message, level::debug);
 	}
+
+	inline std::string logger::get_name() const
+	{
+		return m_logger_name;
+	}
+
+	inline std::string logger::get_pattern() const
+	{
+		return m_pattern;
+	}
 }

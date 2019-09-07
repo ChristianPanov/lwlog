@@ -5,10 +5,8 @@
 namespace details
 {
 	template <typename First = std::string_view, typename Second = std::string_view>
-	class duplex
+	struct duplex
 	{
-
-	public:
 		First first;
 		Second second;
 
@@ -25,6 +23,7 @@ namespace details
 			{
 				if (t == dup.first)
 				{
+					correct_val = t;
 					return true;
 				}
 			}
@@ -33,6 +32,7 @@ namespace details
 			{
 				if (t == dup.second)
 				{
+					correct_val = t;
 					return true;
 				}
 			}
@@ -47,6 +47,7 @@ namespace details
 			{
 				if (t == dup.first)
 				{
+					correct_val = t;
 					return true;
 				}
 			}
@@ -54,6 +55,7 @@ namespace details
 			if constexpr (std::is_convertible_v <T, Second>) {
 				if (t == dup.second)
 				{
+					correct_val = t;
 					return true;
 				}
 			}

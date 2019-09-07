@@ -19,10 +19,16 @@
     <ClInclude Include="lwlog\lwlog.h" />
     <ClInclude Include="lwlog\print.h" />
     <ClInclude Include="lwlog\registry.h" />
+    <ClInclude Include="lwlog\details\file_helper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\formatter.cpp" />
     <ClCompile Include="lwlog\lwlog.cpp" />
     <ClCompile Include="lwlog\registry.cpp" />
+    <ClCompile Include="lwlog\details\file_helper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Colors.txt" />
+    <Text Include="Format.txt" />
   </ItemGroup>
 </Project>

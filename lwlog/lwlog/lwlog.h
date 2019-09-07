@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <cctype>
 
 #include "core.h"
 
@@ -20,7 +19,7 @@ namespace lwlog
 		none =		(1 << 6)
 	};
 
-	static level operator |(level lhs, level rhs)
+	static level operator|(level lhs, level rhs)
 	{
 		return static_cast<level> (
 			static_cast<std::underlying_type<level>::type>(lhs)
@@ -28,7 +27,7 @@ namespace lwlog
 			);
 	}
 
-	static level operator &(level lhs, level rhs)
+	static level operator&(level lhs, level rhs)
 	{
 		return static_cast<level> (
 			static_cast<std::underlying_type<level>::type>(lhs)
@@ -56,8 +55,8 @@ namespace lwlog
 		void critical(std::string_view message);
 		void debug(std::string_view message);
 
-		inline std::string get_name() const { return m_logger_name; }
-		inline std::string get_pattern() const { return m_pattern; }
+		inline std::string get_name() const;
+		inline std::string get_pattern() const;
 
 	private:
 		void log(std::string_view message, level log_level);

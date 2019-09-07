@@ -10,6 +10,9 @@
 
 #include "Benchmark.h"
 
+#include "lwlog/details/file_helper.h"
+
+
 int main()
 {
 	auto console = std::make_unique<lwlog::logger>("CONSOLE");
@@ -54,9 +57,8 @@ int main()
 	console->set_pattern("^br_red^[%x] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
 	{
 		Benchmark b;
-		console->debug("A test debug message");
+		console->info("Some info log");
 	}
-	console->info("Some info log");
 
 	core_logger->set_level_visibility(lwlog::level::error | lwlog::level::critical);
 	core_logger->set_pattern("[%x] [%n] [%l]: %v");
@@ -67,3 +69,4 @@ int main()
 	core_logger3->debug("Just debugging...");
 	core_logger3->warning("A warning!!!");
 */
+
