@@ -4,14 +4,14 @@
 #include "registry.h"
 #include "print.h"
 
+#include "details/backtracer.h"
+
 namespace lwlog
 {
 	logger::logger(std::string_view logger_name)
 		: m_logger_name(logger_name)
 		, m_pattern("[%d, %x] [%l] [%n]: %v")
 		, m_level(level::all)
-		, m_backtrace_messages(0)
-		, m_is_backtrace_enabled(false)
 	{
 		set_level_visibility(m_level);
 
@@ -45,39 +45,27 @@ namespace lwlog
 
 	void logger::backtrace(std::size_t buffer_size)
 	{
-		m_is_backtrace_enabled = true;
-		m_backtrace_buffer.reserve(buffer_size);
+		m_tracer.backtrace(buffer_size);
 	}
 
 	void logger::set_backtrace_stamp(std::string_view stamp)
 	{
-		m_backtrace_stamp = stamp;
+		m_tracer.set_backtrace_stamp(stamp);
 	}
 
 	void logger::display_backtrace()
 	{
-		for (const auto& i : m_backtrace_buffer)
-		{
-			lwlog::print("{0}{1}\n", m_backtrace_stamp, i);
-		}
+		m_tracer.display_backtrace();
 	}
 
 	void logger::delete_backtrace()
 	{
-		m_backtrace_messages = 0;
-		m_backtrace_buffer.clear();
+		m_tracer.delete_backtrace();
 	}
 
 	void logger::push_in_backtrace_buffer(std::string_view message)
 	{
-		if (m_is_backtrace_enabled == true)
-		{
-			m_backtrace_messages++;
-			if (m_backtrace_messages <= m_backtrace_buffer.capacity())
-			{
-				m_backtrace_buffer.emplace_back(message);
-			}
-		}
+		m_tracer.push_in_backtrace_buffer(message);
 	}
 
 	void logger::log(std::string_view message, level log_level)
@@ -95,7 +83,7 @@ namespace lwlog
 			lwlog::print("{0} \n", formatter::format(m_pattern));
 		}
 
-		push_in_backtrace_buffer(formatter::format(m_pattern));
+		m_tracer.push_in_backtrace_buffer(formatter::format(m_pattern));
 	}
 
 	void logger::info(std::string_view message)

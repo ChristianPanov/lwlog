@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "core.h"
+#include "details/backtracer.h"
 
 namespace lwlog
 {
@@ -38,7 +39,6 @@ namespace lwlog
 		void push_in_backtrace_buffer(std::string_view message);
 
 	private:
-		std::vector<std::string> m_backtrace_buffer;
 		/*TODO: FIX IMMEDIATELY*/
 		std::unordered_map<std::string, std::string> REALLY_STRANGE_BUG;
 		/*TODO: FIX IMMEDIATELY*/
@@ -49,8 +49,6 @@ namespace lwlog
 		std::string m_pattern;
 		std::string m_level_string;
 		level m_level;
-		std::string m_backtrace_stamp;
-		int m_backtrace_messages;
-		bool m_is_backtrace_enabled;
+		details::backtracer m_tracer;
 	};
 }

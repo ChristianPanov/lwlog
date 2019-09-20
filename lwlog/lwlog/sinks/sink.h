@@ -14,8 +14,8 @@ namespace lwlog::sinks
 
 		virtual void log(std::string_view message, level log_level) = 0;
 
-		virtual void set_level_visibility(level log_level);
-		virtual void set_pattern(std::string_view pattern);
+		void set_level_visibility(level log_level);
+		void set_pattern(std::string_view pattern);
 
 	protected:
 		std::string m_pattern;
