@@ -1,6 +1,7 @@
 #include "lwlog.h"
-#include "registry.h"
+#include "log_level.h"
 #include "formatter.h"
+#include "registry.h"
 #include "print.h"
 
 namespace lwlog

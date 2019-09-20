@@ -16,16 +16,20 @@ namespace details
 		explicit file_helper() = default;
 		virtual ~file_helper();
 
-		void open(const char* file_name, std::string_view path, append open_mode = append::on);
-		void write(std::string message);
+		void open(std::string_view file_name, std::string_view path, append open_mode = append::on);
+		void write(std::string_view message);
+		void clear();
 		void flush();
 		void close();
 
-		inline std::FILE* get_file_handler();
-		inline std::filesystem::path get_filesys_path();
+		inline std::size_t get_size() const;
+		inline std::string get_filename() const;
+		inline std::FILE* get_file_ptr_handler() const;
+		inline std::filesystem::path get_filesys_path() const;
 
 	private:
 		std::FILE* m_file{nullptr};
 		std::filesystem::path m_path;
+		std::string m_filename;
 	};
 }

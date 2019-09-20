@@ -11,7 +11,9 @@
 #include "Benchmark.h"
 
 #include "lwlog/details/file_helper.h"
+#include "lwlog/log_level.h"
 
+#include "lwlog/sinks/console_sink.h"
 
 int main()
 {
@@ -34,6 +36,15 @@ int main()
 
 	return 0;
 }
+
+/*
+	details::file_helper file;
+
+	file.open("logs.txt", "C:/Users/user/Desktop/MyBitch", details::file_helper::append::on);
+	file.write("Hey bro \n Some logs for you ;) \n");
+	lwlog::print("Filename: {0}\n", file.get_filename());
+	file.close();
+*/
 
 /*
 	std::string str1 = "test";

@@ -20,12 +20,17 @@
     <ClInclude Include="lwlog\print.h" />
     <ClInclude Include="lwlog\registry.h" />
     <ClInclude Include="lwlog\details\file_helper.h" />
+    <ClInclude Include="lwlog\sinks\sink.h" />
+    <ClInclude Include="lwlog\log_level.h" />
+    <ClInclude Include="lwlog\sinks\console_sink.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\formatter.cpp" />
     <ClCompile Include="lwlog\lwlog.cpp" />
     <ClCompile Include="lwlog\registry.cpp" />
     <ClCompile Include="lwlog\details\file_helper.cpp" />
+    <ClCompile Include="lwlog\sinks\console_sink.cpp" />
+    <ClCompile Include="lwlog\sinks\sink.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Colors.txt" />
