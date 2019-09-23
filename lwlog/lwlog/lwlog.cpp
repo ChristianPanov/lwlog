@@ -3,7 +3,6 @@
 #include "formatter.h"
 #include "registry.h"
 #include "print.h"
-
 #include "details/backtracer.h"
 
 namespace lwlog

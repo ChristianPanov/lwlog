@@ -24,6 +24,7 @@
     <ClInclude Include="lwlog\log_level.h" />
     <ClInclude Include="lwlog\sinks\console_sink.h" />
     <ClInclude Include="lwlog\details\backtracer.h" />
+    <ClInclude Include="lwlog\sinks\file_sink.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\formatter.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="lwlog\sinks\console_sink.cpp" />
     <ClCompile Include="lwlog\sinks\sink.cpp" />
     <ClCompile Include="lwlog\details\backtracer.cpp" />
+    <ClCompile Include="lwlog\sinks\file_sink.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Colors.txt" />

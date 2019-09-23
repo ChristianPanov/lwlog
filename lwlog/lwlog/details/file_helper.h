@@ -13,23 +13,19 @@ namespace details
 		enum class append { off = 0, on = 1 };
 
 	public:
-		explicit file_helper() = default;
+		file_helper();
 		virtual ~file_helper();
 
-		void open(std::string_view file_name, std::string_view path, append open_mode = append::on);
+		void open(std::string_view name, std::string_view path_str = "", std::size_t size_limit = 10240, append open_mode = append::on);
 		void write(std::string_view message);
 		void clear();
 		void flush();
 		void close();
 
-		inline std::size_t get_size() const;
-		inline std::string get_filename() const;
-		inline std::FILE* get_file_ptr_handler() const;
-		inline std::filesystem::path get_filesys_path() const;
-
 	private:
-		std::FILE* m_file{nullptr};
+		std::FILE* m_file{ nullptr };
 		std::filesystem::path m_path;
-		std::string m_filename;
+		std::string m_name;
+		std::size_t m_size_limit;
 	};
 }

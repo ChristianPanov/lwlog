@@ -14,6 +14,7 @@
 #include "lwlog/log_level.h"
 
 #include "lwlog/sinks/console_sink.h"
+#include "lwlog/sinks/file_sink.h"
 
 int main()
 {

@@ -96,6 +96,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="lwlog\sinks\file_sink.h" />
     <ClInclude Include="lwlog\color.h" />
     <ClInclude Include="lwlog\core.h" />
     <ClInclude Include="lwlog\datetime.h" />
@@ -112,6 +113,7 @@
     <ClInclude Include="lwlog\sinks\sink.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="lwlog\sinks\file_sink.cpp" />
     <ClCompile Include="lwlog\details\backtracer.cpp" />
     <ClCompile Include="lwlog\details\file_helper.cpp" />
     <ClCompile Include="lwlog\formatter.cpp" />
