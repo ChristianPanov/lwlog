@@ -111,6 +111,7 @@
     <ClInclude Include="lwlog\registry.h" />
     <ClInclude Include="lwlog\sinks\console_sink.h" />
     <ClInclude Include="lwlog\sinks\sink.h" />
+    <ClInclude Include="lwlog\sinks\sink_factory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\sinks\file_sink.cpp" />
@@ -121,6 +122,7 @@
     <ClCompile Include="lwlog\registry.cpp" />
     <ClCompile Include="lwlog\sinks\console_sink.cpp" />
     <ClCompile Include="lwlog\sinks\sink.cpp" />
+    <ClCompile Include="lwlog\sinks\sink_factory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Colors.txt" />

@@ -13,11 +13,31 @@
 #include "lwlog/details/file_helper.h"
 #include "lwlog/log_level.h"
 
+#include "lwlog/sinks/sink_factory.h"
 #include "lwlog/sinks/console_sink.h"
 #include "lwlog/sinks/file_sink.h"
 
 int main()
 {
+	
+	auto console = std::make_unique<lwlog::logger<lwlog::sinks::console_sink>>("LOGGER");
+	console->set_level_visibility(lwlog::level::info | lwlog::level::critical);
+	console->set_pattern("^br_red^[%x] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	console->critical("A very critical message!");
+
+	return 0;
+}
+
+/*
+	auto mySink = std::make_unique<lwlog::sinks::file_sink>();
+	mySink->init_log_file("LOGS.TXT", "C:/Users/user/Desktop/MyBitch");
+	mySink->set_level_visibility(lwlog::level::info | lwlog::level::debug);
+	mySink->set_pattern("[%x] [%n] [%l]: %v");
+	mySink->log("Some info message", lwlog::level::info);
+	mySink->log("Some debug message", lwlog::level::debug);
+*/
+
+/*
 	auto console = std::make_unique<lwlog::logger>("CONSOLE");
 	console->set_level_visibility(lwlog::level::info | lwlog::level::debug);
 	console->set_pattern("^br_red^[%x] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
@@ -34,9 +54,7 @@ int main()
 	lwlog::print("\n\n\n\n");
 
 	console->display_backtrace();
-
-	return 0;
-}
+*/
 
 /*
 	details::file_helper file;

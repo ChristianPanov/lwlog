@@ -7,67 +7,44 @@
 
 namespace lwlog
 {
-	logger::logger(std::string_view logger_name)
+	template<typename SinkPolicy>
+	logger<SinkPolicy>::logger(std::string_view logger_name)
 		: m_logger_name(logger_name)
-		, m_pattern("[%d, %x] [%l] [%n]: %v")
-		, m_level(level::all)
-	{
-		set_level_visibility(m_level);
+		, m_sink(sink_factory<SinkPolicy>::request())
+	{}
 
-		if (registry::is_registry_automatic() == true)
-		{
-			registry::register_logger(*this);
-		}
-	}
-
-	void logger::set_level_visibility(level logLevel)
-	{
-		if (logLevel == level::all)
-		{
-			m_level = level::info | level::warning 
-				| level::error | level::critical | level::debug;
-		}
-		else if (logLevel == level::none)
-		{
-			m_level = level::none;
-		}
-		else
-		{
-			m_level = logLevel;
-		}
-	}
-
-	void logger::set_pattern(std::string_view pattern)
-	{
-		m_pattern = pattern;
-	}
-
-	void logger::backtrace(std::size_t buffer_size)
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::backtrace(std::size_t buffer_size)
 	{
 		m_tracer.backtrace(buffer_size);
 	}
 
-	void logger::set_backtrace_stamp(std::string_view stamp)
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::set_backtrace_stamp(std::string_view stamp)
 	{
 		m_tracer.set_backtrace_stamp(stamp);
 	}
 
-	void logger::display_backtrace()
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::display_backtrace()
 	{
 		m_tracer.display_backtrace();
 	}
 
-	void logger::delete_backtrace()
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::delete_backtrace()
 	{
 		m_tracer.delete_backtrace();
 	}
 
-	void logger::push_in_backtrace_buffer(std::string_view message)
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::push_in_backtrace_buffer(std::string_view message)
 	{
 		m_tracer.push_in_backtrace_buffer(message);
 	}
 
-	void logger::log(std::string_view message, level log_level)
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::log(std::string_view message, level log_level)
 	{
 		m_message = message;
 
@@ -76,52 +53,52 @@ namespace lwlog
 		formatter::insert_pattern_data({"%log_level%",		"%l"}, m_level_string);
 		formatter::insert_pattern_data({"%log_level_abr%",	"%L"}, std::string(1, toupper(m_level_string[0])));
 
-		if (static_cast<std::underlying_type_t<level>>(m_level)
-			& static_cast<std::underlying_type_t<level>>(log_level))
-		{
-			lwlog::print("{0} \n", formatter::format(m_pattern));
-		}
+		m_sink.get()->sink_it(formatter::format(m_pattern), log_level);
 
 		m_tracer.push_in_backtrace_buffer(formatter::format(m_pattern));
 	}
 
-	void logger::info(std::string_view message)
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::info(std::string_view message)
 	{
 		m_level_string = "info";
 		log(message, level::info);
 	}
 
-	void logger::warning(std::string_view message)
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::warning(std::string_view message)
 	{
 		m_level_string = "warning";
 		log(message, level::warning);
 	}
 
-	void logger::error(std::string_view message)
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::error(std::string_view message)
 	{
 		m_level_string = "error";
 		log(message, level::error);
 	}
 
-	void logger::critical(std::string_view message)
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::critical(std::string_view message)
 	{
 		m_level_string = "critical";
 		log(message, level::critical);
 	}
 
-	void logger::debug(std::string_view message)
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::debug(std::string_view message)
 	{
 		m_level_string = "debug";
 		log(message, level::debug);
 	}
 
-	inline std::string logger::get_name() const
+	template<typename SinkPolicy>
+	inline std::string logger<SinkPolicy>::get_name() const
 	{
 		return m_logger_name;
 	}
 
-	inline std::string logger::get_pattern() const
-	{
-		return m_pattern;
-	}
+	template class logger<sinks::console_sink>;
+	template class logger<sinks::file_sink>;
 }

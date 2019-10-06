@@ -4,6 +4,7 @@
 
 namespace lwlog
 {
+	/*
 	std::map<std::string, logger> registry::m_loggers = {};
 
 	bool registry::m_automaticRegistry = true;
@@ -35,4 +36,5 @@ namespace lwlog
 			print("{0} \n", it->first);
 		}
 	}
+	*/
 }

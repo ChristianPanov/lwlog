@@ -7,9 +7,10 @@
 
 namespace lwlog 
 {
+	/*
 	class logger;
 
-	class LWLOG_API registry 
+	class LWLOG_API registry
 	{
 	public:
 		static void register_logger(const logger& new_logger);
@@ -27,4 +28,5 @@ namespace lwlog
 		static std::map<std::string, logger> m_loggers;
 		static bool m_automaticRegistry;
 	};
+	*/
 }

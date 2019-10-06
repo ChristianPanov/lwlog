@@ -38,6 +38,6 @@ namespace lwlog
 			}
 		}
 
-		printf(format_str.data());
+		std::cout << format_str;
 	}
 }
