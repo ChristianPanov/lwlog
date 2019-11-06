@@ -1,5 +1,4 @@
-#include "lwlog/lwlog.h"
-#include "lwlog/registry.h"
+#include "lwlog/logger.h"
 #include "lwlog/datetime.h"
 #include "lwlog/formatter.h"
 
@@ -11,19 +10,22 @@
 #include "Benchmark.h"
 
 #include "lwlog/details/file_helper.h"
-#include "lwlog/log_level.h"
 
+#include "lwlog/sinks/sink.h"
 #include "lwlog/sinks/sink_factory.h"
 #include "lwlog/sinks/console_sink.h"
 #include "lwlog/sinks/file_sink.h"
 
+#include "lwlog/lwlog.h"
+
 int main()
 {
-	
-	auto console = std::make_unique<lwlog::logger<lwlog::sinks::console_sink>>("LOGGER");
-	console->set_level_visibility(lwlog::level::info | lwlog::level::critical);
+	auto console = std::make_unique<lwlog::logger<lwlog::sinks::file_sink>>("LOGGER");
+	console->init_log_file("LOGS.TXT", "C:/Users/user/Desktop/MyBitch");
 	console->set_pattern("^br_red^[%x] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
-	console->critical("A very critical message!");
+	console->info("First info message");
+	console->debug("First debug message");
+	console->critical("First critical message");
 
 	return 0;
 }

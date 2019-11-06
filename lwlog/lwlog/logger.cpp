@@ -1,9 +1,6 @@
-#include "lwlog.h"
+#include "logger.h"
 #include "log_level.h"
 #include "formatter.h"
-#include "registry.h"
-#include "print.h"
-#include "details/backtracer.h"
 
 namespace lwlog
 {
@@ -14,47 +11,16 @@ namespace lwlog
 	{}
 
 	template<typename SinkPolicy>
-	void logger<SinkPolicy>::backtrace(std::size_t buffer_size)
-	{
-		m_tracer.backtrace(buffer_size);
-	}
-
-	template<typename SinkPolicy>
-	void logger<SinkPolicy>::set_backtrace_stamp(std::string_view stamp)
-	{
-		m_tracer.set_backtrace_stamp(stamp);
-	}
-
-	template<typename SinkPolicy>
-	void logger<SinkPolicy>::display_backtrace()
-	{
-		m_tracer.display_backtrace();
-	}
-
-	template<typename SinkPolicy>
-	void logger<SinkPolicy>::delete_backtrace()
-	{
-		m_tracer.delete_backtrace();
-	}
-
-	template<typename SinkPolicy>
-	void logger<SinkPolicy>::push_in_backtrace_buffer(std::string_view message)
-	{
-		m_tracer.push_in_backtrace_buffer(message);
-	}
-
-	template<typename SinkPolicy>
 	void logger<SinkPolicy>::log(std::string_view message, level log_level)
 	{
 		m_message = message;
 
-		formatter::insert_pattern_data({"%logger_name%",	"%n"}, m_logger_name);
-		formatter::insert_pattern_data({"%message%",		"%v"}, m_message);
-		formatter::insert_pattern_data({"%log_level%",		"%l"}, m_level_string);
-		formatter::insert_pattern_data({"%log_level_abr%",	"%L"}, std::string(1, toupper(m_level_string[0])));
+		formatter::insert_pattern_data({ "%logger_name%",	"%n" }, m_logger_name);
+		formatter::insert_pattern_data({ "%message%",		"%v" }, m_message);
+		formatter::insert_pattern_data({ "%log_level%",		"%l" }, m_level_string);
+		formatter::insert_pattern_data({ "%log_level_abr%",	"%L" }, std::to_string(std::toupper(m_level_string[0])));
 
 		m_sink.get()->sink_it(formatter::format(m_pattern), log_level);
-
 		m_tracer.push_in_backtrace_buffer(formatter::format(m_pattern));
 	}
 
@@ -91,6 +57,30 @@ namespace lwlog
 	{
 		m_level_string = "debug";
 		log(message, level::debug);
+	}
+
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::backtrace(std::size_t buffer_size)
+	{
+		m_tracer.backtrace(buffer_size);
+	}
+
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::set_backtrace_stamp(std::string_view stamp)
+	{
+		m_tracer.set_backtrace_stamp(stamp);
+	}
+
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::display_backtrace()
+	{
+		m_tracer.display_backtrace();
+	}
+
+	template<typename SinkPolicy>
+	void logger<SinkPolicy>::delete_backtrace()
+	{
+		m_tracer.delete_backtrace();
 	}
 
 	template<typename SinkPolicy>

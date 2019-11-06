@@ -6,13 +6,13 @@ namespace lwlog
 {
 	enum class level
 	{
-		all =		(1 << 0),
+		none =		(1 << 0),
 		info =		(1 << 1),
 		warning =	(1 << 2),
 		error =		(1 << 3),
 		critical =	(1 << 4),
 		debug =		(1 << 5),
-		none =		(1 << 6)
+		all =		(1 << 6)
 	};
 
 	static level operator|(level lhs, level rhs)

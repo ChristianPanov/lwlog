@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <fstream>
 #include <filesystem>
@@ -13,10 +13,9 @@ namespace details
 		enum class append { off = 0, on = 1 };
 
 	public:
-		file_helper();
 		virtual ~file_helper();
 
-		void open(std::string_view name, std::string_view path_str = "", std::size_t size_limit = 10240, append open_mode = append::on);
+		void open(std::string_view name, std::string_view path_str, std::size_t size_limit, append open_mode = append::on);
 		void write(std::string_view message);
 		void clear();
 		void flush();

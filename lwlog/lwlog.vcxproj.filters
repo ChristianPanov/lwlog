@@ -16,27 +16,26 @@
       <Filter>details</Filter>
     </ClInclude>
     <ClInclude Include="lwlog\formatter.h" />
-    <ClInclude Include="lwlog\lwlog.h" />
     <ClInclude Include="lwlog\print.h" />
-    <ClInclude Include="lwlog\registry.h" />
     <ClInclude Include="lwlog\details\file_helper.h" />
     <ClInclude Include="lwlog\sinks\sink.h" />
-    <ClInclude Include="lwlog\log_level.h" />
     <ClInclude Include="lwlog\sinks\console_sink.h" />
     <ClInclude Include="lwlog\details\backtracer.h" />
     <ClInclude Include="lwlog\sinks\file_sink.h" />
     <ClInclude Include="lwlog\sinks\sink_factory.h" />
+    <ClInclude Include="lwlog\logger.h" />
+    <ClInclude Include="lwlog\lwlog.h" />
+    <ClInclude Include="lwlog\log_level.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\formatter.cpp" />
-    <ClCompile Include="lwlog\lwlog.cpp" />
-    <ClCompile Include="lwlog\registry.cpp" />
     <ClCompile Include="lwlog\details\file_helper.cpp" />
     <ClCompile Include="lwlog\sinks\console_sink.cpp" />
     <ClCompile Include="lwlog\sinks\sink.cpp" />
     <ClCompile Include="lwlog\details\backtracer.cpp" />
     <ClCompile Include="lwlog\sinks\file_sink.cpp" />
     <ClCompile Include="lwlog\sinks\sink_factory.cpp" />
+    <ClCompile Include="lwlog\logger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Colors.txt" />

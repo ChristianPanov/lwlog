@@ -19,7 +19,7 @@ namespace details
 		template<typename T>
 		friend bool operator==(const T& t, const duplex& dup)
 		{
-			if constexpr (std::is_convertible_v <T, First>)
+			if constexpr (std::is_convertible_v<T, First>)
 			{
 				if (t == dup.first)
 				{
@@ -28,7 +28,7 @@ namespace details
 				}
 			}
 
-			if constexpr (std::is_convertible_v <T, Second>)
+			if constexpr (std::is_convertible_v<T, Second>)
 			{
 				if (t == dup.second)
 				{
@@ -43,7 +43,7 @@ namespace details
 		template<typename T>
 		friend bool operator==(const duplex& dup, const T& t)
 		{
-			if constexpr (std::is_convertible_v <T, First>)
+			if constexpr (std::is_convertible_v<T, First>)
 			{
 				if (t == dup.first)
 				{
@@ -52,7 +52,7 @@ namespace details
 				}
 			}
 
-			if constexpr (std::is_convertible_v <T, Second>) {
+			if constexpr (std::is_convertible_v<T, Second>) {
 				if (t == dup.second)
 				{
 					correct_val = t;

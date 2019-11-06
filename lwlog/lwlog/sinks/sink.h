@@ -16,11 +16,9 @@ namespace lwlog::sinks
 		virtual void sink_it(std::string_view, level) = 0;
 
 	public:
-		void set_level_visibility(level log_level);
 		void set_pattern(std::string_view pattern);
 
 	protected:
 		std::string m_pattern;
-		level m_level;
 	};
 }

@@ -7,8 +7,7 @@ namespace details
 	backtracer::backtracer()
 		: m_backtrace_messages(0)
 		, m_is_backtrace_enabled(false)
-	{
-	}
+	{}
 
 	void backtracer::backtrace(std::size_t buffer_size)
 	{

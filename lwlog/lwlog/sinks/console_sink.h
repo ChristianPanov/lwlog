@@ -5,7 +5,7 @@
 
 namespace lwlog::sinks
 {
-	class LWLOG_API console_sink : public sink
+	class LWLOG_API console_sink : public virtual sink
 	{
 	public:
 		virtual ~console_sink() = default;

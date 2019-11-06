@@ -1,7 +1,5 @@
 #pragma once
 
-#include <type_traits>
-
 #include "../core.h"
 #include "sink.h"
 #include "console_sink.h"
@@ -9,7 +7,7 @@
 
 namespace lwlog
 {
-	template <typename SinkPolicy = sinks::console_sink>
+	template <typename SinkPolicy>
 	class LWLOG_API sink_factory
 	{
 	public:

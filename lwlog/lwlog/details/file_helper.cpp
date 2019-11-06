@@ -1,12 +1,7 @@
-#include "file_helper.h"
+﻿#include "file_helper.h"
 
 namespace details
 {
-	file_helper::file_helper()
-		: m_path(std::filesystem::current_path())
-		, m_size_limit(10240)
-	{}
-
 	file_helper::~file_helper()
 	{
 		close();
@@ -22,20 +17,20 @@ namespace details
 		{
 			std::filesystem::create_directory(m_path);
 		}
+		else if (path_str.empty())
+		{
+			std::filesystem::create_directory(std::filesystem::current_path());
+		}
 
 		m_path.append(name);
-		m_file = std::fopen(m_path.string().data(), 
-			open_mode == append::off ? "w" : "a");
+		m_file = std::fopen(m_path.string().data(), open_mode == append::off ? "w" : "a");
 	}
 
 	void file_helper::write(std::string_view message)
 	{
-		std::size_t message_size = message.size();
-		auto data = message.data();
-
 		if (m_file != nullptr && std::filesystem::file_size(m_path) <= m_size_limit)
 		{
-			std::fwrite(data, 1, message_size, m_file);
+			std::fwrite(message.data(), 1, message.size(), m_file);
 		}
 	}
 
@@ -55,8 +50,6 @@ namespace details
 		{
 			std::fclose(m_file);
 			m_file = nullptr;
-			m_name.clear();
-			m_size_limit = 0;
 		}
 	}
 }
