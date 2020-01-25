@@ -10,4 +10,8 @@ namespace lwlog::sinks
 	{
 		m_pattern = pattern;
 	}
+	std::string sink::get_pattern() const
+	{
+		return m_pattern;
+	}
 }

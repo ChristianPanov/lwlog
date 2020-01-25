@@ -1,35 +1,160 @@
 #pragma once
 
 #include <chrono>
-#include "lwlog/print.h"
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <thread>
+#include <algorithm>
 
-class Benchmark
+#define PROFILING 1
+#if PROFILING
+#define PROFILE_SCOPE(name)	InstrumentationTimer timer##__LINE__(name);
+#define PROFILE_FUNCTION() PROFILE_SCOPE(__FUNCSIG__)
+#else
+#define PROFILE_SCOPE(name)
+#define PROFILE_FUNCTION()
+#endif
+
+struct ProfileResult 
 {
-private:
-	std::chrono::time_point<std::chrono::high_resolution_clock> m_startTimepoint;
+	std::string Name;
+	long long Start, End;
+	uint32_t ThreadID;
+};
 
-private:
-	void stop()
-	{
-		auto endTimepoint = std::chrono::high_resolution_clock::now();
+struct InstrumentationSession 
+{
+	std::string Name;
+};
 
-		auto start = std::chrono::time_point_cast<std::chrono::microseconds>(m_startTimepoint).time_since_epoch().count();
-		auto end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch().count();
-
-		auto duration = end - start;
-		double ms = duration * 0.001;
-
-		lwlog::print("{0}us\n", duration);
-	}
-
+class Instrumentor
+{
 public:
-	Benchmark()
-	{
-		m_startTimepoint = std::chrono::high_resolution_clock::now();
+	Instrumentor()
+		: m_currentSession(nullptr), m_profileCount(0)
+	{}
+
+	void BeginSession(const std::string& name, const std::string& filepath = "results.json") {
+		m_outputStream.open(filepath);
+		WriteHeader();
+		m_currentSession = new InstrumentationSession{ name };
 	}
 
-	~Benchmark()
-	{
-		stop();
+	void EndSession() {
+		WriteFooter();
+		m_outputStream.close();
+		delete m_currentSession;
+		m_currentSession = nullptr;
+		m_profileCount = 0;
 	}
+
+	void WriteProfile(const ProfileResult& result) {
+		if (m_profileCount++ > 0) {
+			m_outputStream << ",";
+		}
+
+		std::string name = result.Name;
+		std::replace(name.begin(), name.end(), '"', '\'');
+
+		m_outputStream << "{";
+		m_outputStream << "\"cat\":\"function\",";
+		m_outputStream << "\"dur\":" << (result.End - result.Start) << ',';
+		m_outputStream << "\"name\":\"" << name << "\",";
+		m_outputStream << "\"ph\":\"X\",";
+		m_outputStream << "\"pid\":0,";
+		m_outputStream << "\"tid\":" << result.ThreadID << ",";
+		m_outputStream << "\"ts\":" << result.Start;
+		m_outputStream << "}";
+
+		m_outputStream.flush();
+	}
+
+	void WriteHeader() {
+		m_outputStream << "{\"otherData\": {},\"traceEvents\":[";
+		m_outputStream.flush();
+	}
+
+	void WriteFooter() {
+		m_outputStream << "]}";
+		m_outputStream.flush();
+	}
+
+	static Instrumentor& Get()
+	{
+		static Instrumentor* instance = new Instrumentor();
+		return *instance;
+	}
+
+private:
+	InstrumentationSession* m_currentSession;
+	std::ofstream m_outputStream;
+	int m_profileCount;
+};
+
+class InstrumentationTimer
+{
+public:
+	InstrumentationTimer(std::string_view name)
+		: m_Name(name), m_Stopped(false)
+	{
+		m_StartTimepoint = std::chrono::high_resolution_clock::now();
+	}
+
+	~InstrumentationTimer()
+	{
+		if (!m_Stopped) {
+			stop();
+		}
+	}
+
+private:
+	void stop() {
+		auto end_timepoint = std::chrono::high_resolution_clock::now();
+		long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch().count();
+		long long end = std::chrono::time_point_cast<std::chrono::microseconds>(end_timepoint).time_since_epoch().count();
+
+		uint32_t threadID = std::hash<std::thread::id>{}(std::this_thread::get_id());
+		Instrumentor::Get().WriteProfile({m_Name, start, end, threadID });
+
+		m_Stopped = true;
+	}
+
+private:
+	std::string m_Name;
+	bool m_Stopped;
+	std::chrono::time_point<std::chrono::steady_clock> m_StartTimepoint;
+};
+
+class Timer
+{
+public:
+	Timer(std::string_view name)
+		: m_name(name), m_stopped(false)
+	{
+		m_start_timepoint = std::chrono::high_resolution_clock::now();
+	}
+
+	~Timer()
+	{
+		if (!m_stopped) {
+			stop();
+		}
+	}
+
+private:
+	void stop() {
+		auto end_timepoint = std::chrono::high_resolution_clock::now();
+		long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_start_timepoint).time_since_epoch().count();
+		long long end = std::chrono::time_point_cast<std::chrono::microseconds>(end_timepoint).time_since_epoch().count();
+
+		std::cout << m_name << ": " << (end - start) << "ms\n";
+
+		m_stopped = true;
+	}
+
+private:
+	std::string m_name;
+	bool m_stopped;
+	std::chrono::time_point<std::chrono::steady_clock> m_start_timepoint;
 };

@@ -20,8 +20,8 @@
 
 int main()
 {
-	auto console = std::make_unique<lwlog::logger<lwlog::sinks::file_sink>>("LOGGER");
-	console->init_log_file("LOGS.TXT", "C:/Users/user/Desktop/MyBitch");
+	auto console = std::make_unique<lwlog::logger<lwlog::sinks::console_sink, lwlog::sinks::file_sink>>("LOGGER");
+	//console->init_log_file("LOGS.TXT", "C:/Users/user/Desktop/MyBitch");
 	console->set_pattern("^br_red^[%x] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
 	console->info("First info message");
 	console->debug("First debug message");

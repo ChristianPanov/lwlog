@@ -1,7 +1,5 @@
 #include "sink_factory.h"
 
-#include <iostream>
-
 namespace lwlog
 {
 	template<typename SinkPolicy>

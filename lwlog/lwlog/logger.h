@@ -4,24 +4,25 @@
 #include <vector>
 #include <unordered_map>
 
+#include "core.h"
 #include "sinks/sink.h"
 #include "sinks/console_sink.h"
 #include "sinks/file_sink.h"
 #include "sinks/sink_factory.h"
-
-#include "core.h"
 #include "details/backtracer.h"
 
 namespace lwlog
 {
 	enum class level;
 	
-	template<typename SinkPolicy = sinks::console_sink>
-	class LWLOG_API logger : public SinkPolicy
+	template<typename SinkPolicy = sinks::console_sink, typename ... SinkPolicyArgs>
+	class LWLOG_API logger : public SinkPolicy, public SinkPolicyArgs...
 	{
 	public:
 		explicit logger(std::string_view name);
 		virtual ~logger() = default;
+
+		void set_pattern(std::string_view pattern);
 
 		void info(std::string_view message);
 		void warning(std::string_view message);
@@ -30,6 +31,7 @@ namespace lwlog
 		void debug(std::string_view message);
 
 		void backtrace(std::size_t buffer_size);
+		void disable_backtrace();
 		void set_backtrace_stamp(std::string_view stamp);
 		void display_backtrace();
 		void delete_backtrace();
@@ -45,6 +47,6 @@ namespace lwlog
 		std::string m_level_string;
 
 		details::backtracer m_tracer;
-		std::unique_ptr<sinks::sink> m_sink;
+		std::vector<std::shared_ptr<sinks::sink>> m_sink_buffer;
 	};
 }

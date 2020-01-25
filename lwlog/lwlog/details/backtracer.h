@@ -15,6 +15,7 @@ namespace details
 		virtual ~backtracer() = default;
 
 		void backtrace(std::size_t buffer_size);
+		void disable_backtrace();
 		void set_backtrace_stamp(std::string_view stamp);
 		void display_backtrace();
 		void delete_backtrace();

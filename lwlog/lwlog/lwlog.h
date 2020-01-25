@@ -1,7 +1,6 @@
 #pragma once
 
 #include "logger.h"
-
 #include "sinks/sink.h"
 #include "sinks/console_sink.h"
 #include "sinks/file_sink.h"

@@ -15,6 +15,11 @@ namespace details
 		m_backtrace_buffer.reserve(buffer_size);
 	}
 
+	void backtracer::disable_backtrace()
+	{
+		m_is_backtrace_enabled = false;
+	}
+
 	void backtracer::set_backtrace_stamp(std::string_view stamp)
 	{
 		m_backtrace_stamp = stamp;

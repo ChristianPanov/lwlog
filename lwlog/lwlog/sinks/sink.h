@@ -3,7 +3,6 @@
 #include <string>
 
 #include "../core.h"
-#include "../log_level.h"
 
 namespace lwlog::sinks
 {
@@ -13,12 +12,13 @@ namespace lwlog::sinks
 		sink();
 		virtual ~sink() = default;
 
-		virtual void sink_it(std::string_view, level) = 0;
+		virtual void sink_it(std::string_view) = 0;
 
 	public:
 		void set_pattern(std::string_view pattern);
+		std::string get_pattern() const;
 
-	protected:
+	private:
 		std::string m_pattern;
 	};
 }

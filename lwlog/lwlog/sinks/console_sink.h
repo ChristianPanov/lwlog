@@ -5,11 +5,11 @@
 
 namespace lwlog::sinks
 {
-	class LWLOG_API console_sink : public virtual sink
+	class LWLOG_API console_sink : public sink
 	{
 	public:
 		virtual ~console_sink() = default;
 
-		void sink_it(std::string_view message, level log_level) override;
+		void sink_it(std::string_view message) override;
 	};
 }
