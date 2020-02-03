@@ -96,7 +96,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="lwlog\log_level.h" />
+    <ClInclude Include="lwlog\registry.h" />
+    <ClInclude Include="lwlog\sinks\sink_level.h" />
     <ClInclude Include="lwlog\lwlog.h" />
     <ClInclude Include="lwlog\sinks\file_sink.h" />
     <ClInclude Include="lwlog\color.h" />
@@ -114,6 +115,7 @@
     <ClInclude Include="lwlog\sinks\sink_factory.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="lwlog\registry.cpp" />
     <ClCompile Include="lwlog\sinks\file_sink.cpp" />
     <ClCompile Include="lwlog\details\backtracer.cpp" />
     <ClCompile Include="lwlog\details\file_helper.cpp" />

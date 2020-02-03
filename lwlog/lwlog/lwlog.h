@@ -17,4 +17,7 @@ namespace lwlog
 
 	using file_logger_st = nullptr_t;
 	using file_logger_mt = nullptr_t;
+	/*-------------------------------------------*/
+
+
 }

@@ -15,13 +15,18 @@
 #include "lwlog/sinks/sink_factory.h"
 #include "lwlog/sinks/console_sink.h"
 #include "lwlog/sinks/file_sink.h"
+#include "lwlog/sinks/sink_level.h"
 
 #include "lwlog/lwlog.h"
+#include "lwlog/registry.h"
 
 int main()
 {
 	auto console = std::make_unique<lwlog::logger<lwlog::sinks::console_sink, lwlog::sinks::file_sink>>("LOGGER");
+	auto console2 = std::make_unique<lwlog::logger<lwlog::sinks::console_sink>>("LOGGER2");
+	auto console3 = std::make_unique<lwlog::logger<lwlog::sinks::file_sink>>("LOGGER3");
 	//console->init_log_file("LOGS.TXT", "C:/Users/user/Desktop/MyBitch");
+	console->set_level_visibility({ lwlog::sink_level::info, lwlog::sink_level::debug });
 	console->set_pattern("^br_red^[%x] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
 	console->info("First info message");
 	console->debug("First debug message");

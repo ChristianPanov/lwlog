@@ -1,5 +1,4 @@
 #include "file_sink.h"
-#include "../formatter.h"
 
 #include "../print.h"
 

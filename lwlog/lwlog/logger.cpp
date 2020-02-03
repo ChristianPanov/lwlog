@@ -1,36 +1,45 @@
 #include "logger.h"
-#include "log_level.h"
+#include "sinks/sink_factory.h"
+#include "sinks/sink_level.h"
+#include "registry.h"
 #include "formatter.h"
 
 namespace lwlog
 {
-	template<typename SinkPolicy, typename ... SinkPolicyArgs>
-	logger<SinkPolicy, SinkPolicyArgs...>::logger(std::string_view logger_name)
-		: m_logger_name(logger_name)
+	template<typename ... SinkPolicyArgs>
+	logger<SinkPolicyArgs...>::logger(std::string_view name)
+		: m_name(name)
 	{
-		m_sink_buffer.emplace_back(sink_factory<SinkPolicy>::request());
+		if (registry::instance().is_registry_automatic() == true)
+		{
+			registry::instance().register_logger(this);
+		}
+
 		(m_sink_buffer.emplace_back(sink_factory<SinkPolicyArgs>::request()), ...);
 	}
 
-	template<typename SinkPolicy, typename ... SinkPolicyArgs>
-	void logger<SinkPolicy, SinkPolicyArgs...>::log(std::string_view message, level log_level)
+	template<typename ... SinkPolicyArgs>
+	void logger<SinkPolicyArgs...>::log(std::string_view message, sink_level level)
 	{
 		m_message = message;
 
-		formatter::insert_pattern_data({ "%logger_name%",	"%n" }, m_logger_name);
+		formatter::insert_pattern_data({ "%logger_name%",	"%n" }, m_name);
 		formatter::insert_pattern_data({ "%message%",		"%v" }, m_message);
 		formatter::insert_pattern_data({ "%log_level%",		"%l" }, m_level_string);
 		formatter::insert_pattern_data({ "%log_level_abr%",	"%L" }, std::to_string(std::toupper(m_level_string[0])));
 
 		for (const auto& sink : m_sink_buffer)
 		{
-			sink.get()->sink_it(formatter::format(sink.get()->get_pattern()));
-			m_tracer.push_in_backtrace_buffer(formatter::format(sink.get()->get_pattern()));
+			if (sink.get()->should_sink(level))
+			{
+				sink.get()->sink_it(formatter::format(sink.get()->get_pattern()));
+				m_tracer.push_in_backtrace_buffer(formatter::format(sink.get()->get_pattern()));
+			}
 		}
 	}
 
-	template<typename SinkPolicy, typename ...SinkPolicyArgs>
-	void logger<SinkPolicy, SinkPolicyArgs...>::set_pattern(std::string_view pattern)
+	template<typename ... SinkPolicyArgs>
+	void logger<SinkPolicyArgs...>::set_pattern(std::string_view pattern)
 	{
 		for (const auto& sink : m_sink_buffer)
 		{ 
@@ -38,75 +47,90 @@ namespace lwlog
 		}
 	}
 
-	template<typename SinkPolicy, typename ... SinkPolicyArgs>
-	void logger<SinkPolicy, SinkPolicyArgs...>::info(std::string_view message)
+	template<typename ... SinkPolicyArgs>
+	void logger<SinkPolicyArgs...>::set_level_visibility(std::initializer_list<sink_level> level_init_list)
+	{
+		for (const auto& sink : m_sink_buffer)
+		{
+			sink.get()->set_level_visibility(level_init_list);
+		}
+	}
+
+	template<typename ... SinkPolicyArgs>
+	void logger<SinkPolicyArgs...>::info(std::string_view message)
 	{
 		m_level_string = "info";
-		log(message, level::info);
+		log(message, sink_level::info);
 	}
 
-	template<typename SinkPolicy, typename ... SinkPolicyArgs>
-	void logger<SinkPolicy, SinkPolicyArgs...>::warning(std::string_view message)
+	template<typename ... SinkPolicyArgs>
+	void logger<SinkPolicyArgs...>::warning(std::string_view message)
 	{
 		m_level_string = "warning";
-		log(message, level::warning);
+		log(message, sink_level::warning);
 	}
 
-	template<typename SinkPolicy, typename ... SinkPolicyArgs>
-	void logger<SinkPolicy, SinkPolicyArgs...>::error(std::string_view message)
+	template<typename ... SinkPolicyArgs>
+	void logger<SinkPolicyArgs...>::error(std::string_view message)
 	{
 		m_level_string = "error";
-		log(message, level::error);
+		log(message, sink_level::error);
 	}
 
-	template<typename SinkPolicy, typename ... SinkPolicyArgs>
-	void logger<SinkPolicy, SinkPolicyArgs...>::critical(std::string_view message)
+	template<typename ... SinkPolicyArgs>
+	void logger<SinkPolicyArgs...>::critical(std::string_view message)
 	{
 		m_level_string = "critical";
-		log(message, level::critical);
+		log(message, sink_level::critical);
 	}
 
-	template<typename SinkPolicy, typename ... SinkPolicyArgs>
-	void logger<SinkPolicy, SinkPolicyArgs...>::debug(std::string_view message)
+	template<typename ... SinkPolicyArgs>
+	void logger<SinkPolicyArgs...>::debug(std::string_view message)
 	{
 		m_level_string = "debug";
-		log(message, level::debug);
+		log(message, sink_level::debug);
 	}
 
-	template<typename SinkPolicy, typename ... SinkPolicyArgs>
-	void logger<SinkPolicy, SinkPolicyArgs...>::backtrace(std::size_t buffer_size)
+	template<typename ... SinkPolicyArgs>
+	void logger<SinkPolicyArgs...>::backtrace(std::size_t buffer_size)
 	{
 		m_tracer.backtrace(buffer_size);
 	}
 
-	template<typename SinkPolicy, typename ...SinkPolicyArgs>
-	void logger<SinkPolicy, SinkPolicyArgs...>::disable_backtrace()
+	template<typename ... SinkPolicyArgs>
+	void logger<SinkPolicyArgs...>::disable_backtrace()
 	{
 		m_tracer.disable_backtrace();
 	}
 
-	template<typename SinkPolicy, typename ... SinkPolicyArgs>
-	void logger<SinkPolicy, SinkPolicyArgs...>::set_backtrace_stamp(std::string_view stamp)
+	template<typename ... SinkPolicyArgs>
+	void logger<SinkPolicyArgs...>::set_backtrace_stamp(std::string_view stamp)
 	{
 		m_tracer.set_backtrace_stamp(stamp);
 	}
 
-	template<typename SinkPolicy, typename ... SinkPolicyArgs>
-	void logger<SinkPolicy, SinkPolicyArgs...>::display_backtrace()
+	template<typename ... SinkPolicyArgs>
+	void logger<SinkPolicyArgs...>::display_backtrace()
 	{
 		m_tracer.display_backtrace();
 	}
 
-	template<typename SinkPolicy, typename ... SinkPolicyArgs>
-	void logger<SinkPolicy, SinkPolicyArgs...>::delete_backtrace()
+	template<typename ... SinkPolicyArgs>
+	void logger<SinkPolicyArgs...>::delete_backtrace()
 	{
 		m_tracer.delete_backtrace();
 	}
 
-	template<typename SinkPolicy, typename ... SinkPolicyArgs>
-	inline std::string logger<SinkPolicy, SinkPolicyArgs...>::get_name() const
+	template<typename ... SinkPolicyArgs>
+	inline std::string& logger<SinkPolicyArgs...>::name() const
 	{
-		return m_logger_name;
+		return m_name;
+	}
+
+	template<typename ... SinkPolicyArgs>
+	inline std::vector<std::shared_ptr<sinks::sink>>& logger<SinkPolicyArgs...>::sinks() const
+	{
+		return m_sink_buffer;
 	}
 
 	template class logger<sinks::console_sink, sinks::file_sink>;

@@ -25,7 +25,8 @@
     <ClInclude Include="lwlog\sinks\sink_factory.h" />
     <ClInclude Include="lwlog\logger.h" />
     <ClInclude Include="lwlog\lwlog.h" />
-    <ClInclude Include="lwlog\log_level.h" />
+    <ClInclude Include="lwlog\sinks\sink_level.h" />
+    <ClInclude Include="lwlog\registry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\formatter.cpp" />
@@ -36,6 +37,7 @@
     <ClCompile Include="lwlog\sinks\file_sink.cpp" />
     <ClCompile Include="lwlog\sinks\sink_factory.cpp" />
     <ClCompile Include="lwlog\logger.cpp" />
+    <ClCompile Include="lwlog\registry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Colors.txt" />
