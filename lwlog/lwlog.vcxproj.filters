@@ -4,43 +4,76 @@
     <Filter Include="details">
       <UniqueIdentifier>{8B788209-F757-01A5-0070-8C7B6CCE6706}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sinks">
+      <UniqueIdentifier>{0D785B10-798C-83C1-420E-2721AEE17FF2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lwlog\color.h" />
     <ClInclude Include="lwlog\core.h" />
     <ClInclude Include="lwlog\datetime.h" />
+    <ClInclude Include="lwlog\details\backtracer.h">
+      <Filter>details</Filter>
+    </ClInclude>
     <ClInclude Include="lwlog\details\duplex.h">
+      <Filter>details</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\details\file_helper.h">
+      <Filter>details</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\details\singleton.h">
       <Filter>details</Filter>
     </ClInclude>
     <ClInclude Include="lwlog\details\utilities.h">
       <Filter>details</Filter>
     </ClInclude>
     <ClInclude Include="lwlog\formatter.h" />
-    <ClInclude Include="lwlog\print.h" />
-    <ClInclude Include="lwlog\details\file_helper.h" />
-    <ClInclude Include="lwlog\sinks\sink.h" />
-    <ClInclude Include="lwlog\sinks\console_sink.h" />
-    <ClInclude Include="lwlog\details\backtracer.h" />
-    <ClInclude Include="lwlog\sinks\file_sink.h" />
-    <ClInclude Include="lwlog\sinks\sink_factory.h" />
     <ClInclude Include="lwlog\logger.h" />
     <ClInclude Include="lwlog\lwlog.h" />
-    <ClInclude Include="lwlog\sinks\sink_level.h" />
+    <ClInclude Include="lwlog\print.h" />
     <ClInclude Include="lwlog\registry.h" />
+    <ClInclude Include="lwlog\sinks\console_sink.h">
+      <Filter>sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\sinks\file_sink.h">
+      <Filter>sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\sinks\sink.h">
+      <Filter>sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\sinks\sink_factory.h">
+      <Filter>sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\sinks\sink_level.h">
+      <Filter>sinks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="lwlog\details\backtracer.cpp">
+      <Filter>details</Filter>
+    </ClCompile>
+    <ClCompile Include="lwlog\details\file_helper.cpp">
+      <Filter>details</Filter>
+    </ClCompile>
     <ClCompile Include="lwlog\formatter.cpp" />
-    <ClCompile Include="lwlog\details\file_helper.cpp" />
-    <ClCompile Include="lwlog\sinks\console_sink.cpp" />
-    <ClCompile Include="lwlog\sinks\sink.cpp" />
-    <ClCompile Include="lwlog\details\backtracer.cpp" />
-    <ClCompile Include="lwlog\sinks\file_sink.cpp" />
-    <ClCompile Include="lwlog\sinks\sink_factory.cpp" />
     <ClCompile Include="lwlog\logger.cpp" />
+    <ClCompile Include="lwlog\lwlog.cpp" />
     <ClCompile Include="lwlog\registry.cpp" />
+    <ClCompile Include="lwlog\sinks\console_sink.cpp">
+      <Filter>sinks</Filter>
+    </ClCompile>
+    <ClCompile Include="lwlog\sinks\file_sink.cpp">
+      <Filter>sinks</Filter>
+    </ClCompile>
+    <ClCompile Include="lwlog\sinks\sink.cpp">
+      <Filter>sinks</Filter>
+    </ClCompile>
+    <ClCompile Include="lwlog\sinks\sink_factory.cpp">
+      <Filter>sinks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Colors.txt" />
     <Text Include="Format.txt" />
+    <Text Include="Colors.txt" />
   </ItemGroup>
 </Project>

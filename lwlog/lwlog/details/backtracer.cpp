@@ -27,9 +27,9 @@ namespace details
  
 	void backtracer::display_backtrace()
 	{
-		for (const auto& i : m_backtrace_buffer)
+		for (const auto& message : m_backtrace_buffer)
 		{
-			lwlog::print("{0}{1}\n", m_backtrace_stamp, i);
+			lwlog::print("{0}{1}\n", m_backtrace_stamp, message);
 		}
 	}
 

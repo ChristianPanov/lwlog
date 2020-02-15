@@ -12,7 +12,7 @@ namespace lwlog
 	{
 		if (registry::instance().is_registry_automatic() == true)
 		{
-			registry::instance().register_logger(this);
+			registry::instance().register_logger(m_name, this);
 		}
 
 		(m_sink_buffer.emplace_back(sink_factory<SinkPolicyArgs>::request()), ...);
@@ -48,11 +48,11 @@ namespace lwlog
 	}
 
 	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::set_level_visibility(std::initializer_list<sink_level> level_init_list)
+	void logger<SinkPolicyArgs...>::set_level_visibility(std::initializer_list<sink_level> level_list)
 	{
 		for (const auto& sink : m_sink_buffer)
 		{
-			sink.get()->set_level_visibility(level_init_list);
+			sink.get()->set_level_visibility(level_list);
 		}
 	}
 
@@ -122,13 +122,13 @@ namespace lwlog
 	}
 
 	template<typename ... SinkPolicyArgs>
-	inline std::string& logger<SinkPolicyArgs...>::name() const
+	inline std::string logger<SinkPolicyArgs...>::name() const
 	{
 		return m_name;
 	}
 
 	template<typename ... SinkPolicyArgs>
-	inline std::vector<std::shared_ptr<sinks::sink>>& logger<SinkPolicyArgs...>::sinks() const
+	inline std::vector<std::shared_ptr<sinks::sink>> logger<SinkPolicyArgs...>::sinks() const
 	{
 		return m_sink_buffer;
 	}

@@ -10,6 +10,6 @@ namespace lwlog::sinks
 	public:
 		virtual ~console_sink() = default;
 
-		void sink_it(std::string_view message) override;
+		virtual void sink_it(std::string_view message) override;
 	};
 }

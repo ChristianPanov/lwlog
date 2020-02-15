@@ -18,7 +18,7 @@ namespace lwlog::sinks
 
 	public:
 		void set_pattern(std::string_view pattern);
-		void set_level_visibility(std::initializer_list<sink_level> level_init_list);
+		void set_level_visibility(std::initializer_list<sink_level> level_list);
 		std::string get_pattern() const;
 		bool should_sink(sink_level level);
 

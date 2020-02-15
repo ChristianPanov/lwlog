@@ -7,8 +7,6 @@
 
 namespace lwlog
 {
-	std::vector<details::duplex<std::string, std::string>> formatter::m_inserted_pattern_data_keys = {};
-
 	std::unordered_map<details::duplex<std::string, std::string>, std::string> formatter::m_pattern_data =
 	{
 		{{"%seconds%",			"%s"}, lwlog::datetime::get_second()},
@@ -97,7 +95,6 @@ namespace lwlog
 
 	void formatter::insert_pattern_data(details::duplex<std::string, std::string> duplex_key, std::string_view value)
 	{
-		m_inserted_pattern_data_keys.emplace_back(duplex_key);
 		m_pattern_data.insert_or_assign(duplex_key, value);
 	}
 }

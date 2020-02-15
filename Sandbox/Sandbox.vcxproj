@@ -86,7 +86,6 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalOptions> </AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

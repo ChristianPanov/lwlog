@@ -13,10 +13,10 @@ namespace lwlog::sinks
 		m_pattern = pattern;
 	}
 
-	void sink::set_level_visibility(std::initializer_list<sink_level> level_init_list)
+	void sink::set_level_visibility(std::initializer_list<sink_level> level_list)
 	{
 		m_levels.clear();
-		m_levels = level_init_list;
+		m_levels = level_list;
 	}
 
 	std::string sink::get_pattern() const

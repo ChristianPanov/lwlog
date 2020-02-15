@@ -18,6 +18,5 @@ namespace lwlog
 
 	public:
 		static std::unordered_map<details::duplex<std::string, std::string>, std::string> m_pattern_data;
-		static std::vector<details::duplex<std::string, std::string>> m_inserted_pattern_data_keys;
 	};
 }

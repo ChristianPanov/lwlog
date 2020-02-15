@@ -62,7 +62,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -71,6 +71,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ImportLibrary>..\bin\Debug-windows-x86_64\lwlog\lwlog.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST ..\bin\Debug-windows-x86_64\lwlog\lwlog.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\lwlog\lwlog.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\lwlog\lwlog.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -82,11 +85,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalOptions>
-      </AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -94,34 +95,39 @@
       <OptimizeReferences>true</OptimizeReferences>
       <ImportLibrary>..\bin\Release-windows-x86_64\lwlog\lwlog.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST ..\bin\Release-windows-x86_64\lwlog\lwlog.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\lwlog\lwlog.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\lwlog\lwlog.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="lwlog\registry.h" />
-    <ClInclude Include="lwlog\sinks\sink_level.h" />
-    <ClInclude Include="lwlog\lwlog.h" />
-    <ClInclude Include="lwlog\sinks\file_sink.h" />
     <ClInclude Include="lwlog\color.h" />
     <ClInclude Include="lwlog\core.h" />
     <ClInclude Include="lwlog\datetime.h" />
     <ClInclude Include="lwlog\details\backtracer.h" />
     <ClInclude Include="lwlog\details\duplex.h" />
     <ClInclude Include="lwlog\details\file_helper.h" />
+    <ClInclude Include="lwlog\details\singleton.h" />
     <ClInclude Include="lwlog\details\utilities.h" />
     <ClInclude Include="lwlog\formatter.h" />
     <ClInclude Include="lwlog\logger.h" />
+    <ClInclude Include="lwlog\lwlog.h" />
     <ClInclude Include="lwlog\print.h" />
+    <ClInclude Include="lwlog\registry.h" />
     <ClInclude Include="lwlog\sinks\console_sink.h" />
+    <ClInclude Include="lwlog\sinks\file_sink.h" />
     <ClInclude Include="lwlog\sinks\sink.h" />
     <ClInclude Include="lwlog\sinks\sink_factory.h" />
+    <ClInclude Include="lwlog\sinks\sink_level.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="lwlog\registry.cpp" />
-    <ClCompile Include="lwlog\sinks\file_sink.cpp" />
     <ClCompile Include="lwlog\details\backtracer.cpp" />
     <ClCompile Include="lwlog\details\file_helper.cpp" />
     <ClCompile Include="lwlog\formatter.cpp" />
     <ClCompile Include="lwlog\logger.cpp" />
+    <ClCompile Include="lwlog\lwlog.cpp" />
+    <ClCompile Include="lwlog\registry.cpp" />
     <ClCompile Include="lwlog\sinks\console_sink.cpp" />
+    <ClCompile Include="lwlog\sinks\file_sink.cpp" />
     <ClCompile Include="lwlog\sinks\sink.cpp" />
     <ClCompile Include="lwlog\sinks\sink_factory.cpp" />
   </ItemGroup>
