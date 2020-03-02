@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "core.h"
+#include "logger_registry_interface.h"
 #include "sinks/sink.h"
 #include "sinks/console_sink.h"
 #include "sinks/file_sink.h"
@@ -13,32 +14,32 @@
 namespace lwlog
 {
 	template<typename ... SinkPolicyArgs>
-	class LWLOG_API logger : public SinkPolicyArgs...
+	class LWLOG_API logger : public logger_registry_interface, public SinkPolicyArgs...
 	{
 	public:
 		explicit logger(std::string_view name);
 		virtual ~logger() = default;
 
-		void set_pattern(std::string_view pattern);
-		void set_level_visibility(std::initializer_list<sink_level> level_list);
+		void set_pattern(std::string_view pattern) override;
+		void set_level_visibility(std::initializer_list<sink_level> level_list) override;
 
-		void info(std::string_view message);
-		void warning(std::string_view message);
-		void error(std::string_view message);
-		void critical(std::string_view message);
-		void debug(std::string_view message);
+		void info(std::string_view message) override;
+		void warning(std::string_view message) override;
+		void error(std::string_view message) override;
+		void critical(std::string_view message) override;
+		void debug(std::string_view message) override;
 
-		void backtrace(std::size_t buffer_size);
-		void disable_backtrace();
-		void set_backtrace_stamp(std::string_view stamp);
-		void display_backtrace();
-		void delete_backtrace();
+		void backtrace(std::size_t buffer_size) override;
+		void disable_backtrace() override;
+		void set_backtrace_stamp(std::string_view stamp) override;
+		void display_backtrace() override;
+		void delete_backtrace() override;
 
-		inline std::string name() const;
-		inline std::vector<std::shared_ptr<sinks::sink>> sinks() const;
+		inline std::string name() const override;
+		inline std::vector<std::shared_ptr<sinks::sink>> sinks() const override;
 
 	private:
-		void log(std::string_view message, sink_level level);
+		void log(std::string_view message, sink_level level) override;
 
 	private:
 		std::string m_name;

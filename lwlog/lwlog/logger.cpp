@@ -12,7 +12,7 @@ namespace lwlog
 	{
 		if (registry::instance().is_registry_automatic() == true)
 		{
-			registry::instance().register_logger(m_name, this);
+			registry::instance().register_logger(this);
 		}
 
 		(m_sink_buffer.emplace_back(sink_factory<SinkPolicyArgs>::request()), ...);

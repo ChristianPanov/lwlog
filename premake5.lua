@@ -41,7 +41,7 @@ project "lwlog"
 
 		defines
 		{
-			"LWLOG_BUILD_DLL"
+			"LWLOG_BUILD_SHARED"
 		}
 
 		postbuildcommands

@@ -20,110 +20,6 @@
 #include "lwlog/lwlog.h"
 #include "lwlog/registry.h"
 
-#include <iostream>
-#include <variant>
-#include <typeinfo>
-
-class Sink
-{
-public:
-	virtual void sink_it() = 0;
-};
-
-class Console : public virtual Sink
-{
-public:
-	virtual void sink_it() override { std::cout << "Console\n"; }
-};
-
-class File : public virtual Sink
-{
-public:
-	virtual void sink_it() override { std::cout << "File\n"; }
-};
-
-template <typename ... T>
-class Logger : public T...
-{
-public:
-	Logger()
-	{
-		Registry::instance().register_foo(this);
-	}
-
-	void log() { sink_it(); }
-	void info() { std::cout << "[INFO]\n"; }
-
-	void bar() { std::cout << "bar\n"; }
-	void bizz() { std::cout << "bizz\n"; }
-	void buzz() { std::cout << "buzz\n"; }
-
-private:
-	void sink_it()
-	{
-		(T::sink_it(), ...);
-	}
-};
-
-struct type_member {
-	std::string type_str;
-	template<typename Ty>
-	type_member(Ty&& type, std::string type_str)
-		: type_str(std::move(type_str))
-		, _type(&type)
-	{}
-
-	template<typename Ty>
-	auto type() {
-		return static_cast<Ty*>(_type);
-	}
-
-private:
-	void* _type;
-};
-
-using MyTypes = std::variant<
-	Logger<Console>*, 
-	Logger<File>*, 
-	Logger<Console, File>*,
-	Logger<File, Console>*>;
-
-class Registry
-{
-public:
-	static Registry& instance()
-	{
-		static Registry s_instance;
-		return s_instance;
-	}
-
-	void register_foo(MyTypes logger)
-	{
-		m_vec.emplace_back(logger);
-	}
-
-	auto get(int pos)
-	{
-		return m_vec[pos];
-	}
-
-	std::vector<MyTypes> m_vec;
-};
-
-/*
-int main()
-{
-	auto f1 = std::make_shared<Logger<Console, File>>();
-	auto f2 = std::make_shared<Logger<Console>>();
-
-	//f1->log();
-	//f2->log();
-	//f1->bar();
-
-	Registry::instance().get(0);
-}
-*/
-
 int main()
 {
 	auto console = std::make_unique<lwlog::logger<lwlog::sinks::console_sink, lwlog::sinks::file_sink>>("LOGGER");
@@ -133,18 +29,18 @@ int main()
 	//console->init_log_file("LOGS.TXT", "C:/Users/user/Desktop/MyBitch");
 
 	//lwlog::level_init_list levels{ lwlog::sink_level::info, lwlog::sink_level::debug };
-	console->set_level_visibility({ lwlog::sink_level::info, lwlog::sink_level::debug });
+	console->set_level_visibility({ lwlog::sink_level::info, lwlog::sink_level::debug, lwlog::sink_level::critical });
 	console->set_pattern("^br_red^[%x] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
 	console->info("First info message");
 
-	//lwlog::registry::instance().get("LOGGER2")->info("WOWOW");
-
+	lwlog::registry::instance().get("LOGGER")->critical("CRITICAL MESSAGE");
+	lwlog::get("LOGGER")->info("OKAY THATS PRETTY GLOBAL");
 	//console->debug("First debug message");
 	//console->critical("First critical message");
 
-	//lwlog::set_pattern("^br_red^[%x] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
-	//lwlog::set_level_visibility({ lwlog::sink_level::info, lwlog::sink_level::debug });
-	//lwlog::info("let's see");
+	lwlog::set_pattern("^br_cyan^[%x] [%n]^reset^ ^br_magenta^[%l]^reset^: ^br_white^%v^reset^");
+	lwlog::set_level_visibility({ lwlog::sink_level::debug});
+	lwlog::debug("IS THIS EVEN MORE GLOBAL AND GENERIC?");
 
 	return 0;
 }

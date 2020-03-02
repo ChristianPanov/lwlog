@@ -16,6 +16,8 @@ namespace lwlog
 	using file_logger_mt = nullptr_t;
 	/*-------------------------------------------*/
 
+	LWLOG_API logger_registry_interface* get(std::string_view logger_name);
+
 	LWLOG_API void set_pattern(std::string_view pattern);
 	LWLOG_API void set_level_visibility(std::initializer_list<sink_level> level_list);
 

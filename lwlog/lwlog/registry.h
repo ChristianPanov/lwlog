@@ -3,47 +3,37 @@
 #include <string>
 #include <map>
 #include <memory>
-#include <variant>
 
 #include "core.h"
 #include "logger.h"
-#include "details/singleton.h"
-
-#include <variant>
-#include <algorithm>
-#include <functional>
+#include "logger_registry_interface.h"
 
 namespace lwlog
 {
-	using MyTypes = std::variant<
-		logger<sinks::console_sink>*,
-		logger<sinks::file_sink>*,
-		logger<sinks::console_sink, sinks::file_sink>*,
-		logger<sinks::file_sink, sinks::console_sink>*
-	>;
-
-	class LWLOG_API registry : public singleton
+	class LWLOG_API registry
 	{
+		registry(const registry&) = delete;
+		registry(registry&&) = delete;
+		registry& operator=(const registry&) = delete;
+		registry& operator=(registry&&) = delete;
+
 	public:
 		static registry& instance();
-		void register_logger(std::string_view name, MyTypes logger);
+		void register_logger(logger_registry_interface* logger);
 		void set_automatic_registry(bool automatic);
 		void drop(std::string_view logger_name);
 		void drop_all();
 		inline bool is_registry_automatic();
 
+		logger_registry_interface* get(std::string_view logger_name);
 		std::shared_ptr<logger<sinks::console_sink>> default_logger();
 
-		auto get(std::string_view name)
-		{
-		}
+	private:
+		registry() = default;
 
 	private:
-		registry();
-
-	private:
-		std::map<std::string, MyTypes> m_loggers;
 		bool m_automatic_registry{true};
-		//std::shared_ptr<logger<sinks::console_sink>> m_default_logger;
+		std::map<std::string, logger_registry_interface*> m_loggers;
+		static std::shared_ptr<logger<sinks::console_sink>> m_default_logger;
 	};
 }

@@ -1,14 +1,9 @@
 #include "registry.h"
 #include "logger.h"
 
-#include "print.h"
-
 namespace lwlog
 {
-	registry::registry()
-	{
-		//m_default_logger = std::make_shared<logger<sinks::console_sink>>("");
-	}
+	std::shared_ptr<logger<sinks::console_sink>> registry::m_default_logger = std::make_shared<logger<sinks::console_sink>>("");
 
 	registry& registry::instance()
 	{
@@ -16,9 +11,9 @@ namespace lwlog
 		return s_instance;
 	}
 
-	void registry::register_logger(std::string_view name, MyTypes logger)
+	void registry::register_logger(logger_registry_interface* logger)
 	{
-		m_loggers.insert_or_assign(name.data(), logger);
+		m_loggers.insert_or_assign(logger->name(), logger);
 	}
 
 	void registry::set_automatic_registry(bool automatic)
@@ -28,20 +23,26 @@ namespace lwlog
 
 	void registry::drop(std::string_view logger_name)
 	{
-		//m_loggers.erase(logger_name.data());
+		m_loggers.erase(logger_name.data());
 	}
 
 	void registry::drop_all()
 	{
-		//m_loggers.clear();
+		m_loggers.clear();
 	}
+
 	inline bool registry::is_registry_automatic()
 	{
 		return m_automatic_registry ? true : false;
 	}
 
+	logger_registry_interface* registry::get(std::string_view logger_name)
+	{
+		return m_loggers[logger_name.data()];
+	}
+
 	std::shared_ptr<logger<sinks::console_sink>> registry::default_logger()
 	{
-		return std::shared_ptr<logger<sinks::console_sink>>();
+		return m_default_logger;
 	}
 }

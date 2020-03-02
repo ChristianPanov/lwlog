@@ -10,18 +10,12 @@
 	#define LWLOG_PLATFORM_MAC
 #endif
 
-#ifndef LWLOG
+#ifndef LWLOG_API
 	#ifdef LWLOG_PLATFORM_WINDOWS
-		#if defined(LWLOG_BUILD_DLL)
+		#ifdef LWLOG_BUILD_SHARED
 			#define LWLOG_API __declspec(dllexport)
 		#elif !defined(LWLOG_BUILD_STATIC)
 			#define LWLOG_API __declspec(dllimport)
-		#else
-			#define LWLOG_API
-		#endif
-	#else
-		#if __GNUC__ >= 4
-			#define LWLOG_API __attribute__((visibility("default")))
 		#else
 			#define LWLOG_API
 		#endif

@@ -7,6 +7,11 @@
 
 namespace lwlog 
 {
+	LWLOG_API logger_registry_interface* get(std::string_view logger_name)
+	{
+		return registry::instance().get(logger_name);
+	}
+
 	LWLOG_API void set_pattern(std::string_view pattern)
 	{
 		registry::instance().default_logger()->set_pattern(pattern);

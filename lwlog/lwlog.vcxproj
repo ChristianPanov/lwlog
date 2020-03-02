@@ -58,7 +58,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;LWLOG_BUILD_DLL;LWLOG_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;LWLOG_BUILD_SHARED;LWLOG_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -79,7 +79,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;LWLOG_BUILD_DLL;LWLOG_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;LWLOG_BUILD_SHARED;LWLOG_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -106,10 +106,11 @@
     <ClInclude Include="lwlog\details\backtracer.h" />
     <ClInclude Include="lwlog\details\duplex.h" />
     <ClInclude Include="lwlog\details\file_helper.h" />
-    <ClInclude Include="lwlog\details\singleton.h" />
     <ClInclude Include="lwlog\details\utilities.h" />
     <ClInclude Include="lwlog\formatter.h" />
     <ClInclude Include="lwlog\logger.h" />
+    <ClInclude Include="lwlog\logger_interface.h" />
+    <ClInclude Include="lwlog\logger_registry_interface.h" />
     <ClInclude Include="lwlog\lwlog.h" />
     <ClInclude Include="lwlog\print.h" />
     <ClInclude Include="lwlog\registry.h" />
