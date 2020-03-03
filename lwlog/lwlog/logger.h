@@ -20,6 +20,11 @@ namespace lwlog
 		explicit logger(std::string_view name);
 		virtual ~logger() = default;
 
+		logger(const logger& other);
+		logger(logger&& other) noexcept;
+		logger& operator=(logger& other);
+		logger& operator=(logger&& other) noexcept;
+
 		void set_pattern(std::string_view pattern) override;
 		void set_level_visibility(std::initializer_list<sink_level> level_list) override;
 
@@ -46,7 +51,7 @@ namespace lwlog
 		std::string m_message;
 		std::string m_level_string;
 
-		details::backtracer m_tracer;
 		std::vector<std::shared_ptr<sinks::sink>> m_sink_buffer;
+		details::backtracer m_tracer;
 	};
 }

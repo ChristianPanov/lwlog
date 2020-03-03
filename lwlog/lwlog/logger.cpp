@@ -10,12 +10,60 @@ namespace lwlog
 	logger<SinkPolicyArgs...>::logger(std::string_view name)
 		: m_name(name)
 	{
-		if (registry::instance().is_registry_automatic() == true)
+		if (registry::instance().is_registry_automatic())
 		{
-			registry::instance().register_logger(this);
+			registry::instance().register_logger(std::make_shared<logger<SinkPolicyArgs...>>(*this));
 		}
 
 		(m_sink_buffer.emplace_back(sink_factory<SinkPolicyArgs>::request()), ...);
+	}
+
+	template<typename ...SinkPolicyArgs>
+	logger<SinkPolicyArgs...>::logger(const logger& other)
+		: m_name(other.m_name)
+		, m_message(other.m_message)
+		, m_level_string(other.m_level_string)
+		, m_sink_buffer(other.m_sink_buffer)
+		, m_tracer(other.m_tracer)
+	{}
+
+	template<typename ...SinkPolicyArgs>
+	logger<SinkPolicyArgs...>::logger(logger&& other) noexcept
+		: m_name(std::move(other.m_name))
+		, m_message(std::move(other.m_message))
+		, m_level_string(std::move(other.m_level_string))
+		, m_sink_buffer(std::move(other.m_sink_buffer))
+		, m_tracer(std::move(other.m_tracer))
+	{}
+
+	template<typename ...SinkPolicyArgs>
+	logger<SinkPolicyArgs...>& logger<SinkPolicyArgs...>::operator=(logger& other)
+	{
+		if (this == &other) 
+		{ 
+			return *this;
+		}
+		m_name.swap(other.m_name);
+		m_message.swap(other.m_message);
+		m_level_string.swap(other.m_level_string);
+		m_sink_buffer.swap(other.m_sink_buffer);
+		std::swap(m_tracer, other.m_tracer);
+		return *this;
+	}
+
+	template<typename ...SinkPolicyArgs>
+	logger<SinkPolicyArgs...>& logger<SinkPolicyArgs...>::operator=(logger&& other) noexcept
+	{
+		if (this == &other)
+		{
+			return *this;
+		}
+		m_name = std::move(other.m_name);
+		m_message = std::move(other.m_message);
+		m_level_string = std::move(other.m_level_string);
+		m_sink_buffer = std::move(other.m_sink_buffer);
+		m_tracer = std::move(other.m_tracer);
+		return *this;
 	}
 
 	template<typename ... SinkPolicyArgs>
