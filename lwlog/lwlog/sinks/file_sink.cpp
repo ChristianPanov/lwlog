@@ -1,7 +1,12 @@
 #include "file_sink.h"
-#include <iostream>
+
 namespace lwlog::sinks
 {
+	file_sink::file_sink()
+	{
+		disable_color();
+	}
+
 	file_sink::~file_sink()
 	{
 		m_file.close();

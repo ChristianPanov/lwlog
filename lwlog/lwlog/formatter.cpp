@@ -25,69 +25,77 @@ namespace lwlog
 		{{"%date%",				"%d"}, lwlog::datetime::get_date()},
 		{{"%time%",				"%x"}, lwlog::datetime::get_time()},
 
-		{{"^black^",				}, lwlog::color::foreground_black()},
-		{{"^red^"					}, lwlog::color::foreground_red()},
-		{{"^green^"					}, lwlog::color::foreground_green()},
-		{{"^yellow^"				}, lwlog::color::foreground_yellow()},
-		{{"^blue^"					}, lwlog::color::foreground_blue()},
-		{{"^magenta^"				}, lwlog::color::foreground_magenta()},
-		{{"^cyan^"					}, lwlog::color::foreground_cyan()},
-		{{"^white^"					}, lwlog::color::foreground_white()},
-
-		{{"^br_black^"				}, lwlog::color::foreground_bright_black()},
-		{{"^br_red^"				}, lwlog::color::foreground_bright_red()},
-		{{"^br_green^"				}, lwlog::color::foreground_bright_green()},
-		{{"^br_yellow^"				}, lwlog::color::foreground_bright_yellow()},
-		{{"^br_blue^"				}, lwlog::color::foreground_bright_blue()},
-		{{"^br_magenta^"			}, lwlog::color::foreground_bright_magenta()},
-		{{"^br_cyan^"				}, lwlog::color::foreground_bright_cyan()},
-		{{"^br_white^"				}, lwlog::color::foreground_bright_white()},
-
-		{{"^bg_black^"				}, lwlog::color::background_black()},
-		{{"^bg_red^"				}, lwlog::color::background_red()},
-		{{"^bg_green^"				}, lwlog::color::background_green()},
-		{{"^bg_yellow^"				}, lwlog::color::background_yellow()},
-		{{"^bg_blue^"				}, lwlog::color::background_blue()},
-		{{"^bg_magenta^"			}, lwlog::color::background_magenta()},
-		{{"^bg_cyan^"				}, lwlog::color::background_cyan()},
-		{{"^bg_white^"				}, lwlog::color::background_white()},
-
-		{{"^bg_br_black^"			}, lwlog::color::background_bright_black()},
-		{{"^bg_br_red^"				}, lwlog::color::background_bright_red()},
-		{{"^bg_br_green^"			}, lwlog::color::background_bright_green()},
-		{{"^bg_br_yellow^"			}, lwlog::color::background_bright_yellow()},
-		{{"^bg_br_blue^"			}, lwlog::color::background_bright_blue()},
-		{{"^bg_br_magenta^"			}, lwlog::color::background_bright_magenta()},
-		{{"^bg_br_cyan^"			}, lwlog::color::background_bright_cyan()},
-		{{"^bg_br_white^"			}, lwlog::color::background_bright_white()},
-
-		{{"^reset^"					}, lwlog::color::reset()},
-		{{"^bold^"					}, lwlog::color::bold()},
-		{{"^underlined^"			}, lwlog::color::underlined()},
-		{{"^reversed^"				}, lwlog::color::reversed()},
-
 		{{						"%%"}, "%"},
 		{{						"^^"}, "^"}
 	};
 
-	std::string formatter::format(std::string pattern) 
+	std::unordered_map<std::string, std::string> formatter::m_color_data =
 	{
-		for (const auto& [duplex_key, value] : m_pattern_data)
+		{"^black^",			lwlog::color::foreground_black()},
+		{"^red^",			lwlog::color::foreground_red()},
+		{"^green^",			lwlog::color::foreground_green()},
+		{"^yellow^",		lwlog::color::foreground_yellow()},
+		{"^blue^",			lwlog::color::foreground_blue()},
+		{"^magenta^",		lwlog::color::foreground_magenta()},
+		{"^cyan^",			lwlog::color::foreground_cyan()},
+		{"^white^",			lwlog::color::foreground_white()},
+
+		{"^br_black^",		lwlog::color::foreground_bright_black()},
+		{"^br_red^",		lwlog::color::foreground_bright_red()},
+		{"^br_green^",		lwlog::color::foreground_bright_green()},
+		{"^br_yellow^",		lwlog::color::foreground_bright_yellow()},
+		{"^br_blue^",		lwlog::color::foreground_bright_blue()},
+		{"^br_magenta^",	lwlog::color::foreground_bright_magenta()},
+		{"^br_cyan^",		lwlog::color::foreground_bright_cyan()},
+		{"^br_white^",		lwlog::color::foreground_bright_white()},
+
+		{"^bg_black^",		lwlog::color::background_black()},
+		{"^bg_red^",		lwlog::color::background_red()},
+		{"^bg_green^",		lwlog::color::background_green()},
+		{"^bg_yellow^",		lwlog::color::background_yellow()},
+		{"^bg_blue^",		lwlog::color::background_blue()},
+		{"^bg_magenta^",	lwlog::color::background_magenta()},
+		{"^bg_cyan^",		lwlog::color::background_cyan()},
+		{"^bg_white^",		lwlog::color::background_white()},
+
+		{"^bg_br_black^",	lwlog::color::background_bright_black()},
+		{"^bg_br_red^",		lwlog::color::background_bright_red()},
+		{"^bg_br_green^",	lwlog::color::background_bright_green()},
+		{"^bg_br_yellow^",	lwlog::color::background_bright_yellow()},
+		{"^bg_br_blue^",	lwlog::color::background_bright_blue()},
+		{"^bg_br_magenta^", lwlog::color::background_bright_magenta()},
+		{"^bg_br_cyan^",	lwlog::color::background_bright_cyan()},
+		{"^bg_br_white^",	lwlog::color::background_bright_white()},
+
+		{"^reset^",			lwlog::color::reset()},
+		{"^bold^",			lwlog::color::bold()},
+		{"^underlined^",	lwlog::color::underlined()},
+		{"^reversed^",		lwlog::color::reversed()}
+	};
+
+	std::string formatter::format(std::string pattern, bool should_color)
+	{
+		for (const auto& [key, value] : m_pattern_data)
 		{
-			const auto& [verbose, shortened] = duplex_key;
+			const auto& [verbose, shortened] = key;
 			if (!verbose.empty()) 
 			{
 				details::utilities::replace_in_string(pattern, verbose, value);
 			}
 		}
 
-		for (const auto& [duplex_key, value] : m_pattern_data)
+		for (const auto& [key, value] : m_pattern_data)
 		{
-			const auto& [verbose, shortened] = duplex_key;
+			const auto& [verbose, shortened] = key;
 			if (!shortened.empty()) 
 			{
 				details::utilities::replace_in_string(pattern, shortened, value);
 			}
+		}
+
+		for (const auto& [key, value] : m_color_data)
+		{
+			details::utilities::replace_in_string(pattern, key, (should_color == true ? value : ""));
 		}
 
 		return pattern;

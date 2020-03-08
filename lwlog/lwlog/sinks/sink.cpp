@@ -3,7 +3,8 @@
 namespace lwlog::sinks
 {
 	sink::sink()
-		: m_pattern("[%d, %x] [%l] [%n]: %v")
+		: m_should_color(true)
+		, m_pattern("[%d, %x] [%l] [%n]: %v")
 	{
 		m_levels.emplace_back(sink_level::all);
 	}
@@ -19,9 +20,9 @@ namespace lwlog::sinks
 		m_levels = level_list;
 	}
 
-	std::string sink::get_pattern() const
+	void sink::disable_color()
 	{
-		return m_pattern;
+		m_should_color = false;
 	}
 
 	bool sink::should_sink(sink_level level)
@@ -35,5 +36,15 @@ namespace lwlog::sinks
 		}
 
 		return false;
+	}
+
+	bool sink::should_color()
+	{
+		return m_should_color;
+	}
+
+	std::string sink::get_pattern() const
+	{
+		return m_pattern;
 	}
 }

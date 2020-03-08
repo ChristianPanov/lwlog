@@ -19,10 +19,13 @@ namespace lwlog::sinks
 	public:
 		void set_pattern(std::string_view pattern);
 		void set_level_visibility(std::initializer_list<sink_level> level_list);
-		std::string get_pattern() const;
+		void disable_color();
 		bool should_sink(sink_level level);
+		bool should_color();
+		std::string get_pattern() const;
 
-	private:
+	protected:
+		bool m_should_color;
 		std::string m_pattern;
 		std::vector<sink_level> m_levels;
 	};

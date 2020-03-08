@@ -1,7 +1,5 @@
 ﻿#include "file_helper.h"
 
-#include <iostream>
-
 namespace details
 {
 	file_helper::~file_helper()

@@ -80,10 +80,10 @@ namespace lwlog
 
 		for (const auto& sink : m_sink_buffer)
 		{
-			if (sink.get()->should_sink(level))
+			if (sink->should_sink(level))
 			{
-				sink.get()->sink_it(formatter::format(sink.get()->get_pattern()));
-				m_tracer.push_in_backtrace_buffer(formatter::format(sink.get()->get_pattern()));
+				sink->sink_it(formatter::format(sink->get_pattern(), sink->should_color()));
+				m_tracer.push_in_backtrace_buffer(formatter::format(sink->get_pattern(), sink->should_color()));
 			}
 		}
 	}
@@ -93,7 +93,7 @@ namespace lwlog
 	{
 		for (const auto& sink : m_sink_buffer)
 		{ 
-			sink.get()->set_pattern(pattern);
+			sink->set_pattern(pattern);
 		}
 	}
 
@@ -102,7 +102,7 @@ namespace lwlog
 	{
 		for (const auto& sink : m_sink_buffer)
 		{
-			sink.get()->set_level_visibility(level_list);
+			sink->set_level_visibility(level_list);
 		}
 	}
 
@@ -183,8 +183,8 @@ namespace lwlog
 		return m_sink_buffer;
 	}
 
-	template class logger<sinks::console_sink, sinks::file_sink>;
-	template class logger<sinks::file_sink, sinks::console_sink>;
 	template class logger<sinks::console_sink>;
 	template class logger<sinks::file_sink>;
+	template class logger<sinks::console_sink, sinks::file_sink>;
+	template class logger<sinks::file_sink, sinks::console_sink>;
 }

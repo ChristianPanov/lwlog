@@ -27,16 +27,9 @@ namespace details::utilities
 
 	static void replace_in_string(std::string& str, std::string_view to_replace, std::string_view replace_with)
 	{
-		size_t index = 0;
-		while (true)
+		while (str.find(to_replace) != std::string::npos)
 		{
-			index = str.find(to_replace, index);
-			if (index == std::string::npos)
-			{
-				break;
-			}
-			str.replace(index, to_replace.length(), replace_with);
-			index += to_replace.length();
+			str.replace(str.find(to_replace), to_replace.length(), replace_with);
 		}
 	}
 
