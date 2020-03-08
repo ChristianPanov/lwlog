@@ -1,2 +1,1 @@
-# lwlog
-C++ logging library
+
