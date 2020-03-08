@@ -12,7 +12,7 @@ namespace lwlog
 	{
 		if (registry::instance().is_registry_automatic())
 		{
-			registry::instance().register_logger(std::make_shared<logger<SinkPolicyArgs...>>(*this));
+			registry::instance().register_logger(this);
 		}
 
 		(m_sink_buffer.emplace_back(sink_factory<SinkPolicyArgs>::request()), ...);
@@ -71,10 +71,12 @@ namespace lwlog
 	{
 		m_message = message;
 
-		formatter::insert_pattern_data({ "%logger_name%",	"%n" }, m_name);
-		formatter::insert_pattern_data({ "%message%",		"%v" }, m_message);
-		formatter::insert_pattern_data({ "%log_level%",		"%l" }, m_level_string);
-		formatter::insert_pattern_data({ "%log_level_abr%",	"%L" }, std::to_string(std::toupper(m_level_string[0])));
+		formatter::insert_pattern_data({ 
+			{ { "%logger_name%",	"%n" }, m_name },
+			{ { "%message%",		"%v" }, m_message },
+			{ { "%log_level%",		"%l" }, m_level_string },
+			{ { "%log_level_abr%",	"%L" }, std::to_string(std::toupper(m_level_string[0])) } 
+		});
 
 		for (const auto& sink : m_sink_buffer)
 		{

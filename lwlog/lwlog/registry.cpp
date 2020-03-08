@@ -11,7 +11,7 @@ namespace lwlog
 		return s_instance;
 	}
 
-	void registry::register_logger(std::shared_ptr<logger_registry_interface> logger)
+	void registry::register_logger(logger_registry_interface* logger)
 	{
 		m_loggers[logger->name()] = std::move(logger);
 	}
@@ -36,28 +36,29 @@ namespace lwlog
 		return m_automatic_registry ? true : false;
 	}
 
-	std::shared_ptr<logger_registry_interface> registry::get(std::string_view logger_name)
+	logger_registry_interface* registry::get(std::string_view logger_name)
 	{
 		return m_loggers[logger_name.data()];
+	}
+
+	std::unordered_map<std::string, logger_registry_interface*> registry::loggers()
+	{
+		return m_loggers;
+	}
+
+	void registry::apply_to_all(const std::function<void(logger_registry_interface*)>& fn)
+	{
+		for (const auto& [name, logger] : registry::instance().loggers())
+		{
+			if (!name.empty())
+			{
+				fn(logger);
+			}
+		}
 	}
 
 	std::shared_ptr<logger_registry_interface> registry::default_logger()
 	{
 		return m_default_logger;
-	}
-
-	void registry::set_default_logger(std::shared_ptr<logger_registry_interface> new_default_logger)
-	{
-		if (m_default_logger != nullptr)
-		{
-			m_loggers.erase(m_default_logger->name());
-		}
-
-		if (new_default_logger != nullptr)
-		{
-			m_loggers[new_default_logger->name()] = std::move(new_default_logger);
-		}
-
-		m_default_logger = std::move(new_default_logger);
 	}
 }

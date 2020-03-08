@@ -11,11 +11,10 @@ namespace lwlog::sinks
 	public:
 		virtual ~file_sink();
 
-		void init_log_file(std::string_view file_name, std::string_view path, std::size_t file_size_limit = 20480);
+		static void init_log_file(std::string_view file_name, std::string_view path, std::size_t file_size_limit = 20480);
 		virtual void sink_it(std::string_view message) override;
 
 	private:
-		details::file_helper m_file;
-		std::size_t m_file_size_limit{ 0 };
+		static inline details::file_helper m_file;
 	};
 }

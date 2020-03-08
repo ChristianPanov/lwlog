@@ -6,6 +6,6 @@ namespace lwlog::sinks
 {
 	void console_sink::sink_it(std::string_view message)
 	{
-		lwlog::print("[CONSOLE] {0} \n", message.data());
+		lwlog::print("{0}\n", message.data());
 	}
 }

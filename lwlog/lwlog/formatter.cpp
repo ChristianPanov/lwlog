@@ -74,7 +74,7 @@ namespace lwlog
 	{
 		for (const auto& [duplex_key, value] : m_pattern_data)
 		{
-			auto& [verbose, shortened] = duplex_key;
+			const auto& [verbose, shortened] = duplex_key;
 			if (!verbose.empty()) 
 			{
 				details::utilities::replace_in_string(pattern, verbose, value);
@@ -83,7 +83,7 @@ namespace lwlog
 
 		for (const auto& [duplex_key, value] : m_pattern_data)
 		{
-			auto& [verbose, shortened] = duplex_key;
+			const auto& [verbose, shortened] = duplex_key;
 			if (!shortened.empty()) 
 			{
 				details::utilities::replace_in_string(pattern, shortened, value);
@@ -93,8 +93,11 @@ namespace lwlog
 		return pattern;
 	}
 
-	void formatter::insert_pattern_data(details::duplex<std::string, std::string> duplex_key, std::string_view value)
+	void formatter::insert_pattern_data(std::initializer_list<details::duplex<details::duplex<std::string, std::string>, std::string>> pattern_data)
 	{
-		m_pattern_data.insert_or_assign(duplex_key, value);
+		for (const auto& [duplex_key, value] : pattern_data)
+		{
+			m_pattern_data.insert_or_assign(duplex_key, value);
+		}
 	}
 }

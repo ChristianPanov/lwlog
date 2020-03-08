@@ -14,7 +14,7 @@ namespace lwlog
 	public:
 		virtual ~formatter() = default;
 		static std::string format(std::string pattern);
-		static void insert_pattern_data(details::duplex<std::string, std::string> duplex_key, std::string_view value);
+		static void insert_pattern_data(std::initializer_list<details::duplex<details::duplex<std::string, std::string>, std::string>> pattern_data);
 
 	public:
 		static std::unordered_map<details::duplex<std::string, std::string>, std::string> m_pattern_data;

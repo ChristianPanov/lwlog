@@ -1,7 +1,8 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include <memory>
+#include <functional>
 
 #include "core.h"
 #include "logger.h"
@@ -18,22 +19,23 @@ namespace lwlog
 
 	public:
 		static registry& instance();
-		void register_logger(std::shared_ptr<logger_registry_interface> logger);
+		void register_logger(logger_registry_interface* logger);
 		void set_automatic_registry(bool automatic);
 		void drop(std::string_view logger_name);
 		void drop_all();
 		inline bool is_registry_automatic();
 
-		std::shared_ptr<logger_registry_interface> get(std::string_view logger_name);
+		logger_registry_interface* get(std::string_view logger_name);
+		std::unordered_map<std::string, logger_registry_interface*> loggers();
+		static void apply_to_all(const std::function<void(logger_registry_interface*)>& fn);
 		static std::shared_ptr<logger_registry_interface> default_logger();
-		void set_default_logger(std::shared_ptr<logger_registry_interface> new_default_logger);
 
 	private:
 		registry() = default;
 
 	private:
 		bool m_automatic_registry{true};
-		std::map<std::string, std::shared_ptr<logger_registry_interface>> m_loggers;
+		std::unordered_map<std::string, logger_registry_interface*> m_loggers;
 		static std::shared_ptr<logger_registry_interface> m_default_logger;
 	};
 }

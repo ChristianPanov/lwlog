@@ -11,6 +11,8 @@
 #include "sinks/file_sink.h"
 #include "details/backtracer.h"
 
+#include <type_traits>
+
 namespace lwlog
 {
 	template<typename ... SinkPolicyArgs>
