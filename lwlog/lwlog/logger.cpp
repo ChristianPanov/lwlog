@@ -1,8 +1,9 @@
 #include "logger.h"
-#include "sinks/sink_factory.h"
 #include "sinks/sink_level.h"
 #include "registry.h"
-#include "formatter.h"
+#include "details/formatter.h"
+
+#include <iostream>
 
 namespace lwlog
 {
@@ -15,10 +16,20 @@ namespace lwlog
 			registry::instance().register_logger(this);
 		}
 
-		(m_sink_buffer.emplace_back(sink_factory<SinkPolicyArgs>::request()), ...);
+		(m_sink_buffer.emplace_back(std::make_unique<SinkPolicyArgs>()), ...);
 	}
 
-	template<typename ...SinkPolicyArgs>
+	template<typename ... SinkPolicyArgs>
+	logger<SinkPolicyArgs...>::logger(std::string_view name, sinks::sink_ptr sink)
+		: logger<SinkPolicyArgs...>(name, { std::move(sink) })
+	{}
+
+	template<typename ... SinkPolicyArgs>
+	logger<SinkPolicyArgs...>::logger(std::string_view name, std::initializer_list<sinks::sink_ptr> sink_list)
+		: logger<SinkPolicyArgs...>(name, sink_list.begin(), sink_list.end())
+	{}
+
+	template<typename ... SinkPolicyArgs>
 	logger<SinkPolicyArgs...>::logger(const logger& other)
 		: m_name(other.m_name)
 		, m_message(other.m_message)
@@ -27,7 +38,7 @@ namespace lwlog
 		, m_tracer(other.m_tracer)
 	{}
 
-	template<typename ...SinkPolicyArgs>
+	template<typename ... SinkPolicyArgs>
 	logger<SinkPolicyArgs...>::logger(logger&& other) noexcept
 		: m_name(std::move(other.m_name))
 		, m_message(std::move(other.m_message))
@@ -36,7 +47,7 @@ namespace lwlog
 		, m_tracer(std::move(other.m_tracer))
 	{}
 
-	template<typename ...SinkPolicyArgs>
+	template<typename ... SinkPolicyArgs>
 	logger<SinkPolicyArgs...>& logger<SinkPolicyArgs...>::operator=(logger& other)
 	{
 		if (this == &other) 
@@ -51,7 +62,7 @@ namespace lwlog
 		return *this;
 	}
 
-	template<typename ...SinkPolicyArgs>
+	template<typename ... SinkPolicyArgs>
 	logger<SinkPolicyArgs...>& logger<SinkPolicyArgs...>::operator=(logger&& other) noexcept
 	{
 		if (this == &other)
@@ -71,7 +82,7 @@ namespace lwlog
 	{
 		m_message = message;
 
-		formatter::insert_pattern_data({ 
+		details::formatter::insert_pattern_data({ 
 			{ { "%logger_name%",	"%n" }, m_name },
 			{ { "%message%",		"%v" }, m_message },
 			{ { "%log_level%",		"%l" }, m_level_string },
@@ -82,8 +93,8 @@ namespace lwlog
 		{
 			if (sink->should_sink(level))
 			{
-				sink->sink_it(formatter::format(sink->get_pattern(), sink->should_color()));
-				m_tracer.push_in_backtrace_buffer(formatter::format(sink->get_pattern(), sink->should_color()));
+				sink->sink_it(details::formatter::format(sink->get_pattern(), sink->should_color()));
+				m_tracer.push_in_backtrace_buffer(details::formatter::format(sink->get_pattern(), sink->should_color()));
 			}
 		}
 	}
@@ -178,11 +189,12 @@ namespace lwlog
 	}
 
 	template<typename ... SinkPolicyArgs>
-	inline std::vector<std::shared_ptr<sinks::sink>> logger<SinkPolicyArgs...>::sinks() const
+	inline std::vector<sinks::sink_ptr> logger<SinkPolicyArgs...>::sinks() const
 	{
 		return m_sink_buffer;
 	}
 
+	template class logger<>;
 	template class logger<sinks::console_sink>;
 	template class logger<sinks::file_sink>;
 	template class logger<sinks::console_sink, sinks::file_sink>;

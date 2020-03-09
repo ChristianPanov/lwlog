@@ -1,8 +1,8 @@
 #include "backtracer.h"
 
-#include "../print.h"
+#include "print.h"
 
-namespace details
+namespace lwlog::details
 {
 	backtracer::backtracer()
 		: m_backtrace_messages(0)

@@ -16,6 +16,7 @@ namespace lwlog::sinks
 		virtual void sink_it(std::string_view message) override;
 
 	private:
+		static inline std::size_t m_file_size_limit;
 		static inline details::file_helper m_file;
 	};
 }

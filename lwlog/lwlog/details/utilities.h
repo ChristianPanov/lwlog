@@ -7,7 +7,7 @@
 #include <unordered_set>
 #include <regex>
 
-namespace details::utilities
+namespace lwlog::details::utilities
 {
 	static std::vector<std::string> populate_with_regex_matches_from_str(std::regex reg, std::string str)
 	{

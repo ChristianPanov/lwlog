@@ -18,8 +18,8 @@ namespace lwlog
 	using file_logger_mt = nullptr_t;
 	/*-------------------------------------------*/
 
-	LWLOG_API logger_registry_interface* get(std::string_view logger_name);
-	LWLOG_API std::shared_ptr<logger_registry_interface> default_logger();
+	LWLOG_API logger_interface* get(std::string_view logger_name);
+	LWLOG_API std::shared_ptr<logger_interface> default_logger();
 
 	LWLOG_API void info(std::string_view message);
 	LWLOG_API void warning(std::string_view message);
@@ -33,7 +33,7 @@ namespace lwlog
 	LWLOG_API void display_backtrace();
 	LWLOG_API void delete_backtrace();
 
-	LWLOG_API void apply_to_all(const std::function<void(logger_registry_interface*)>& fn);
+	LWLOG_API void apply_to_all(const std::function<void(logger_interface*)>& fn);
 	LWLOG_API void global_set_pattern(std::string_view pattern);
 	LWLOG_API void global_set_level_visibility(std::initializer_list<sink_level> level_list);
 	LWLOG_API void global_backtrace(std::size_t buffer_size);

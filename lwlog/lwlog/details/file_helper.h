@@ -5,7 +5,7 @@
 
 #include "../core.h"
 
-namespace details
+namespace lwlog::details
 {
 	class LWLOG_API file_helper
 	{
@@ -15,16 +15,16 @@ namespace details
 	public:
 		~file_helper();
 
-		void open(std::string_view name, std::string_view path_str, std::size_t size_limit, truncate open_mode = truncate::off);
+		void open(std::string_view name, std::string_view path_str, truncate open_mode = truncate::off);
 		void reopen();
 		void write(std::string_view message);
 		void close();
+		std::size_t file_size() const;
 
 	private:
 		std::ofstream m_file;
 		std::string m_name;
 		std::filesystem::path m_path;
-		std::size_t m_size_limit;
-		truncate m_open_mode;
+		truncate m_open_mode{ truncate::off };
 	};
 }

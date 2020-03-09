@@ -12,6 +12,4 @@ namespace lwlog
 		debug		=		(1 << 5),
 		all			=		(1 << 6)
 	};
-
-	using level_init_list = std::initializer_list<sink_level>;
 }

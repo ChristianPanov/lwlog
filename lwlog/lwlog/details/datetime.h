@@ -6,7 +6,7 @@
 #include <ctime>
 #include <string_view>
 
-namespace lwlog::datetime
+namespace lwlog::details::datetime
 {
 	std::string format_time(std::string format)
 	{

@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace lwlog::color
+namespace lwlog::details::color
 {
 	inline std::string reset()		{ return "\u001b[0m"; }
 	inline std::string bold()		{ return "\u001b[1m"; }

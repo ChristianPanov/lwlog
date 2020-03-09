@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <regex>
 
-#include "details/utilities.h"
+#include "utilities.h"
 
 namespace lwlog 
 {

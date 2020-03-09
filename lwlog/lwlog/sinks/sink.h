@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "../core.h"
 #include "sink_level.h"
@@ -29,4 +30,6 @@ namespace lwlog::sinks
 		std::string m_pattern;
 		std::vector<sink_level> m_levels;
 	};
+
+	using sink_ptr = std::shared_ptr<sink>;
 }

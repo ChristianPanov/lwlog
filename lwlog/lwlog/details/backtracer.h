@@ -6,7 +6,7 @@
 
 #include "../core.h"
 
-namespace details
+namespace lwlog::details
 {
 	class LWLOG_API backtracer
 	{
