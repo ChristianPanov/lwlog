@@ -3,8 +3,6 @@
 #include "registry.h"
 #include "details/formatter.h"
 
-#include <iostream>
-
 namespace lwlog
 {
 	template<typename ... SinkPolicyArgs>
@@ -17,6 +15,13 @@ namespace lwlog
 		}
 
 		(m_sink_buffer.emplace_back(std::make_unique<SinkPolicyArgs>()), ...);
+	}
+
+	template<typename ... SinkPolicyArgs>
+	logger<SinkPolicyArgs...>::logger(std::string_view name, iterator<sinks::sink_ptr> begin, iterator<sinks::sink_ptr> end)
+		: logger(name) 
+	{ 
+		m_sink_buffer = { begin, end }; 
 	}
 
 	template<typename ... SinkPolicyArgs>
@@ -83,10 +88,10 @@ namespace lwlog
 		m_message = message;
 
 		details::formatter::insert_pattern_data({ 
-			{ { "%logger_name%",	"%n" }, m_name },
-			{ { "%message%",		"%v" }, m_message },
-			{ { "%log_level%",		"%l" }, m_level_string },
-			{ { "%log_level_abr%",	"%L" }, std::to_string(std::toupper(m_level_string[0])) } 
+			{{"{logger_name}",		"%n"}, m_name},
+			{{"{message}",			"%v"}, m_message},
+			{{"{log_level}",		"%l"}, m_level_string},
+			{{"{log_level_abr}",	"%L"}, std::string(1, std::toupper(m_level_string[0]))} 
 		});
 
 		for (const auto& sink : m_sink_buffer)
@@ -197,6 +202,7 @@ namespace lwlog
 	template class logger<>;
 	template class logger<sinks::console_sink>;
 	template class logger<sinks::file_sink>;
+	template class logger<sinks::rotating_file_sink>;
 	template class logger<sinks::console_sink, sinks::file_sink>;
 	template class logger<sinks::file_sink, sinks::console_sink>;
 }

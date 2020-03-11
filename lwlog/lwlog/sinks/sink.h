@@ -21,8 +21,8 @@ namespace lwlog::sinks
 		void set_pattern(std::string_view pattern);
 		void set_level_visibility(std::initializer_list<sink_level> level_list);
 		void disable_color();
-		bool should_sink(sink_level level);
-		bool should_color();
+		bool should_sink(sink_level level) const;
+		bool should_color() const;
 		std::string get_pattern() const;
 
 	protected:

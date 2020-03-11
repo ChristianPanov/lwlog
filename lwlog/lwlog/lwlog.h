@@ -9,6 +9,7 @@ namespace lwlog
 {
 	using console_logger = logger<sinks::console_sink>;
 	using file_logger = logger<sinks::file_sink>;
+	using rotating_file_logger = logger<sinks::rotating_file_sink>;
 
 	/*-------------------------------------------*/
 	using console_logger_st = nullptr_t;

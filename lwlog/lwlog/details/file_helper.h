@@ -15,15 +15,20 @@ namespace lwlog::details
 	public:
 		~file_helper();
 
-		void open(std::string_view name, std::string_view path_str, truncate open_mode = truncate::off);
+		void open(std::string_view path_str, truncate open_mode = truncate::off);
 		void reopen();
+		void rename(std::string_view new_name);
 		void write(std::string_view message);
 		void close();
-		std::size_t file_size() const;
+		bool exists();
+		std::filesystem::path path() const;
+		std::filesystem::path parent_path() const;
+		std::filesystem::path name() const;
+		std::filesystem::path extension() const;
+		std::size_t size() const;
 
 	private:
 		std::ofstream m_file;
-		std::string m_name;
 		std::filesystem::path m_path;
 		truncate m_open_mode{ truncate::off };
 	};

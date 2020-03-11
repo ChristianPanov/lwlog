@@ -10,6 +10,8 @@ namespace lwlog
 	class LWLOG_API  logger_interface_base
 	{
 	public:
+		virtual ~logger_interface_base() = default;
+
 		virtual void log(std::string_view, sink_level) = 0;
 		virtual void set_pattern(std::string_view) = 0;
 		virtual void set_level_visibility(std::initializer_list<sink_level>) = 0;

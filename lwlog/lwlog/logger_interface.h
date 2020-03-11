@@ -12,6 +12,8 @@ namespace lwlog
 	class LWLOG_API  logger_interface : public logger_interface_base
 	{
 	public:
+		virtual ~logger_interface() = default;
+
 		virtual void info(std::string_view) = 0;
 		virtual void warning(std::string_view) = 0;
 		virtual void error(std::string_view) = 0;

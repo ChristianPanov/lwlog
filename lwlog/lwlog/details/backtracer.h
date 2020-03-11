@@ -12,7 +12,6 @@ namespace lwlog::details
 	{
 	public:
 		backtracer();
-		virtual ~backtracer() = default;
 
 		void backtrace(std::size_t buffer_size);
 		void disable_backtrace();
@@ -22,9 +21,9 @@ namespace lwlog::details
 		void push_in_backtrace_buffer(std::string_view message);
 
 	private:
-		std::vector<std::string> m_backtrace_buffer;
-		std::string m_backtrace_stamp;
-		int m_backtrace_messages;
 		bool m_is_backtrace_enabled;
+		int m_backtrace_messages;
+		std::string m_backtrace_stamp;
+		std::vector<std::string> m_backtrace_buffer;
 	};
 }

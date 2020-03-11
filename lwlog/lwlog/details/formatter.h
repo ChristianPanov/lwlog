@@ -12,7 +12,6 @@ namespace lwlog::details
 	class LWLOG_API formatter
 	{
 	public:
-		virtual ~formatter() = default;
 		static std::string format(std::string pattern, bool should_color);
 		static void insert_pattern_data(std::initializer_list<duplex<duplex<std::string, std::string>, std::string>> pattern_data);
 

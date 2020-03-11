@@ -7,24 +7,25 @@ namespace lwlog::details
 {
 	std::unordered_map<duplex<std::string, std::string>, std::string> formatter::m_pattern_data =
 	{
-		{{"%seconds%",			"%s"}, datetime::get_second()},
-		{{"%minute%",			"%i"}, datetime::get_minute()},
-		{{"%hour_24%",			"%H"}, datetime::get_hour_24()},
-		{{"%hour_12%",			"%h"}, datetime::get_hour_12()},
-		{{"%day%",				"%M"}, datetime::get_day()},
-		{{"%weekday_abr%",		"%A"}, datetime::get_weekday_abbreviated()},
-		{{"%weekday%",			"%a"}, datetime::get_weekday()},
-		{{"%month%",			"%m"}, datetime::get_month()},
-		{{"%mont_name_abr%",	"%B"}, datetime::get_month_name_abbreviated()},
-		{{"%month_name%",		"%b"}, datetime::get_month_name()},
-		{{"%year_short%",		"%C"}, datetime::get_year_short()},
-		{{"%year%",				"%c"}, datetime::get_year()},
-		{{"%date_short%",		"%D"}, datetime::get_date_short()},
-		{{"%date%",				"%d"}, datetime::get_date()},
-		{{"%time%",				"%x"}, datetime::get_time()},
+		{{"{seconds}",			"%s"}, datetime::get_second()},
+		{{"{minute}",			"%i"}, datetime::get_minute()},
+		{{"{hour_24}",			"%H"}, datetime::get_hour_24()},
+		{{"{hour_12}",			"%h"}, datetime::get_hour_12()},
+		{{"{day}",				"%M"}, datetime::get_day()},
+		{{"{weekday_abr}",		"%A"}, datetime::get_weekday_abbreviated()},
+		{{"{weekday}",			"%a"}, datetime::get_weekday()},
+		{{"{month}",			"%m"}, datetime::get_month()},
+		{{"{mont_name_abr}",	"%B"}, datetime::get_month_name_abbreviated()},
+		{{"{month_name}",		"%b"}, datetime::get_month_name()},
+		{{"{year_short}",		"%C"}, datetime::get_year_short()},
+		{{"{year}",				"%c"}, datetime::get_year()},
+		{{"{date_short}",		"%D"}, datetime::get_date_short()},
+		{{"{date}",				"%d"}, datetime::get_date()},
+		{{"{time}",				"%x"}, datetime::get_time()},
 
 		{{						"%%"}, "%"},
-		{{						"^^"}, "^"}
+		{{						"{{"}, "{"},
+		{{						"}}"}, "}"}
 	};
 
 	std::unordered_map<std::string, std::string> formatter::m_color_data =
@@ -68,7 +69,9 @@ namespace lwlog::details
 		{"^reset^",			color::reset()},
 		{"^bold^",			color::bold()},
 		{"^underlined^",	color::underlined()},
-		{"^reversed^",		color::reversed()}
+		{"^reversed^",		color::reversed()},
+
+		{{					"^^"}, "^"}
 	};
 
 	std::string formatter::format(std::string pattern, bool should_color)
@@ -76,7 +79,7 @@ namespace lwlog::details
 		for (const auto& [key, value] : m_pattern_data)
 		{
 			const auto& [verbose, shortened] = key;
-			if (!verbose.empty()) 
+			if (!verbose.empty())
 			{
 				utilities::replace_in_string(pattern, verbose, value);
 			}
@@ -85,7 +88,7 @@ namespace lwlog::details
 		for (const auto& [key, value] : m_pattern_data)
 		{
 			const auto& [verbose, shortened] = key;
-			if (!shortened.empty()) 
+			if (!shortened.empty())
 			{
 				utilities::replace_in_string(pattern, shortened, value);
 			}

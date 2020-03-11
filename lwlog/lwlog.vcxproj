@@ -116,6 +116,7 @@
     <ClInclude Include="lwlog\registry.h" />
     <ClInclude Include="lwlog\sinks\console_sink.h" />
     <ClInclude Include="lwlog\sinks\file_sink.h" />
+    <ClInclude Include="lwlog\sinks\rotating_file_sink.h" />
     <ClInclude Include="lwlog\sinks\sink.h" />
     <ClInclude Include="lwlog\sinks\sink_level.h" />
   </ItemGroup>
@@ -128,6 +129,7 @@
     <ClCompile Include="lwlog\registry.cpp" />
     <ClCompile Include="lwlog\sinks\console_sink.cpp" />
     <ClCompile Include="lwlog\sinks\file_sink.cpp" />
+    <ClCompile Include="lwlog\sinks\rotating_file_sink.cpp" />
     <ClCompile Include="lwlog\sinks\sink.cpp" />
   </ItemGroup>
   <ItemGroup>
