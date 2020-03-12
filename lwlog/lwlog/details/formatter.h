@@ -13,7 +13,8 @@ namespace lwlog::details
 	{
 	public:
 		static std::string format(std::string pattern, bool should_color);
-		static void insert_pattern_data(std::initializer_list<duplex<duplex<std::string, std::string>, std::string>> pattern_data);
+		static void insert_pattern_data(std::initializer_list<duplex<duplex<std::string, std::string>, 
+			std::string>> pattern_data);
 
 	public:
 		static std::unordered_map<duplex<std::string, std::string>, std::string> m_pattern_data;

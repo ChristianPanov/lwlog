@@ -9,7 +9,6 @@
 #include "sinks/sink.h"
 #include "sinks/console_sink.h"
 #include "sinks/file_sink.h"
-#include "sinks/rotating_file_sink.h"
 #include "details/backtracer.h"
 
 namespace lwlog
@@ -18,13 +17,18 @@ namespace lwlog
 	class LWLOG_API logger : public logger_interface, public SinkPolicyArgs...
 	{
 		template<typename Ty>
-		using iterator = typename std::initializer_list<Ty>::iterator;
+		using iter = typename std::initializer_list<Ty>::iterator;
 
 	public:
-		explicit logger(std::string_view name);
-		logger(std::string_view name, iterator<sinks::sink_ptr> begin, iterator<sinks::sink_ptr> end);
-		logger(std::string_view name, sinks::sink_ptr sink);
-		logger(std::string_view name, std::initializer_list<sinks::sink_ptr> sink_list);
+		template<typename ... SinkParams>
+		logger(std::string_view name, SinkParams&& ... params);
+		template<typename ... SinkParams>
+		logger(std::string_view name, iter<sinks::sink_ptr> begin, iter<sinks::sink_ptr> end, SinkParams&& ... params);
+		template<typename ... SinkParams>
+		logger(std::string_view name, sinks::sink_ptr sink, SinkParams&& ... params);
+		template<typename ... SinkParams>
+		logger(std::string_view name, std::initializer_list<sinks::sink_ptr> sink_list, SinkParams&& ... params);
+
 		logger(const logger& other);
 		logger(logger&& other) noexcept;
 		logger& operator=(logger& other);
@@ -60,3 +64,5 @@ namespace lwlog
 		details::backtracer m_tracer;
 	};
 }
+
+#include "logger_impl.h"

@@ -109,6 +109,7 @@
     <ClInclude Include="lwlog\details\utilities.h" />
     <ClInclude Include="lwlog\details\formatter.h" />
     <ClInclude Include="lwlog\logger.h" />
+    <ClInclude Include="lwlog\logger_impl.h" />
     <ClInclude Include="lwlog\logger_interface_base.h" />
     <ClInclude Include="lwlog\logger_interface.h" />
     <ClInclude Include="lwlog\lwlog.h" />
@@ -116,8 +117,8 @@
     <ClInclude Include="lwlog\registry.h" />
     <ClInclude Include="lwlog\sinks\console_sink.h" />
     <ClInclude Include="lwlog\sinks\file_sink.h" />
-    <ClInclude Include="lwlog\sinks\rotating_file_sink.h" />
     <ClInclude Include="lwlog\sinks\sink.h" />
+    <ClInclude Include="lwlog\sinks\sink_factory.h" />
     <ClInclude Include="lwlog\sinks\sink_level.h" />
   </ItemGroup>
   <ItemGroup>
@@ -127,9 +128,7 @@
     <ClCompile Include="lwlog\logger.cpp" />
     <ClCompile Include="lwlog\lwlog.cpp" />
     <ClCompile Include="lwlog\registry.cpp" />
-    <ClCompile Include="lwlog\sinks\console_sink.cpp" />
     <ClCompile Include="lwlog\sinks\file_sink.cpp" />
-    <ClCompile Include="lwlog\sinks\rotating_file_sink.cpp" />
     <ClCompile Include="lwlog\sinks\sink.cpp" />
   </ItemGroup>
   <ItemGroup>

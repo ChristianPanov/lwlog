@@ -6,35 +6,6 @@
 namespace lwlog
 {
 	template<typename ... SinkPolicyArgs>
-	logger<SinkPolicyArgs...>::logger(std::string_view name)
-		: m_name(name)
-	{
-		if (registry::instance().is_registry_automatic())
-		{
-			registry::instance().register_logger(this);
-		}
-
-		(m_sink_buffer.emplace_back(std::make_unique<SinkPolicyArgs>()), ...);
-	}
-
-	template<typename ... SinkPolicyArgs>
-	logger<SinkPolicyArgs...>::logger(std::string_view name, iterator<sinks::sink_ptr> begin, iterator<sinks::sink_ptr> end)
-		: logger(name) 
-	{ 
-		m_sink_buffer = { begin, end }; 
-	}
-
-	template<typename ... SinkPolicyArgs>
-	logger<SinkPolicyArgs...>::logger(std::string_view name, sinks::sink_ptr sink)
-		: logger<SinkPolicyArgs...>(name, { std::move(sink) })
-	{}
-
-	template<typename ... SinkPolicyArgs>
-	logger<SinkPolicyArgs...>::logger(std::string_view name, std::initializer_list<sinks::sink_ptr> sink_list)
-		: logger<SinkPolicyArgs...>(name, sink_list.begin(), sink_list.end())
-	{}
-
-	template<typename ... SinkPolicyArgs>
 	logger<SinkPolicyArgs...>::logger(const logger& other)
 		: m_name(other.m_name)
 		, m_message(other.m_message)
@@ -99,7 +70,9 @@ namespace lwlog
 			if (sink->should_sink(level))
 			{
 				sink->sink_it(details::formatter::format(sink->get_pattern(), sink->should_color()));
-				m_tracer.push_in_backtrace_buffer(details::formatter::format(sink->get_pattern(), sink->should_color()));
+				m_tracer.push_in_backtrace_buffer(
+					details::formatter::format(sink->get_pattern(), sink->should_color())
+				);
 			}
 		}
 	}
@@ -202,7 +175,6 @@ namespace lwlog
 	template class logger<>;
 	template class logger<sinks::console_sink>;
 	template class logger<sinks::file_sink>;
-	template class logger<sinks::rotating_file_sink>;
 	template class logger<sinks::console_sink, sinks::file_sink>;
 	template class logger<sinks::file_sink, sinks::console_sink>;
 }

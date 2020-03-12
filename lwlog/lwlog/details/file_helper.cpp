@@ -16,10 +16,6 @@ namespace lwlog::details
 		{
 			std::filesystem::create_directory(m_path.parent_path());
 		}
-		else if (m_path.parent_path().empty())
-		{
-			std::filesystem::create_directory(std::filesystem::current_path());
-		}
 
 		m_file.open(m_path, m_open_mode == truncate::on 
 			? std::ios::in | std::ios::out | std::ios::trunc 
@@ -77,7 +73,8 @@ namespace lwlog::details
 
 	std::filesystem::path file_helper::name() const
 	{
-		return m_path.filename().string().erase(m_path.filename().string().find(m_path.extension().string(), m_path.extension().string().length()));
+		return m_path.filename().string().erase(m_path.filename().string().find(m_path.extension().string(), 
+			m_path.extension().string().length()));
 	}
 
 	std::filesystem::path file_helper::extension() const

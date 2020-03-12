@@ -102,7 +102,8 @@ namespace lwlog::details
 		return pattern;
 	}
 
-	void formatter::insert_pattern_data(std::initializer_list<duplex<duplex<std::string, std::string>, std::string>> pattern_data)
+	void formatter::insert_pattern_data(std::initializer_list<duplex<duplex<std::string, std::string>, 
+		std::string>> pattern_data)
 	{
 		for (const auto& [duplex_key, value] : pattern_data)
 		{
