@@ -21,26 +21,26 @@ namespace lwlog
 		), ...);
 	}
 
-	template<typename ... SinkPolicyArgs>
+	template<typename ... SinkPolicy>
 	template<typename ... SinkParams>
-	logger<SinkPolicyArgs...>::logger(std::string_view name,
+	logger<SinkPolicy...>::logger(std::string_view name,
 		iter<sinks::sink_ptr> begin, iter<sinks::sink_ptr> end, SinkParams&& ... params)
 		: logger(name, params...)
 	{
-		m_sink_buffer = { begin, end };
+		m_sink_buffer.insert(m_sink_buffer.end(), begin, end);
 	}
 
-	template<typename ... SinkPolicyArgs>
+	template<typename ... SinkPolicy>
 	template<typename ... SinkParams>
-	logger<SinkPolicyArgs...>::logger(std::string_view name,
-		sinks::sink_ptr sink, SinkParams&& ... params)
-		: logger<SinkPolicyArgs...>(name, { std::move(sink) }, params...)
+	logger<SinkPolicy...>::logger(std::string_view name,
+		std::initializer_list<sinks::sink_ptr> sink_list, SinkParams&& ... params)
+		: logger<SinkPolicy...>(name, sink_list.begin(), sink_list.end(), params...)
 	{}
 
-	template<typename ... SinkPolicyArgs>
+	template<typename ... SinkPolicy>
 	template<typename ... SinkParams>
-	logger<SinkPolicyArgs...>::logger(std::string_view name,
-		std::initializer_list<sinks::sink_ptr> sink_list, SinkParams&& ... params)
-		: logger<SinkPolicyArgs...>(name, sink_list.begin(), sink_list.end(), params...)
+	logger<SinkPolicy...>::logger(std::string_view name,
+		sinks::sink_ptr sink, SinkParams&& ... params)
+		: logger<SinkPolicy...>(name, { std::move(sink) }, params...)
 	{}
 }

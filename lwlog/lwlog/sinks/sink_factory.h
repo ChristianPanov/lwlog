@@ -17,7 +17,7 @@ namespace lwlog::sinks
 	};
 
 	template<typename SinkPolicy>
-	template<typename ...SinkParams>
+	template<typename ... SinkParams>
 	std::shared_ptr<sink> sink_factory<SinkPolicy>::request(SinkParams&& ...params)
 	{
 		if constexpr (std::is_constructible<SinkPolicy, SinkParams...>::value)

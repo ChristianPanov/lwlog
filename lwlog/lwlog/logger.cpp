@@ -5,8 +5,8 @@
 
 namespace lwlog
 {
-	template<typename ... SinkPolicyArgs>
-	logger<SinkPolicyArgs...>::logger(const logger& other)
+	template<typename ... SinkPolicy>
+	logger<SinkPolicy...>::logger(const logger& other)
 		: m_name(other.m_name)
 		, m_message(other.m_message)
 		, m_level_string(other.m_level_string)
@@ -14,8 +14,8 @@ namespace lwlog
 		, m_tracer(other.m_tracer)
 	{}
 
-	template<typename ... SinkPolicyArgs>
-	logger<SinkPolicyArgs...>::logger(logger&& other) noexcept
+	template<typename ... SinkPolicy>
+	logger<SinkPolicy...>::logger(logger&& other) noexcept
 		: m_name(std::move(other.m_name))
 		, m_message(std::move(other.m_message))
 		, m_level_string(std::move(other.m_level_string))
@@ -23,8 +23,8 @@ namespace lwlog
 		, m_tracer(std::move(other.m_tracer))
 	{}
 
-	template<typename ... SinkPolicyArgs>
-	logger<SinkPolicyArgs...>& logger<SinkPolicyArgs...>::operator=(logger& other)
+	template<typename ... SinkPolicy>
+	logger<SinkPolicy...>& logger<SinkPolicy...>::operator=(logger& other)
 	{
 		if (this == &other) 
 		{ 
@@ -38,8 +38,8 @@ namespace lwlog
 		return *this;
 	}
 
-	template<typename ... SinkPolicyArgs>
-	logger<SinkPolicyArgs...>& logger<SinkPolicyArgs...>::operator=(logger&& other) noexcept
+	template<typename ... SinkPolicy>
+	logger<SinkPolicy...>& logger<SinkPolicy...>::operator=(logger&& other) noexcept
 	{
 		if (this == &other)
 		{
@@ -53,8 +53,8 @@ namespace lwlog
 		return *this;
 	}
 
-	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::log(std::string_view message, sink_level level)
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::log(std::string_view message, sink_level level)
 	{
 		m_message = message;
 
@@ -77,8 +77,8 @@ namespace lwlog
 		}
 	}
 
-	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::set_pattern(std::string_view pattern)
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::set_pattern(std::string_view pattern)
 	{
 		for (const auto& sink : m_sink_buffer)
 		{ 
@@ -86,8 +86,17 @@ namespace lwlog
 		}
 	}
 
-	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::set_level_visibility(std::initializer_list<sink_level> level_list)
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::add_pattern_attribute(std::string_view verbose, std::string_view shortened, 
+		std::string_view attribute)
+	{
+		details::formatter::insert_pattern_data({
+			{{verbose.data(), shortened.data()}, attribute.data()}
+		});
+	}
+
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::set_level_visibility(std::initializer_list<sink_level> level_list)
 	{
 		for (const auto& sink : m_sink_buffer)
 		{
@@ -95,79 +104,79 @@ namespace lwlog
 		}
 	}
 
-	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::info(std::string_view message)
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::info(std::string_view message)
 	{
 		m_level_string = "info";
 		log(message, sink_level::info);
 	}
 
-	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::warning(std::string_view message)
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::warning(std::string_view message)
 	{
 		m_level_string = "warning";
 		log(message, sink_level::warning);
 	}
 
-	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::error(std::string_view message)
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::error(std::string_view message)
 	{
 		m_level_string = "error";
 		log(message, sink_level::error);
 	}
 
-	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::critical(std::string_view message)
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::critical(std::string_view message)
 	{
 		m_level_string = "critical";
 		log(message, sink_level::critical);
 	}
 
-	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::debug(std::string_view message)
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::debug(std::string_view message)
 	{
 		m_level_string = "debug";
 		log(message, sink_level::debug);
 	}
 
-	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::backtrace(std::size_t buffer_size)
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::backtrace(std::size_t buffer_size)
 	{
 		m_tracer.backtrace(buffer_size);
 	}
 
-	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::disable_backtrace()
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::disable_backtrace()
 	{
 		m_tracer.disable_backtrace();
 	}
 
-	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::set_backtrace_stamp(std::string_view stamp)
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::set_backtrace_stamp(std::string_view stamp)
 	{
 		m_tracer.set_backtrace_stamp(stamp);
 	}
 
-	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::display_backtrace()
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::display_backtrace()
 	{
 		m_tracer.display_backtrace();
 	}
 
-	template<typename ... SinkPolicyArgs>
-	void logger<SinkPolicyArgs...>::delete_backtrace()
+	template<typename ... SinkPolicy>
+	void logger<SinkPolicy...>::delete_backtrace()
 	{
 		m_tracer.delete_backtrace();
 	}
 
-	template<typename ... SinkPolicyArgs>
-	inline std::string logger<SinkPolicyArgs...>::name() const
+	template<typename ... SinkPolicy>
+	inline std::string logger<SinkPolicy...>::name() const
 	{
 		return m_name;
 	}
 
-	template<typename ... SinkPolicyArgs>
-	inline std::vector<sinks::sink_ptr> logger<SinkPolicyArgs...>::sinks() const
+	template<typename ... SinkPolicy>
+	inline std::vector<sinks::sink_ptr> logger<SinkPolicy...>::sinks() const
 	{
 		return m_sink_buffer;
 	}

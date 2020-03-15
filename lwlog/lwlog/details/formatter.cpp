@@ -7,21 +7,24 @@ namespace lwlog::details
 {
 	std::unordered_map<duplex<std::string, std::string>, std::string> formatter::m_pattern_data =
 	{
-		{{"{seconds}",			"%s"}, datetime::get_second()},
-		{{"{minute}",			"%i"}, datetime::get_minute()},
+		{{"{seconds}",			"%S"}, datetime::get_second()},
+		{{"{minute}",			"%M"}, datetime::get_minute()},
 		{{"{hour_24}",			"%H"}, datetime::get_hour_24()},
-		{{"{hour_12}",			"%h"}, datetime::get_hour_12()},
-		{{"{day}",				"%M"}, datetime::get_day()},
-		{{"{weekday_abr}",		"%A"}, datetime::get_weekday_abbreviated()},
-		{{"{weekday}",			"%a"}, datetime::get_weekday()},
+		{{"{hour_12}",			"%I"}, datetime::get_hour_12()},
+		{{"{ampm}",				"%p"}, datetime::get_ampm()},
+		{{"{12_clock}",			"%r"}, datetime::get_12_hour_clock()},
+		{{"{24_clock}",			"%R"}, datetime::get_24_hour_clock()},
+		{{"{day}",				"%d"}, datetime::get_day()},
+		{{"{weekday_abr}",		"%a"}, datetime::get_weekday_abbreviated()},
+		{{"{weekday}",			"%A"}, datetime::get_weekday()},
 		{{"{month}",			"%m"}, datetime::get_month()},
-		{{"{mont_name_abr}",	"%B"}, datetime::get_month_name_abbreviated()},
-		{{"{month_name}",		"%b"}, datetime::get_month_name()},
-		{{"{year_short}",		"%C"}, datetime::get_year_short()},
-		{{"{year}",				"%c"}, datetime::get_year()},
+		{{"{mont_name_abr}",	"%b"}, datetime::get_month_name_abbreviated()},
+		{{"{month_name}",		"%B"}, datetime::get_month_name()},
+		{{"{year_short}",		"%y"}, datetime::get_year_short()},
+		{{"{year}",				"%Y"}, datetime::get_year()},
 		{{"{date_short}",		"%D"}, datetime::get_date_short()},
-		{{"{date}",				"%d"}, datetime::get_date()},
-		{{"{time}",				"%x"}, datetime::get_time()},
+		{{"{date}",				"%F"}, datetime::get_date()},
+		{{"{time}",				"%T"}, datetime::get_time()},
 
 		{{						"%%"}, "%"},
 		{{						"{{"}, "{"},
@@ -76,27 +79,27 @@ namespace lwlog::details
 
 	std::string formatter::format(std::string pattern, bool should_color)
 	{
-		for (const auto& [key, value] : m_pattern_data)
+		for (const auto& [key, attribute] : m_pattern_data)
 		{
 			const auto& [verbose, shortened] = key;
 			if (!verbose.empty())
 			{
-				utilities::replace_in_string(pattern, verbose, value);
+				utilities::replace_in_string(pattern, verbose, attribute);
 			}
 		}
 
-		for (const auto& [key, value] : m_pattern_data)
+		for (const auto& [key, attribute] : m_pattern_data)
 		{
 			const auto& [verbose, shortened] = key;
 			if (!shortened.empty())
 			{
-				utilities::replace_in_string(pattern, shortened, value);
+				utilities::replace_in_string(pattern, shortened, attribute);
 			}
 		}
 
-		for (const auto& [key, value] : m_color_data)
+		for (const auto& [key, attribute] : m_color_data)
 		{
-			utilities::replace_in_string(pattern, key, (should_color == true ? value : ""));
+			utilities::replace_in_string(pattern, key, (should_color == true ? attribute : ""));
 		}
 
 		return pattern;
@@ -105,9 +108,9 @@ namespace lwlog::details
 	void formatter::insert_pattern_data(std::initializer_list<duplex<duplex<std::string, std::string>, 
 		std::string>> pattern_data)
 	{
-		for (const auto& [duplex_key, value] : pattern_data)
+		for (const auto& [key, attribute] : pattern_data)
 		{
-			m_pattern_data.insert_or_assign(duplex_key, value);
+			m_pattern_data.insert_or_assign(key, attribute);
 		}
 	}
 }

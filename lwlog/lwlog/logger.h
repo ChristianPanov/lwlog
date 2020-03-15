@@ -13,8 +13,8 @@
 
 namespace lwlog
 {
-	template<typename ... SinkPolicyArgs>
-	class LWLOG_API logger : public logger_interface, public SinkPolicyArgs...
+	template<typename ... SinkPolicy>
+	class LWLOG_API logger : public logger_interface, public SinkPolicy...
 	{
 		template<typename Ty>
 		using iter = typename std::initializer_list<Ty>::iterator;
@@ -25,9 +25,9 @@ namespace lwlog
 		template<typename ... SinkParams>
 		logger(std::string_view name, iter<sinks::sink_ptr> begin, iter<sinks::sink_ptr> end, SinkParams&& ... params);
 		template<typename ... SinkParams>
-		logger(std::string_view name, sinks::sink_ptr sink, SinkParams&& ... params);
-		template<typename ... SinkParams>
 		logger(std::string_view name, std::initializer_list<sinks::sink_ptr> sink_list, SinkParams&& ... params);
+		template<typename ... SinkParams>
+		logger(std::string_view name, sinks::sink_ptr sink, SinkParams&& ... params);
 
 		logger(const logger& other);
 		logger(logger&& other) noexcept;
@@ -35,6 +35,7 @@ namespace lwlog
 		logger& operator=(logger&& other) noexcept;
 
 		void set_pattern(std::string_view pattern) override;
+		void add_pattern_attribute(std::string_view verbose, std::string_view shortened, std::string_view attribute);
 		void set_level_visibility(std::initializer_list<sink_level> level_list) override;
 
 		void info(std::string_view message) override;
@@ -55,11 +56,10 @@ namespace lwlog
 	private:
 		void log(std::string_view message, sink_level level) override;
 
-	private:
+	public:
 		std::string m_name;
 		std::string m_message;
 		std::string m_level_string;
-
 		std::vector<sinks::sink_ptr> m_sink_buffer;
 		details::backtracer m_tracer;
 	};
