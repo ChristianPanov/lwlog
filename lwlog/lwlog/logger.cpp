@@ -53,6 +53,24 @@ namespace lwlog
 		return *this;
 	}
 
+	template<typename ...SinkPolicy>
+	void logger<SinkPolicy...>::add_sink(sinks::sink_ptr sink)
+	{
+		m_sink_buffer.emplace_back(sink);
+	}
+
+	template<typename ...SinkPolicy>
+	void logger<SinkPolicy...>::remove_sink(sinks::sink_ptr sink)
+	{
+		for (int i = 0; i < m_sink_buffer.size(); ++i)
+		{
+			if (m_sink_buffer[i] == sink)
+			{
+				m_sink_buffer.erase(m_sink_buffer.begin() + i);
+			}
+		}
+	}
+
 	template<typename ... SinkPolicy>
 	void logger<SinkPolicy...>::log(std::string_view message, sink_level level)
 	{
@@ -63,7 +81,7 @@ namespace lwlog
 			{{"{message}",			"%v"}, m_message},
 			{{"{log_level}",		"%l"}, m_level_string},
 			{{"{log_level_abr}",	"%L"}, std::string(1, std::toupper(m_level_string[0]))} 
-		});
+			});
 
 		for (const auto& sink : m_sink_buffer)
 		{
@@ -91,8 +109,8 @@ namespace lwlog
 		std::string_view attribute)
 	{
 		details::formatter::insert_pattern_data({
-			{{verbose.data(), shortened.data()}, attribute.data()}
-		});
+			{{verbose.data(), shortened.data()}, attribute.data()} 
+			});
 	}
 
 	template<typename ... SinkPolicy>

@@ -31,6 +31,11 @@ project "lwlog"
 		"%{prj.name}/lwlog/**.cpp"
 	}
 
+	includedirs
+	{
+		"%{prj.name}/lwlog"
+	}
+
 	defines
 	{
 		"_CRT_SECURE_NO_WARNINGS"

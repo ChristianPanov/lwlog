@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "../core.h"
+#include "core.h"
 #include "sink.h"
-#include "../details/file_helper.h"
+#include "details/file_helper.h"
 
 namespace lwlog::sinks
 {

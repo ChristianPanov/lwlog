@@ -34,6 +34,8 @@ namespace lwlog
 	LWLOG_API void delete_backtrace();
 
 	LWLOG_API void apply_to_all(const std::function<void(logger_interface*)>& fn);
+	LWLOG_API void global_add_sink(sinks::sink_ptr sink);
+	LWLOG_API void global_remove_sink(sinks::sink_ptr sink);
 	LWLOG_API void global_set_pattern(std::string_view pattern);
 	LWLOG_API void global_set_level_visibility(std::initializer_list<sink_level> level_list);
 	LWLOG_API void global_backtrace(std::size_t buffer_size);

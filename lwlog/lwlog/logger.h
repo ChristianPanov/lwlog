@@ -34,6 +34,9 @@ namespace lwlog
 		logger& operator=(logger& other);
 		logger& operator=(logger&& other) noexcept;
 
+		void add_sink(sinks::sink_ptr sink) override;
+		void remove_sink(sinks::sink_ptr sink) override;
+
 		void set_pattern(std::string_view pattern) override;
 		void add_pattern_attribute(std::string_view verbose, std::string_view shortened, std::string_view attribute);
 		void set_level_visibility(std::initializer_list<sink_level> level_list) override;

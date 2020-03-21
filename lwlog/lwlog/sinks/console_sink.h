@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "../core.h"
+#include "core.h"
 #include "sink.h"
 
 namespace lwlog::sinks

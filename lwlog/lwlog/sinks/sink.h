@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "../core.h"
+#include "core.h"
 #include "sink_level.h"
 
 namespace lwlog::sinks

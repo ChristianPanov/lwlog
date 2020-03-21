@@ -3,7 +3,7 @@
 #include <fstream>
 #include <filesystem>
 
-#include "../core.h"
+#include "core.h"
 
 namespace lwlog::details
 {

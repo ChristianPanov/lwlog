@@ -4,7 +4,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "../core.h"
+#include "core.h"
 #include "duplex.h"
 
 namespace lwlog::details

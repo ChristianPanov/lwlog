@@ -14,6 +14,9 @@ namespace lwlog
 	public:
 		virtual ~logger_interface() = default;
 
+		virtual void add_sink(sinks::sink_ptr) = 0;
+		virtual void remove_sink(sinks::sink_ptr) = 0;
+
 		virtual void info(std::string_view) = 0;
 		virtual void warning(std::string_view) = 0;
 		virtual void error(std::string_view) = 0;

@@ -4,7 +4,7 @@
 #include <string_view>
 #include <vector>
 
-#include "../core.h"
+#include "core.h"
 
 namespace lwlog::details
 {

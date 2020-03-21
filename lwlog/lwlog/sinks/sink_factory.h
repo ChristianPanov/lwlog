@@ -3,7 +3,7 @@
 #include <type_traits>
 #include <memory>
 
-#include "../core.h"
+#include "core.h"
 #include "sink.h"
 
 namespace lwlog::sinks

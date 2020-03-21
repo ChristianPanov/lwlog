@@ -59,6 +59,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;LWLOG_BUILD_SHARED;LWLOG_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>lwlog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -80,6 +81,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;LWLOG_BUILD_SHARED;LWLOG_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>lwlog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -100,20 +102,20 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="lwlog\details\color.h" />
     <ClInclude Include="lwlog\core.h" />
-    <ClInclude Include="lwlog\details\datetime.h" />
     <ClInclude Include="lwlog\details\backtracer.h" />
+    <ClInclude Include="lwlog\details\color.h" />
+    <ClInclude Include="lwlog\details\datetime.h" />
     <ClInclude Include="lwlog\details\duplex.h" />
     <ClInclude Include="lwlog\details\file_helper.h" />
-    <ClInclude Include="lwlog\details\utilities.h" />
     <ClInclude Include="lwlog\details\formatter.h" />
+    <ClInclude Include="lwlog\details\print.h" />
+    <ClInclude Include="lwlog\details\utilities.h" />
     <ClInclude Include="lwlog\logger.h" />
     <ClInclude Include="lwlog\logger_impl.h" />
-    <ClInclude Include="lwlog\logger_interface_base.h" />
     <ClInclude Include="lwlog\logger_interface.h" />
+    <ClInclude Include="lwlog\logger_interface_base.h" />
     <ClInclude Include="lwlog\lwlog.h" />
-    <ClInclude Include="lwlog\details\print.h" />
     <ClInclude Include="lwlog\registry.h" />
     <ClInclude Include="lwlog\sinks\console_sink.h" />
     <ClInclude Include="lwlog\sinks\file_sink.h" />
@@ -130,10 +132,6 @@
     <ClCompile Include="lwlog\registry.cpp" />
     <ClCompile Include="lwlog\sinks\file_sink.cpp" />
     <ClCompile Include="lwlog\sinks\sink.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Colors.txt" />
-    <Text Include="Format.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
