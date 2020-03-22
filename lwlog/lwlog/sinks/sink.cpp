@@ -3,8 +3,7 @@
 namespace lwlog::sinks
 {
 	sink::sink()
-		: m_should_color(true)
-		, m_pattern("[%d, %T] [%l] [%n]: %v")
+		: m_pattern("[%d, %T] [%l] [%n]: %v")
 	{
 		m_levels.emplace_back(sink_level::all);
 	}

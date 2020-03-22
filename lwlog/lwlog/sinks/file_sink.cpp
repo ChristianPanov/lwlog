@@ -2,10 +2,6 @@
 
 namespace lwlog::sinks
 {
-	file_sink::file_sink()
-		: m_file_size_limit(0)
-	{}
-
 	file_sink::file_sink(std::string_view path_str, int file_size_limit)
 		: m_file_size_limit(file_size_limit)
 	{

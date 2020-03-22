@@ -26,7 +26,7 @@ namespace lwlog::sinks
 		std::string get_pattern() const;
 
 	protected:
-		bool m_should_color;
+		bool m_should_color{ true };
 		std::string m_pattern;
 		std::vector<sink_level> m_levels;
 	};
