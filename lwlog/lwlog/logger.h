@@ -5,16 +5,16 @@
 #include <unordered_map>
 
 #include "core.h"
-#include "logger_interface.h"
 #include "sinks/sink.h"
 #include "sinks/console_sink.h"
 #include "sinks/file_sink.h"
 #include "details/backtracer.h"
+#include "interface/logger_interface.h"
 
 namespace lwlog
 {
 	template<typename ... SinkPolicy>
-	class LWLOG_API logger : public logger_interface, public SinkPolicy...
+	class LWLOG_API logger : public interface::logger, public SinkPolicy...
 	{
 		template<typename Ty>
 		using iter = typename std::initializer_list<Ty>::iterator;

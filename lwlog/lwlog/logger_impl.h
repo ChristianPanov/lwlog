@@ -39,7 +39,7 @@ namespace lwlog
 
 	template<typename ... SinkPolicy>
 	template<typename ... SinkParams>
-	logger<SinkPolicy...>::logger(std::string_view name,
+	logger<SinkPolicy...>::logger(std::string_view name, 
 		sinks::sink_ptr sink, SinkParams&& ... params)
 		: logger<SinkPolicy...>(name, { std::move(sink) }, params...)
 	{}

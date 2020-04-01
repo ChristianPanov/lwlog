@@ -6,7 +6,7 @@
 
 #include "core.h"
 #include "logger.h"
-#include "logger_interface.h"
+#include "interface/logger_interface.h"
 
 namespace lwlog
 {
@@ -19,23 +19,23 @@ namespace lwlog
 
 	public:
 		static registry& instance();
-		void register_logger(logger_interface* logger);
+		void register_logger(interface::logger* logger);
 		void set_automatic_registry(bool automatic);
 		void drop(std::string_view logger_name);
 		void drop_all();
 		inline bool is_registry_automatic();
 
-		logger_interface* get(std::string_view logger_name);
-		std::unordered_map<std::string, logger_interface*> loggers();
-		static void apply_to_all(const std::function<void(logger_interface*)>& fn);
-		static std::shared_ptr<logger_interface> default_logger();
+		interface::logger* get(std::string_view logger_name);
+		std::unordered_map<std::string, interface::logger*> loggers();
+		static void apply_to_all(const std::function<void(interface::logger*)>& fn);
+		static std::shared_ptr<interface::logger> default_logger();
 
 	private:
 		registry() = default;
 
 	private:
 		bool m_automatic_registry{ true };
-		std::unordered_map<std::string, logger_interface*> m_loggers;
-		static std::shared_ptr<logger_interface> m_default_logger;
+		std::unordered_map<std::string, interface::logger*> m_loggers;
+		static std::shared_ptr<interface::logger> m_default_logger;
 	};
 }

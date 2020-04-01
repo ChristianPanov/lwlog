@@ -14,7 +14,6 @@ namespace lwlog::sinks
 	public:
 		sink();
 		virtual ~sink() = default;
-
 		virtual void sink_it(std::string_view) = 0;
 
 	public:
