@@ -9,6 +9,12 @@
 
 namespace lwlog::details
 {
+	struct attribute_key
+	{
+		std::string verbose;
+		std::string shortened;
+	};
+
 	class LWLOG_API formatter
 	{
 	public:

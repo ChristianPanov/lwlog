@@ -38,7 +38,7 @@ namespace lwlog
 		void remove_sink(sinks::sink_ptr sink) override;
 
 		void set_pattern(std::string_view pattern) override;
-		void add_pattern_attribute(std::string_view verbose, std::string_view shortened, std::string_view attribute);
+		void add_pattern_attribute(details::attribute_key key, std::string_view attribute) override;
 		void set_level_visibility(std::initializer_list<sink_level> level_list) override;
 
 		void info(std::string_view message) override;

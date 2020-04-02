@@ -104,12 +104,11 @@ namespace lwlog
 		}
 	}
 
-	template<typename ... SinkPolicy>
-	void logger<SinkPolicy...>::add_pattern_attribute(std::string_view verbose, std::string_view shortened, 
-		std::string_view attribute)
+	template<typename ...SinkPolicy>
+	void logger<SinkPolicy...>::add_pattern_attribute(details::attribute_key key, std::string_view attribute)
 	{
 		details::formatter::insert_pattern_data({
-			{{verbose.data(), shortened.data()}, attribute.data()} 
+			{{key.verbose, key.shortened}, attribute.data()}
 			});
 	}
 
