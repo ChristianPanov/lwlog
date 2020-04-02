@@ -17,6 +17,11 @@ namespace lwlog
 		return registry::default_logger();
 	}
 
+	LWLOG_API void add_pattern_attribute(details::pattern_attribute attribute)
+	{
+		registry::default_logger()->add_pattern_attribute(attribute);
+	}
+
 	LWLOG_API void info(std::string_view message)
 	{
 		registry::default_logger()->info(message);
@@ -71,8 +76,11 @@ namespace lwlog
 	{
 		registry::apply_to_all(fn);
 	}
+}
 
-	LWLOG_API void global_add_sink(sinks::sink_ptr sink)
+namespace lwlog::global
+{
+	LWLOG_API void add_sink(sinks::sink_ptr sink)
 	{
 		registry::apply_to_all([sink](interface::logger* logger)
 			{
@@ -80,7 +88,7 @@ namespace lwlog
 			});
 	}
 
-	LWLOG_API void global_remove_sink(sinks::sink_ptr sink)
+	LWLOG_API void remove_sink(sinks::sink_ptr sink)
 	{
 		registry::apply_to_all([sink](interface::logger* logger)
 			{
@@ -88,15 +96,23 @@ namespace lwlog
 			});
 	}
 
-	LWLOG_API void global_set_pattern(std::string_view pattern)
+	LWLOG_API void set_pattern(std::string_view pattern)
 	{
 		registry::apply_to_all([pattern](interface::logger* logger)
-			{ 
+			{
 				logger->set_pattern(pattern);
 			});
 	}
 
-	LWLOG_API void global_set_level_visibility(std::initializer_list<sink_level> level_list)
+	LWLOG_API void add_pattern_attribute(details::pattern_attribute attribute)
+	{
+		registry::apply_to_all([attribute](interface::logger* logger)
+			{
+				logger->add_pattern_attribute(attribute);
+			});
+	}
+
+	LWLOG_API void set_level_visibility(std::initializer_list<sink_level> level_list)
 	{
 		registry::apply_to_all([level_list](interface::logger* logger)
 			{
@@ -104,7 +120,7 @@ namespace lwlog
 			});
 	}
 
-	LWLOG_API void global_backtrace(std::size_t buffer_size)
+	LWLOG_API void backtrace(std::size_t buffer_size)
 	{
 		registry::apply_to_all([buffer_size](interface::logger* logger)
 			{
@@ -112,7 +128,7 @@ namespace lwlog
 			});
 	}
 
-	LWLOG_API void global_disable_backtrace()
+	LWLOG_API void disable_backtrace()
 	{
 		registry::apply_to_all([](interface::logger* logger)
 			{
@@ -120,7 +136,7 @@ namespace lwlog
 			});
 	}
 
-	LWLOG_API void global_set_backtrace_stamp(std::string_view stamp)
+	LWLOG_API void set_backtrace_stamp(std::string_view stamp)
 	{
 		registry::apply_to_all([stamp](interface::logger* logger)
 			{
@@ -128,7 +144,7 @@ namespace lwlog
 			});
 	}
 
-	LWLOG_API void global_display_backtrace()
+	LWLOG_API void display_backtrace()
 	{
 		registry::apply_to_all([](interface::logger* logger)
 			{
@@ -136,7 +152,7 @@ namespace lwlog
 			});
 	}
 
-	LWLOG_API void global_delete_backtrace()
+	LWLOG_API void delete_backtrace()
 	{
 		registry::apply_to_all([](interface::logger* logger)
 			{

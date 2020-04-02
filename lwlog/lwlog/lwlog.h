@@ -18,6 +18,8 @@ namespace lwlog
 	LWLOG_API interface::logger* get(std::string_view logger_name);
 	LWLOG_API std::shared_ptr<interface::logger> default_logger();
 
+	LWLOG_API void add_pattern_attribute(details::pattern_attribute attribute);
+
 	LWLOG_API void info(std::string_view message);
 	LWLOG_API void warning(std::string_view message);
 	LWLOG_API void error(std::string_view message);
@@ -31,13 +33,20 @@ namespace lwlog
 	LWLOG_API void delete_backtrace();
 
 	LWLOG_API void apply_to_all(const std::function<void(interface::logger*)>& fn);
-	LWLOG_API void global_add_sink(sinks::sink_ptr sink);
-	LWLOG_API void global_remove_sink(sinks::sink_ptr sink);
-	LWLOG_API void global_set_pattern(std::string_view pattern);
-	LWLOG_API void global_set_level_visibility(std::initializer_list<sink_level> level_list);
-	LWLOG_API void global_backtrace(std::size_t buffer_size);
-	LWLOG_API void global_disable_backtrace();
-	LWLOG_API void global_set_backtrace_stamp(std::string_view stamp);
-	LWLOG_API void global_display_backtrace();
-	LWLOG_API void global_delete_backtrace();
+}
+
+namespace lwlog::global
+{
+	LWLOG_API void add_sink(sinks::sink_ptr sink);
+	LWLOG_API void remove_sink(sinks::sink_ptr sink);
+
+	LWLOG_API void set_pattern(std::string_view pattern);
+	LWLOG_API void add_pattern_attribute(details::pattern_attribute attribute);
+	LWLOG_API void set_level_visibility(std::initializer_list<sink_level> level_list);
+
+	LWLOG_API void backtrace(std::size_t buffer_size);
+	LWLOG_API void disable_backtrace();
+	LWLOG_API void set_backtrace_stamp(std::string_view stamp);
+	LWLOG_API void display_backtrace();
+	LWLOG_API void delete_backtrace();
 }

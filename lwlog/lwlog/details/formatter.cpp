@@ -105,12 +105,11 @@ namespace lwlog::details
 		return pattern;
 	}
 
-	void formatter::insert_pattern_data(std::initializer_list<duplex<duplex<std::string, std::string>, 
-		std::string>> pattern_data)
+	void formatter::insert_pattern_data(std::initializer_list<pattern_attribute> pattern_data)
 	{
-		for (const auto& [key, attribute] : pattern_data)
+		for (const auto& [verbose, shortened, attribute] : pattern_data)
 		{
-			m_pattern_data.insert_or_assign(key, attribute);
+			m_pattern_data.insert_or_assign({ verbose, shortened }, attribute);
 		}
 	}
 }

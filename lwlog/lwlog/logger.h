@@ -38,7 +38,7 @@ namespace lwlog
 		void remove_sink(sinks::sink_ptr sink) override;
 
 		void set_pattern(std::string_view pattern) override;
-		void add_pattern_attribute(details::attribute_key key, std::string_view attribute) override;
+		void add_pattern_attribute(details::pattern_attribute attribute) override;
 		void set_level_visibility(std::initializer_list<sink_level> level_list) override;
 
 		void info(std::string_view message) override;
@@ -59,7 +59,7 @@ namespace lwlog
 	private:
 		void log(std::string_view message, sink_level level) override;
 
-	public:
+	private:
 		std::string m_name;
 		std::string m_message;
 		std::string m_level_string;
