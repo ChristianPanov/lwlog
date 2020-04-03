@@ -1,47 +1,45 @@
 #include "backtracer.h"
 
-#include "print.h"
-
 namespace lwlog::details
 {
 	void backtracer::backtrace(std::size_t buffer_size)
 	{
-		m_is_backtrace_enabled = true;
-		m_backtrace_buffer.reserve(buffer_size);
+		m_is_enabled = true;
+		m_buffer.reserve(buffer_size);
 	}
 
-	void backtracer::disable_backtrace()
+	void backtracer::disable()
 	{
-		m_is_backtrace_enabled = false;
+		m_is_enabled = false;
 	}
 
-	void backtracer::set_backtrace_stamp(std::string_view stamp)
+	void backtracer::set_stamp(std::string_view stamp)
 	{
-		m_backtrace_stamp = stamp;
+		m_stamp = stamp;
 	}
  
-	void backtracer::display_backtrace()
+	void backtracer::display()
 	{
-		for (const auto& message : m_backtrace_buffer)
+		for (const auto& message : m_buffer)
 		{
-			lwlog::print("{0}{1}\n", m_backtrace_stamp, message);
+			std::cout << m_stamp + message << '\n';
 		}
 	}
 
-	void backtracer::delete_backtrace()
+	void backtracer::dump()
 	{
-		m_backtrace_messages = 0;
-		m_backtrace_buffer.clear();
+		m_messages = 0;
+		m_buffer.clear();
 	}
 
-	void backtracer::push_in_backtrace_buffer(std::string_view message)
+	void backtracer::push_in_buffer(std::string_view message)
 	{
-		if (m_is_backtrace_enabled == true)
+		if (m_is_enabled == true)
 		{
-			m_backtrace_messages++;
-			if (m_backtrace_messages <= m_backtrace_buffer.capacity())
+			m_messages++;
+			if (m_messages <= m_buffer.capacity())
 			{
-				m_backtrace_buffer.emplace_back(message);
+				m_buffer.emplace_back(message);
 			}
 		}
 	}

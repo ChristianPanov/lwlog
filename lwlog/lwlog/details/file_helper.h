@@ -17,14 +17,9 @@ namespace lwlog::details
 
 		void open(std::string_view path_str, truncate open_mode = truncate::off);
 		void reopen();
-		void rename(std::string_view new_name);
 		void write(std::string_view message);
 		void close();
 		bool exists();
-		std::filesystem::path path() const;
-		std::filesystem::path parent_path() const;
-		std::filesystem::path name() const;
-		std::filesystem::path extension() const;
 		std::size_t size() const;
 
 	private:

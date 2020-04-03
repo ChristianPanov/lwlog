@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -12,16 +13,16 @@ namespace lwlog::details
 	{
 	public:
 		void backtrace(std::size_t buffer_size);
-		void disable_backtrace();
-		void set_backtrace_stamp(std::string_view stamp);
-		void display_backtrace();
-		void delete_backtrace();
-		void push_in_backtrace_buffer(std::string_view message);
+		void disable();
+		void set_stamp(std::string_view stamp);
+		void display();
+		void dump();
+		void push_in_buffer(std::string_view message);
 
 	private:
-		bool m_is_backtrace_enabled{ false };
-		int m_backtrace_messages{ 0 };
-		std::string m_backtrace_stamp;
-		std::vector<std::string> m_backtrace_buffer;
+		bool m_is_enabled{ false };
+		int m_messages{ 0 };
+		std::string m_stamp;
+		std::vector<std::string> m_buffer;
 	};
 }

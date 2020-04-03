@@ -1,7 +1,6 @@
 #include "formatter.h"
 #include "datetime.h"
 #include "color.h"
-#include "utilities.h"
 
 namespace lwlog::details
 {
@@ -84,7 +83,10 @@ namespace lwlog::details
 			const auto& [verbose, shortened] = key;
 			if (!verbose.empty())
 			{
-				utilities::replace_in_string(pattern, verbose, attribute);
+				while (pattern.find(verbose) != std::string::npos)
+				{
+					pattern.replace(pattern.find(verbose), verbose.length(), attribute);
+				}
 			}
 		}
 
@@ -93,13 +95,19 @@ namespace lwlog::details
 			const auto& [verbose, shortened] = key;
 			if (!shortened.empty())
 			{
-				utilities::replace_in_string(pattern, shortened, attribute);
+				while (pattern.find(shortened) != std::string::npos)
+				{
+					pattern.replace(pattern.find(shortened), shortened.length(), attribute);
+				}
 			}
 		}
 
 		for (const auto& [key, attribute] : m_color_data)
 		{
-			utilities::replace_in_string(pattern, key, (should_color == true ? attribute : ""));
+			while (pattern.find(key) != std::string::npos)
+			{
+				pattern.replace(pattern.find(key), key.length(), (should_color == true ? attribute : ""));
+			}
 		}
 
 		return pattern;

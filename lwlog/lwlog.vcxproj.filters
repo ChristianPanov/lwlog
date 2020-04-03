@@ -28,12 +28,6 @@
     <ClInclude Include="lwlog\details\formatter.h">
       <Filter>details</Filter>
     </ClInclude>
-    <ClInclude Include="lwlog\details\print.h">
-      <Filter>details</Filter>
-    </ClInclude>
-    <ClInclude Include="lwlog\details\utilities.h">
-      <Filter>details</Filter>
-    </ClInclude>
     <ClInclude Include="lwlog\logger.h" />
     <ClInclude Include="lwlog\logger_impl.h" />
     <ClInclude Include="lwlog\lwlog.h" />

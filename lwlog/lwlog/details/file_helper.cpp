@@ -32,14 +32,6 @@ namespace lwlog::details
 		}
 	}
 
-	void file_helper::rename(std::string_view new_name)
-	{
-		if (std::filesystem::exists(m_path))
-		{
-			m_path.replace_filename(new_name.data() + m_path.extension().string());
-		}
-	}
-
 	void file_helper::write(std::string_view message)
 	{
 		if (std::filesystem::exists(m_path))
@@ -59,27 +51,6 @@ namespace lwlog::details
 	bool file_helper::exists()
 	{
 		return std::filesystem::exists(m_path);
-	}
-
-	std::filesystem::path file_helper::path() const
-	{
-		return m_path;
-	}
-
-	std::filesystem::path file_helper::parent_path() const
-	{
-		return m_path.parent_path();
-	}
-
-	std::filesystem::path file_helper::name() const
-	{
-		return m_path.filename().string().erase(m_path.filename().string().find(m_path.extension().string(), 
-			m_path.extension().string().length()));
-	}
-
-	std::filesystem::path file_helper::extension() const
-	{
-		return m_path.extension().string();
 	}
 
 	std::size_t file_helper::size() const

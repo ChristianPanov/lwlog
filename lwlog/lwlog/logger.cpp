@@ -88,9 +88,7 @@ namespace lwlog
 			if (sink->should_sink(level))
 			{
 				sink->sink_it(details::formatter::format(sink->get_pattern(), sink->should_color()));
-				m_tracer.push_in_backtrace_buffer(
-					details::formatter::format(sink->get_pattern(), sink->should_color())
-				);
+				m_tracer.push_in_buffer(details::formatter::format(sink->get_pattern(), sink->should_color()));
 			}
 		}
 	}
@@ -163,25 +161,25 @@ namespace lwlog
 	template<typename ... SinkPolicy>
 	void logger<SinkPolicy...>::disable_backtrace()
 	{
-		m_tracer.disable_backtrace();
+		m_tracer.disable();
 	}
 
 	template<typename ... SinkPolicy>
 	void logger<SinkPolicy...>::set_backtrace_stamp(std::string_view stamp)
 	{
-		m_tracer.set_backtrace_stamp(stamp);
+		m_tracer.set_stamp(stamp);
 	}
 
 	template<typename ... SinkPolicy>
 	void logger<SinkPolicy...>::display_backtrace()
 	{
-		m_tracer.display_backtrace();
+		m_tracer.display();
 	}
 
 	template<typename ... SinkPolicy>
-	void logger<SinkPolicy...>::delete_backtrace()
+	void logger<SinkPolicy...>::dump_backtrace()
 	{
-		m_tracer.delete_backtrace();
+		m_tracer.dump();
 	}
 
 	template<typename ... SinkPolicy>

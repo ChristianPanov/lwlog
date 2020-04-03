@@ -51,7 +51,7 @@ namespace lwlog
 		void disable_backtrace() override;
 		void set_backtrace_stamp(std::string_view stamp) override;
 		void display_backtrace() override;
-		void delete_backtrace() override;
+		void dump_backtrace() override;
 
 		inline std::string name() const override;
 		inline std::vector<sinks::sink_ptr> sinks() const override;

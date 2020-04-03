@@ -69,7 +69,7 @@ namespace lwlog
 
 	LWLOG_API void delete_backtrace()
 	{
-		return registry::default_logger()->delete_backtrace();
+		return registry::default_logger()->dump_backtrace();
 	}
 
 	LWLOG_API void apply_to_all(const std::function<void(interface::logger*)>& fn)
@@ -156,7 +156,7 @@ namespace lwlog::global
 	{
 		registry::apply_to_all([](interface::logger* logger)
 			{
-				logger->delete_backtrace();
+				logger->dump_backtrace();
 			});
 	}
 }

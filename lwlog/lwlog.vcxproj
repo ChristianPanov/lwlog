@@ -109,8 +109,6 @@
     <ClInclude Include="lwlog\details\duplex.h" />
     <ClInclude Include="lwlog\details\file_helper.h" />
     <ClInclude Include="lwlog\details\formatter.h" />
-    <ClInclude Include="lwlog\details\print.h" />
-    <ClInclude Include="lwlog\details\utilities.h" />
     <ClInclude Include="lwlog\interface\backtracer_interface.h" />
     <ClInclude Include="lwlog\interface\level_visibility_interface.h" />
     <ClInclude Include="lwlog\interface\logger_interface.h" />

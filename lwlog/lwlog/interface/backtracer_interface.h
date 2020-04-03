@@ -12,6 +12,6 @@ namespace lwlog::interface
 		virtual void disable_backtrace() = 0;
 		virtual void set_backtrace_stamp(std::string_view) = 0;
 		virtual void display_backtrace() = 0;
-		virtual void delete_backtrace() = 0;
+		virtual void dump_backtrace() = 0;
 	};
 }
