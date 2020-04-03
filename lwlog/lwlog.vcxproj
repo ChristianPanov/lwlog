@@ -112,8 +112,10 @@
     <ClInclude Include="lwlog\details\print.h" />
     <ClInclude Include="lwlog\details\utilities.h" />
     <ClInclude Include="lwlog\interface\backtracer_interface.h" />
+    <ClInclude Include="lwlog\interface\level_visibility_interface.h" />
     <ClInclude Include="lwlog\interface\logger_interface.h" />
     <ClInclude Include="lwlog\interface\level_interface.h" />
+    <ClInclude Include="lwlog\interface\pattern_interface.h" />
     <ClInclude Include="lwlog\interface\sink_interface.h" />
     <ClInclude Include="lwlog\logger.h" />
     <ClInclude Include="lwlog\logger_impl.h" />

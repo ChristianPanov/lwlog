@@ -57,6 +57,8 @@
     <ClInclude Include="lwlog\interface\level_interface.h" />
     <ClInclude Include="lwlog\interface\logger_interface.h" />
     <ClInclude Include="lwlog\interface\sink_interface.h" />
+    <ClInclude Include="lwlog\interface\pattern_interface.h" />
+    <ClInclude Include="lwlog\interface\level_visibility_interface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\details\backtracer.cpp">
