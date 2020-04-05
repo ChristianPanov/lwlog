@@ -2,14 +2,15 @@
 
 #include <string>
 #include <vector>
-#include <unordered_map>
 
 #include "core.h"
+#include "interface/logger_interface.h"
 #include "sinks/sink.h"
 #include "sinks/console_sink.h"
 #include "sinks/file_sink.h"
+#include "details/formatter.h"
+#include "sinks/sink_level.h"
 #include "details/backtracer.h"
-#include "interface/logger_interface.h"
 
 namespace lwlog
 {

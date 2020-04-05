@@ -1,7 +1,4 @@
 #include "logger.h"
-#include "sinks/sink_level.h"
-#include "registry.h"
-#include "details/formatter.h"
 
 namespace lwlog
 {

@@ -5,8 +5,7 @@
 #include <functional>
 
 #include "core.h"
-#include "logger.h"
-#include "interface/logger_interface.h"
+#include "fwd.h"
 
 namespace lwlog
 {

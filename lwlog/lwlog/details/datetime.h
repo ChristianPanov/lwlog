@@ -4,7 +4,7 @@
 #include <sstream>
 #include <chrono>
 #include <ctime>
-#include <string_view>
+#include <string>
 
 namespace lwlog::details::datetime
 {

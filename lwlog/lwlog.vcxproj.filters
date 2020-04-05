@@ -4,6 +4,9 @@
     <Filter Include="details">
       <UniqueIdentifier>{8B788209-F757-01A5-0070-8C7B6CCE6706}</UniqueIdentifier>
     </Filter>
+    <Filter Include="interface">
+      <UniqueIdentifier>{966DB512-02D8-6989-4B16-1B2FB7BF47DE}</UniqueIdentifier>
+    </Filter>
     <Filter Include="sinks">
       <UniqueIdentifier>{0D785B10-798C-83C1-420E-2721AEE17FF2}</UniqueIdentifier>
     </Filter>
@@ -28,6 +31,24 @@
     <ClInclude Include="lwlog\details\formatter.h">
       <Filter>details</Filter>
     </ClInclude>
+    <ClInclude Include="lwlog\interface\backtracer_interface.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\interface\level_interface.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\interface\level_visibility_interface.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\interface\logger_interface.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\interface\pattern_interface.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\interface\sink_interface.h">
+      <Filter>interface</Filter>
+    </ClInclude>
     <ClInclude Include="lwlog\logger.h" />
     <ClInclude Include="lwlog\logger_impl.h" />
     <ClInclude Include="lwlog\lwlog.h" />
@@ -47,12 +68,7 @@
     <ClInclude Include="lwlog\sinks\sink_level.h">
       <Filter>sinks</Filter>
     </ClInclude>
-    <ClInclude Include="lwlog\interface\backtracer_interface.h" />
-    <ClInclude Include="lwlog\interface\level_interface.h" />
-    <ClInclude Include="lwlog\interface\logger_interface.h" />
-    <ClInclude Include="lwlog\interface\sink_interface.h" />
-    <ClInclude Include="lwlog\interface\pattern_interface.h" />
-    <ClInclude Include="lwlog\interface\level_visibility_interface.h" />
+    <ClInclude Include="lwlog\fwd.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\details\backtracer.cpp">

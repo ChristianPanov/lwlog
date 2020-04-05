@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core.h"
-#include "details/formatter.h"
+#include "fwd.h"
 
 namespace lwlog::interface
 {

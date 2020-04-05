@@ -1,9 +1,7 @@
 #pragma once
 
-#include <vector>
-
 #include "core.h"
-#include "sinks/sink.h"
+#include "fwd.h"
 
 namespace lwlog::interface
 {
@@ -11,8 +9,8 @@ namespace lwlog::interface
 	{
 	public:
 		virtual ~sink() = default;
-		virtual void add_sink(lwlog::sinks::sink_ptr) = 0;
-		virtual void remove_sink(lwlog::sinks::sink_ptr) = 0;
-		virtual std::vector<lwlog::sinks::sink_ptr> sinks() const = 0;
+		virtual void add_sink(sinks::sink_ptr) = 0;
+		virtual void remove_sink(sinks::sink_ptr) = 0;
+		virtual std::vector<sinks::sink_ptr> sinks() const = 0;
 	};
 }

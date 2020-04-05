@@ -1,10 +1,5 @@
 #include "lwlog.h"
 
-#include "sinks/sink.h"
-#include "sinks/console_sink.h"
-#include "sinks/file_sink.h"
-#include "registry.h"
-
 namespace lwlog 
 {
 	LWLOG_API interface::logger* get(std::string_view logger_name)

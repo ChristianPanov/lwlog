@@ -19,15 +19,14 @@ int main()
 	lwlog::global::set_pattern("^br_cyan^[%T] [%n]^reset^ ^br_magenta^[%l]^reset^: ^br_white^%v^reset^");
 
 	console2->info("Info message");
-	
+
 	lwlog::apply_to_all([](lwlog::interface::logger* logger)
-	{
-		logger->info("Dispatched to all loggers in registry");
-	});
+		{
+			logger->info("Dispatched to all loggers in registry");
+		});
 
 	lwlog::debug("IS THIS EVEN MORE GLOBAL AND GENERIC?");
 
 	lwlog::get("CONSOLE")->warning("Global");
-	
 	return 0;
 }

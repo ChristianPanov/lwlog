@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "core.h"
-#include "sink.h"
+#include "fwd.h"
 
 namespace lwlog::sinks
 {
