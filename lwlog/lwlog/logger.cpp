@@ -74,10 +74,10 @@ namespace lwlog
 		m_message = message;
 
 		details::formatter::insert_pattern_data({ 
-			{"{logger_name}",		"%n", m_name},
-			{"{message}",			"%v", m_message},
-			{"{log_level}",			"%l", m_level_string},
-			{"{log_level_abr}",		"%L", std::string(1, std::toupper(m_level_string[0]))} 
+			{"{logger_name}",	"%n", m_name},
+			{"{message}",		"%v", m_message},
+			{"{log_level}",		"%l", m_level_string},
+			{"{log_level_abr}",	"%L", std::string(1, std::toupper(m_level_string[0]))} 
 			});
 
 		for (const auto& sink : m_sink_buffer)

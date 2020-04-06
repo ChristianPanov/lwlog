@@ -2,12 +2,6 @@
 
 namespace lwlog::sinks
 {
-	sink::sink()
-		: m_pattern("[%d, %T] [%l] [%n]: %v")
-	{
-		m_levels.emplace_back(sink_level::all);
-	}
-
 	void sink::set_pattern(std::string_view pattern)
 	{
 		m_pattern = pattern;

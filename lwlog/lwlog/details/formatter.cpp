@@ -30,7 +30,7 @@ namespace lwlog::details
 		{{						"}}"}, "}"}
 	};
 
-	std::unordered_map<std::string, std::string> formatter::m_color_data =
+	std::unordered_map<std::string_view, std::string_view> formatter::m_color_data =
 	{
 		{"^black^",			color::foreground_black()},
 		{"^red^",			color::foreground_red()},

@@ -46,9 +46,6 @@
     <ClInclude Include="lwlog\interface\pattern_interface.h">
       <Filter>interface</Filter>
     </ClInclude>
-    <ClInclude Include="lwlog\interface\sink_interface.h">
-      <Filter>interface</Filter>
-    </ClInclude>
     <ClInclude Include="lwlog\logger.h" />
     <ClInclude Include="lwlog\logger_impl.h" />
     <ClInclude Include="lwlog\lwlog.h" />
@@ -69,6 +66,9 @@
       <Filter>sinks</Filter>
     </ClInclude>
     <ClInclude Include="lwlog\fwd.h" />
+    <ClInclude Include="lwlog\interface\sink_buffer_interface.h">
+      <Filter>interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\details\backtracer.cpp">

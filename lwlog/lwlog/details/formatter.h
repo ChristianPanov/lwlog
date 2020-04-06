@@ -23,6 +23,6 @@ namespace lwlog::details
 
 	private:
 		static std::unordered_map<duplex<std::string, std::string>, std::string> m_pattern_data;
-		static std::unordered_map<std::string, std::string> m_color_data;
+		static std::unordered_map<std::string_view, std::string_view> m_color_data;
 	};
 }

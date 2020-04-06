@@ -17,16 +17,13 @@ namespace lwlog
 	template<typename ... SinkPolicy>
 	class LWLOG_API logger : public interface::logger, public SinkPolicy...
 	{
-		template<typename Ty>
-		using iter = typename std::initializer_list<Ty>::iterator;
-
 	public:
 		template<typename ... SinkParams>
 		logger(std::string_view name, SinkParams&& ... params);
+		template<typename Iterator, typename ... SinkParams>
+		logger(std::string_view name, Iterator begin, Iterator end, SinkParams&& ... params);
 		template<typename ... SinkParams>
-		logger(std::string_view name, iter<sinks::sink_ptr> begin, iter<sinks::sink_ptr> end, SinkParams&& ... params);
-		template<typename ... SinkParams>
-		logger(std::string_view name, std::initializer_list<sinks::sink_ptr> sink_list, SinkParams&& ... params);
+		logger(std::string_view name, sinks::sink_list sink_list, SinkParams&& ... params);
 		template<typename ... SinkParams>
 		logger(std::string_view name, sinks::sink_ptr sink, SinkParams&& ... params);
 
