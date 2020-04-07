@@ -52,7 +52,7 @@ namespace lwlog
 		void dump_backtrace() override;
 
 		inline std::string name() const override;
-		inline std::vector<sinks::sink_ptr> sinks() const override;
+		inline std::vector<sinks::sink_ptr>& sinks() override;
 
 	private:
 		void log(std::string_view message, sink_level level) override;

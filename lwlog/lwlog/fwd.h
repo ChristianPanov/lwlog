@@ -20,6 +20,7 @@ namespace lwlog::sinks
 namespace lwlog::interface
 {
 	class logger;
+	using logger_ptr = logger*;
 }
 
 namespace lwlog::details 

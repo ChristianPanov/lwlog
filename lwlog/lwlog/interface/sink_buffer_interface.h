@@ -11,6 +11,6 @@ namespace lwlog::interface
 		virtual ~sink_buffer() = default;
 		virtual void add_sink(sinks::sink_ptr) = 0;
 		virtual void remove_sink(sinks::sink_ptr) = 0;
-		virtual std::vector<sinks::sink_ptr> sinks() const = 0;
+		virtual std::vector<sinks::sink_ptr>& sinks() = 0;
 	};
 }

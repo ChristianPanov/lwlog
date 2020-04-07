@@ -11,7 +11,7 @@ namespace lwlog
 	logger<SinkPolicy...>::logger(std::string_view name, SinkParams&& ... params)
 		: m_name(name)
 	{
-		if (registry::instance().is_registry_automatic())
+		if (registry::instance().is_registry_automatic() && !name.empty())
 		{
 			registry::instance().register_logger(this);
 		}

@@ -18,4 +18,6 @@ namespace lwlog::interface
 		virtual void log(std::string_view, sink_level) = 0;
 		virtual std::string name() const = 0;
 	};
+
+	using logger_ptr = logger*;
 }

@@ -18,23 +18,23 @@ namespace lwlog
 
 	public:
 		static registry& instance();
-		void register_logger(interface::logger* logger);
+		void register_logger(interface::logger_ptr logger);
 		void set_automatic_registry(bool automatic);
 		void drop(std::string_view logger_name);
 		void drop_all();
 		inline bool is_registry_automatic();
 
-		interface::logger* get(std::string_view logger_name);
-		std::unordered_map<std::string, interface::logger*> loggers();
-		static void apply_to_all(const std::function<void(interface::logger*)>& fn);
+		interface::logger_ptr get(std::string_view logger_name);
+		std::unordered_map<std::string, interface::logger_ptr> loggers();
+		static void apply_to_all(const std::function<void(interface::logger_ptr)>& fn);
 		static std::shared_ptr<interface::logger> default_logger();
 
 	private:
 		registry() = default;
 
-	public:
+	private:
 		bool m_automatic_registry{ true };
-		std::unordered_map<std::string, interface::logger*> m_loggers;
+		std::unordered_map<std::string, interface::logger_ptr> m_loggers;
 		static std::shared_ptr<interface::logger> m_default_logger;
 	};
 }

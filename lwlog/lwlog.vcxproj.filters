@@ -31,6 +31,7 @@
     <ClInclude Include="lwlog\details\formatter.h">
       <Filter>details</Filter>
     </ClInclude>
+    <ClInclude Include="lwlog\fwd.h" />
     <ClInclude Include="lwlog\interface\backtracer_interface.h">
       <Filter>interface</Filter>
     </ClInclude>
@@ -44,6 +45,9 @@
       <Filter>interface</Filter>
     </ClInclude>
     <ClInclude Include="lwlog\interface\pattern_interface.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\interface\sink_buffer_interface.h">
       <Filter>interface</Filter>
     </ClInclude>
     <ClInclude Include="lwlog\logger.h" />
@@ -64,10 +68,6 @@
     </ClInclude>
     <ClInclude Include="lwlog\sinks\sink_level.h">
       <Filter>sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="lwlog\fwd.h" />
-    <ClInclude Include="lwlog\interface\sink_buffer_interface.h">
-      <Filter>interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

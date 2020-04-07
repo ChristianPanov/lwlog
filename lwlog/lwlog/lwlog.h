@@ -15,7 +15,7 @@ namespace lwlog
 	using file_logger_mt = nullptr_t;
 	/*-------------------------------------------*/
 
-	LWLOG_API interface::logger* get(std::string_view logger_name);
+	LWLOG_API interface::logger_ptr get(std::string_view logger_name);
 	LWLOG_API std::shared_ptr<interface::logger> default_logger();
 
 	LWLOG_API void add_pattern_attribute(details::pattern_attribute attribute);
@@ -32,7 +32,7 @@ namespace lwlog
 	LWLOG_API void display_backtrace();
 	LWLOG_API void delete_backtrace();
 
-	LWLOG_API void apply_to_all(const std::function<void(interface::logger*)>& fn);
+	LWLOG_API void apply_to_all(const std::function<void(interface::logger_ptr)>& fn);
 }
 
 namespace lwlog::global

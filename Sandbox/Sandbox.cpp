@@ -20,7 +20,7 @@ int main()
 
 	console2->info("Info message");
 
-	lwlog::apply_to_all([](lwlog::interface::logger* logger)
+	lwlog::apply_to_all([](lwlog::interface::logger_ptr logger)
 		{
 			logger->info("Dispatched to all loggers in registry");
 		});

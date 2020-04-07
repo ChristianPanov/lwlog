@@ -186,7 +186,7 @@ namespace lwlog
 	}
 
 	template<typename ... SinkPolicy>
-	inline std::vector<sinks::sink_ptr> logger<SinkPolicy...>::sinks() const
+	inline std::vector<sinks::sink_ptr>& logger<SinkPolicy...>::sinks()
 	{
 		return m_sink_buffer;
 	}

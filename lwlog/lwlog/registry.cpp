@@ -11,7 +11,7 @@ namespace lwlog
 		return s_instance;
 	}
 
-	void registry::register_logger(interface::logger* logger)
+	void registry::register_logger(interface::logger_ptr logger)
 	{
 		m_loggers[logger->name()] = std::move(logger);
 	}
@@ -36,17 +36,17 @@ namespace lwlog
 		return m_automatic_registry ? true : false;
 	}
 
-	interface::logger* registry::get(std::string_view logger_name)
+	interface::logger_ptr registry::get(std::string_view logger_name)
 	{
 		return m_loggers[logger_name.data()];
 	}
 
-	std::unordered_map<std::string, interface::logger*> registry::loggers()
+	std::unordered_map<std::string, interface::logger_ptr> registry::loggers()
 	{
 		return m_loggers;
 	}
 
-	void registry::apply_to_all(const std::function<void(interface::logger*)>& fn)
+	void registry::apply_to_all(const std::function<void(interface::logger_ptr)>& fn)
 	{
 		for (const auto& [name, logger] : registry::instance().loggers())
 		{

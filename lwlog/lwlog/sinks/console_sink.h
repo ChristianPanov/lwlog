@@ -15,6 +15,6 @@ namespace lwlog::sinks
 
 	inline void console_sink::sink_it(std::string_view message)
 	{
-		std::cout << message << '\n';
+		fwrite((std::string(message) + "\n").data(), message.size(), 1, stderr);
 	}
 }
