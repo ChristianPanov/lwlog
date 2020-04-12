@@ -77,15 +77,18 @@ namespace lwlog
 			{"{logger_name}",	"%n", m_name},
 			{"{message}",		"%v", m_message},
 			{"{log_level}",		"%l", m_level_string},
-			{"{log_level_abr}",	"%L", std::string(1, std::toupper(m_level_string[0]))} 
+			{"{log_level_abr}",	"%L", std::string(1, std::toupper(m_level_string[0]))}
 			});
 
 		for (const auto& sink : m_sink_buffer)
 		{
 			if (sink->should_sink(level))
 			{
-				sink->sink_it(details::formatter::format(sink->get_pattern(), sink->should_color()));
-				m_tracer.push_in_buffer(details::formatter::format(sink->get_pattern(), sink->should_color()));
+				m_message = details::formatter::format(
+					sink->get_pattern(), sink->should_color()
+				);
+				sink->sink_it(m_message);
+				m_tracer.push_in_buffer(m_message);
 			}
 		}
 	}
@@ -102,7 +105,9 @@ namespace lwlog
 	template<typename ...SinkPolicy>
 	void logger<SinkPolicy...>::add_pattern_attribute(details::pattern_attribute attribute)
 	{
-		details::formatter::insert_pattern_data({ {attribute.verbose, attribute.shortened, attribute.attribute } });
+		details::formatter::insert_pattern_data({ 
+			{attribute.verbose, attribute.shortened, attribute.attribute } 
+			});
 	}
 
 	template<typename ... SinkPolicy>
@@ -177,6 +182,12 @@ namespace lwlog
 	void logger<SinkPolicy...>::dump_backtrace()
 	{
 		m_tracer.dump();
+	}
+
+	template<typename ...SinkPolicy>
+	bool logger<SinkPolicy...>::is_backtrace_enabled() const
+	{
+		return m_tracer.is_enabled();
 	}
 
 	template<typename ... SinkPolicy>

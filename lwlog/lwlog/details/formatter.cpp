@@ -4,7 +4,7 @@
 
 namespace lwlog::details
 {
-	std::unordered_map<duplex<std::string, std::string>, std::string> formatter::m_pattern_data =
+	std::unordered_map<duplex, std::string> formatter::m_pattern_data =
 	{
 		{{"{seconds}",			"%S"}, datetime::get_second()},
 		{{"{minute}",			"%M"}, datetime::get_minute()},

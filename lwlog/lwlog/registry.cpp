@@ -31,9 +31,20 @@ namespace lwlog
 		m_loggers.clear();
 	}
 
-	inline bool registry::is_registry_automatic()
+	void registry::apply_to_all(const std::function<void(interface::logger_ptr)>& fn)
 	{
-		return m_automatic_registry ? true : false;
+		for (const auto& [name, logger] : registry::instance().loggers())
+		{
+			if (!name.empty())
+			{
+				fn(logger);
+			}
+		}
+	}
+
+	bool registry::is_registry_automatic()
+	{
+		return m_automatic_registry;
 	}
 
 	interface::logger_ptr registry::get(std::string_view logger_name)
@@ -44,17 +55,6 @@ namespace lwlog
 	std::unordered_map<std::string, interface::logger_ptr> registry::loggers()
 	{
 		return m_loggers;
-	}
-
-	void registry::apply_to_all(const std::function<void(interface::logger_ptr)>& fn)
-	{
-		for (const auto& [name, logger] : registry::instance().loggers())
-		{
-			if (!name.empty())
-			{
-				fn(logger);
-			}
-		}
 	}
 
 	std::shared_ptr<interface::logger> registry::default_logger()

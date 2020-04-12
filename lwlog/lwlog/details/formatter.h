@@ -22,7 +22,7 @@ namespace lwlog::details
 		static void insert_pattern_data(std::initializer_list<pattern_attribute> pattern_data);
 
 	private:
-		static std::unordered_map<duplex<std::string, std::string>, std::string> m_pattern_data;
+		static std::unordered_map<duplex, std::string> m_pattern_data;
 		static std::unordered_map<std::string_view, std::string_view> m_color_data;
 	};
 }

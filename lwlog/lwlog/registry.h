@@ -22,12 +22,12 @@ namespace lwlog
 		void set_automatic_registry(bool automatic);
 		void drop(std::string_view logger_name);
 		void drop_all();
+		void apply_to_all(const std::function<void(interface::logger_ptr)>& fn);
 		inline bool is_registry_automatic();
 
 		interface::logger_ptr get(std::string_view logger_name);
 		std::unordered_map<std::string, interface::logger_ptr> loggers();
-		static void apply_to_all(const std::function<void(interface::logger_ptr)>& fn);
-		static std::shared_ptr<interface::logger> default_logger();
+		std::shared_ptr<interface::logger> default_logger();
 
 	private:
 		registry() = default;

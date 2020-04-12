@@ -17,6 +17,7 @@ namespace lwlog::details
 		void display();
 		void dump();
 		void push_in_buffer(std::string_view message);
+		bool is_enabled() const;
 
 	private:
 		bool m_is_enabled{ false };

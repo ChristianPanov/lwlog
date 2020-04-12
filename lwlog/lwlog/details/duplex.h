@@ -2,25 +2,27 @@
 
 namespace lwlog::details
 {
-	template <typename Ty1, typename Ty2>
 	struct duplex
 	{
-		Ty1 first;
-		Ty2 second;
+		std::string first;
+		std::string second;
 
-		bool operator==(const duplex<Ty1, Ty2>& dup) const
+		bool operator==(const duplex& dup) const noexcept
 		{
-			return (first == dup.first
-				&& second == dup.second);
+			return ((first == dup.first) || (second == dup.second) || 
+				(first == dup.second) || (second == dup.first));
 		}
 	};
+}
 
-	template <typename Ty1, typename Ty2>
-	struct std::hash<lwlog::details::duplex<Ty1, Ty2>>
+namespace std
+{
+	template <>
+	struct std::hash<lwlog::details::duplex>
 	{
-		std::size_t operator()(const lwlog::details::duplex<Ty1, Ty2>& dup) const
+		std::size_t operator()(const lwlog::details::duplex& dup) const noexcept
 		{
-			return std::hash<Ty1>{}(dup.first) ^ std::hash<Ty2>{}(dup.second);
+			return std::hash<std::string>{}(dup.first) ^ std::hash<std::string>{}(dup.second);
 		}
 	};
 }

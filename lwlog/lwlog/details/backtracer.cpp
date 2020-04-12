@@ -43,4 +43,9 @@ namespace lwlog::details
 			}
 		}
 	}
+
+	bool backtracer::is_enabled() const
+	{
+		return m_is_enabled;
+	}
 }
