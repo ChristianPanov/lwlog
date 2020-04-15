@@ -8,6 +8,7 @@
 int main()
 {
 	auto console = std::make_shared<lwlog::logger<lwlog::sinks::console_sink>>("CONSOLE");
+	auto consoleFile = std::make_shared<lwlog::logger<lwlog::sinks::console_sink, lwlog::sinks::file_sink>>("CONSOLE", "C:/Users/user/Desktop/TheLogs/LOGS.txt");
 
 	console->add_pattern_attribute({ "{ATTR}", "%*", "NEW_ATTRIBUTE" });
 	console->set_level_visibility({ lwlog::sink_level::info, lwlog::sink_level::debug, lwlog::sink_level::critical });
