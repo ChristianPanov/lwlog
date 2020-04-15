@@ -28,12 +28,13 @@ namespace lwlog
 		{
 			if (sink->should_sink(level))
 			{
-				m_log_message = {
+				m_message = {
 					message.data(), sink->get_pattern(),
 					level, sink->should_color()
 				};
-				sink->sink_it(m_log_message.message());
-				m_tracer.push_in_buffer(m_log_message.message());
+
+				sink->sink_it(m_message.message());
+				m_tracer.push_in_buffer(m_message.message());
 			}
 		}
 	}
