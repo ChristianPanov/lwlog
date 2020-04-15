@@ -109,6 +109,7 @@
     <ClInclude Include="lwlog\details\duplex.h" />
     <ClInclude Include="lwlog\details\file_helper.h" />
     <ClInclude Include="lwlog\details\formatter.h" />
+    <ClInclude Include="lwlog\details\log_message.h" />
     <ClInclude Include="lwlog\fwd.h" />
     <ClInclude Include="lwlog\interface\backtracer_interface.h" />
     <ClInclude Include="lwlog\interface\level_interface.h" />
@@ -130,6 +131,7 @@
     <ClCompile Include="lwlog\details\backtracer.cpp" />
     <ClCompile Include="lwlog\details\file_helper.cpp" />
     <ClCompile Include="lwlog\details\formatter.cpp" />
+    <ClCompile Include="lwlog\details\log_message.cpp" />
     <ClCompile Include="lwlog\logger.cpp" />
     <ClCompile Include="lwlog\lwlog.cpp" />
     <ClCompile Include="lwlog\registry.cpp" />
