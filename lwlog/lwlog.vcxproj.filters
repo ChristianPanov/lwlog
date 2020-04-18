@@ -57,9 +57,6 @@
     <ClInclude Include="lwlog\logger_impl.h" />
     <ClInclude Include="lwlog\lwlog.h" />
     <ClInclude Include="lwlog\registry.h" />
-    <ClInclude Include="lwlog\sinks\console_sink.h">
-      <Filter>sinks</Filter>
-    </ClInclude>
     <ClInclude Include="lwlog\sinks\file_sink.h">
       <Filter>sinks</Filter>
     </ClInclude>
@@ -72,6 +69,11 @@
     <ClInclude Include="lwlog\sinks\sink_level.h">
       <Filter>sinks</Filter>
     </ClInclude>
+    <ClInclude Include="lwlog\details\stream.h" />
+    <ClInclude Include="lwlog\sinks\stdout_sink.h" />
+    <ClInclude Include="lwlog\sinks\stdout_color_sink.h" />
+    <ClInclude Include="lwlog\sinks\stderr_sink.h" />
+    <ClInclude Include="lwlog\sinks\stderr_color_sink.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\details\backtracer.cpp">

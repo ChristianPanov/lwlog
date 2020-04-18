@@ -1,9 +1,11 @@
 #include "registry.h"
 #include "logger.h"
+#include "sinks/stdout_color_sink.h"
 
 namespace lwlog
 {
-	std::shared_ptr<interface::logger> registry::m_default_logger = std::make_shared<logger<sinks::console_sink>>("");
+	std::shared_ptr<interface::logger> registry::m_default_logger 
+		= std::make_shared<logger<sinks::stdout_color_sink>>("");
 
 	registry& registry::instance()
 	{

@@ -5,9 +5,16 @@
 #include "core.h"
 #include "logger.h"
 
+#include "sinks/file_sink.h"
+#include "sinks/stdout_sink.h"
+#include "sinks/stdout_color_sink.h"
+#include "sinks/stderr_sink.h"
+#include "sinks/stderr_color_sink.h"
+
 namespace lwlog
 {
-	using console_logger = logger<sinks::console_sink>;
+	using console_color_logger = logger<sinks::stdout_color_sink>;
+	using console_logger = logger<sinks::stdout_sink>;
 	using file_logger = logger<sinks::file_sink>;
 
 	/*-------------------------------------------*/

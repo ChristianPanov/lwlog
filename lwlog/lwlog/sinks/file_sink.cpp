@@ -22,7 +22,7 @@ namespace lwlog::sinks
 			if (m_file.size() <= m_file_size_limit)
 			{
 				m_file.reopen();
-				m_file.write(message.data() + std::string("\n"));
+				m_file.write(message.data());
 				m_file.close();
 			}
 		}

@@ -32,8 +32,7 @@ namespace lwlog::details
 	{
 		if (m_file != nullptr)
 		{
-			std::setvbuf(m_file, NULL, _IOFBF, 32768);
-			std::fwrite(message.data(), message.size(), 1, m_file);
+			std::fwrite((std::string(message) + "\n").data(), message.size() + 1, 1, m_file);
 		}
 	}
 
