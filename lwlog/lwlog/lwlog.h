@@ -45,7 +45,7 @@ namespace lwlog::global
 
 	LWLOG_API void set_pattern(std::string_view pattern);
 	LWLOG_API void add_pattern_attribute(details::pattern_attribute attribute);
-	LWLOG_API void set_level_visibility(std::initializer_list<sink_level> level_list);
+	LWLOG_API void set_level_filter(std::initializer_list<sink_level> level_list);
 
 	LWLOG_API void backtrace(std::size_t buffer_size);
 	LWLOG_API void disable_backtrace();

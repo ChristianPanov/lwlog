@@ -33,7 +33,7 @@ namespace lwlog
 
 		void set_pattern(std::string_view pattern) override;
 		void add_pattern_attribute(details::pattern_attribute attribute) override;
-		void set_level_visibility(std::initializer_list<sink_level> level_list) override;
+		void set_level_filter(std::initializer_list<sink_level> level_list) override;
 
 		void info(std::string_view message) override;
 		void warning(std::string_view message) override;

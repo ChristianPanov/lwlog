@@ -1,4 +1,5 @@
 #include "sink.h"
+#include "details/formatter.h"
 
 namespace lwlog::sinks
 {
@@ -7,7 +8,14 @@ namespace lwlog::sinks
 		m_pattern = pattern;
 	}
 
-	void sink::set_level_visibility(std::initializer_list<sink_level> level_list)
+	void sink::add_pattern_attribute(details::pattern_attribute attribute)
+	{
+		details::formatter::insert_pattern_data({
+			{attribute.verbose, attribute.shortened, attribute.attribute }
+			});
+	}
+
+	void sink::set_level_filter(std::initializer_list<sink_level> level_list)
 	{
 		m_levels.clear();
 		m_levels = level_list;

@@ -4,13 +4,13 @@
 
 namespace lwlog
 {
-	log_message::log_message(std::string message, std::string pattern,
+	log_message::log_message(std::string_view message, std::string_view pattern,
 		sink_level level, bool should_color)
 		: m_message{ message }, m_pattern{ pattern }
 		, m_level{ level }, m_should_color{ should_color }
 	{}
 
-	std::string log_message::message() const
+	std::string log_message::data() const
 	{
 		details::formatter::insert_pattern_data({
 			{"{message}",		"%v", m_message},
@@ -28,15 +28,5 @@ namespace lwlog
 		else if (m_level == sink_level::error) { return "error"; }
 		else if (m_level == sink_level::critical) { return "critical"; }
 		else if (m_level == sink_level::debug) { return "debug"; }
-	}
-
-	void log_message::disable_color()
-	{
-		m_should_color = false;
-	}
-
-	bool log_message::should_color() const
-	{
-		return m_should_color;
 	}
 }

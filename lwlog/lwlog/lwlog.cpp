@@ -132,11 +132,11 @@ namespace lwlog::global
 			});
 	}
 
-	LWLOG_API void set_level_visibility(std::initializer_list<sink_level> level_list)
+	LWLOG_API void set_level_filter(std::initializer_list<sink_level> level_list)
 	{
 		registry::instance().apply_to_all([level_list](interface::logger_ptr logger)
 			{
-				logger->set_level_visibility(level_list);
+				logger->set_level_filter(level_list);
 			});
 	}
 

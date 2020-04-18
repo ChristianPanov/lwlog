@@ -6,10 +6,12 @@
 
 #include "core.h"
 #include "sink_level.h"
+#include "interface/level_filter_interface.h"
+#include "interface/pattern_interface.h"
 
 namespace lwlog::sinks
 {
-	class LWLOG_API sink
+	class LWLOG_API sink : public interface::level_filter, public interface::pattern
 	{
 	public:
 		virtual ~sink() = default;
@@ -17,13 +19,14 @@ namespace lwlog::sinks
 
 	public:
 		void set_pattern(std::string_view pattern);
-		void set_level_visibility(std::initializer_list<sink_level> level_list);
-		std::string get_pattern() const;
+		void add_pattern_attribute(details::pattern_attribute attribute) override;
+		void set_level_filter(std::initializer_list<sink_level> level_list) override;
 
 	public:
 		void disable_color();
 		bool should_sink(sink_level level) const;
 		bool should_color() const;
+		std::string get_pattern() const;
 
 	private:
 		bool m_should_color{ true };
