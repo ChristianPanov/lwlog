@@ -44,11 +44,6 @@ project "lwlog"
 	filter "system:windows"
 		systemversion "latest"
 
-		defines
-		{
-			"LWLOG_BUILD_SHARED"
-		}
-
 	filter "configurations:Debug"
 		defines "LWLOG_DEBUG"
 		runtime "Debug"

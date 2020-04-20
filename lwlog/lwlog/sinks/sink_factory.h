@@ -3,13 +3,12 @@
 #include <type_traits>
 #include <memory>
 
-#include "core.h"
 #include "fwd.h"
 
 namespace lwlog::sinks
 {
 	template<typename SinkPolicy>
-	class LWLOG_API sink_factory
+	class sink_factory
 	{
 	public:
 		template <typename ... SinkParams>

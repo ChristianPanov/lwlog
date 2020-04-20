@@ -10,23 +10,14 @@ namespace lwlog
 		, m_level{ level }, m_should_color{ should_color }
 	{}
 
-	std::string log_message::data() const
+	std::string log_message::message() const
 	{
 		details::formatter::insert_pattern_data({
 			{"{message}",		"%v", m_message},
-			{"{log_level}",		"%l", level_to_string()},
-			{"{log_level_abr}",	"%L", std::string(1, level_to_string()[0])}
+			{"{log_level}",		"%l", level_to_string(m_level)},
+			{"{log_level_abr}",	"%L", std::string(1, level_to_string(m_level)[0])}
 			});
 
 		return details::formatter::format(m_pattern, m_should_color);
-	}
-
-	std::string log_message::level_to_string() const
-	{
-		if (m_level == sink_level::info) { return "info"; }
-		else if (m_level == sink_level::warning) { return "warning"; }
-		else if (m_level == sink_level::error) { return "error"; }
-		else if (m_level == sink_level::critical) { return "critical"; }
-		else if (m_level == sink_level::debug) { return "debug"; }
 	}
 }

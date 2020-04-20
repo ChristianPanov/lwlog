@@ -4,16 +4,16 @@
 #include <vector>
 #include <memory>
 
-#include "core.h"
-#include "sink_level.h"
 #include "interface/level_filter_interface.h"
 #include "interface/pattern_interface.h"
+#include "fwd.h"
 
 namespace lwlog::sinks
 {
-	class LWLOG_API sink : public interface::level_filter, public interface::pattern
+	class sink : public interface::level_filter, public interface::pattern
 	{
 	public:
+		sink();
 		virtual ~sink() = default;
 		virtual void sink_it(std::string_view) = 0;
 
@@ -31,7 +31,7 @@ namespace lwlog::sinks
 	private:
 		bool m_should_color{ true };
 		std::string m_pattern{ "[%d, %T] [%l] [%n]: %v" };
-		std::vector<sink_level> m_levels{sink_level::all};
+		std::vector<sink_level> m_levels;
 	};
 
 	using sink_ptr = std::shared_ptr<sink>;

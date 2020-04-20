@@ -71,14 +71,14 @@ namespace lwlog
 			if (sink->should_sink(level))
 			{
 				m_message = {
-					message.data(), 
+					message, 
 					sink->get_pattern(),
 					level,
 					sink->should_color()
 				};
 
-				sink->sink_it(m_message.data());
-				m_tracer.push_in_buffer(m_message.data());
+				sink->sink_it(m_message.message());
+				m_tracer.push_in_buffer(m_message.message());
 			}
 		}
 	}

@@ -1,12 +1,11 @@
 ﻿#pragma once
 
-#include "core.h"
 #include "sink.h"
 #include "details/file_helper.h"
 
 namespace lwlog::sinks
 {
-	class LWLOG_API file_sink : public sink
+	class file_sink : public sink
 	{
 	public:
 		file_sink() = default;

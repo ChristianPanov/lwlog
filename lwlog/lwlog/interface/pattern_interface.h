@@ -1,11 +1,10 @@
 #pragma once
 
-#include "core.h"
 #include "fwd.h"
 
 namespace lwlog::interface
 {
-	class LWLOG_API pattern
+	class pattern
 	{
 	public:
 		virtual ~pattern() = default;

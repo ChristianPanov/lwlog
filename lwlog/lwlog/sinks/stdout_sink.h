@@ -1,12 +1,11 @@
 #pragma once
 
-#include "core.h"
 #include "sink.h"
 #include "details/stream.h"
 
 namespace lwlog::sinks
 {
-	class LWLOG_API stdout_sink : public sink, public details::stream
+	class stdout_sink : public sink, public details::stream
 	{
 	public:
 		stdout_sink();

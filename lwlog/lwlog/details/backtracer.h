@@ -4,11 +4,9 @@
 #include <string>
 #include <vector>
 
-#include "core.h"
-
 namespace lwlog::details
 {
-	class LWLOG_API backtracer
+	class backtracer
 	{
 	public:
 		void backtrace(std::size_t buffer_size);

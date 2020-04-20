@@ -12,7 +12,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lwlog\core.h" />
     <ClInclude Include="lwlog\details\backtracer.h">
       <Filter>details</Filter>
     </ClInclude>
@@ -32,6 +31,9 @@
       <Filter>details</Filter>
     </ClInclude>
     <ClInclude Include="lwlog\details\log_message.h">
+      <Filter>details</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\details\stream.h">
       <Filter>details</Filter>
     </ClInclude>
     <ClInclude Include="lwlog\fwd.h" />
@@ -69,11 +71,18 @@
     <ClInclude Include="lwlog\sinks\sink_level.h">
       <Filter>sinks</Filter>
     </ClInclude>
-    <ClInclude Include="lwlog\details\stream.h" />
-    <ClInclude Include="lwlog\sinks\stdout_sink.h" />
-    <ClInclude Include="lwlog\sinks\stdout_color_sink.h" />
-    <ClInclude Include="lwlog\sinks\stderr_sink.h" />
-    <ClInclude Include="lwlog\sinks\stderr_color_sink.h" />
+    <ClInclude Include="lwlog\sinks\stderr_color_sink.h">
+      <Filter>sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\sinks\stderr_sink.h">
+      <Filter>sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\sinks\stdout_color_sink.h">
+      <Filter>sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="lwlog\sinks\stdout_sink.h">
+      <Filter>sinks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\details\backtracer.cpp">

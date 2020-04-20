@@ -1,10 +1,8 @@
 #pragma once
 
-#include "core.h"
-
 namespace lwlog::interface
 {
-	class LWLOG_API level
+	class level
 	{
 	public:
 		virtual ~level() = default;

@@ -3,11 +3,9 @@
 #include <fstream>
 #include <filesystem>
 
-#include "core.h"
-
 namespace lwlog::details
 {
-	class LWLOG_API file_helper
+	class file_helper
 	{
 	public:
 		enum class truncate { off = 0, on = 1 };

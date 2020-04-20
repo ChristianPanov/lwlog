@@ -1,11 +1,10 @@
 #pragma once
 
-#include "core.h"
 #include "fwd.h"
 
 namespace lwlog::interface
 {
-	class LWLOG_API level_filter
+	class level_filter
 	{
 	public:
 		virtual ~level_filter() = default;

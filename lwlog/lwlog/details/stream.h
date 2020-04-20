@@ -3,13 +3,11 @@
 #include <string>
 #include <cstdio>
 
-#include "core.h"
-
 namespace lwlog::details
 {
 	using stream_t = std::FILE*;
 
-	class LWLOG_API stream
+	class stream
 	{
 		static constexpr std::size_t internal_size = 32768;
 	public:

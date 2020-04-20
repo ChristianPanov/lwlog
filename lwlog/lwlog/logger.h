@@ -3,18 +3,17 @@
 #include <string>
 #include <vector>
 
-#include "core.h"
 #include "interface/logger_interface.h"
 #include "details/log_message.h"
 #include "sinks/sink.h"
-#include "details/formatter.h"
 #include "sinks/sink_level.h"
+#include "details/formatter.h"
 #include "details/backtracer.h"
 
 namespace lwlog
 {
 	template<typename ... SinkPolicy>
-	class LWLOG_API logger : public interface::logger, public SinkPolicy...
+	class logger : public interface::logger, public SinkPolicy...
 	{
 	public:
 		template<typename ... SinkParams>

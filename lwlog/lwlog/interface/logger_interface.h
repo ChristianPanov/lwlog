@@ -1,6 +1,5 @@
 #pragma once
 
-#include "core.h"
 #include "level_interface.h"
 #include "level_filter_interface.h"
 #include "pattern_interface.h"
@@ -9,7 +8,7 @@
 
 namespace lwlog::interface
 {
-	class LWLOG_API logger : public level, public level_filter,
+	class logger : public level, public level_filter,
 		public pattern, public sink_buffer, public backtracer
 	{
 		friend class registry;

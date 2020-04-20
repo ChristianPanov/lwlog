@@ -1,8 +1,13 @@
 #include "sink.h"
+#include "sink_level.h"
 #include "details/formatter.h"
 
 namespace lwlog::sinks
 {
+	sink::sink()
+		: m_levels{ sink_level::all }
+	{}
+
 	void sink::set_pattern(std::string_view pattern)
 	{
 		m_pattern = pattern;

@@ -1,11 +1,10 @@
 #pragma once
 
-#include "core.h"
 #include "fwd.h"
 
 namespace lwlog::interface
 {
-	class LWLOG_API sink_buffer
+	class sink_buffer
 	{
 	public:
 		virtual ~sink_buffer() = default;

@@ -1,10 +1,8 @@
 #pragma once
 
-#include "core.h"
-
 namespace lwlog::interface
 {
-	class LWLOG_API backtracer
+	class backtracer
 	{
 	public:
 		virtual ~backtracer() = default;

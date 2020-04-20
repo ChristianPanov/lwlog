@@ -3,7 +3,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "core.h"
 #include "duplex.h"
 
 namespace lwlog::details
@@ -15,12 +14,11 @@ namespace lwlog::details
 		std::string attribute;
 	};
 
-	class LWLOG_API formatter
+	class formatter
 	{
 	public:
 		static std::string format(std::string pattern, bool should_color);
 		static void insert_pattern_data(std::initializer_list<pattern_attribute> pattern_data);
-		static void remove_color_flags(std::string& pattern);
 
 	private:
 		static std::unordered_map<duplex, std::string> m_pattern_data;

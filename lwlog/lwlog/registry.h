@@ -4,12 +4,11 @@
 #include <memory>
 #include <functional>
 
-#include "core.h"
 #include "fwd.h"
 
 namespace lwlog
 {
-	class LWLOG_API registry
+	class registry
 	{
 		registry(const registry&) = delete;
 		registry(registry&&) = delete;
