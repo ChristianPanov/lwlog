@@ -11,6 +11,7 @@ namespace lwlog
 	logger<SinkPolicy...>::logger(std::string_view name, SinkParams&&... params)
 		: m_name{ name }
 	{
+		details::formatter::insert_pattern_data({ {"{logger_name}", "%n", m_name} });
 		if (registry::instance().is_registry_automatic() && !name.empty())
 		{
 			registry::instance().register_logger(this);
@@ -65,7 +66,6 @@ namespace lwlog
 	template<typename ... SinkPolicy>
 	void logger<SinkPolicy...>::log(std::string_view message, sink_level level)
 	{
-		details::formatter::insert_pattern_data({ {"{logger_name}", "%n", m_name} });
 		for (const auto& sink : m_sink_buffer)
 		{
 			if (sink->should_sink(level))
