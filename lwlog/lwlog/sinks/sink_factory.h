@@ -12,12 +12,12 @@ namespace lwlog::sinks
 	{
 	public:
 		template <typename ... SinkParams>
-		static sink_ptr request(SinkParams&& ... params);
+		static sink_ptr request(SinkParams&&... params);
 	};
 
 	template<typename SinkPolicy>
 	template<typename ... SinkParams>
-	sink_ptr sink_factory<SinkPolicy>::request(SinkParams&& ...params)
+	sink_ptr sink_factory<SinkPolicy>::request(SinkParams&&... params)
 	{
 		if constexpr (std::is_constructible<SinkPolicy, SinkParams...>::value)
 		{

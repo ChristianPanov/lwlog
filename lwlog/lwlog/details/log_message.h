@@ -6,18 +6,22 @@
 
 namespace lwlog
 {
+	struct log_message_t
+	{
+		std::string message;
+		std::string pattern;
+		sink_level level{ 0 };
+		bool should_color{ true };
+	};
+
 	class log_message
 	{
 	public:
 		log_message() = default;
-		log_message(std::string_view message, std::string_view pattern, 
-			sink_level level, bool should_color);
+		log_message(log_message_t t_log_message);
 		std::string message() const;
 
 	private:
-		std::string m_message;
-		std::string m_pattern;
-		sink_level m_level{ 0 };
-		bool m_should_color{ true };
+		log_message_t m_log_message;
 	};
 }

@@ -22,7 +22,7 @@ namespace lwlog::details
 		std::size_t size() const;
 
 	private:
-		std::FILE* m_file;
+		std::FILE* m_file{ nullptr };
 		std::filesystem::path m_path;
 		truncate m_open_mode{ truncate::off };
 	};

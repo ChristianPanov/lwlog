@@ -17,13 +17,13 @@ namespace lwlog
 	{
 	public:
 		template<typename ... SinkParams>
-		logger(std::string_view name, SinkParams&& ... params);
+		logger(std::string_view name, SinkParams&&... params);
 		template<typename Iterator, typename ... SinkParams>
-		logger(std::string_view name, Iterator begin, Iterator end, SinkParams&& ... params);
+		logger(std::string_view name, Iterator begin, Iterator end, SinkParams&&... params);
 		template<typename ... SinkParams>
-		logger(std::string_view name, sinks::sink_list sink_list, SinkParams&& ... params);
+		logger(std::string_view name, sinks::sink_list sink_list, SinkParams&&... params);
 		template<typename ... SinkParams>
-		logger(std::string_view name, sinks::sink_ptr sink, SinkParams&& ... params);
+		logger(std::string_view name, sinks::sink_ptr sink, SinkParams&&... params);
 
 		void add_sink(sinks::sink_ptr sink) override;
 		void remove_sink(sinks::sink_ptr sink) override;
@@ -45,8 +45,8 @@ namespace lwlog
 		void dump_backtrace() override;
 		bool is_backtrace_enabled() const override;
 
-		inline std::string name() const override;
-		inline std::vector<sinks::sink_ptr>& sinks() override;
+		std::string name() const override;
+		std::vector<sinks::sink_ptr>& sinks() override;
 
 	private:
 		void log(std::string_view message, sink_level level) override;

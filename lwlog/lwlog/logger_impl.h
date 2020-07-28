@@ -8,7 +8,7 @@ namespace lwlog
 {
 	template<typename ... SinkPolicy>
 	template<typename ... SinkParams>
-	logger<SinkPolicy...>::logger(std::string_view name, SinkParams&& ... params)
+	logger<SinkPolicy...>::logger(std::string_view name, SinkParams&&... params)
 		: m_name{ name }
 	{
 		if (registry::instance().is_registry_automatic() && !name.empty())
@@ -24,7 +24,7 @@ namespace lwlog
 	template<typename ... SinkPolicy>
 	template<typename Iterator, typename ... SinkParams>
 	logger<SinkPolicy...>::logger(std::string_view name, 
-		Iterator begin, Iterator end, SinkParams&& ... params)
+		Iterator begin, Iterator end, SinkParams&&... params)
 		: logger{ name, params... }
 	{
 		m_sink_buffer.insert(m_sink_buffer.end(), begin, end);
@@ -33,24 +33,24 @@ namespace lwlog
 	template<typename ... SinkPolicy>
 	template<typename ... SinkParams>
 	logger<SinkPolicy...>::logger(std::string_view name, 
-		sinks::sink_list sink_list, SinkParams&& ... params)
+		sinks::sink_list sink_list, SinkParams&&... params)
 		: logger<SinkPolicy...>{ name, sink_list.begin(), sink_list.end(), params... }
 	{}
 
 	template<typename ... SinkPolicy>
 	template<typename ... SinkParams>
 	logger<SinkPolicy...>::logger(std::string_view name, 
-		sinks::sink_ptr sink, SinkParams&& ... params)
+		sinks::sink_ptr sink, SinkParams&&... params)
 		: logger<SinkPolicy...>{ name, { std::move(sink) }, params... }
 	{}
 
-		template<typename ...SinkPolicy>
+	template<typename ... SinkPolicy>
 	void logger<SinkPolicy...>::add_sink(sinks::sink_ptr sink)
 	{
 		m_sink_buffer.emplace_back(sink);
 	}
 
-	template<typename ...SinkPolicy>
+	template<typename ... SinkPolicy>
 	void logger<SinkPolicy...>::remove_sink(sinks::sink_ptr sink)
 	{
 		for (int i = 0; i < m_sink_buffer.size(); ++i)
@@ -70,15 +70,16 @@ namespace lwlog
 		{
 			if (sink->should_sink(level))
 			{
-				m_message = {
-					message, 
+				m_message = { {
+					message.data(),
 					sink->get_pattern(),
 					level,
 					sink->should_color()
-				};
+				} };
 
-				sink->sink_it(m_message.message());
-				m_tracer.push_in_buffer(m_message.message());
+				auto message = m_message.message();
+				sink->sink_it(message);
+				m_tracer.push_in_buffer(message);
 			}
 		}
 	}
@@ -92,7 +93,7 @@ namespace lwlog
 		}
 	}
 
-	template<typename ...SinkPolicy>
+	template<typename ... SinkPolicy>
 	void logger<SinkPolicy...>::add_pattern_attribute(details::pattern_attribute attribute)
 	{
 		for (const auto& sink : m_sink_buffer)
@@ -170,20 +171,20 @@ namespace lwlog
 		m_tracer.dump();
 	}
 
-	template<typename ...SinkPolicy>
+	template<typename ... SinkPolicy>
 	bool logger<SinkPolicy...>::is_backtrace_enabled() const
 	{
 		return m_tracer.is_enabled();
 	}
 
 	template<typename ... SinkPolicy>
-	inline std::string logger<SinkPolicy...>::name() const
+	std::string logger<SinkPolicy...>::name() const
 	{
 		return m_name;
 	}
 
 	template<typename ... SinkPolicy>
-	inline std::vector<sinks::sink_ptr>& logger<SinkPolicy...>::sinks()
+	std::vector<sinks::sink_ptr>& logger<SinkPolicy...>::sinks()
 	{
 		return m_sink_buffer;
 	}

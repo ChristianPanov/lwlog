@@ -9,7 +9,7 @@ namespace lwlog::details
 
 	class stream
 	{
-		static constexpr std::size_t internal_size = 32768;
+		static constexpr std::size_t internal_size = 4194304;
 	public:
 		explicit stream(stream_t stream, std::size_t size = internal_size);
 		virtual ~stream() = default;
