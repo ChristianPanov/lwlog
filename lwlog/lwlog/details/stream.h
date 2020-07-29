@@ -14,6 +14,7 @@ namespace lwlog::details
 		explicit stream(stream_t stream, std::size_t size = internal_size);
 		virtual ~stream() = default;
 		void write(std::string_view message);
+		void writeln(std::string_view message);
 
 	private:
 		stream_t m_stream;
@@ -26,6 +27,11 @@ namespace lwlog::details
 	}
 
 	inline void stream::write(std::string_view message)
+	{
+		std::fwrite(message.data(), message.size() + 1, 1, m_stream);
+	}
+
+	inline void stream::writeln(std::string_view message)
 	{
 		std::fwrite((std::string(message) + "\n").data(), message.size() + 1, 1, m_stream);
 	}

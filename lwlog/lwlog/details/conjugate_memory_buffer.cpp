@@ -15,6 +15,12 @@ namespace lwlog::details
 		}
 	}
 
+	void chunk_t::clear()
+	{
+		m_elements = 0;
+		m_chunk_buffer.clear();
+	}
+
 	bool chunk_t::is_full() const
 	{
 		return m_elements == m_size;
@@ -47,6 +53,14 @@ namespace lwlog::details
 			{
 				m_chunk_buffer[++m_pos].store(data);
 			}
+		}
+	}
+
+	void conjugate_memory_buffer::clear()
+	{
+		for (auto& chunk : m_chunk_buffer)
+		{
+			chunk.clear();
 		}
 	}
 

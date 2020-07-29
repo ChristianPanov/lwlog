@@ -18,6 +18,6 @@ namespace lwlog::sinks
 
 	inline void stdout_color_sink::sink_it(std::string_view message)
 	{
-		details::stream::write(message);
+		details::stream::writeln(message);
 	}
 }

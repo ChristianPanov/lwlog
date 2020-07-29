@@ -1,5 +1,7 @@
 #include "backtracer.h"
 
+#include "stream.h"
+
 namespace lwlog::details
 {
 	void backtracer::backtrace(std::size_t chunk_size, std::size_t chunks)
@@ -20,14 +22,16 @@ namespace lwlog::details
  
 	void backtracer::display()
 	{
+		details::stream stream(stdout);
 		for (int i = 0; i < m_buffer.chunks(); ++i)
 		{
-			std::cout << m_buffer.output(i);
+			stream.write(m_buffer.output(i));
 		}
 	}
 
 	void backtracer::dump()
 	{
+		m_buffer.clear();
 	}
 
 	void backtracer::push_in_buffer(std::string_view message)

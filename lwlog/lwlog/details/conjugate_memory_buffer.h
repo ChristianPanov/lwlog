@@ -10,6 +10,7 @@ namespace lwlog::details
 		chunk_t() = default;
 		chunk_t(std::size_t size);
 		void store(std::string_view data);
+		void clear();
 		bool is_full() const;
 		std::string& data();
 
@@ -25,6 +26,7 @@ namespace lwlog::details
 		conjugate_memory_buffer() = default;
 		conjugate_memory_buffer(std::size_t chunk_size, std::size_t chunks);
 		void store(std::string_view data);
+		void clear();
 		std::string output(std::size_t pos);
 		std::size_t chunks() const;
 
