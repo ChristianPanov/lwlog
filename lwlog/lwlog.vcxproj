@@ -94,6 +94,7 @@
   <ItemGroup>
     <ClInclude Include="lwlog\details\backtracer.h" />
     <ClInclude Include="lwlog\details\color.h" />
+    <ClInclude Include="lwlog\details\conjugate_memory_buffer.h" />
     <ClInclude Include="lwlog\details\datetime.h" />
     <ClInclude Include="lwlog\details\duplex.h" />
     <ClInclude Include="lwlog\details\file_helper.h" />
@@ -122,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\details\backtracer.cpp" />
+    <ClCompile Include="lwlog\details\conjugate_memory_buffer.cpp" />
     <ClCompile Include="lwlog\details\file_helper.cpp" />
     <ClCompile Include="lwlog\details\formatter.cpp" />
     <ClCompile Include="lwlog\details\log_message.cpp" />

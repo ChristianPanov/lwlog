@@ -2,10 +2,10 @@
 
 namespace lwlog::details
 {
-	void backtracer::backtrace(std::size_t buffer_size)
+	void backtracer::backtrace(std::size_t chunk_size, std::size_t chunks)
 	{
 		m_is_enabled = true;
-		m_buffer.reserve(buffer_size);
+		m_buffer = { chunks, chunk_size };
 	}
 
 	void backtracer::disable()
@@ -20,27 +20,21 @@ namespace lwlog::details
  
 	void backtracer::display()
 	{
-		for (const auto& message : m_buffer)
+		for (int i = 0; i < m_buffer.chunks(); ++i)
 		{
-			std::cout << m_stamp + message << '\n';
+			std::cout << m_buffer.output(i);
 		}
 	}
 
 	void backtracer::dump()
 	{
-		m_messages = 0;
-		m_buffer.clear();
 	}
 
 	void backtracer::push_in_buffer(std::string_view message)
 	{
 		if (m_is_enabled == true)
 		{
-			m_messages++;
-			if (m_messages <= m_buffer.capacity())
-			{
-				m_buffer.emplace_back(message);
-			}
+			m_buffer.store(m_stamp + message.data());
 		}
 	}
 

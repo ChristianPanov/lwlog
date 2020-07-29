@@ -142,9 +142,9 @@ namespace lwlog
 	}
 
 	template<typename ... SinkPolicy>
-	void logger<SinkPolicy...>::backtrace(std::size_t buffer_size)
+	void logger<SinkPolicy...>::backtrace(std::size_t chunk_size, std::size_t chunks)
 	{
-		m_tracer.backtrace(buffer_size);
+		m_tracer.backtrace(chunk_size, chunks);
 	}
 
 	template<typename ... SinkPolicy>

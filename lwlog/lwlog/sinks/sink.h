@@ -18,7 +18,7 @@ namespace lwlog::sinks
 		virtual void sink_it(std::string_view) = 0;
 
 	public:
-		void set_pattern(std::string_view pattern);
+		void set_pattern(std::string_view pattern) override;
 		void add_pattern_attribute(details::pattern_attribute attribute) override;
 		void set_level_filter(std::initializer_list<sink_level> level_list) override;
 

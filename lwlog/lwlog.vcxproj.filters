@@ -83,6 +83,7 @@
     <ClInclude Include="lwlog\sinks\stdout_sink.h">
       <Filter>sinks</Filter>
     </ClInclude>
+    <ClInclude Include="lwlog\details\conjugate_memory_buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lwlog\details\backtracer.cpp">
@@ -105,5 +106,6 @@
     <ClCompile Include="lwlog\sinks\sink.cpp">
       <Filter>sinks</Filter>
     </ClCompile>
+    <ClCompile Include="lwlog\details\conjugate_memory_buffer.cpp" />
   </ItemGroup>
 </Project>

@@ -72,9 +72,9 @@ namespace lwlog
 		registry::instance().default_logger()->debug(message);
 	}
 
-	void backtrace(std::size_t buffer_size)
+	void backtrace(std::size_t chunk_size, std::size_t chunks)
 	{
-		return registry::instance().default_logger()->backtrace(buffer_size);
+		return registry::instance().default_logger()->backtrace(chunk_size, chunks);
 	}
 
 	void disable_backtrace()
@@ -140,11 +140,11 @@ namespace lwlog::global
 			});
 	}
 
-	void backtrace(std::size_t buffer_size)
+	void backtrace(std::size_t chunk_size, std::size_t chunks)
 	{
-		registry::instance().apply_to_all([buffer_size](interface::logger_ptr logger)
+		registry::instance().apply_to_all([chunk_size, chunks](interface::logger_ptr logger)
 			{
-				logger->backtrace(buffer_size);
+				logger->backtrace(chunk_size, chunks);
 			});
 	}
 

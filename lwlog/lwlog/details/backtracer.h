@@ -4,12 +4,14 @@
 #include <string>
 #include <vector>
 
+#include "conjugate_memory_buffer.h"
+
 namespace lwlog::details
 {
 	class backtracer
 	{
 	public:
-		void backtrace(std::size_t buffer_size);
+		void backtrace(std::size_t chunk_size, std::size_t chunks);
 		void disable();
 		void set_stamp(std::string_view stamp);
 		void display();
@@ -19,8 +21,7 @@ namespace lwlog::details
 
 	private:
 		bool m_is_enabled{ false };
-		int m_messages{ 0 };
-		std::string m_stamp;
-		std::vector<std::string> m_buffer;
+		std::string m_stamp{ "[BACKTRACE]" };
+		conjugate_memory_buffer m_buffer;
 	};
 }
