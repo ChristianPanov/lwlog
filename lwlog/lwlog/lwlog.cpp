@@ -71,31 +71,6 @@ namespace lwlog
 	{
 		registry::instance().default_logger()->debug(message);
 	}
-
-	void backtrace(std::size_t chunk_size, std::size_t chunks)
-	{
-		return registry::instance().default_logger()->backtrace(chunk_size, chunks);
-	}
-
-	void disable_backtrace()
-	{
-		return registry::instance().default_logger()->disable_backtrace();
-	}
-
-	void set_backtrace_stamp(std::string_view stamp)
-	{
-		return registry::instance().default_logger()->set_backtrace_stamp(stamp);
-	}
-
-	void display_backtrace()
-	{
-		return registry::instance().default_logger()->display_backtrace();
-	}
-
-	void dump_backtrace()
-	{
-		return registry::instance().default_logger()->dump_backtrace();
-	}
 }
 
 namespace lwlog::global
@@ -137,46 +112,6 @@ namespace lwlog::global
 		registry::instance().apply_to_all([level_list](interface::logger_ptr logger)
 			{
 				logger->set_level_filter(level_list);
-			});
-	}
-
-	void backtrace(std::size_t chunk_size, std::size_t chunks)
-	{
-		registry::instance().apply_to_all([chunk_size, chunks](interface::logger_ptr logger)
-			{
-				logger->backtrace(chunk_size, chunks);
-			});
-	}
-
-	void disable_backtrace()
-	{
-		registry::instance().apply_to_all([](interface::logger_ptr logger)
-			{
-				logger->disable_backtrace();
-			});
-	}
-
-	void set_backtrace_stamp(std::string_view stamp)
-	{
-		registry::instance().apply_to_all([stamp](interface::logger_ptr logger)
-			{
-				logger->set_backtrace_stamp(stamp);
-			});
-	}
-
-	void display_backtrace()
-	{
-		registry::instance().apply_to_all([](interface::logger_ptr logger)
-			{
-				logger->display_backtrace();
-			});
-	}
-
-	void dump_backtrace()
-	{
-		registry::instance().apply_to_all([](interface::logger_ptr logger)
-			{
-				logger->dump_backtrace();
 			});
 	}
 }

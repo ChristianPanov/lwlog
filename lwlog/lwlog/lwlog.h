@@ -31,12 +31,6 @@ namespace lwlog
 	void error(std::string_view message);
 	void critical(std::string_view message);
 	void debug(std::string_view message);
-
-	void backtrace(std::size_t chunk_size, std::size_t chunks);
-	void disable_backtrace();
-	void set_backtrace_stamp(std::string_view stamp);
-	void display_backtrace();
-	void dump_backtrace();
 }
 
 namespace lwlog::global
@@ -47,10 +41,4 @@ namespace lwlog::global
 	void set_pattern(std::string_view pattern);
 	void add_pattern_attribute(details::pattern_attribute attribute);
 	void set_level_filter(std::initializer_list<sink_level> level_list);
-
-	void backtrace(std::size_t chunk_size, std::size_t chunks);
-	void disable_backtrace();
-	void set_backtrace_stamp(std::string_view stamp);
-	void display_backtrace();
-	void dump_backtrace();
 }

@@ -12,9 +12,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lwlog\details\backtracer.h">
-      <Filter>details</Filter>
-    </ClInclude>
     <ClInclude Include="lwlog\details\color.h">
       <Filter>details</Filter>
     </ClInclude>
@@ -37,9 +34,6 @@
       <Filter>details</Filter>
     </ClInclude>
     <ClInclude Include="lwlog\fwd.h" />
-    <ClInclude Include="lwlog\interface\backtracer_interface.h">
-      <Filter>interface</Filter>
-    </ClInclude>
     <ClInclude Include="lwlog\interface\level_filter_interface.h">
       <Filter>interface</Filter>
     </ClInclude>
@@ -83,12 +77,8 @@
     <ClInclude Include="lwlog\sinks\stdout_sink.h">
       <Filter>sinks</Filter>
     </ClInclude>
-    <ClInclude Include="lwlog\details\conjugate_memory_buffer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="lwlog\details\backtracer.cpp">
-      <Filter>details</Filter>
-    </ClCompile>
     <ClCompile Include="lwlog\details\file_helper.cpp">
       <Filter>details</Filter>
     </ClCompile>
@@ -106,6 +96,5 @@
     <ClCompile Include="lwlog\sinks\sink.cpp">
       <Filter>sinks</Filter>
     </ClCompile>
-    <ClCompile Include="lwlog\details\conjugate_memory_buffer.cpp" />
   </ItemGroup>
 </Project>

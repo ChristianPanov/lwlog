@@ -76,10 +76,7 @@ namespace lwlog
 					level,
 					sink->should_color()
 				} };
-
-				auto message = m_message.message();
-				sink->sink_it(message);
-				m_tracer.push_in_buffer(message);
+				sink->sink_it(m_message.message());
 			}
 		}
 	}
@@ -139,42 +136,6 @@ namespace lwlog
 	void logger<SinkPolicy...>::debug(std::string_view message)
 	{
 		log(message, sink_level::debug);
-	}
-
-	template<typename ... SinkPolicy>
-	void logger<SinkPolicy...>::backtrace(std::size_t chunk_size, std::size_t chunks)
-	{
-		m_tracer.backtrace(chunk_size, chunks);
-	}
-
-	template<typename ... SinkPolicy>
-	void logger<SinkPolicy...>::disable_backtrace()
-	{
-		m_tracer.disable();
-	}
-
-	template<typename ... SinkPolicy>
-	void logger<SinkPolicy...>::set_backtrace_stamp(std::string_view stamp)
-	{
-		m_tracer.set_stamp(stamp);
-	}
-
-	template<typename ... SinkPolicy>
-	void logger<SinkPolicy...>::display_backtrace()
-	{
-		m_tracer.display();
-	}
-
-	template<typename ... SinkPolicy>
-	void logger<SinkPolicy...>::dump_backtrace()
-	{
-		m_tracer.dump();
-	}
-
-	template<typename ... SinkPolicy>
-	bool logger<SinkPolicy...>::is_backtrace_enabled() const
-	{
-		return m_tracer.is_enabled();
 	}
 
 	template<typename ... SinkPolicy>

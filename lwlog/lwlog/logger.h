@@ -8,7 +8,6 @@
 #include "sinks/sink.h"
 #include "sinks/sink_level.h"
 #include "details/formatter.h"
-#include "details/backtracer.h"
 
 namespace lwlog
 {
@@ -38,13 +37,6 @@ namespace lwlog
 		void critical(std::string_view message) override;
 		void debug(std::string_view message) override;
 
-		void backtrace(std::size_t chunk_size, std::size_t chunks) override;
-		void disable_backtrace() override;
-		void set_backtrace_stamp(std::string_view stamp) override;
-		void display_backtrace() override;
-		void dump_backtrace() override;
-		bool is_backtrace_enabled() const override;
-
 		std::string name() const override;
 		std::vector<sinks::sink_ptr>& sinks() override;
 
@@ -55,7 +47,6 @@ namespace lwlog
 		std::string m_name;
 		log_message m_message;
 		std::vector<sinks::sink_ptr> m_sink_buffer;
-		details::backtracer m_tracer;
 	};
 }
 

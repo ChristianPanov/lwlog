@@ -59,11 +59,11 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;LWLOG_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>lwlog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -76,7 +76,6 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;LWLOG_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>lwlog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
@@ -84,6 +83,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -92,9 +92,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="lwlog\details\backtracer.h" />
     <ClInclude Include="lwlog\details\color.h" />
-    <ClInclude Include="lwlog\details\conjugate_memory_buffer.h" />
     <ClInclude Include="lwlog\details\datetime.h" />
     <ClInclude Include="lwlog\details\duplex.h" />
     <ClInclude Include="lwlog\details\file_helper.h" />
@@ -102,7 +100,6 @@
     <ClInclude Include="lwlog\details\log_message.h" />
     <ClInclude Include="lwlog\details\stream.h" />
     <ClInclude Include="lwlog\fwd.h" />
-    <ClInclude Include="lwlog\interface\backtracer_interface.h" />
     <ClInclude Include="lwlog\interface\level_filter_interface.h" />
     <ClInclude Include="lwlog\interface\level_interface.h" />
     <ClInclude Include="lwlog\interface\logger_interface.h" />
@@ -122,8 +119,6 @@
     <ClInclude Include="lwlog\sinks\stdout_sink.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="lwlog\details\backtracer.cpp" />
-    <ClCompile Include="lwlog\details\conjugate_memory_buffer.cpp" />
     <ClCompile Include="lwlog\details\file_helper.cpp" />
     <ClCompile Include="lwlog\details\formatter.cpp" />
     <ClCompile Include="lwlog\details\log_message.cpp" />
