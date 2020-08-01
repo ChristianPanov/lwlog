@@ -6,6 +6,7 @@
 
 #include "interface/level_filter_interface.h"
 #include "interface/pattern_interface.h"
+#include "details/stream.h"
 #include "fwd.h"
 
 namespace lwlog::sinks
@@ -24,8 +25,8 @@ namespace lwlog::sinks
 
 	public:
 		void disable_color();
-		bool should_sink(sink_level level) const;
 		bool should_color() const;
+		bool should_sink(sink_level level) const;
 		std::string get_pattern() const;
 
 	private:

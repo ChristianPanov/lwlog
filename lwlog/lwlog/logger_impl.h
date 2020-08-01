@@ -12,11 +12,7 @@ namespace lwlog
 		: m_name{ name }
 	{
 		details::formatter::insert_pattern_data({ {"{logger_name}", "%n", m_name} });
-		if (registry::instance().is_registry_automatic() && !name.empty())
-		{
-			registry::instance().register_logger(this);
-		}
-
+		registry::instance().register_logger(this);
 		(m_sink_buffer.emplace_back(
 			sinks::sink_factory<SinkPolicy>::request(std::forward<SinkParams>(params)...)
 		), ...);
@@ -76,6 +72,7 @@ namespace lwlog
 					level,
 					sink->should_color()
 				} };
+
 				sink->sink_it(m_message.message());
 			}
 		}

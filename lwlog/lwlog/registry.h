@@ -18,7 +18,7 @@ namespace lwlog
 	public:
 		static registry& instance();
 		void register_logger(interface::logger_ptr logger);
-		void set_automatic_registry(bool automatic);
+		void automatic_registry(bool automatic);
 		void drop(std::string_view logger_name);
 		void drop_all();
 		void apply_to_all(const std::function<void(interface::logger_ptr)>& fn);

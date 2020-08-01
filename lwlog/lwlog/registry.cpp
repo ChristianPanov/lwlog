@@ -15,10 +15,13 @@ namespace lwlog
 
 	void registry::register_logger(interface::logger_ptr logger)
 	{
-		m_loggers[logger->name()] = std::move(logger);
+		if (m_automatic_registry && !logger->name().empty())
+		{
+			m_loggers[logger->name()] = std::move(logger);
+		}
 	}
 
-	void registry::set_automatic_registry(bool automatic)
+	void registry::automatic_registry(bool automatic)
 	{
 		m_automatic_registry = automatic;
 	}

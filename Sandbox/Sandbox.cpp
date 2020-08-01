@@ -1,8 +1,8 @@
 #include "Benchmark.h"
 
-#include "lwlog/lwlog.h"
-//#include "lwlog/logger.h"
-//#include "lwlog/sinks/stdout_color_sink.h"
+//#include "lwlog/lwlog.h"
+#include "lwlog/logger.h"
+#include "lwlog/sinks/stdout_color_sink.h"
 
 #include <iostream>
 

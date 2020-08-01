@@ -31,6 +31,11 @@ namespace lwlog::sinks
 		m_should_color = false;
 	}
 
+	bool sink::should_color() const
+	{
+		return m_should_color;
+	}
+
 	bool sink::should_sink(sink_level level) const
 	{
 		for (const auto& i : m_levels)
@@ -42,11 +47,6 @@ namespace lwlog::sinks
 		}
 
 		return false;
-	}
-
-	bool sink::should_color() const
-	{
-		return m_should_color;
 	}
 
 	std::string sink::get_pattern() const
