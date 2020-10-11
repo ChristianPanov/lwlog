@@ -19,6 +19,8 @@ namespace lwlog
 	public:
 		log_message() = default;
 		log_message(log_message_t t_log_message);
+
+	public:
 		std::string message() const;
 
 	private:

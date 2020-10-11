@@ -5,25 +5,27 @@
 
 namespace lwlog::details
 {
-	class file_helper
+	class file_t
 	{
 	public:
-		enum class truncate { off = 0, on = 1 };
+		enum class append { off = 0, on = 1 };
 
 	public:
-		~file_helper();
+		file_t() = default;
+		file_t(std::string_view path, append mode = append::on);
+		~file_t();
 
-		void open(std::string_view path_str, truncate open_mode = truncate::off);
+	public:
+		void open();
 		void reopen();
 		void write(std::string_view message);
-		void clear();
-		bool exists();
 		void close();
+		bool exists() const;
 		std::size_t size() const;
 
 	private:
 		std::FILE* m_file{ nullptr };
 		std::filesystem::path m_path;
-		truncate m_open_mode{ truncate::off };
+		append m_mode{ append::on };
 	};
 }

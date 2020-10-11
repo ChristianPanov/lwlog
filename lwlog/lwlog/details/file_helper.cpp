@@ -2,33 +2,35 @@
 
 namespace lwlog::details
 {
-	file_helper::~file_helper()
+	file_t::file_t(std::string_view path, append mode)
+		: m_path{ path }
+		, m_mode{ mode }
+	{}
+
+	file_t::~file_t()
 	{
 		close();
 	}
 
-	void file_helper::open(std::string_view path_str, truncate open_mode)
+	void file_t::open()
 	{
-		m_path = path_str;
-		m_open_mode = open_mode;
-
 		if (!std::filesystem::exists(m_path.parent_path()))
 		{
 			std::filesystem::create_directory(m_path.parent_path());
 		}
 
-		m_file = std::fopen(m_path.string().data(), m_open_mode == truncate::off ? "a" : "w");
+		m_file = std::fopen(m_path.string().data(), m_mode == append::on ? "a" : "w");
 	}
 
-	void file_helper::reopen()
+	void file_t::reopen()
 	{
 		if (std::filesystem::exists(m_path))
 		{
-			m_file = std::fopen(m_path.string().data(), m_open_mode == truncate::off ? "a" : "w");
+			m_file = std::fopen(m_path.string().data(), m_mode == append::on ? "a" : "w");
 		}
 	}
 
-	void file_helper::write(std::string_view message)
+	void file_t::write(std::string_view message)
 	{
 		if (m_file != nullptr)
 		{
@@ -36,17 +38,7 @@ namespace lwlog::details
 		}
 	}
 
-	void file_helper::clear()
-	{
-		m_path.clear();
-	}
-
-	bool file_helper::exists()
-	{
-		return std::filesystem::exists(m_path);
-	}
-
-	void file_helper::close()
+	void file_t::close()
 	{
 		if (m_file != nullptr)
 		{
@@ -55,7 +47,12 @@ namespace lwlog::details
 		}
 	}
 
-	std::size_t file_helper::size() const
+	bool file_t::exists() const
+	{
+		return std::filesystem::exists(m_path);
+	}
+
+	std::size_t file_t::size() const
 	{
 		return std::filesystem::file_size(m_path);
 	}

@@ -2,11 +2,12 @@
 
 namespace lwlog::sinks
 {
-	file_sink::file_sink(std::string_view path_str, int file_size_limit)
-		: m_file_size_limit{ file_size_limit }
+	file_sink::file_sink(std::string_view path, std::size_t size_limit)
+		: m_size_limit{ size_limit }
+		, m_file{ path }
 	{
 		disable_color();
-		m_file.open(path_str);
+		m_file.open();
 	}
 
 	file_sink::~file_sink()
@@ -18,7 +19,7 @@ namespace lwlog::sinks
 	{
 		if (m_file.exists())
 		{
-			if (m_file.size() <= m_file_size_limit)
+			if (m_size_limit == 0 || m_file.size() <= m_size_limit)
 			{
 				m_file.reopen();
 				m_file.write(message.data());

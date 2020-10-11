@@ -16,6 +16,8 @@ namespace lwlog::sinks
 	public:
 		sink();
 		virtual ~sink() = default;
+
+	public:
 		virtual void sink_it(std::string_view) = 0;
 
 	public:
@@ -23,7 +25,6 @@ namespace lwlog::sinks
 		void add_pattern_attribute(details::pattern_attribute attribute) override;
 		void set_level_filter(std::initializer_list<sink_level> level_list) override;
 
-	public:
 		void disable_color();
 		bool should_color() const;
 		bool should_sink(sink_level t_level) const;

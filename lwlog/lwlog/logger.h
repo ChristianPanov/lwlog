@@ -24,6 +24,7 @@ namespace lwlog
 		template<typename ... SinkParams>
 		logger(std::string_view name, sinks::sink_ptr sink, SinkParams&&... params);
 
+	public:
 		void add_sink(sinks::sink_ptr sink) override;
 		void remove_sink(sinks::sink_ptr sink) override;
 
