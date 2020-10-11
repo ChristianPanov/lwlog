@@ -7,7 +7,6 @@ namespace lwlog::sinks
 	{
 		disable_color();
 		m_file.open(path_str);
-		m_file.close();
 	}
 
 	file_sink::~file_sink()

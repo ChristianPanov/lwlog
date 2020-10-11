@@ -36,11 +36,11 @@ namespace lwlog::sinks
 		return m_should_color;
 	}
 
-	bool sink::should_sink(sink_level level) const
+	bool sink::should_sink(sink_level t_level) const
 	{
-		for (const auto& i : m_levels)
+		for (const auto& level : m_levels)
 		{
-			if (level == i || i == sink_level::all)
+			if (t_level == level || level == sink_level::all)
 			{
 				return true;
 			}

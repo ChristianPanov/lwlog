@@ -10,7 +10,6 @@ namespace lwlog::interface
 	class logger : public level, public level_filter,
 		public pattern, public sink_buffer
 	{
-		friend class registry;
 	public:
 		virtual ~logger() = default;
 		virtual void log(std::string_view, sink_level) = 0;

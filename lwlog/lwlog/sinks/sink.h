@@ -26,7 +26,7 @@ namespace lwlog::sinks
 	public:
 		void disable_color();
 		bool should_color() const;
-		bool should_sink(sink_level level) const;
+		bool should_sink(sink_level t_level) const;
 		std::string get_pattern() const;
 
 	private:

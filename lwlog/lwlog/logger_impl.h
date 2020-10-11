@@ -13,7 +13,8 @@ namespace lwlog
 	{
 		details::formatter::insert_pattern_data({ {"{logger_name}", "%n", m_name} });
 		registry::instance().register_logger(this);
-		(m_sink_buffer.emplace_back(
+
+		(m_sink_buffer.push_back(
 			sinks::sink_factory<SinkPolicy>::request(std::forward<SinkParams>(params)...)
 		), ...);
 	}
@@ -50,7 +51,7 @@ namespace lwlog
 	template<typename ... SinkPolicy>
 	void logger<SinkPolicy...>::remove_sink(sinks::sink_ptr sink)
 	{
-		for (int i = 0; i < m_sink_buffer.size(); ++i)
+		for (std::size_t i = 0; i < m_sink_buffer.size(); ++i)
 		{
 			if (m_sink_buffer[i] == sink)
 			{
