@@ -2,17 +2,17 @@
 
 namespace lwlog::details
 {
-	file_t::file_t(std::string_view path, append mode)
+	file::file(std::string_view path, append mode)
 		: m_path{ path }
 		, m_mode{ mode }
 	{}
 
-	file_t::~file_t()
+	file::~file()
 	{
 		close();
 	}
 
-	void file_t::open()
+	void file::open()
 	{
 		if (!std::filesystem::exists(m_path.parent_path()))
 		{
@@ -22,7 +22,7 @@ namespace lwlog::details
 		m_file = std::fopen(m_path.string().data(), m_mode == append::on ? "a" : "w");
 	}
 
-	void file_t::reopen()
+	void file::reopen()
 	{
 		if (std::filesystem::exists(m_path))
 		{
@@ -30,7 +30,7 @@ namespace lwlog::details
 		}
 	}
 
-	void file_t::write(std::string_view message)
+	void file::write(std::string_view message)
 	{
 		if (m_file != nullptr)
 		{
@@ -38,7 +38,7 @@ namespace lwlog::details
 		}
 	}
 
-	void file_t::close()
+	void file::close()
 	{
 		if (m_file != nullptr)
 		{
@@ -47,12 +47,12 @@ namespace lwlog::details
 		}
 	}
 
-	bool file_t::exists() const
+	bool file::exists() const
 	{
 		return std::filesystem::exists(m_path);
 	}
 
-	std::size_t file_t::size() const
+	std::size_t file::size() const
 	{
 		return std::filesystem::file_size(m_path);
 	}

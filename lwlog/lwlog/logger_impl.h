@@ -89,7 +89,7 @@ namespace lwlog
 	}
 
 	template<typename ... SinkPolicy>
-	void logger<SinkPolicy...>::add_pattern_attribute(details::pattern_attribute attribute)
+	void logger<SinkPolicy...>::add_pattern_attribute(details::pattern_attribute_t attribute)
 	{
 		for (const auto& sink : m_sink_buffer)
 		{

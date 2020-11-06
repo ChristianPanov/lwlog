@@ -25,5 +25,5 @@ namespace lwlog::interface
 
 namespace lwlog::details 
 { 
-	struct pattern_attribute; 
+	struct pattern_attribute_t;
 }

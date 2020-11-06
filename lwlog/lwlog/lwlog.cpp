@@ -42,7 +42,7 @@ namespace lwlog
 		return registry::instance().default_logger();
 	}
 
-	void add_pattern_attribute(details::pattern_attribute attribute)
+	void add_pattern_attribute(details::pattern_attribute_t attribute)
 	{
 		registry::instance().default_logger()->add_pattern_attribute(attribute);
 	}
@@ -99,7 +99,7 @@ namespace lwlog::global
 			});
 	}
 
-	void add_pattern_attribute(details::pattern_attribute attribute)
+	void add_pattern_attribute(details::pattern_attribute_t attribute)
 	{
 		registry::instance().apply_to_all([attribute](interface::logger_ptr logger)
 			{

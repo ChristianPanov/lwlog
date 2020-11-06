@@ -7,7 +7,7 @@
 
 namespace lwlog::details
 {
-	struct pattern_attribute
+	struct pattern_attribute_t
 	{
 		std::string verbose;
 		std::string shortened;
@@ -18,7 +18,7 @@ namespace lwlog::details
 	{
 	public:
 		static std::string format(std::string pattern, bool should_color);
-		static void insert_pattern_data(std::initializer_list<pattern_attribute> pattern_data);
+		static void insert_pattern_data(std::initializer_list<pattern_attribute_t> pattern_data);
 
 	private:
 		static std::unordered_map<duplex, std::string> m_pattern_data;

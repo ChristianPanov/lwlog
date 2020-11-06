@@ -5,15 +5,15 @@
 
 namespace lwlog::details
 {
-	class file_t
+	class file
 	{
 	public:
 		enum class append { off = 0, on = 1 };
 
 	public:
-		file_t() = default;
-		file_t(std::string_view path, append mode = append::on);
-		~file_t();
+		file() = default;
+		file(std::string_view path, append mode = append::on);
+		~file();
 
 	public:
 		void open();

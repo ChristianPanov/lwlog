@@ -17,6 +17,6 @@ namespace lwlog::sinks
 
 	private:
 		std::size_t m_size_limit{};
-		details::file_t m_file;
+		details::file m_file;
 	};
 }

@@ -3,7 +3,6 @@
 #include <functional>
 
 #include "logger.h"
-
 #include "sinks/file_sink.h"
 #include "sinks/stdout_sink.h"
 #include "sinks/stdout_color_sink.h"
@@ -25,7 +24,7 @@ namespace lwlog
 	interface::logger_ptr get(std::string_view logger_name);
 	std::shared_ptr<interface::logger> default_logger();
 
-	void add_pattern_attribute(details::pattern_attribute attribute);
+	void add_pattern_attribute(details::pattern_attribute_t attribute);
 	void info(std::string_view message);
 	void warning(std::string_view message);
 	void error(std::string_view message);
@@ -39,6 +38,6 @@ namespace lwlog::global
 	void remove_sink(sinks::sink_ptr sink);
 
 	void set_pattern(std::string_view pattern);
-	void add_pattern_attribute(details::pattern_attribute attribute);
+	void add_pattern_attribute(details::pattern_attribute_t attribute);
 	void set_level_filter(std::initializer_list<sink_level> level_list);
 }
