@@ -26,7 +26,7 @@ namespace lwlog
 
 		interface::logger_ptr get(std::string_view logger_name);
 		std::unordered_map<std::string, interface::logger_ptr> loggers();
-		std::shared_ptr<interface::logger> default_logger();
+		const std::unique_ptr<interface::logger>& default_logger() const;
 
 	private:
 		registry() = default;
@@ -34,6 +34,6 @@ namespace lwlog
 	private:
 		bool m_automatic_registry{ true };
 		std::unordered_map<std::string, interface::logger_ptr> m_loggers;
-		static std::shared_ptr<interface::logger> m_default_logger;
+		static std::unique_ptr<interface::logger> m_default_logger;
 	};
 }

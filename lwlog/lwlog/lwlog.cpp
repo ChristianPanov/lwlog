@@ -37,7 +37,7 @@ namespace lwlog
 		return registry::instance().get(logger_name);
 	}
 
-	std::shared_ptr<interface::logger> default_logger()
+	const std::unique_ptr<interface::logger>& default_logger()
 	{
 		return registry::instance().default_logger();
 	}

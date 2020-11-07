@@ -4,8 +4,8 @@
 
 namespace lwlog
 {
-	std::shared_ptr<interface::logger> registry::m_default_logger 
-		= std::make_shared<logger<sinks::stdout_color_sink>>("");
+	std::unique_ptr<interface::logger> registry::m_default_logger 
+		= std::make_unique<logger<sinks::stdout_color_sink>>("");
 
 	registry& registry::instance()
 	{
@@ -62,7 +62,7 @@ namespace lwlog
 		return m_loggers;
 	}
 
-	std::shared_ptr<interface::logger> registry::default_logger()
+	const std::unique_ptr<interface::logger>& registry::default_logger() const
 	{
 		return m_default_logger;
 	}
