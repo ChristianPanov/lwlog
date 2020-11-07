@@ -24,7 +24,9 @@ namespace lwlog
 	interface::logger_ptr get(std::string_view logger_name);
 	std::shared_ptr<interface::logger> default_logger();
 
+	void set_pattern(std::string_view pattern);
 	void add_pattern_attribute(details::pattern_attribute_t attribute);
+	void set_level_filter(std::initializer_list<sink_level> level_list);
 	void info(std::string_view message);
 	void warning(std::string_view message);
 	void error(std::string_view message);

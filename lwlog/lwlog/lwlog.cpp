@@ -42,9 +42,19 @@ namespace lwlog
 		return registry::instance().default_logger();
 	}
 
+	void set_pattern(std::string_view pattern)
+	{
+		registry::instance().default_logger()->set_pattern(pattern);
+	}
+
 	void add_pattern_attribute(details::pattern_attribute_t attribute)
 	{
 		registry::instance().default_logger()->add_pattern_attribute(attribute);
+	}
+
+	void set_level_filter(std::initializer_list<sink_level> level_list)
+	{
+		registry::instance().default_logger()->set_level_filter(level_list);
 	}
 
 	void info(std::string_view message)
