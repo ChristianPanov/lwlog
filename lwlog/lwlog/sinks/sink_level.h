@@ -15,10 +15,13 @@ namespace lwlog
 
 	inline std::string level_to_string(sink_level level)
 	{
-		if (level == sink_level::info)			{ return "info"; }
-		else if (level == sink_level::warning)	{ return "warning"; }
-		else if (level == sink_level::error)	{ return "error"; }
-		else if (level == sink_level::critical) { return "critical"; }
-		else if (level == sink_level::debug)	{ return "debug"; }
+		switch (level)
+		{
+			case sink_level::info:		return "info";		break;
+			case sink_level::warning:	return "warning";	break;
+			case sink_level::error:		return "error";		break;
+			case sink_level::critical:	return "critical";	break;
+			case sink_level::debug:		return "debug";		break;
+		}
 	}
 }
