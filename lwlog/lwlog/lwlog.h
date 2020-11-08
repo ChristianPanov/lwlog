@@ -14,6 +14,7 @@ namespace lwlog
 	using console_color_logger = logger<sinks::stdout_color_sink>;
 	using console_logger = logger<sinks::stdout_sink>;
 	using file_logger = logger<sinks::file_sink>;
+	using null_logger = logger<>;
 
 	void register_logger(interface::logger_ptr logger);
 	void automatic_registry(bool automatic);
