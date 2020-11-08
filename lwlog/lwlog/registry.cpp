@@ -38,7 +38,7 @@ namespace lwlog
 
 	void registry::apply_to_all(const std::function<void(interface::logger_ptr)>& fn)
 	{
-		for (const auto& [name, logger] : registry::instance().loggers())
+		for (const auto& [name, logger] : m_loggers)
 		{
 			if (!name.empty())
 			{
@@ -65,5 +65,25 @@ namespace lwlog
 	const std::unique_ptr<interface::logger>& registry::default_logger() const
 	{
 		return m_default_logger;
+	}
+
+	std::unordered_map<std::string, interface::logger_ptr>::iterator registry::begin()
+	{
+		return m_loggers.begin();
+	}
+
+	std::unordered_map<std::string, interface::logger_ptr>::iterator registry::end()
+	{
+		return m_loggers.end();
+	}
+
+	std::unordered_map<std::string, interface::logger_ptr>::const_iterator registry::cbegin()
+	{
+		return m_loggers.cbegin();
+	}
+
+	std::unordered_map<std::string, interface::logger_ptr>::const_iterator registry::cend()
+	{
+		return m_loggers.cend();
 	}
 }

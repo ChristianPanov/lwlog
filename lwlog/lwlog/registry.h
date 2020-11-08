@@ -10,6 +10,7 @@ namespace lwlog
 {
 	class registry
 	{
+	private:
 		registry(const registry&) = delete;
 		registry(registry&&) = delete;
 		registry& operator=(const registry&) = delete;
@@ -27,6 +28,12 @@ namespace lwlog
 		interface::logger_ptr get(std::string_view logger_name);
 		std::unordered_map<std::string, interface::logger_ptr> loggers();
 		const std::unique_ptr<interface::logger>& default_logger() const;
+
+	public:
+		std::unordered_map<std::string, interface::logger_ptr>::iterator begin();
+		std::unordered_map<std::string, interface::logger_ptr>::iterator end();
+		std::unordered_map<std::string, interface::logger_ptr>::const_iterator cbegin();
+		std::unordered_map<std::string, interface::logger_ptr>::const_iterator cend();
 
 	private:
 		registry() = default;
