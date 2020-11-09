@@ -45,8 +45,8 @@ namespace lwlog
 		void log(std::string_view message, sink_level level) override;
 
 	private:
-		std::string m_name;
 		log_message m_message;
+		std::string m_name;
 		std::vector<sinks::sink_ptr> m_sink_buffer;
 	};
 }

@@ -25,11 +25,9 @@ namespace lwlog
 		void apply_to_all(const std::function<void(interface::logger_ptr)>& fn);
 		bool is_registry_automatic();
 
+		const std::unique_ptr<interface::logger>& default_logger() const;
 		interface::logger_ptr get(std::string_view logger_name);
 		std::unordered_map<std::string, interface::logger_ptr> loggers();
-		const std::unique_ptr<interface::logger>& default_logger() const;
-
-	public:
 		std::unordered_map<std::string, interface::logger_ptr>::iterator begin();
 		std::unordered_map<std::string, interface::logger_ptr>::iterator end();
 		std::unordered_map<std::string, interface::logger_ptr>::const_iterator cbegin();
@@ -40,7 +38,7 @@ namespace lwlog
 
 	private:
 		bool m_automatic_registry{ true };
-		std::unordered_map<std::string, interface::logger_ptr> m_loggers;
 		static std::unique_ptr<interface::logger> m_default_logger;
+		std::unordered_map<std::string, interface::logger_ptr> m_loggers;
 	};
 }

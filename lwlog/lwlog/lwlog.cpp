@@ -32,14 +32,14 @@ namespace lwlog
 		return registry::instance().is_registry_automatic();
 	}
 
-	interface::logger_ptr get(std::string_view logger_name)
-	{
-		return registry::instance().get(logger_name);
-	}
-
 	const std::unique_ptr<interface::logger>& default_logger()
 	{
 		return registry::instance().default_logger();
+	}
+
+	interface::logger_ptr get(std::string_view logger_name)
+	{
+		return registry::instance().get(logger_name);
 	}
 
 	void set_pattern(std::string_view pattern)

@@ -52,6 +52,11 @@ namespace lwlog
 		return m_automatic_registry;
 	}
 
+	const std::unique_ptr<interface::logger>& registry::default_logger() const
+	{
+		return m_default_logger;
+	}
+
 	interface::logger_ptr registry::get(std::string_view logger_name)
 	{
 		return m_loggers[logger_name.data()];
@@ -60,11 +65,6 @@ namespace lwlog
 	std::unordered_map<std::string, interface::logger_ptr> registry::loggers()
 	{
 		return m_loggers;
-	}
-
-	const std::unique_ptr<interface::logger>& registry::default_logger() const
-	{
-		return m_default_logger;
 	}
 
 	std::unordered_map<std::string, interface::logger_ptr>::iterator registry::begin()

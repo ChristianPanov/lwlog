@@ -17,11 +17,11 @@ namespace lwlog
 	{
 		switch (level)
 		{
-			case sink_level::info:		return "info";		break;
-			case sink_level::warning:	return "warning";	break;
-			case sink_level::error:		return "error";		break;
-			case sink_level::critical:	return "critical";	break;
-			case sink_level::debug:		return "debug";		break;
+		case sink_level::info:		return "info";		break;
+		case sink_level::warning:	return "warning";	break;
+		case sink_level::error:		return "error";		break;
+		case sink_level::critical:	return "critical";	break;
+		case sink_level::debug:		return "debug";		break;
 		}
 	}
 }

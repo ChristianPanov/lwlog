@@ -22,8 +22,8 @@ namespace lwlog
 	void drop_all();
 	void apply_to_all(const std::function<void(interface::logger_ptr)>& fn);
 	bool is_registry_automatic();
-	interface::logger_ptr get(std::string_view logger_name);
 	const std::unique_ptr<interface::logger>& default_logger();
+	interface::logger_ptr get(std::string_view logger_name);
 
 	void set_pattern(std::string_view pattern);
 	void add_pattern_attribute(details::pattern_attribute_t attribute);

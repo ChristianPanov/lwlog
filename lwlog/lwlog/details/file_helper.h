@@ -24,8 +24,8 @@ namespace lwlog::details
 		std::size_t size() const;
 
 	private:
-		std::FILE* m_file{ nullptr };
-		std::filesystem::path m_path;
 		append m_mode{ append::on };
+		std::filesystem::path m_path;
+		std::FILE* m_file{ nullptr };
 	};
 }
