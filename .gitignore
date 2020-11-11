@@ -1,6 +1,6 @@
 # Directories
-**bin/
-**bin-int/
+**/bin
+**/bin-int
 
 # Visual Studio
 .vs/
