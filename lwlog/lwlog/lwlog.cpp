@@ -22,9 +22,9 @@ namespace lwlog
 		return registry::instance().drop_all();
 	}
 
-	void apply_to_all(const std::function<void(interface::logger_ptr)>& fn)
+	void apply_to_all(const std::function<void(interface::logger_ptr)>& function)
 	{
-		registry::instance().apply_to_all(fn);
+		registry::instance().apply_to_all(function);
 	}
 
 	bool is_registry_automatic()

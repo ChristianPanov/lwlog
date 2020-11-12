@@ -36,14 +36,11 @@ namespace lwlog
 		m_loggers.clear();
 	}
 
-	void registry::apply_to_all(const std::function<void(interface::logger_ptr)>& fn)
+	void registry::apply_to_all(const std::function<void(interface::logger_ptr)>& function)
 	{
 		for (const auto& [name, logger] : m_loggers)
 		{
-			if (!name.empty())
-			{
-				fn(logger);
-			}
+			if (!name.empty()) function(logger);
 		}
 	}
 
