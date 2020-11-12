@@ -50,7 +50,7 @@ namespace lwlog::sinks
 		return false;
 	}
 
-	std::string sink::get_pattern() const
+	std::string sink::pattern() const
 	{
 		return m_pattern;
 	}

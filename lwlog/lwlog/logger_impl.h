@@ -69,7 +69,7 @@ namespace lwlog
 			{
 				m_message = { {
 					message.data(),
-					sink->get_pattern(),
+					sink->pattern(),
 					level,
 					sink->should_color()
 				} };
