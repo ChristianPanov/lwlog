@@ -6,6 +6,7 @@ namespace lwlog::sinks
 {
 	sink::sink()
 		: m_levels{ sink_level::all }
+		, m_pattern{ "[%d, %T] [%l] [%n]: %v" }
 	{}
 
 	void sink::set_pattern(std::string_view pattern)

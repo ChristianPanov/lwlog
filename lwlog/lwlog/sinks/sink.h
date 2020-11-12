@@ -32,7 +32,7 @@ namespace lwlog::sinks
 
 	private:
 		bool m_should_color{ true };
-		std::string m_pattern{ "[%d, %T] [%l] [%n]: %v" };
+		std::string m_pattern;
 		std::vector<sink_level> m_levels;
 	};
 
