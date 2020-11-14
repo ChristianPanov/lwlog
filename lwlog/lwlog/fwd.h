@@ -23,7 +23,12 @@ namespace lwlog::interface
 	using logger_ptr = logger*;
 }
 
-namespace lwlog::details 
-{ 
-	struct pattern_attribute_t;
+namespace lwlog::details::formatter_primitives
+{
+	struct attribute_t;
+}
+
+namespace lwlog::details
+{
+	using attribute_t = formatter_primitives::attribute_t;
 }

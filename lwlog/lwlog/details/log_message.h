@@ -4,7 +4,7 @@
 
 #include "fwd.h"
 
-namespace lwlog
+namespace lwlog::details
 {
 	struct log_message_t
 	{

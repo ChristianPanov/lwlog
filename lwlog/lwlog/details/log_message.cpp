@@ -2,7 +2,7 @@
 #include "sinks/sink_level.h"
 #include "formatter.h"
 
-namespace lwlog
+namespace lwlog::details
 {
 	log_message::log_message(log_message_t t_log_message)
 		: m_log_message { t_log_message }

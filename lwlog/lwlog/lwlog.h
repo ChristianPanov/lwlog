@@ -26,7 +26,7 @@ namespace lwlog
 	interface::logger_ptr get(std::string_view logger_name);
 
 	void set_pattern(std::string_view pattern);
-	void add_pattern_attribute(details::pattern_attribute_t attribute);
+	void add_pattern_attribute(details::attribute_t attribute);
 	void set_level_filter(std::initializer_list<sink_level> level_list);
 	void info(std::string_view message);
 	void warning(std::string_view message);
@@ -41,6 +41,6 @@ namespace lwlog::global
 	void remove_sink(sinks::sink_ptr sink);
 
 	void set_pattern(std::string_view pattern);
-	void add_pattern_attribute(details::pattern_attribute_t attribute);
+	void add_pattern_attribute(details::attribute_t attribute);
 	void set_level_filter(std::initializer_list<sink_level> level_list);
 }

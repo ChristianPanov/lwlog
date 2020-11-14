@@ -6,7 +6,6 @@
 
 #include "interface/level_filter_interface.h"
 #include "interface/pattern_interface.h"
-#include "details/stream.h"
 #include "fwd.h"
 
 namespace lwlog::sinks
@@ -22,7 +21,7 @@ namespace lwlog::sinks
 
 	public:
 		void set_pattern(std::string_view pattern) override;
-		void add_pattern_attribute(details::pattern_attribute_t attribute) override;
+		void add_pattern_attribute(details::attribute_t attribute) override;
 		void set_level_filter(std::initializer_list<sink_level> level_list) override;
 
 		void disable_color();

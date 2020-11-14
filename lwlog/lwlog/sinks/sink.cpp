@@ -14,11 +14,9 @@ namespace lwlog::sinks
 		m_pattern = pattern;
 	}
 
-	void sink::add_pattern_attribute(details::pattern_attribute_t attribute)
+	void sink::add_pattern_attribute(details::attribute_t attribute)
 	{
-		details::formatter::insert_pattern_data({
-			{attribute.verbose, attribute.shortened, attribute.attribute }
-			});
+		details::formatter::insert_pattern_data({ attribute });
 	}
 
 	void sink::set_level_filter(std::initializer_list<sink_level> level_list)
