@@ -3,10 +3,10 @@
 #include <string>
 #include <vector>
 
+#include "primitives.h"
 #include "interface/logger_interface.h"
 #include "details/log_message.h"
 #include "sinks/sink.h"
-#include "sinks/sink_level.h"
 #include "details/formatter.h"
 
 namespace lwlog
@@ -20,16 +20,16 @@ namespace lwlog
 		template<typename Iterator, typename ... SinkParams>
 		logger(std::string_view name, Iterator begin, Iterator end, SinkParams&&... params);
 		template<typename ... SinkParams>
-		logger(std::string_view name, sinks::sink_list sink_list, SinkParams&&... params);
+		logger(std::string_view name, primitives::sink_list sink_list, SinkParams&&... params);
 		template<typename ... SinkParams>
-		logger(std::string_view name, sinks::sink_ptr sink, SinkParams&&... params);
+		logger(std::string_view name, primitives::sink_ptr sink, SinkParams&&... params);
 
 	public:
-		void add_sink(sinks::sink_ptr sink) override;
-		void remove_sink(sinks::sink_ptr sink) override;
+		void add_sink(primitives::sink_ptr sink) override;
+		void remove_sink(primitives::sink_ptr sink) override;
 
 		void set_pattern(std::string_view pattern) override;
-		void add_pattern_attribute(details::attribute_t attribute) override;
+		void add_pattern_attribute(primitives::attribute_t attribute) override;
 		void set_level_filter(std::initializer_list<sink_level> level_list) override;
 
 		void info(std::string_view message) override;
@@ -39,7 +39,7 @@ namespace lwlog
 		void debug(std::string_view message) override;
 
 		std::string name() const override;
-		std::vector<sinks::sink_ptr>& sinks() override;
+		std::vector<primitives::sink_ptr>& sinks() override;
 
 	private:
 		void log(std::string_view message, sink_level level) override;
@@ -47,7 +47,7 @@ namespace lwlog
 	private:
 		details::log_message m_message;
 		std::string m_name;
-		std::vector<sinks::sink_ptr> m_sink_buffer;
+		std::vector<primitives::sink_ptr> m_sink_buffer;
 	};
 }
 

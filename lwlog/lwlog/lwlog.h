@@ -1,7 +1,5 @@
 #pragma once
 
-#include <functional>
-
 #include "logger.h"
 #include "sinks/file_sink.h"
 #include "sinks/stdout_sink.h"
@@ -16,17 +14,17 @@ namespace lwlog
 	using file_logger			= logger<sinks::file_sink>;
 	using null_logger			= logger<>;
 
-	void register_logger(interface::logger_ptr logger);
+	void register_logger(primitives::logger_ptr logger);
 	void automatic_registry(bool automatic);
 	void drop(std::string_view logger_name);
 	void drop_all();
-	void apply_to_all(const std::function<void(interface::logger_ptr)>& function);
+	void apply_to_all(const std::function<void(primitives::logger_ptr)>& function);
 	bool is_registry_automatic();
 	const std::unique_ptr<interface::logger>& default_logger();
-	interface::logger_ptr get(std::string_view logger_name);
+	primitives::logger_ptr get(std::string_view logger_name);
 
 	void set_pattern(std::string_view pattern);
-	void add_pattern_attribute(details::attribute_t attribute);
+	void add_pattern_attribute(primitives::attribute_t attribute);
 	void set_level_filter(std::initializer_list<sink_level> level_list);
 	void info(std::string_view message);
 	void warning(std::string_view message);
@@ -37,10 +35,10 @@ namespace lwlog
 
 namespace lwlog::global
 {
-	void add_sink(sinks::sink_ptr sink);
-	void remove_sink(sinks::sink_ptr sink);
+	void add_sink(primitives::sink_ptr sink);
+	void remove_sink(primitives::sink_ptr sink);
 
 	void set_pattern(std::string_view pattern);
-	void add_pattern_attribute(details::attribute_t attribute);
+	void add_pattern_attribute(primitives::attribute_t attribute);
 	void set_level_filter(std::initializer_list<sink_level> level_list);
 }

@@ -21,7 +21,7 @@ namespace lwlog::sinks
 
 	public:
 		void set_pattern(std::string_view pattern) override;
-		void add_pattern_attribute(details::attribute_t attribute) override;
+		void add_pattern_attribute(primitives::attribute_t attribute) override;
 		void set_level_filter(std::initializer_list<sink_level> level_list) override;
 
 		void disable_color();
@@ -34,7 +34,4 @@ namespace lwlog::sinks
 		std::string m_pattern;
 		std::vector<sink_level> m_levels;
 	};
-
-	using sink_ptr = std::shared_ptr<sink>;
-	using sink_list = std::initializer_list<sink_ptr>;
 }

@@ -14,7 +14,7 @@ namespace lwlog::sinks
 		m_pattern = pattern;
 	}
 
-	void sink::add_pattern_attribute(details::attribute_t attribute)
+	void sink::add_pattern_attribute(primitives::attribute_t attribute)
 	{
 		details::formatter::insert_pattern_data({ attribute });
 	}

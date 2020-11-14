@@ -2,7 +2,7 @@
 
 namespace std
 {
-	template <class _Ty>
+	template<class _Ty>
 	class shared_ptr;
 }
 
@@ -14,13 +14,11 @@ namespace lwlog
 namespace lwlog::sinks
 {
 	class sink;
-	using sink_ptr = std::shared_ptr<sink>;
 }
 
 namespace lwlog::interface
 {
 	class logger;
-	using logger_ptr = logger*;
 }
 
 namespace lwlog::details::formatter_primitives
@@ -28,7 +26,9 @@ namespace lwlog::details::formatter_primitives
 	struct attribute_t;
 }
 
-namespace lwlog::details
+namespace lwlog::primitives
 {
-	using attribute_t = formatter_primitives::attribute_t;
+	using attribute_t = details::formatter_primitives::attribute_t;
+	using sink_ptr = std::shared_ptr<sinks::sink>;
+	using logger_ptr = interface::logger*;
 }

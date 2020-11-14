@@ -4,11 +4,10 @@
 #include <unordered_map>
 
 #include "formatter_primitives.h"
+#include "fwd.h"
 
 namespace lwlog::details
 {
-	using attribute_t = formatter_primitives::attribute_t;
-
 	class formatter
 	{
 	private:
@@ -18,7 +17,7 @@ namespace lwlog::details
 
 	public:
 		static std::string format(std::string pattern, bool should_color);
-		static void insert_pattern_data(std::initializer_list<attribute_t> attributes);
+		static void insert_pattern_data(std::initializer_list<primitives::attribute_t> attributes);
 
 	private:
 		static pattern_map m_pattern_data;

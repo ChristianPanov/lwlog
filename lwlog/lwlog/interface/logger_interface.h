@@ -17,6 +17,4 @@ namespace lwlog::interface
 	protected:
 		virtual void log(std::string_view, sink_level) = 0;
 	};
-
-	using logger_ptr = logger*;
 }

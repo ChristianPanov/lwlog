@@ -40,7 +40,7 @@ namespace lwlog::details
 		return pattern;
 	}
 
-	void formatter::insert_pattern_data(std::initializer_list<attribute_t> attributes)
+	void formatter::insert_pattern_data(std::initializer_list<primitives::attribute_t> attributes)
 	{
 		for (const auto& [verbose, shortened, value] : attributes)
 		{

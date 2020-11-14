@@ -2,6 +2,7 @@
 
 #include "logger.h"
 #include "sinks/sink_factory.h"
+#include "sinks/sink_level.h"
 #include "registry.h"
 
 namespace lwlog
@@ -31,25 +32,25 @@ namespace lwlog
 	template<typename ... SinkPolicy>
 	template<typename ... SinkParams>
 	logger<SinkPolicy...>::logger(std::string_view name, 
-		sinks::sink_list sink_list, SinkParams&&... params)
+		primitives::sink_list sink_list, SinkParams&&... params)
 		: logger<SinkPolicy...>{ name, sink_list.begin(), sink_list.end(), params... }
 	{}
 
 	template<typename ... SinkPolicy>
 	template<typename ... SinkParams>
 	logger<SinkPolicy...>::logger(std::string_view name, 
-		sinks::sink_ptr sink, SinkParams&&... params)
+		primitives::sink_ptr sink, SinkParams&&... params)
 		: logger<SinkPolicy...>{ name, { std::move(sink) }, params... }
 	{}
 
 	template<typename ... SinkPolicy>
-	void logger<SinkPolicy...>::add_sink(sinks::sink_ptr sink)
+	void logger<SinkPolicy...>::add_sink(primitives::sink_ptr sink)
 	{
 		m_sink_buffer.emplace_back(sink);
 	}
 
 	template<typename ... SinkPolicy>
-	void logger<SinkPolicy...>::remove_sink(sinks::sink_ptr sink)
+	void logger<SinkPolicy...>::remove_sink(primitives::sink_ptr sink)
 	{
 		for (std::size_t i = 0; i < m_sink_buffer.size(); ++i)
 		{
@@ -89,7 +90,7 @@ namespace lwlog
 	}
 
 	template<typename ... SinkPolicy>
-	void logger<SinkPolicy...>::add_pattern_attribute(details::attribute_t attribute)
+	void logger<SinkPolicy...>::add_pattern_attribute(primitives::attribute_t attribute)
 	{
 		for (const auto& sink : m_sink_buffer)
 		{
@@ -143,7 +144,7 @@ namespace lwlog
 	}
 
 	template<typename ... SinkPolicy>
-	std::vector<sinks::sink_ptr>& logger<SinkPolicy...>::sinks()
+	std::vector<primitives::sink_ptr>& logger<SinkPolicy...>::sinks()
 	{
 		return m_sink_buffer;
 	}

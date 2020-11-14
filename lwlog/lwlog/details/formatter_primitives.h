@@ -29,7 +29,6 @@ namespace lwlog::details::formatter_primitives
 
 	inline std::size_t attribute_key_hasher::operator()(const attribute_key& key) const
 	{
-		return std::hash<std::string>{}(key.verbose)
-			^ std::hash<std::string>{}(key.shortened);
+		return std::hash<std::string>{}(key.verbose) ^ std::hash<std::string>{}(key.shortened);
 	}
 }

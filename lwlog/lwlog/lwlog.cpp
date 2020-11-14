@@ -2,7 +2,7 @@
 
 namespace lwlog
 {
-	void register_logger(interface::logger_ptr logger)
+	void register_logger(primitives::logger_ptr logger)
 	{
 		return registry::instance().register_logger(logger);
 	}
@@ -22,7 +22,7 @@ namespace lwlog
 		return registry::instance().drop_all();
 	}
 
-	void apply_to_all(const std::function<void(interface::logger_ptr)>& function)
+	void apply_to_all(const std::function<void(primitives::logger_ptr)>& function)
 	{
 		registry::instance().apply_to_all(function);
 	}
@@ -37,7 +37,7 @@ namespace lwlog
 		return registry::instance().default_logger();
 	}
 
-	interface::logger_ptr get(std::string_view logger_name)
+	primitives::logger_ptr get(std::string_view logger_name)
 	{
 		return registry::instance().get(logger_name);
 	}
@@ -47,7 +47,7 @@ namespace lwlog
 		registry::instance().default_logger()->set_pattern(pattern);
 	}
 
-	void add_pattern_attribute(details::attribute_t attribute)
+	void add_pattern_attribute(primitives::attribute_t attribute)
 	{
 		registry::instance().default_logger()->add_pattern_attribute(attribute);
 	}
@@ -85,17 +85,17 @@ namespace lwlog
 
 namespace lwlog::global
 {
-	void add_sink(sinks::sink_ptr sink)
+	void add_sink(primitives::sink_ptr sink)
 	{
-		registry::instance().apply_to_all([sink](interface::logger_ptr logger)
+		registry::instance().apply_to_all([sink](primitives::logger_ptr logger)
 			{
 				logger->add_sink(sink);
 			});
 	}
 
-	void remove_sink(sinks::sink_ptr sink)
+	void remove_sink(primitives::sink_ptr sink)
 	{
-		registry::instance().apply_to_all([sink](interface::logger_ptr logger)
+		registry::instance().apply_to_all([sink](primitives::logger_ptr logger)
 			{
 				logger->remove_sink(sink);
 			});
@@ -103,15 +103,15 @@ namespace lwlog::global
 
 	void set_pattern(std::string_view pattern)
 	{
-		registry::instance().apply_to_all([pattern](interface::logger_ptr logger)
+		registry::instance().apply_to_all([pattern](primitives::logger_ptr logger)
 			{
 				logger->set_pattern(pattern);
 			});
 	}
 
-	void add_pattern_attribute(details::attribute_t attribute)
+	void add_pattern_attribute(primitives::attribute_t attribute)
 	{
-		registry::instance().apply_to_all([attribute](interface::logger_ptr logger)
+		registry::instance().apply_to_all([attribute](primitives::logger_ptr logger)
 			{
 				logger->add_pattern_attribute(attribute);
 			});
@@ -119,7 +119,7 @@ namespace lwlog::global
 
 	void set_level_filter(std::initializer_list<sink_level> level_list)
 	{
-		registry::instance().apply_to_all([level_list](interface::logger_ptr logger)
+		registry::instance().apply_to_all([level_list](primitives::logger_ptr logger)
 			{
 				logger->set_level_filter(level_list);
 			});

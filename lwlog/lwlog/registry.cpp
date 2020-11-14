@@ -13,7 +13,7 @@ namespace lwlog
 		return s_instance;
 	}
 
-	void registry::register_logger(interface::logger_ptr logger)
+	void registry::register_logger(primitives::logger_ptr logger)
 	{
 		if (m_automatic_registry && !logger->name().empty())
 		{
@@ -36,7 +36,7 @@ namespace lwlog
 		m_loggers.clear();
 	}
 
-	void registry::apply_to_all(const std::function<void(interface::logger_ptr)>& function)
+	void registry::apply_to_all(const std::function<void(primitives::logger_ptr)>& function)
 	{
 		for (const auto& [name, logger] : m_loggers)
 		{
@@ -54,32 +54,32 @@ namespace lwlog
 		return m_default_logger;
 	}
 
-	interface::logger_ptr registry::get(std::string_view logger_name)
+	primitives::logger_ptr registry::get(std::string_view logger_name)
 	{
 		return m_loggers[logger_name.data()];
 	}
 
-	std::unordered_map<std::string, interface::logger_ptr> registry::loggers()
+	std::unordered_map<std::string, primitives::logger_ptr> registry::loggers()
 	{
 		return m_loggers;
 	}
 
-	std::unordered_map<std::string, interface::logger_ptr>::iterator registry::begin()
+	std::unordered_map<std::string, primitives::logger_ptr>::iterator registry::begin()
 	{
 		return m_loggers.begin();
 	}
 
-	std::unordered_map<std::string, interface::logger_ptr>::iterator registry::end()
+	std::unordered_map<std::string, primitives::logger_ptr>::iterator registry::end()
 	{
 		return m_loggers.end();
 	}
 
-	std::unordered_map<std::string, interface::logger_ptr>::const_iterator registry::cbegin()
+	std::unordered_map<std::string, primitives::logger_ptr>::const_iterator registry::cbegin()
 	{
 		return m_loggers.cbegin();
 	}
 
-	std::unordered_map<std::string, interface::logger_ptr>::const_iterator registry::cend()
+	std::unordered_map<std::string, primitives::logger_ptr>::const_iterator registry::cend()
 	{
 		return m_loggers.cend();
 	}
