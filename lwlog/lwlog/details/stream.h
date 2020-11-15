@@ -5,11 +5,12 @@
 
 namespace lwlog::details
 {
-	using stream_t = std::FILE*;
-
 	class stream
 	{
-		static constexpr std::size_t internal_size{ 4194304 };
+	private:
+		using stream_t = std::FILE*;
+		static constexpr std::uint32_t internal_size{ 4194304 };
+
 	public:
 		explicit stream(stream_t stream, std::size_t size = internal_size);
 		virtual ~stream() = default;
