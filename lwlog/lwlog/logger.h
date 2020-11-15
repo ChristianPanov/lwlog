@@ -7,7 +7,7 @@
 #include "interface/logger_interface.h"
 #include "details/log_message.h"
 #include "sinks/sink.h"
-#include "details/formatter.h"
+#include "details/formatter/formatter.h"
 
 namespace lwlog
 {

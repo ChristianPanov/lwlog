@@ -1,6 +1,6 @@
 #include "log_message.h"
 #include "sinks/sink_level.h"
-#include "formatter.h"
+#include "formatter/formatter.h"
 
 namespace lwlog::details
 {

@@ -1,6 +1,6 @@
 #include "sink.h"
 #include "sink_level.h"
-#include "details/formatter.h"
+#include "details/formatter/formatter.h"
 
 namespace lwlog::sinks
 {

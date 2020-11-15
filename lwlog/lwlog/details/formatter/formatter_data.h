@@ -1,7 +1,7 @@
 #pragma once
 
-#include "datetime.h"
-#include "color.h"
+#include "details/datetime.h"
+#include "details/color.h"
 
 namespace lwlog::details::formatter_data
 {
