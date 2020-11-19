@@ -8,7 +8,7 @@ namespace std
 
 namespace lwlog
 {
-	enum class sink_level;
+	enum class sink_level : std::uint8_t;
 }
 
 namespace lwlog::sinks

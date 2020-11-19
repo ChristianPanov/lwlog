@@ -2,7 +2,7 @@
 
 namespace lwlog
 {
-	enum class sink_level
+	enum class sink_level : std::uint8_t
 	{
 		none		=	(1 << 0),
 		info		=	(1 << 1),
