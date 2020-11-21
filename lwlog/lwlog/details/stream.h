@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include <string_view>
 #include <cstdio>
 
 namespace lwlog::details
@@ -12,7 +12,7 @@ namespace lwlog::details
 		static constexpr std::uint32_t internal_size{ 4194304 };
 
 	public:
-		explicit stream(stream_t stream, std::size_t size = internal_size);
+		explicit stream(stream_t stream, std::size_t size = 4194304);
 		virtual ~stream() = default;
 		void write(std::string_view message);
 
@@ -28,6 +28,7 @@ namespace lwlog::details
 
 	inline void stream::write(std::string_view message)
 	{
-		std::fwrite((std::string(message) + "\n").data(), message.size() + 1, 1, m_stream);
+		std::fwrite(message.data(), message.size(), 1, m_stream);
+		std::fwrite("\n", 1, 1, m_stream);
 	}
 }
