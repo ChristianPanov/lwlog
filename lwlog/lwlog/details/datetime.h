@@ -8,13 +8,13 @@
 
 namespace lwlog::details::datetime
 {
-	static std::string format_time(std::string format)
+	static std::string format_time(const char* format)
 	{
 		auto now = std::chrono::system_clock::now();
 		auto in_time_t = std::chrono::system_clock::to_time_t(now);
 
 		std::stringstream ss;
-		ss << std::put_time(std::gmtime(&in_time_t), format.data());
+		ss << std::put_time(std::gmtime(&in_time_t), format);
 		return ss.str();
 	}
 

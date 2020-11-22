@@ -13,7 +13,7 @@ namespace lwlog
 		all			=	(1 << 6)
 	};
 
-	inline std::string level_to_string(sink_level level)
+	inline const char* level_to_string(sink_level level)
 	{
 		switch (level)
 		{
