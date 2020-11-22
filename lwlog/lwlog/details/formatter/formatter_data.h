@@ -6,7 +6,7 @@
 namespace lwlog::details::formatter_data
 {
 	static std::unordered_map<formatter_primitives::attribute_key, std::string,
-		formatter_primitives::attribute_key_hasher> pattern_data =
+		formatter_primitives::attribute_key_hasher> datetime_data =
 	{
 		{{"{seconds}",			"%S"}, datetime::get_second()},
 		{{"{minute}",			"%M"}, datetime::get_minute()},

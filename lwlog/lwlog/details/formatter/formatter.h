@@ -20,7 +20,7 @@ namespace lwlog::details
 		static void insert_pattern_data(std::initializer_list<primitives::attribute_t> attributes);
 
 	private:
-		static pattern_map m_pattern_data;
+		static pattern_map m_datetime_data;
 		static color_map m_color_data;
 	};
 }
