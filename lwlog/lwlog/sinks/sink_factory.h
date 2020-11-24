@@ -7,7 +7,7 @@
 
 namespace lwlog::sinks
 {
-	template<typename SinkPolicy>
+	template<typename Sink>
 	class sink_factory
 	{
 	public:
@@ -15,18 +15,18 @@ namespace lwlog::sinks
 		static primitives::sink_ptr request(SinkParams&&... params);
 	};
 
-	template<typename SinkPolicy>
+	template<typename Sink>
 	template<typename ... SinkParams>
 	[[nodiscard("This method is supposed to be initialized to a sink object")]]
-	primitives::sink_ptr sink_factory<SinkPolicy>::request(SinkParams&&... params)
+	primitives::sink_ptr sink_factory<Sink>::request(SinkParams&&... params)
 	{
-		if constexpr (std::is_constructible<SinkPolicy, SinkParams...>::value)
+		if constexpr (std::is_constructible<Sink, SinkParams...>::value)
 		{
-			return std::make_shared<SinkPolicy>(std::forward<SinkParams>(params)...);
+			return std::make_shared<Sink>(std::forward<SinkParams>(params)...);
 		}
-		else if constexpr (std::is_default_constructible<SinkPolicy>::value)
+		else if constexpr (std::is_default_constructible<Sink>::value)
 		{
-			return std::make_shared<SinkPolicy>();
+			return std::make_shared<Sink>();
 		}
 		return primitives::sink_ptr{};
 	}

@@ -11,8 +11,8 @@
 
 namespace lwlog
 {
-	template<typename ... SinkPolicy>
-	class logger : public interface::logger, public SinkPolicy...
+	template<typename ... Sinks>
+	class logger : public interface::logger, public Sinks...
 	{
 	public:
 		template<typename ... SinkParams>
