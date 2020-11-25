@@ -9,9 +9,9 @@
 
 namespace lwlog
 {
-	using console_color_logger	= logger<sinks::stdout_color_sink>;
-	using console_logger		= logger<sinks::stdout_sink>;
-	using file_logger			= logger<sinks::file_sink>;
+	using console_color_logger	= logger<static_storage_policy, sinks::stdout_color_sink>;
+	using console_logger		= logger<static_storage_policy, sinks::stdout_sink>;
+	using file_logger			= logger<static_storage_policy, sinks::file_sink>;
 	using null_logger			= logger<>;
 
 	void register_logger(primitives::logger_ptr logger);
@@ -35,9 +35,6 @@ namespace lwlog
 
 namespace lwlog::global
 {
-	void add_sink(primitives::sink_ptr sink);
-	void remove_sink(primitives::sink_ptr sink);
-
 	void set_pattern(std::string_view pattern);
 	void add_pattern_attribute(primitives::attribute_t attribute);
 	void set_level_filter(std::initializer_list<sink_level> level_list);

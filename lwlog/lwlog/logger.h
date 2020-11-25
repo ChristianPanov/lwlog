@@ -8,12 +8,17 @@
 #include "details/log_message.h"
 #include "sinks/sink.h"
 #include "details/formatter/formatter.h"
+#include "policy/sink_storage_policy.h"
 
 namespace lwlog
 {
-	template<typename ... Sinks>
+	template<template<typename ... Args> typename StoragePolicy = dynamic_storage_policy, typename ... Sinks>
 	class logger : public interface::logger, public Sinks...
 	{
+	private:
+		using StoragePolicyT = typename StoragePolicy<Sinks...>;
+		using Storage = typename StoragePolicyT::storage;
+
 	public:
 		template<typename ... SinkParams>
 		logger(std::string_view name, SinkParams&&... params);
@@ -25,8 +30,8 @@ namespace lwlog
 		logger(std::string_view name, primitives::sink_ptr sink, SinkParams&&... params);
 
 	public:
-		void add_sink(primitives::sink_ptr sink) override;
-		void remove_sink(primitives::sink_ptr sink) override;
+		void add_sink(primitives::sink_ptr sink);
+		void remove_sink(primitives::sink_ptr sink);
 
 		void set_pattern(std::string_view pattern) override;
 		void add_pattern_attribute(primitives::attribute_t attribute) override;
@@ -39,7 +44,7 @@ namespace lwlog
 		void debug(std::string_view message) override;
 
 		std::string name() const override;
-		std::vector<primitives::sink_ptr>& sinks() override;
+		std::vector<primitives::sink_ptr>& sinks();
 
 	private:
 		void log(std::string_view message, sink_level level) override;
@@ -47,7 +52,7 @@ namespace lwlog
 	private:
 		details::log_message m_message;
 		std::string m_name;
-		std::vector<primitives::sink_ptr> m_sink_buffer;
+		Storage m_sink_buffer;
 	};
 }
 

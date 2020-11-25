@@ -85,22 +85,6 @@ namespace lwlog
 
 namespace lwlog::global
 {
-	void add_sink(primitives::sink_ptr sink)
-	{
-		registry::instance().apply_to_all([sink](primitives::logger_ptr logger)
-			{
-				logger->add_sink(sink);
-			});
-	}
-
-	void remove_sink(primitives::sink_ptr sink)
-	{
-		registry::instance().apply_to_all([sink](primitives::logger_ptr logger)
-			{
-				logger->remove_sink(sink);
-			});
-	}
-
 	void set_pattern(std::string_view pattern)
 	{
 		registry::instance().apply_to_all([pattern](primitives::logger_ptr logger)

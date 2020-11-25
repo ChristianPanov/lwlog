@@ -8,7 +8,12 @@
 
 int main()
 {
-	auto console = std::make_shared<lwlog::logger<lwlog::sinks::stdout_color_sink>>("CONSOLE");
+	auto console = std::make_shared<
+		lwlog::logger<
+		lwlog::static_storage_policy,
+		lwlog::sinks::stdout_color_sink
+		>
+	>("CONSOLE");
 
 	console->add_pattern_attribute({ "{ATTR}", "%*", "NEW_ATTRIBUTE" });
 	console->set_level_filter({ lwlog::sink_level::info, lwlog::sink_level::debug, lwlog::sink_level::critical });

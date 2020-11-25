@@ -5,7 +5,7 @@
 namespace lwlog
 {
 	std::unique_ptr<interface::logger> registry::m_default_logger 
-		= std::make_unique<logger<sinks::stdout_color_sink>>("");
+		= std::make_unique<logger<dynamic_storage_policy, sinks::stdout_color_sink>>("");
 
 	registry& registry::instance()
 	{
