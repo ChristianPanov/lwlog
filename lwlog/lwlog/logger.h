@@ -44,7 +44,7 @@ namespace lwlog
 		void debug(std::string_view message) override;
 
 		std::string name() const override;
-		std::vector<primitives::sink_ptr>& sinks();
+		Storage& sinks();
 
 	private:
 		void log(std::string_view message, sink_level level) override;

@@ -144,9 +144,8 @@ namespace lwlog
 	}
 
 	template<template<typename ... Args> typename StoragePolicy, typename ... Sinks>
-	std::vector<primitives::sink_ptr>& logger<StoragePolicy, Sinks...>::sinks()
+	typename logger<StoragePolicy, Sinks...>::Storage& logger<StoragePolicy, Sinks...>::sinks()
 	{
-		//return m_sink_buffer;
-		return std::vector<primitives::sink_ptr>{};
+		return m_sink_buffer;
 	}
 }
