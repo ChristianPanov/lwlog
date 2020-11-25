@@ -6,8 +6,10 @@ namespace lwlog::interface
 {
 	class level_filter
 	{
+	protected:
+		~level_filter() = default;
+
 	public:
-		virtual ~level_filter() = default;
 		virtual void set_level_filter(std::initializer_list<sink_level>) = 0;
 	};
 }
