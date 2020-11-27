@@ -33,14 +33,14 @@ namespace lwlog
 	template<typename ... SinkParams>
 	logger<StoragePolicy, Sinks...>::logger(std::string_view name,
 		primitives::sink_list sink_list, SinkParams&&... params)
-		: logger<Sinks...>{ name, sink_list.begin(), sink_list.end(), params... }
+		: logger<StoragePolicy, Sinks...>{ name, sink_list.begin(), sink_list.end(), params... }
 	{}
 
 	template<template<typename ... Args> typename StoragePolicy, typename ... Sinks>
 	template<typename ... SinkParams>
 	logger<StoragePolicy, Sinks...>::logger(std::string_view name,
 		primitives::sink_ptr sink, SinkParams&&... params)
-		: logger<Sinks...>{ name, { std::move(sink) }, params... }
+		: logger<StoragePolicy, Sinks...>{ name, { std::move(sink) }, params... }
 	{}
 
 	template<template<typename ... Args> typename StoragePolicy, typename ... Sinks>
@@ -71,8 +71,7 @@ namespace lwlog
 				m_message = { {
 					message.data(),
 					sink->pattern(),
-					level,
-					sink->should_color()
+					level
 				} };
 
 				sink->sink_it(m_message.message());

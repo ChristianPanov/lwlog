@@ -3,7 +3,7 @@
 
 namespace lwlog::details
 {
-	std::string formatter::format(std::string pattern, bool should_color)
+	std::string formatter::format(std::string pattern)
 	{
 		for (const auto& [key, value] : m_datetime_data)
 		{
@@ -33,7 +33,7 @@ namespace lwlog::details
 		{
 			while (pattern.find(key) != std::string::npos)
 			{
-				pattern.replace(pattern.find(key), key.length(), (should_color == true ? value : ""));
+				pattern.replace(pattern.find(key), key.length(), value);
 			}
 		}
 

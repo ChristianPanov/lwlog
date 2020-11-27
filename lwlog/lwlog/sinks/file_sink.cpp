@@ -6,7 +6,6 @@ namespace lwlog::sinks
 		: m_size_limit{ size_limit }
 		, m_file{ path }
 	{
-		disable_color();
 		m_file.open();
 	}
 

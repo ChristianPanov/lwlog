@@ -1,37 +1,32 @@
 #pragma once
 
 #include <string>
-#include <vector>
-#include <memory>
 
-#include "interface/level_filter_interface.h"
-#include "interface/pattern_interface.h"
+#include "interface/sink_interface.h"
+#include "policy/sink_color_policy.h"
 #include "fwd.h"
 
 namespace lwlog::sinks
 {
-	class sink : public interface::level_filter, public interface::pattern
+	template<typename ColorPolicy = colored_policy>
+	class sink : public interface::sink
 	{
 	public:
 		sink();
 		virtual ~sink() = default;
 
 	public:
-		virtual void sink_it(std::string_view) = 0;
-
-	public:
 		void set_pattern(std::string_view pattern) override;
 		void add_pattern_attribute(primitives::attribute_t attribute) override;
 		void set_level_filter(std::initializer_list<sink_level> level_list) override;
 
-		void disable_color();
-		bool should_color() const;
-		bool should_sink(sink_level t_level) const;
-		std::string pattern() const;
+		bool should_sink(sink_level t_level) const override;
+		std::string pattern() const override;
 
 	private:
-		bool m_should_color{ true };
 		std::string m_pattern;
 		std::vector<sink_level> m_levels;
 	};
 }
+
+#include "sink_impl.h"

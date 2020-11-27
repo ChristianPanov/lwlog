@@ -11,7 +11,6 @@ namespace lwlog::details
 		std::string message;
 		std::string pattern;
 		sink_level level{ 0 };
-		bool should_color{ true };
 	};
 
 	class log_message

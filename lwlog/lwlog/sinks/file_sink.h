@@ -5,7 +5,7 @@
 
 namespace lwlog::sinks
 {
-	class file_sink : public sink
+	class file_sink : public sink<uncolored_policy>
 	{
 	public:
 		file_sink() = default;

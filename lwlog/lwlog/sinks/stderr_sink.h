@@ -5,21 +5,15 @@
 
 namespace lwlog::sinks
 {
-	class stderr_sink : public sink, public details::stream
+	class stderr_sink 
+		: public sink<uncolored_policy>
+		, public details::stream
 	{
 	public:
-		stderr_sink();
-		void sink_it(std::string_view message) override;
+		stderr_sink() : details::stream(stderr) {}
+		void sink_it(std::string_view message) override 
+		{
+			details::stream::write(message);
+		}
 	};
-
-	inline stderr_sink::stderr_sink()
-		: details::stream(stderr)
-	{
-		disable_color();
-	}
-
-	inline void stderr_sink::sink_it(std::string_view message)
-	{
-		details::stream::write(message);
-	}
 }

@@ -16,7 +16,7 @@ namespace lwlog::details
 		using color_map		= std::unordered_map<std::string_view, std::string_view>;
 
 	public:
-		static std::string format(std::string pattern, bool should_color);
+		static std::string format(std::string pattern);
 		static void insert_pattern_data(std::initializer_list<primitives::attribute_t> attributes);
 
 	private:

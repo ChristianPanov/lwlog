@@ -16,6 +16,6 @@ namespace lwlog::details
 
 	std::string log_message::message() const
 	{
-		return details::formatter::format(m_log_message.pattern, m_log_message.should_color);
+		return details::formatter::format(m_log_message.pattern);
 	}
 }
