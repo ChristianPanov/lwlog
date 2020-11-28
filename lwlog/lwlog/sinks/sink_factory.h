@@ -11,12 +11,12 @@ namespace lwlog::sinks
 	class sink_factory
 	{
 	public:
-		template <typename ... SinkParams>
+		template <typename... SinkParams>
 		static primitives::sink_ptr request(SinkParams&&... params);
 	};
 
 	template<typename Sink>
-	template<typename ... SinkParams>
+	template<typename... SinkParams>
 	[[nodiscard("This method is supposed to be initialized to a sink object")]]
 	primitives::sink_ptr sink_factory<Sink>::request(SinkParams&&... params)
 	{

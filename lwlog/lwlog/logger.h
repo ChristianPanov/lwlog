@@ -12,7 +12,7 @@
 
 namespace lwlog
 {
-	template<template<typename ... Args> typename StoragePolicy = dynamic_storage_policy, typename ... Sinks>
+	template<template<typename...> typename StoragePolicy = dynamic_storage_policy, typename... Sinks>
 	class logger : public interface::logger, public Sinks...
 	{
 	private:
@@ -20,13 +20,13 @@ namespace lwlog
 		using Storage = typename StoragePolicyT::storage;
 
 	public:
-		template<typename ... SinkParams>
+		template<typename... SinkParams>
 		logger(std::string_view name, SinkParams&&... params);
-		template<typename Iterator, typename ... SinkParams>
+		template<typename Iterator, typename... SinkParams>
 		logger(std::string_view name, Iterator begin, Iterator end, SinkParams&&... params);
-		template<typename ... SinkParams>
+		template<typename... SinkParams>
 		logger(std::string_view name, primitives::sink_list sink_list, SinkParams&&... params);
-		template<typename ... SinkParams>
+		template<typename... SinkParams>
 		logger(std::string_view name, primitives::sink_ptr sink, SinkParams&&... params);
 
 	public:
