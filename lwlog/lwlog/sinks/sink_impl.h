@@ -26,10 +26,10 @@ namespace lwlog::sinks
 	}
 
 	template<typename ColorPolicy>
-	void sink<ColorPolicy>::set_level_filter(std::initializer_list<sink_level> level_list)
+	void sink<ColorPolicy>::set_level_filter(primitives::level_list levels)
 	{
 		m_levels.clear();
-		m_levels = level_list;
+		m_levels = levels;
 	}
 
 	template<typename ColorPolicy>

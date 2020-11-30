@@ -18,7 +18,7 @@ namespace lwlog::sinks
 	public:
 		void set_pattern(std::string_view pattern) override;
 		void add_pattern_attribute(primitives::attribute_t attribute) override;
-		void set_level_filter(std::initializer_list<sink_level> level_list) override;
+		void set_level_filter(primitives::level_list levels) override;
 
 		bool should_sink(sink_level t_level) const override;
 		std::string pattern() const override;

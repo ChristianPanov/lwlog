@@ -52,9 +52,9 @@ namespace lwlog
 		registry::instance().default_logger()->add_pattern_attribute(attribute);
 	}
 
-	void set_level_filter(std::initializer_list<sink_level> level_list)
+	void set_level_filter(primitives::level_list levels)
 	{
-		registry::instance().default_logger()->set_level_filter(level_list);
+		registry::instance().default_logger()->set_level_filter(levels);
 	}
 
 	void info(std::string_view message)
@@ -101,11 +101,11 @@ namespace lwlog::global
 			});
 	}
 
-	void set_level_filter(std::initializer_list<sink_level> level_list)
+	void set_level_filter(primitives::level_list levels)
 	{
-		registry::instance().apply_to_all([level_list](primitives::logger_ptr logger)
+		registry::instance().apply_to_all([levels](primitives::logger_ptr logger)
 			{
-				logger->set_level_filter(level_list);
+				logger->set_level_filter(levels);
 			});
 	}
 }

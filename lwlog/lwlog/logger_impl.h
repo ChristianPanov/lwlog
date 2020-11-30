@@ -98,11 +98,11 @@ namespace lwlog
 	}
 
 	template<template<typename...> typename StoragePolicy, typename... Sinks>
-	void logger<StoragePolicy, Sinks...>::set_level_filter(std::initializer_list<sink_level> level_list)
+	void logger<StoragePolicy, Sinks...>::set_level_filter(primitives::level_list levels)
 	{
 		for (const auto& sink : m_sink_buffer)
 		{
-			sink->set_level_filter(level_list);
+			sink->set_level_filter(levels);
 		}
 	}
 
