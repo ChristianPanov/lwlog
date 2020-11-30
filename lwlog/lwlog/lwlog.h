@@ -30,7 +30,11 @@ namespace lwlog
 			sinks::file_sink
 		>;
 
-	using null_logger = logger<>;
+	using null_logger = 
+		logger<
+			static_storage_policy, 
+			single_threaded_policy
+		>;
 
 	void register_logger(primitives::logger_ptr logger);
 	void automatic_registry(bool automatic);
