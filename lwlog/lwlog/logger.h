@@ -12,11 +12,16 @@
 
 namespace lwlog
 {
-	template<template<typename...> typename StoragePolicy = dynamic_storage_policy, typename... Sinks>
-	class logger : public interface::logger, public Sinks...
+	template
+	<
+		template<typename...> typename StoragePolicy = dynamic_storage_policy, 
+		typename ThreadingPolicy = single_threaded_policy, 
+		template<typename> typename... Sinks
+	>
+	class logger : public interface::logger, public Sinks<ThreadingPolicy>...
 	{
 	private:
-		using StoragePolicyT = typename StoragePolicy<Sinks...>;
+		using StoragePolicyT = typename StoragePolicy<Sinks<ThreadingPolicy>...>;
 		using Storage = typename StoragePolicyT::storage;
 
 	public:

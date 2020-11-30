@@ -11,6 +11,7 @@ int main()
 	auto console = std::make_shared<
 		lwlog::logger<
 		lwlog::static_storage_policy,
+		lwlog::single_threaded_policy,
 		lwlog::sinks::stdout_color_sink
 		>
 	>("CONSOLE");

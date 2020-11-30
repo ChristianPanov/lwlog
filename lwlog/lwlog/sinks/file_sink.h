@@ -5,7 +5,8 @@
 
 namespace lwlog::sinks
 {
-	class file_sink : public sink<uncolored_policy>
+	template<typename ThreadingPolicy>
+	class file_sink : public sink<uncolored_policy, ThreadingPolicy>
 	{
 	public:
 		file_sink() = default;

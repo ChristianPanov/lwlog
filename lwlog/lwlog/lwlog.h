@@ -9,10 +9,28 @@
 
 namespace lwlog
 {
-	using console_color_logger	= logger<static_storage_policy, sinks::stdout_color_sink>;
-	using console_logger		= logger<static_storage_policy, sinks::stdout_sink>;
-	using file_logger			= logger<static_storage_policy, sinks::file_sink>;
-	using null_logger			= logger<>;
+	using console_color_logger = 
+		logger<
+			static_storage_policy, 
+			single_threaded_policy, 
+			sinks::stdout_color_sink
+		>;
+
+	using console_logger = 
+		logger<
+			static_storage_policy, 
+			single_threaded_policy, 
+			sinks::stdout_sink
+		>;
+
+	using file_logger = 
+		logger<
+			static_storage_policy, 
+			single_threaded_policy, 
+			sinks::file_sink
+		>;
+
+	using null_logger = logger<>;
 
 	void register_logger(primitives::logger_ptr logger);
 	void automatic_registry(bool automatic);
