@@ -1,5 +1,5 @@
 #include "log_message.h"
-#include "sinks/sink_level.h"
+#include "level.h"
 #include "formatter/formatter.h"
 
 namespace lwlog::details
@@ -9,8 +9,8 @@ namespace lwlog::details
 	{
 		details::formatter::insert_pattern_data({
 			{"{message}",		"%v", m_log_message.message},
-			{"{log_level}",		"%l", level_to_string(m_log_message.level)},
-			{"{log_level_abr}",	"%L", std::string(1, level_to_string(m_log_message.level)[0])}
+			{"{log_level}",		"%l", level::level_to_string(m_log_message.level)},
+			{"{log_level_abr}",	"%L", std::string(1, level::level_to_string(m_log_message.level)[0])}
 			});
 	}
 

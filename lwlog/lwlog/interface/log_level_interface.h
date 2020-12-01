@@ -2,10 +2,10 @@
 
 namespace lwlog::interface
 {
-	class level
+	class log_level
 	{
 	protected:
-		~level() = default;
+		~log_level() = default;
 
 	public:
 		virtual void info(std::string_view) = 0;

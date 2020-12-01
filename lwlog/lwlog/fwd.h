@@ -10,7 +10,7 @@ namespace std
 
 namespace lwlog
 {
-	enum class sink_level : std::uint8_t;
+	enum class level_t : std::uint8_t;
 }
 
 namespace lwlog::sinks
@@ -39,6 +39,5 @@ namespace lwlog::primitives
 {
 	using attribute_t = details::formatter_primitives::attribute_t;
 	using sink_ptr = std::shared_ptr<interface::sink>;
-	using level_list = std::initializer_list<sink_level>;
 	using logger_ptr = interface::logger*;
 }

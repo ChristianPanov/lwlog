@@ -10,7 +10,7 @@ namespace lwlog::details
 	{
 		std::string message;
 		std::string pattern;
-		sink_level level{ 0 };
+		level_t level{ 0 };
 	};
 
 	class log_message

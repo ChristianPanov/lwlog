@@ -36,7 +36,7 @@ namespace lwlog
 
 		void set_pattern(std::string_view pattern) override;
 		void add_pattern_attribute(primitives::attribute_t attribute) override;
-		void set_level_filter(primitives::level_list levels) override;
+		void set_level_filter(level_t level) override;
 
 		void info(std::string_view message) override;
 		void warning(std::string_view message) override;
@@ -48,7 +48,7 @@ namespace lwlog
 		Storage& sinks();
 
 	private:
-		void log(std::string_view message, sink_level level) override;
+		void log(std::string_view message, level_t level) override;
 
 	private:
 		details::log_message m_message;

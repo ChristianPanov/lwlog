@@ -1,14 +1,14 @@
 #pragma once
 
 #include "sink.h"
-#include "sink_level.h"
+#include "level.h"
 #include "details/formatter/formatter.h"
 
 namespace lwlog::sinks
 {
 	template<typename ColorPolicy, typename ThreadingPolicy>
 	sink<ColorPolicy, ThreadingPolicy>::sink()
-		: m_levels{ sink_level::all }
+		: m_level{ level_t::all }
 		, m_pattern{ "[%d, %T] [%l] [%n]: %v" }
 	{}
 
@@ -28,25 +28,18 @@ namespace lwlog::sinks
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
-	void sink<ColorPolicy, ThreadingPolicy>::set_level_filter(primitives::level_list levels)
+	void sink<ColorPolicy, ThreadingPolicy>::set_level_filter(level_t level)
 	{
 		Lock lock(m_mtx);
-		m_levels.clear();
-		m_levels = levels;
+		m_level = level;
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
-	bool sink<ColorPolicy, ThreadingPolicy>::should_sink(sink_level t_level) const
+	bool sink<ColorPolicy, ThreadingPolicy>::should_sink(level_t t_level) const
 	{
 		Lock lock(m_mtx);
-		for (const auto& level : m_levels)
-		{
-			if (t_level == level || level == sink_level::all)
-			{
-				return true;
-			}
-		}
-
+		if (level::level_value(m_level) & level::level_value(t_level)) return true;
+		else if (level::level_value(m_level) & level::level_value(level_t::all)) return true;
 		return false;
 	}
 

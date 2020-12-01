@@ -10,7 +10,7 @@ namespace lwlog::interface
 	public:
 		virtual ~sink() = default;
 		virtual void sink_it(std::string_view) = 0;
-		virtual bool should_sink(sink_level) const = 0;
+		virtual bool should_sink(level_t) const = 0;
 		virtual std::string pattern() const = 0;
 	};
 }
