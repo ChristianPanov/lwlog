@@ -30,11 +30,6 @@ namespace lwlog::details::formatter_primitives
 	struct attribute_t;
 }
 
-namespace lwlog::details
-{
-	using attribute_buffer = std::vector<formatter_primitives::attribute_t>;
-}
-
 namespace lwlog::primitives
 {
 	using attribute_t = details::formatter_primitives::attribute_t;
