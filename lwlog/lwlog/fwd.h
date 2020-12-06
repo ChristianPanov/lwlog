@@ -10,7 +10,7 @@ namespace std
 
 namespace lwlog
 {
-	enum class level_t : std::uint8_t;
+	enum class level : std::uint8_t;
 }
 
 namespace lwlog::sinks

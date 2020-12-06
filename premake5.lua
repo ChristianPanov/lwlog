@@ -2,14 +2,12 @@ workspace "lwlog"
 	architecture "x64"
 	startproject "Sandbox"
 
-	configurations
-	{
+	configurations {
 		"Debug",
 		"Release"
 	}
 	
-	flags
-	{
+	flags {
 		"MultiProcessorCompile"
 	}
 
@@ -25,19 +23,16 @@ project "lwlog"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	files
-	{
+	files {
 		"%{prj.name}/lwlog/**.h",
 		"%{prj.name}/lwlog/**.cpp"
 	}
 
-	includedirs
-	{
+	includedirs {
 		"%{prj.name}/lwlog"
 	}
 
-	defines
-	{
+	defines {
 		"_CRT_SECURE_NO_WARNINGS"
 	}
 
@@ -52,7 +47,7 @@ project "lwlog"
 	filter "configurations:Release"
 		defines "LWLOG_RELEASE"
 		runtime "Release"
-		optimize "on"
+		optimize "speed"
 
 project "Sandbox"
 	location "Sandbox"
@@ -64,19 +59,16 @@ project "Sandbox"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	files
-	{
+	files {
 		"%{prj.name}/**.h",
 		"%{prj.name}/**.cpp"
 	}
 
-	includedirs
-	{
+	includedirs {
 		"lwlog"
 	}
 
-	links
-	{
+	links {
 		"lwlog"
 	}
 

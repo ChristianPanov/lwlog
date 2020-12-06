@@ -13,6 +13,6 @@ namespace lwlog::interface
 		virtual std::string name() const = 0;
 
 	protected:
-		virtual void log(std::string_view, level_t) = 0;
+		virtual void log(std::string_view, level) = 0;
 	};
 }

@@ -8,7 +8,7 @@ namespace lwlog::sinks
 {
 	template<typename ColorPolicy, typename ThreadingPolicy>
 	sink<ColorPolicy, ThreadingPolicy>::sink()
-		: m_level{ level_t::all }
+		: m_level{ level::all }
 		, m_pattern{ "[%d, %T] [%l] [%n]: %v" }
 	{}
 
@@ -28,18 +28,18 @@ namespace lwlog::sinks
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
-	void sink<ColorPolicy, ThreadingPolicy>::set_level_filter(level_t level)
+	void sink<ColorPolicy, ThreadingPolicy>::set_level_filter(level level)
 	{
 		Lock lock(m_mtx);
 		m_level = level;
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
-	bool sink<ColorPolicy, ThreadingPolicy>::should_sink(level_t t_level) const
+	bool sink<ColorPolicy, ThreadingPolicy>::should_sink(level t_level) const
 	{
 		Lock lock(m_mtx);
-		if (level::level_value(m_level) & level::level_value(t_level)) return true;
-		else if (level::level_value(m_level) & level::level_value(level_t::all)) return true;
+		if (level_details::value(m_level) & level_details::value(t_level)) return true;
+		else if (level_details::value(m_level) & level_details::value(level::all)) return true;
 		return false;
 	}
 

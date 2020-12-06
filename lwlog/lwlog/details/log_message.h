@@ -6,23 +6,18 @@
 
 namespace lwlog::details
 {
-	struct log_message_t
-	{
-		std::string message;
-		std::string pattern;
-		level_t level{ 0 };
-	};
-
 	class log_message
 	{
 	public:
 		log_message() = default;
-		log_message(log_message_t t_log_message);
+		log_message(std::string message, std::string pattern, level level);
 
 	public:
 		std::string message() const;
 
 	private:
-		log_message_t m_log_message;
+		std::string m_message;
+		std::string m_pattern;
+		level m_level{ 0 };
 	};
 }

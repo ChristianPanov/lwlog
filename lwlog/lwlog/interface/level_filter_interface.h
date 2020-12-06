@@ -10,6 +10,6 @@ namespace lwlog::interface
 		~level_filter() = default;
 
 	public:
-		virtual void set_level_filter(level_t) = 0;
+		virtual void set_level_filter(level) = 0;
 	};
 }

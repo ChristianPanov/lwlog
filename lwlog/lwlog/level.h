@@ -2,7 +2,7 @@
 
 namespace lwlog
 {
-	enum class level_t : std::uint8_t
+	enum class level : std::uint8_t
 	{
 		none		=	(1 << 0),
 		info		=	(1 << 1),
@@ -13,41 +13,53 @@ namespace lwlog
 		all			=	(1 << 6)
 	};
 
-	static level_t operator|(level_t lhs, level_t rhs)
+	static level operator|(level lhs, level rhs)
 	{
-		return static_cast<level_t>(
-			static_cast<std::underlying_type_t<level_t>>(lhs) | 
-			static_cast<std::underlying_type_t<level_t>>(rhs)
+		return static_cast<level>(
+			static_cast<std::underlying_type_t<level>>(lhs) |
+			static_cast<std::underlying_type_t<level>>(rhs)
 			);
 	}
 
-	static level_t operator&(level_t lhs, level_t rhs)
+	static level operator&(level lhs, level rhs)
 	{
-		return static_cast<level_t>(
-			static_cast<std::underlying_type_t<level_t>>(lhs) &
-			static_cast<std::underlying_type_t<level_t>>(rhs)
+		return static_cast<level>(
+			static_cast<std::underlying_type_t<level>>(lhs) &
+			static_cast<std::underlying_type_t<level>>(rhs)
 			);
 	}
 }
 
-namespace lwlog::level
+namespace lwlog::level_details
 {
-	using level_underlying_type = std::underlying_type_t<level_t>;
+	using level_underlying_type = std::underlying_type_t<level>;
 
-	static level_underlying_type level_value(level_t level)
+	constexpr level_underlying_type value(level level)
 	{
 		return static_cast<level_underlying_type>(level);
 	}
 
-	static const char* level_to_string(level_t level)
+	constexpr const char* to_string(level level)
 	{
 		switch (level)
 		{
-		case level_t::info:		return "info";		break;
-		case level_t::warning:	return "warning";	break;
-		case level_t::error:	return "error";		break;
-		case level_t::critical:	return "critical";	break;
-		case level_t::debug:	return "debug";		break;
+		case level::info:		return "info";		break;
+		case level::warning:	return "warning";	break;
+		case level::error:		return "error";		break;
+		case level::critical:	return "critical";	break;
+		case level::debug:		return "debug";		break;
+		}
+	}
+
+	constexpr const char* color_value(level level)
+	{
+		switch (level)
+		{
+		case level::info:		return "\u001b[30;1m";  break;
+		case level::warning:	return "\u001b[33;1m";  break;
+		case level::error:		return "\u001b[31;1m";  break;
+		case level::critical:	return "\u001b[41;1m";  break;
+		case level::debug:		return "\u001b[37;1m";  break;
 		}
 	}
 }

@@ -69,17 +69,20 @@ namespace lwlog
 
 	template<template<typename...> typename StoragePolicy, typename ThreadingPolicy,
 		template<typename> typename... Sinks>
-	void logger<StoragePolicy, ThreadingPolicy, Sinks...>::log(std::string_view message, level_t level)
+	void logger<StoragePolicy, ThreadingPolicy, Sinks...>::log(std::string_view message, level t_level)
 	{
+		details::formatter::insert_pattern_data(
+			{ {"^level_color^", "", level_details::color_value(t_level)} }
+		);
 		for (const auto& sink : m_sink_buffer)
 		{
-			if (sink->should_sink(level))
+			if (sink->should_sink(t_level))
 			{
-				m_message = { {
+				m_message = {
 					message.data(),
 					sink->pattern(),
-					level
-				} };
+					t_level
+				};
 
 				sink->sink_it(m_message.message());
 			}
@@ -108,11 +111,11 @@ namespace lwlog
 
 	template<template<typename...> typename StoragePolicy, typename ThreadingPolicy,
 		template<typename> typename... Sinks>
-	void logger<StoragePolicy, ThreadingPolicy, Sinks...>::set_level_filter(level_t level)
+	void logger<StoragePolicy, ThreadingPolicy, Sinks...>::set_level_filter(level t_level)
 	{
 		for (const auto& sink : m_sink_buffer)
 		{
-			sink->set_level_filter(level);
+			sink->set_level_filter(t_level);
 		}
 	}
 
@@ -120,35 +123,35 @@ namespace lwlog
 		template<typename> typename... Sinks>
 	void logger<StoragePolicy, ThreadingPolicy, Sinks...>::info(std::string_view message)
 	{
-		log(message, level_t::info);
+		log(message, level::info);
 	}
 
 	template<template<typename...> typename StoragePolicy, typename ThreadingPolicy,
 		template<typename> typename... Sinks>
 	void logger<StoragePolicy, ThreadingPolicy, Sinks...>::warning(std::string_view message)
 	{
-		log(message, level_t::warning);
+		log(message, level::warning);
 	}
 
 	template<template<typename...> typename StoragePolicy, typename ThreadingPolicy,
 		template<typename> typename... Sinks>
 	void logger<StoragePolicy, ThreadingPolicy, Sinks...>::error(std::string_view message)
 	{
-		log(message, level_t::error);
+		log(message, level::error);
 	}
 
 	template<template<typename...> typename StoragePolicy, typename ThreadingPolicy,
 		template<typename> typename... Sinks>
 	void logger<StoragePolicy, ThreadingPolicy, Sinks...>::critical(std::string_view message)
 	{
-		log(message, level_t::critical);
+		log(message, level::critical);
 	}
 
 	template<template<typename...> typename StoragePolicy, typename ThreadingPolicy,
 		template<typename> typename... Sinks>
 	void logger<StoragePolicy, ThreadingPolicy, Sinks...>::debug(std::string_view message)
 	{
-		log(message, level_t::debug);
+		log(message, level::debug);
 	}
 
 	template<template<typename...> typename StoragePolicy, typename ThreadingPolicy,
