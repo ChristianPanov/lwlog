@@ -9,33 +9,20 @@
 
 namespace lwlog
 {
-	using console_color_logger = 
-		logger<
-			static_storage_policy, 
-			single_threaded_policy, 
-			sinks::stdout_color_sink
-		>;
+	using console_color_logger	= logger<dynamic_storage_policy, single_threaded_policy, sinks::stdout_color_sink>;
+	using console_logger		= logger<dynamic_storage_policy, single_threaded_policy, sinks::stdout_sink>;
+	using file_logger			= logger<dynamic_storage_policy, single_threaded_policy, sinks::file_sink>;
 
-	using console_logger = 
-		logger<
-			static_storage_policy, 
-			single_threaded_policy, 
-			sinks::stdout_sink
-		>;
+	using console_color_logger_mt	= logger<dynamic_storage_policy, multi_threaded_policy, sinks::stdout_color_sink>;
+	using console_logger_mt			= logger<dynamic_storage_policy, multi_threaded_policy, sinks::stdout_sink>;
+	using file_logger_mt			= logger<dynamic_storage_policy, multi_threaded_policy, sinks::file_sink>;
 
-	using file_logger = 
-		logger<
-			static_storage_policy, 
-			single_threaded_policy, 
-			sinks::file_sink
-		>;
+	using null_logger		= logger<dynamic_storage_policy, single_threaded_policy>;
+	using null_logger_mt	= logger<dynamic_storage_policy, multi_threaded_policy>;
+}
 
-	using null_logger = 
-		logger<
-			static_storage_policy, 
-			single_threaded_policy
-		>;
-
+namespace lwlog
+{
 	void register_logger(primitives::logger_ptr logger);
 	void automatic_registry(bool automatic);
 	void drop(std::string_view logger_name);
