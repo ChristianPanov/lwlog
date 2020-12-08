@@ -5,7 +5,7 @@ namespace lwlog::details
 {
 	std::string formatter::format(std::string pattern)
 	{
-		for (const auto& [key, value] : m_datetime_data)
+		for (const auto& [key, value] : formatter_data::datetime_data)
 		{
 			const auto& [verbose, shortened] = key;
 			if (!verbose.empty())
@@ -17,7 +17,7 @@ namespace lwlog::details
 			}
 		}
 
-		for (const auto& [key, value] : m_datetime_data)
+		for (const auto& [key, value] : formatter_data::datetime_data)
 		{
 			const auto& [verbose, shortened] = key;
 			if (!shortened.empty())
@@ -29,7 +29,7 @@ namespace lwlog::details
 			}
 		}
 
-		for (const auto& [key, value] : m_color_data)
+		for (const auto& [key, value] : formatter_data::color_data)
 		{
 			while (pattern.find(key) != std::string::npos)
 			{
@@ -44,10 +44,7 @@ namespace lwlog::details
 	{
 		for (const auto& [verbose, shortened, value] : attributes)
 		{
-			m_datetime_data.insert_or_assign({ verbose, shortened }, value);
+			formatter_data::datetime_data.insert_or_assign({ verbose, shortened }, value);
 		}
 	}
-
-	formatter::pattern_map formatter::m_datetime_data{ formatter_data::datetime_data };
-	formatter::color_map formatter::m_color_data{ formatter_data::color_data };
 }
