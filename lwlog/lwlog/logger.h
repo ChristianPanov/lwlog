@@ -50,7 +50,6 @@ namespace lwlog
 		void log(std::string_view message, level t_level) override;
 
 	private:
-		//details::log_message m_message;
 		std::string m_name;
 		Storage m_sink_buffer;
 	};
