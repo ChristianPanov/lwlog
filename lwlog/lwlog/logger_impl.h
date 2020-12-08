@@ -71,9 +71,9 @@ namespace lwlog
 		template<typename> typename... Sinks>
 	void logger<StoragePolicy, ThreadingPolicy, Sinks...>::log(std::string_view message, level t_level)
 	{
-		details::formatter::insert_pattern_data(
-			{ {"^level_color^", "", level_details::color_value(t_level)} }
-		);
+		details::formatter::insert_pattern_data({ 
+			{"^level_color^", "", level_details::color_value(t_level)} 
+			});
 		for (const auto& sink : m_sink_buffer)
 		{
 			if (sink->should_sink(t_level))
