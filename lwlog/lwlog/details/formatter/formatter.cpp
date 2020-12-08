@@ -29,6 +29,11 @@ namespace lwlog::details
 			}
 		}
 
+		return pattern;
+	}
+
+	std::string formatter::format_color(std::string pattern)
+	{
 		for (const auto& [key, value] : formatter_data::color_data)
 		{
 			while (pattern.find(key) != std::string::npos)
@@ -36,7 +41,6 @@ namespace lwlog::details
 				pattern.replace(pattern.find(key), key.length(), value);
 			}
 		}
-
 		return pattern;
 	}
 

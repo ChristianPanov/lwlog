@@ -71,20 +71,18 @@ namespace lwlog
 		template<typename> typename... Sinks>
 	void logger<StoragePolicy, ThreadingPolicy, Sinks...>::log(std::string_view message, level t_level)
 	{
-		details::formatter::insert_pattern_data({ 
-			{"^level_color^", "", level_details::color_value(t_level)} 
+		details::formatter::insert_pattern_data({
+			{"^level_color^", "", level_details::color_value(t_level)},
+			{"{message}",		"%v", message.data()},
+			{"{log_level}",		"%l", level_details::to_string(t_level)},
+			{"{log_level_abr}",	"%L", std::string(1, level_details::to_string(t_level)[0])}
 			});
+
 		for (const auto& sink : m_sink_buffer)
 		{
 			if (sink->should_sink(t_level))
 			{
-				m_message = {
-					message.data(),
-					sink->pattern(),
-					t_level
-				};
-
-				sink->sink_it(m_message.message());
+				sink->sink_it(details::formatter::format(sink->pattern()));
 			}
 		}
 	}
