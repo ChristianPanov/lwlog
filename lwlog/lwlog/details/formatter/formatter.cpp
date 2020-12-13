@@ -32,7 +32,7 @@ namespace lwlog::details
 		return pattern;
 	}
 
-	std::string formatter::format_color(std::string pattern)
+	void formatter::format_color(std::string& pattern)
 	{
 		for (const auto& [key, value] : formatter_data::color_data)
 		{
@@ -41,7 +41,6 @@ namespace lwlog::details
 				pattern.replace(pattern.find(key), key.length(), value);
 			}
 		}
-		return pattern;
 	}
 
 	void formatter::insert_pattern_data(std::initializer_list<primitives::attribute_t> attributes)

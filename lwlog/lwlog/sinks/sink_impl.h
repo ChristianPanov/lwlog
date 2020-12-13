@@ -16,7 +16,8 @@ namespace lwlog::sinks
 	void sink<ColorPolicy, ThreadingPolicy>::set_pattern(std::string_view pattern)
 	{
 		Lock lock(m_mtx);
-		m_pattern = ColorPolicy::process_color(pattern);
+		m_pattern = pattern;
+		ColorPolicy::process_color(m_pattern);
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>

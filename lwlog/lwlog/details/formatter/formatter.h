@@ -16,7 +16,7 @@ namespace lwlog::details
 
 	public:
 		static std::string format(std::string pattern);
-		static std::string format_color(std::string pattern);
+		static void format_color(std::string& pattern);
 		static void insert_pattern_data(std::initializer_list<primitives::attribute_t> attributes);
 	};
 }
