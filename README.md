@@ -70,14 +70,14 @@ int main()
 
 int main()
 {
-	auto console = std::make_shared<
+	auto logger = std::make_shared<
 		lwlog::logger<
 			lwlog::static_storage_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_color_sink, 
       lwlog::sinks::file_sink
 		>
-	>("CONSOLE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
+	>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 
 	logger->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^"); // Color attributes will be ignored for the file sink
 	logger->critical("First critical message"); // Log message will be distributed to both sinks
