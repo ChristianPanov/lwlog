@@ -32,7 +32,7 @@ int main()
 	lwlog::critical("Critical message");
 	lwlog::debug("Debug message");
 
-	lwlog::set_level_filter({ lwlog::sink_level::debug, lwlog::sink_level::critical });
+	lwlog::set_level_filter(lwlog::sink_level::debug | lwlog::sink_level::critical);
 	lwlog::info("Will not be displayed");
 
 	lwlog::add_pattern_attribute({ "{foo}", "%f", "FOO" });
