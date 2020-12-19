@@ -34,7 +34,6 @@ namespace lwlog
 		void remove_sink(primitives::sink_ptr sink);
 
 		void set_pattern(std::string_view pattern) override;
-		void add_pattern_attribute(primitives::attribute_t attribute) override;
 		void set_level_filter(level t_level) override;
 
 		void info(std::string_view message) override;

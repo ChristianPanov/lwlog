@@ -99,16 +99,6 @@ namespace lwlog
 
 	template<template<typename...> typename StoragePolicy, typename ThreadingPolicy,
 		template<typename> typename... Sinks>
-	void logger<StoragePolicy, ThreadingPolicy, Sinks...>::add_pattern_attribute(primitives::attribute_t attribute)
-	{
-		for (const auto& sink : m_sink_buffer)
-		{
-			sink->add_pattern_attribute(attribute);
-		}
-	}
-
-	template<template<typename...> typename StoragePolicy, typename ThreadingPolicy,
-		template<typename> typename... Sinks>
 	void logger<StoragePolicy, ThreadingPolicy, Sinks...>::set_level_filter(level t_level)
 	{
 		for (const auto& sink : m_sink_buffer)

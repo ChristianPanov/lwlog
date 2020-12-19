@@ -16,7 +16,7 @@ int main()
 		>
 	>("CONSOLE");
 
-	console->add_pattern_attribute({ "{ATTR}", "%*", "NEW_ATTRIBUTE" });
+	//console->add_pattern_attribute({ "{ATTR}", "%*", "NEW_ATTRIBUTE" });
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
 	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^ {ATTR}");
 
