@@ -21,6 +21,13 @@ namespace lwlog::sinks
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
+	void sink<ColorPolicy, ThreadingPolicy>::add_pattern_attribute(primitives::attribute_t attribute)
+	{
+		Lock lock(m_mtx);
+		details::formatter::insert_pattern_data({ attribute });
+	}
+
+	template<typename ColorPolicy, typename ThreadingPolicy>
 	void sink<ColorPolicy, ThreadingPolicy>::set_level_filter(level level)
 	{
 		Lock lock(m_mtx);

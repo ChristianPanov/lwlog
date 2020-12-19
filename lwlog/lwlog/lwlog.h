@@ -33,6 +33,7 @@ namespace lwlog
 	primitives::logger_ptr get(std::string_view logger_name);
 
 	void set_pattern(std::string_view pattern);
+	void add_pattern_attribute(primitives::attribute_t attribute);
 	void set_level_filter(level t_level);
 	void info(std::string_view message);
 	void warning(std::string_view message);
@@ -44,5 +45,6 @@ namespace lwlog
 namespace lwlog::global
 {
 	void set_pattern(std::string_view pattern);
+	void add_pattern_attribute(primitives::attribute_t attribute);
 	void set_level_filter(level t_level);
 }

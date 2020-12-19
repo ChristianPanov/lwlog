@@ -22,6 +22,7 @@ namespace lwlog::sinks
 
 	public:
 		void set_pattern(std::string_view pattern) override;
+		void add_pattern_attribute(primitives::attribute_t attribute) override;
 		void set_level_filter(level level) override;
 		bool should_sink(level t_level) const override;
 		std::string pattern() const override;
