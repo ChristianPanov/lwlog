@@ -20,8 +20,8 @@ git clone --recursive https://github.com/ChristianPanov/lwlog
 - Very configurable - it uses policy classes which you can just plug in based on your needs. At the same time, convenient easy-to-use predefined types are made for the
 people who want simplicity without too much configuration. Most of the time you will be just fine with using the predefined types.
 ## Benchmarks
-I haven't had the chance  to conduct proper benchmarks, but I have benchmarked against spdlog, as well as logging a single synchronous message
-A single synchronous log call (single-threaded, formatted, and colored) takes ~8μs
+I haven't had the chance  to conduct proper benchmarks, but I have benchmarked against spdlog, as well as logging a single synchronous message.\
+A single synchronous log call (single-threaded, formatted, and colored) takes ~8μs\
 #### lwlog (colored and formatted, syncrhonous) vs spdlog (formatted, syncrhonous) - Benchmarked with picobench(https://github.com/iboB/picobench)
 
 ```
@@ -156,8 +156,8 @@ int main()
 }
 ```
 ## Creating your own sink
-As I said and promissed, lwlog is extremely easy to extend. Let's give an example with sinks.
-To create your own sink, all you have to do is to inherit from lwlog::interface::sink and implement a sink_it() function. That's it
+As I said and promissed, lwlog is extremely easy to extend. Let's give an example with sinks.\
+To create your own sink, all you have to do is to inherit from lwlog::interface::sink and implement a sink_it() function. That's it.\
 Example with an existing sink implementation
 ```cpp
 namespace lwlog::sinks
@@ -176,8 +176,9 @@ namespace lwlog::sinks
 	};
 }
 ```
-Here we inherit from the sink base class, and configure it to be colored. Whether it's thread-safe or not is left up to the one using the sink.
-The color policy could be either colored(```colored_policy```) or non-colored (```uncolored_policy```). The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them.
+Here we inherit from the sink base class, and configure it to be colored. Whether it's thread-safe or not is left up to the one using the sink.\
+The color policy could be either colored(```colored_policy```) or non-colored (```uncolored_policy```).\
+The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them.\
 We only need the sink_it() function, which is called as the actual log call. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.
 ```cpp
 namespace lwlog::sinks
@@ -210,30 +211,20 @@ int main()
 	return 0;
 }
 ```
-```default_storage_policy``` - convenienve alias for ```static_storage_policy```
-
-```static_storage_policy``` - it configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks in at runtime, it is more lightweight than a dynamic sink storage.
-
-```dynamic_storage_policy``` - it configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks.
-
-```single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger.
-
-```multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety.
+```default_storage_policy``` - convenienve alias for ```static_storage_policy```\
+```static_storage_policy``` - it configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks in at runtime, it is more lightweight than a dynamic sink storage.\
+```dynamic_storage_policy``` - it configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks.\
+```single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger.\
+```multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety.\
 
 ## Usage TIPS
-If you don't need to configure anything and if you want to have a simpler logger creation, you are always free to use the convenience aliases.
-For example, you can create a logger simply by using one of these aliases:
+If you don't need to configure anything and if you want to have a simpler logger creation, you are always free to use the convenience aliases.\
+For example, you can create a logger simply by using one of these aliases:\
+```console_color_logger```- colored logger, sinks to stdout\
+```console_logger``` - non-colored logger, sinks to stdout\
+```file_logger``` - sinks to a file\
 
-```console_color_logger```- colored logger, sinks to stdout
-
-```console_logger``` - non-colored logger, sinks to stdout
-
-```file_logger``` - sinks to a file
-
-Or if you want thread-safe loggers, just use:
-
-```console_color_logger_mt``` - colored thread-safe logger, sinks to stdout
-
-```console_logger_mt``` - non-colored thread-safe logger, sinks to stdout
-
-```file_logger_mt``` - thread-safe logger, sinks to file
+Or if you want thread-safe loggers, just use:\
+```console_color_logger_mt``` - colored thread-safe logger, sinks to stdout\
+```console_logger_mt``` - non-colored thread-safe logger, sinks to stdout\
+```file_logger_mt``` - thread-safe logger, sinks to file\
