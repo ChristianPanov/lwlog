@@ -178,7 +178,7 @@ namespace lwlog::sinks
 ```
 Here we inherit from the sink base class, and configure it to be colored. Whether it's thread-safe or not is left up to the one using the sink. 
 We only need the sink_it() function, which is called as the actual log call. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.
-```
+```cpp
 namespace lwlog::sinks
 {
 	template<typename ThreadingPolicy>
