@@ -227,4 +227,4 @@ For example, you can create a logger simply by using one of these aliases:\
 Or if you want thread-safe loggers, just use:\
 ```console_color_logger_mt``` - colored thread-safe logger, sinks to stdout\
 ```console_logger_mt``` - non-colored thread-safe logger, sinks to stdout\
-```file_logger_mt``` - thread-safe logger, sinks to file\
+```file_logger_mt``` - thread-safe logger, sinks to file
