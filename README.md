@@ -155,7 +155,44 @@ int main()
 	return 0;
 }
 ```
-
+## Creating your own sink
+As I said and promissed, lwlog is extremely easy to extend. Let's give an example with sinks.
+To create your own sink, all you have to do is to inherit from lwlog::interface::sink and implement a sink_it() function. That's it
+Example with an existing sink implementation
+```cpp
+namespace lwlog::sinks
+{
+	template<typename ThreadingPolicy>
+	class stdout_color_sink
+		: public sink<colored_policy, ThreadingPolicy>
+		, public details::stream
+	{
+	public:
+		stdout_color_sink() : details::stream(stdout) {};
+		void sink_it(std::string_view message) override
+		{
+			details::stream::write(message);
+		}
+	};
+}
+```
+Here we inherit from the sink base class, and configure it to be colored. Whether it's thread-safe or not is left up to the one using the sink. 
+We only need the sink_it() function, which is called as the actual log call. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.
+```
+namespace lwlog::sinks
+{
+	template<typename ThreadingPolicy>
+	class new_custom_sink
+		: public sink<colored_policy, ThreadingPolicy>
+	{
+	public:
+		void sink_it(std::string_view message) override
+		{
+			// sink message to somewhere
+		}
+	};
+}
+```
 ## Logger configuration
 ```cpp
 #include "lwlog/lwlog.h"
