@@ -164,6 +164,24 @@ int main()
 
 ```multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety.
 
+## Usage TIPS
+If you don't need to configure anything and if you want to have a simpler logger creation, you are always free to use the convenience aliases.
+For example, you can create a logger simply by using one of these aliases:
+
+```console_color_logger```- colored logger, sinks to stdout
+
+```console_logger``` - non-colored logger, sinks to stdout
+
+```file_logger``` - sinks to a file
+
+Or if you want thread-safe loggers, just use:
+
+```console_color_logger_mt``` - colored thread-safe logger, sinks to stdout
+
+```console_logger_mt``` - non-colored thread-safe logger, sinks to stdout
+
+```file_logger_mt``` - thread-safe logger, sinks to file
+
 ## Benchmarks
 I haven't had the chance  to conduct proper benchmarks, but I have benchmarked against spdlog, as well as logging a single synchronous message
 A single synchronous log call (single-threaded, formatted, and colored) takes ~8μs
