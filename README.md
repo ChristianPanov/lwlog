@@ -96,7 +96,7 @@ int main()
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_color_sink, 
-      lwlog::sinks::file_sink
+      			lwlog::sinks::file_sink
 		>
 	>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 
@@ -136,21 +136,8 @@ int main()
 
 int main()
 {
-	auto console = std::make_shared<
-		lwlog::logger<
-		lwlog::default_storage_policy,
-		lwlog::single_threaded_policy,
-		lwlog::sinks::stdout_color_sink
-		>
-	>("CONSOLE");
-  
-	auto file = std::make_shared<
-		lwlog::logger<
-		lwlog::static_storage_policy,
-		lwlog::single_threaded_policy,
-		lwlog::sinks::file_sink
-		>
-	>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
+	auto console = std::make_shared<lwlog::console_color_logger>("CONSOLE");
+	auto file = std::make_shared<lwlog::file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 	
 	//Pattern will be applied to all loggers present in the registry
 	lwlog::global::set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
@@ -158,6 +145,20 @@ int main()
 	return 0;
 }
 ```
+## Accessing a logger from the global registry by name
+```cpp
+#include "lwlog/lwlog.h"
+
+int main()
+{
+	auto console = std::make_shared<lwlog::console_color_logger>("CONSOLE");
+	
+	lwlog::get("CONSOLE)->critical("First critical message");
+	
+	return 0;
+}
+```
+
 ## Logger configuration
 ```cpp
 #include "lwlog/lwlog.h"
