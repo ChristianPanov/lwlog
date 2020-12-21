@@ -143,7 +143,7 @@ A single synchronous log call (single-threaded, formatted, and colored) takes ~8
 
 #### lwlog (colored and formatted) vs spdlog (formatted) - Benchmarked with picobench(https://github.com/iboB/picobench)
 
-`
+```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
 ===============================================================================
@@ -158,4 +158,4 @@ A single synchronous log call (single-threaded, formatted, and colored) takes ~8
             lwlog_bench * |    8192 |    23.543 |    2873 |      - |   347959.1
              spdlog_bench |    8192 |   642.031 |   78372 | 27.271 |    12759.5
 ===============================================================================
-`
+```
