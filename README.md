@@ -154,7 +154,9 @@ int main()
 	return 0;
 }
 ```
-```default_storage_policy``` - it's an alias for ```static_storage_policy```, it configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks in at runtime, it is more lightweight than a dynamic sink storage.
+```default_storage_policy``` - convenienve alias for ```static_storage_policy```
+
+```static_storage_policy``` - it configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks in at runtime, it is more lightweight than a dynamic sink storage.
 
 ```dynamic_storage_policy``` - it configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks.
 
