@@ -215,14 +215,14 @@ int main()
 ```static_storage_policy``` - it configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks in at runtime, it is more lightweight than a dynamic sink storage.\
 ```dynamic_storage_policy``` - it configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks.\
 ```single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger.\
-```multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety.\
+```multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety.
 
 ## Usage TIPS
 If you don't need to configure anything and if you want to have a simpler logger creation, you are always free to use the convenience aliases.\
 For example, you can create a logger simply by using one of these aliases:\
 ```console_color_logger```- colored logger, sinks to stdout\
 ```console_logger``` - non-colored logger, sinks to stdout\
-```file_logger``` - sinks to a file\
+```file_logger``` - sinks to a file
 
 Or if you want thread-safe loggers, just use:\
 ```console_color_logger_mt``` - colored thread-safe logger, sinks to stdout\
