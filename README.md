@@ -153,7 +153,7 @@ int main()
 {
 	auto console = std::make_shared<lwlog::console_color_logger>("CONSOLE");
 	
-	lwlog::get("CONSOLE)->critical("First critical message");
+	lwlog::get("CONSOLE")->critical("First critical message");
 	
 	return 0;
 }
