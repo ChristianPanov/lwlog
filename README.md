@@ -73,9 +73,8 @@ int main()
 		lwlog::logger<
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_color_sink
-		>
-	>("CONSOLE");
+			lwlog::sinks::stdout_color_sink>
+			>("CONSOLE");
 	// or use the helper logger type aliases
 	auto console2 = std::make_shared<lwlog::console_color_logger>("CONSOLE");
 	
@@ -96,9 +95,8 @@ int main()
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_color_sink, 
-      			lwlog::sinks::file_sink
-		>
-	>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
+      			lwlog::sinks::file_sink>
+			>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 
 	logger->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^"); // Color attributes will be ignored for the file sink
 	logger->critical("First critical message"); // Log message will be distributed to both sinks
@@ -123,9 +121,8 @@ int main()
 		lwlog::logger<
 			lwlog::static_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_color_sink
-		>
-	>("COMBINED", file_sink);
+			lwlog::sinks::stdout_color_sink>
+			>("COMBINED", file_sink);
 
 	return 0;
 }
@@ -169,9 +166,8 @@ int main()
 		lwlog::logger<
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_color_sink
-		>
-	>("CONSOLE");
+			lwlog::sinks::stdout_color_sink>
+			>("CONSOLE");
 	
 	return 0;
 }
