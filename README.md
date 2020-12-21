@@ -137,3 +137,25 @@ int main()
 	return 0;
 }
 ```
+## Benchmarks
+I haven't had the chance  to conduct proper benchmarks, but I have benchmarked against spdlog, as well as logging a single synchronous message
+A single synchronous log call (single-threaded, formatted, and colored) takes ~8μs
+
+#### lwlog (colored and formatted) vs spdlog (formatted) - Benchmarked with picobench(https://github.com/iboB/picobench)
+
+```
+===============================================================================
+   Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
+===============================================================================
+            lwlog_bench * |       8 |     0.017 |    2125 |      - |   470588.2
+             spdlog_bench |       8 |     0.487 |   60862 | 28.641 |    16430.5
+            lwlog_bench * |      64 |     0.103 |    1603 |      - |   623781.7
+             spdlog_bench |      64 |     3.171 |   49539 | 30.902 |    20186.1
+            lwlog_bench * |     512 |     0.818 |    1597 |      - |   625916.9
+             spdlog_bench |     512 |    38.332 |   74866 | 46.860 |    13357.1
+            lwlog_bench * |    4096 |     7.457 |    1820 |      - |   549275.2
+             spdlog_bench |    4096 |   278.632 |   68025 | 37.365 |    14700.4
+            lwlog_bench * |    8192 |    23.543 |    2873 |      - |   347959.1
+             spdlog_bench |    8192 |   642.031 |   78372 | 27.271 |    12759.5
+===============================================================================
+```
