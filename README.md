@@ -1,3 +1,5 @@
+[![Code Quality Score](https://www.code-inspector.com/project/17218/score/svg)](https://frontend.code-inspector.com/project/17218/preferences)
+[![Code Grade](https://www.code-inspector.com/project/17218/status/svg)](https://frontend.code-inspector.com/project/17218/dashboard)
 # lwlog
 Very fast C++17/C++20 logging library
 # Install
