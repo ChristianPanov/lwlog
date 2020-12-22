@@ -206,7 +206,7 @@ namespace lwlog::sinks
 ```
 ## Convenience logger aliases
 In the file lwlog.h you can see several convenience aliases at your disposal. They are intended for ease of use, so I encourage you to use them instead of the more complex way of creating loggers directly through the logger class. They are predefined with default configurations, so unless you need more special functionality, stick to using them.
-```basic_logger``` - configured with a standard log mechanism(forward logging) and a standard sink storage(dynamic storage), not thread-safe.
+```basic_logger``` - configured with a standard log mechanism(forward logging) and a standard sink storage(dynamic storage), not thread-safe
 ```cpp
 #include "lwlog/lwlog.h"
 
@@ -217,8 +217,8 @@ int main()
 	return 0;
 }
 ```
-```console_color_logger``` - basic_logger with a colored sink to stdout
-```console_logger``` - basic_logger with an uncolored sink to stdout
+```console_color_logger``` - basic_logger with a colored sink to stdout\
+```console_logger``` - basic_logger with an uncolored sink to stdout\
 ```file_logger``` - basic_logger with a file sink
 ```cpp
 #include "lwlog/lwlog.h"
@@ -231,7 +231,7 @@ int main()
 	return 0;
 }
 ```
-```null_logger``` - A null logger is simply a logger with default configuration but without any sinks. Use it if you don't want compile time sinks and you are only interested in adding sinks later at runtime.
+```null_logger``` - A null logger is simply a logger with default configuration but without any sinks. Use it if you don't want compile time sinks and you are only interested in adding sinks later at runtime
 ```cpp
 auto logger = std::make_shared<lwlog::null_logger>("LOGGER");
 ```
@@ -252,14 +252,14 @@ int main()
 	return 0;
 }
 ```
-```default_log_policy``` - convenience alias for ```forward_log_policy```.\
-```forward_log_policy``` - your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink.
-```deferred_log_policy``` - as the name suggests, log calls are deffered for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency, but use it only if you are sure you don't need your logs immediately.
+```default_log_policy``` - convenience alias for ```forward_log_policy```\
+```forward_log_policy``` - your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink\
+```deferred_log_policy``` - as the name suggests, log calls are deffered for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency, but use it only if you are sure you don't need your logs immediately\
 ```default_storage_policy``` - convenienve alias for ```static_storage_policy```\
-```static_storage_policy``` - it configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks in at runtime, it is more lightweight than a dynamic sink storage.\
-```dynamic_storage_policy``` - it configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks.\
-```single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger.\
-```multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety.
+```static_storage_policy``` - it configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks in at runtime, it is more lightweight than a dynamic sink storage\
+```dynamic_storage_policy``` - it configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks\
+```single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger\
+```multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety
 ## Thread-safety
 Both the sinks and the logger classes expect a threading policy as a template parameter, which will determine whether they will be thread-safe or not.
 However, if you want to use the convenienve aliases I meantioned above, you need to keep in mind they are not thread-safe. However, all of them have a thread-safe analog whith the same name and an _mt suffix.\
