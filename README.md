@@ -1,4 +1,5 @@
-# lwlog
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/05f2384593ed49bbaa51fa2516793d99)](https://app.codacy.com/gh/ChristianPanov/lwlog?utm_source=github.com&utm_medium=referral&utm_content=ChristianPanov/lwlog&utm_campaign=Badge_Grade)
+
 Very fast C++17/C++20 logging library
 # Install
 ```
@@ -19,7 +20,27 @@ git clone --recursive https://github.com/ChristianPanov/lwlog
 - High extensibility - very easy to add your own types of sinks and loggers
 - Very configurable - it uses policy classes which you can just plug in based on your needs. At the same time, convenient easy-to-use predefined types are made for the
 people who want simplicity without too much configuration. Most of the time you will be just fine with using the predefined types.
-# Usage Examples
+# Benchmarks
+I haven't had the chance  to conduct proper benchmarks, but I have benchmarked against spdlog, as well as logging a single synchronous message.\
+A single synchronous log call (single-threaded, formatted, and colored) takes ~8μs
+#### lwlog (colored and formatted, syncrhonous) vs spdlog (formatted, syncrhonous) - Benchmarked with picobench(https://github.com/iboB/picobench)
+```
+===============================================================================
+   Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
+===============================================================================
+            lwlog_bench * |       8 |     0.017 |    2125 |      - |   470588.2
+             spdlog_bench |       8 |     0.487 |   60862 | 28.641 |    16430.5
+            lwlog_bench * |      64 |     0.103 |    1603 |      - |   623781.7
+             spdlog_bench |      64 |     3.171 |   49539 | 30.902 |    20186.1
+            lwlog_bench * |     512 |     0.818 |    1597 |      - |   625916.9
+             spdlog_bench |     512 |    38.332 |   74866 | 46.860 |    13357.1
+            lwlog_bench * |    4096 |     7.457 |    1820 |      - |   549275.2
+             spdlog_bench |    4096 |   278.632 |   68025 | 37.365 |    14700.4
+            lwlog_bench * |    8192 |    23.543 |    2873 |      - |   347959.1
+             spdlog_bench |    8192 |   642.031 |   78372 | 27.271 |    12759.5
+===============================================================================
+```
+# Usage
 ## Basic Usage
 ```cpp
 #include "lwlog/lwlog.h"
@@ -50,11 +71,10 @@ int main()
 {
 	auto console = std::make_shared<
 		lwlog::logger<
-			lwlog::static_storage_policy,
+			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_color_sink
-		>
-	>("CONSOLE");
+			lwlog::sinks::stdout_color_sink>
+			>("CONSOLE");
 	// or use the helper logger type aliases
 	auto console2 = std::make_shared<lwlog::console_color_logger>("CONSOLE");
 	
@@ -72,12 +92,11 @@ int main()
 {
 	auto logger = std::make_shared<
 		lwlog::logger<
-			lwlog::static_storage_policy,
+			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_color_sink, 
-      lwlog::sinks::file_sink
-		>
-	>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
+      			lwlog::sinks::file_sink>
+			>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 
 	logger->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^"); // Color attributes will be ignored for the file sink
 	logger->critical("First critical message"); // Log message will be distributed to both sinks
@@ -102,9 +121,8 @@ int main()
 		lwlog::logger<
 			lwlog::static_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_color_sink
-		>
-	>("COMBINED", file_sink);
+			lwlog::sinks::stdout_color_sink>
+			>("COMBINED", file_sink);
 
 	return 0;
 }
@@ -115,21 +133,8 @@ int main()
 
 int main()
 {
-	auto console = std::make_shared<
-		lwlog::logger<
-		lwlog::static_storage_policy,
-		lwlog::single_threaded_policy,
-		lwlog::sinks::stdout_color_sink
-		>
-	>("CONSOLE");
-  
-	auto file = std::make_shared<
-		lwlog::logger<
-		lwlog::static_storage_policy,
-		lwlog::single_threaded_policy,
-		lwlog::sinks::file_sink
-		>
-	>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
+	auto console = std::make_shared<lwlog::console_color_logger>("CONSOLE");
+	auto file = std::make_shared<lwlog::file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 	
 	//Pattern will be applied to all loggers present in the registry
 	lwlog::global::set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
@@ -137,25 +142,98 @@ int main()
 	return 0;
 }
 ```
-## Benchmarks
-I haven't had the chance  to conduct proper benchmarks, but I have benchmarked against spdlog, as well as logging a single synchronous message
-A single synchronous log call (single-threaded, formatted, and colored) takes ~8μs
+## Accessing a logger from the global registry by name
+```cpp
+#include "lwlog/lwlog.h"
 
-#### lwlog (colored and formatted) vs spdlog (formatted) - Benchmarked with picobench(https://github.com/iboB/picobench)
+int main()
+{
+	auto console = std::make_shared<lwlog::console_color_logger>("CONSOLE");
+	
+	lwlog::get("CONSOLE")->critical("First critical message");
+	
+	return 0;
+}
+```
+## Creating your own sink
+As I said and promissed, lwlog is extremely easy to extend. Let's give an example with sinks.\
+To create your own sink, all you have to do is to inherit from lwlog::interface::sink and implement a sink_it() function. That's it.\
+Example with an existing sink implementation
+```cpp
+#include "policy/sink_color_policy.h"
 
+namespace lwlog::sinks
+{
+	template<typename ThreadingPolicy>
+	class stdout_color_sink
+		: public sink<colored_policy, ThreadingPolicy>
+		, public details::stream
+	{
+	public:
+		stdout_color_sink() : details::stream(stdout) {};
+		void sink_it(std::string_view message) override
+		{
+			details::stream::write(message);
+		}
+	};
+}
 ```
-===============================================================================
-   Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
-===============================================================================
-            lwlog_bench * |       8 |     0.017 |    2125 |      - |   470588.2
-             spdlog_bench |       8 |     0.487 |   60862 | 28.641 |    16430.5
-            lwlog_bench * |      64 |     0.103 |    1603 |      - |   623781.7
-             spdlog_bench |      64 |     3.171 |   49539 | 30.902 |    20186.1
-            lwlog_bench * |     512 |     0.818 |    1597 |      - |   625916.9
-             spdlog_bench |     512 |    38.332 |   74866 | 46.860 |    13357.1
-            lwlog_bench * |    4096 |     7.457 |    1820 |      - |   549275.2
-             spdlog_bench |    4096 |   278.632 |   68025 | 37.365 |    14700.4
-            lwlog_bench * |    8192 |    23.543 |    2873 |      - |   347959.1
-             spdlog_bench |    8192 |   642.031 |   78372 | 27.271 |    12759.5
-===============================================================================
+Here we inherit from the sink base class, and configure it to be colored. Whether it's thread-safe or not is left up to the one using the sink.\
+The color policy could be either colored(```colored_policy```) or non-colored (```uncolored_policy```).\
+The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them.\
+We only need the sink_it() function, which is called as the actual log call. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.
+```cpp
+#include "policy/sink_color_policy.h"
+
+namespace lwlog::sinks
+{
+	template<typename ThreadingPolicy>
+	class new_custom_sink
+		: public sink<colored_policy, ThreadingPolicy>
+	{
+	public:
+		void sink_it(std::string_view message) override
+		{
+			// sink message to somewhere
+		}
+	};
+}
 ```
+## Logger configuration
+```cpp
+#include "lwlog/lwlog.h"
+
+int main()
+{
+	auto console = std::make_shared<
+		lwlog::logger<
+			lwlog::default_storage_policy,
+			lwlog::single_threaded_policy,
+			lwlog::sinks::stdout_color_sink>
+			>("CONSOLE");
+	
+	return 0;
+}
+```
+```default_storage_policy``` - convenienve alias for ```static_storage_policy```\
+```static_storage_policy``` - it configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks in at runtime, it is more lightweight than a dynamic sink storage.\
+```dynamic_storage_policy``` - it configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks.\
+```single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger.\
+```multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety.
+## Null logger
+```cpp
+auto logger = std::make_shared<lwlog::null_logger>("LOGGER");
+```
+A null logger is simply a logger with dynamic_storage_policy and a threading policy, without any sinks. Use it if you don't want compile time sinks and you are only interested in adding sinks later at runtime
+
+## Usage TIPS
+If you don't need to configure anything and if you want to have a simpler logger creation, you are always free to use the convenience aliases.\
+For example, you can create a logger simply by using one of these aliases:\
+```console_color_logger```- colored logger, sinks to stdout\
+```console_logger``` - non-colored logger, sinks to stdout\
+```file_logger``` - sinks to a file
+
+Or if you want thread-safe loggers, just use:\
+```console_color_logger_mt``` - colored thread-safe logger, sinks to stdout\
+```console_logger_mt``` - non-colored thread-safe logger, sinks to stdout\
+```file_logger_mt``` - thread-safe logger, sinks to file
