@@ -54,7 +54,7 @@ int main()
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_color_sink>
 			>("CONSOLE");
-	// or use the helper logger type aliases
+	// or use the convenience logger aliases
 	auto console2 = std::make_shared<lwlog::console_color_logger>("CONSOLE");
 	
 	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
