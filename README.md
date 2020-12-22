@@ -205,7 +205,7 @@ namespace lwlog::sinks
 }
 ```
 ## Convenience logger aliases
-In the file lwlog.h you can see several convenience aliases at your disposal. They are intended for ease of use, so I encourage you to use them instead of the more complex way of creating loggers directly through the logger class. They are predefined with default configurations, so unless you need more special functionality, stick to using them.
+In the file lwlog.h you can see several convenience aliases at your disposal. They are intended for ease of use, so I encourage you to use them instead of the more complex way of creating loggers directly through the logger class. They are predefined with default configurations, so unless you need more special functionality, stick to using them.\
 ```basic_logger``` - configured with a standard log mechanism(forward logging) and a standard sink storage(dynamic storage), not thread-safe
 ```cpp
 #include "lwlog/lwlog.h"
