@@ -22,10 +22,10 @@ git clone --recursive https://github.com/ChristianPanov/lwlog
 - High extensibility - very easy to add your own types of sinks and loggers
 - Very configurable - it uses policy classes which you can just plug in based on your needs. At the same time, convenient easy-to-use predefined types are made for the
 people who want simplicity without too much configuration. Most of the time you will be just fine with using the predefined types.
-## Benchmarks
+# Benchmarks
 I haven't had the chance  to conduct proper benchmarks, but I have benchmarked against spdlog, as well as logging a single synchronous message.\
 A single synchronous log call (single-threaded, formatted, and colored) takes ~8μs
-#### lwlog (colored and formatted, syncrhonous) vs spdlog (formatted, syncrhonous) - Benchmarked with picobench(https://github.com/iboB/picobench)
+### lwlog (colored and formatted, syncrhonous) vs spdlog (formatted, syncrhonous) - Benchmarked with picobench(https://github.com/iboB/picobench)
 
 ```
 ===============================================================================
