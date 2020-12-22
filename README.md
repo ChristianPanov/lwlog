@@ -41,7 +41,7 @@ A single synchronous log call (single-threaded, formatted, and colored) takes ~8
              spdlog_bench |    8192 |   642.031 |   78372 | 27.271 |    12759.5
 ===============================================================================
 ```
-# Usage Examples
+# Usage
 ## Basic Usage
 ```cpp
 #include "lwlog/lwlog.h"
