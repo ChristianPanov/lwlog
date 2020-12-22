@@ -1,6 +1,4 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/05f2384593ed49bbaa51fa2516793d99)](https://app.codacy.com/gh/ChristianPanov/lwlog?utm_source=github.com&utm_medium=referral&utm_content=ChristianPanov/lwlog&utm_campaign=Badge_Grade_Settings)
-[![Code Grade](https://www.code-inspector.com/project/17218/status/svg)](https://frontend.code-inspector.com/project/17218/dashboard)
-![Code Quality Score](https://www.code-inspector.com/project/17218/score/svg)
 # lwlog
 Very fast C++17/C++20 logging library
 # Install
