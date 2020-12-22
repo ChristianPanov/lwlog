@@ -162,6 +162,8 @@ As I said and promissed, lwlog is extremely easy to extend. Let's give an exampl
 To create your own sink, all you have to do is to inherit from lwlog::interface::sink and implement a sink_it() function. That's it.\
 Example with an existing sink implementation
 ```cpp
+#include "policy/sink_color_policy.h"
+
 namespace lwlog::sinks
 {
 	template<typename ThreadingPolicy>
@@ -183,6 +185,8 @@ The color policy could be either colored(```colored_policy```) or non-colored (`
 The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them.\
 We only need the sink_it() function, which is called as the actual log call. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.
 ```cpp
+#include "policy/sink_color_policy.h"
+
 namespace lwlog::sinks
 {
 	template<typename ThreadingPolicy>
