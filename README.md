@@ -71,6 +71,7 @@ int main()
 {
 	auto console = std::make_shared<
 		lwlog::logger<
+			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_color_sink>
@@ -92,6 +93,7 @@ int main()
 {
 	auto logger = std::make_shared<
 		lwlog::logger<
+			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_color_sink, 
@@ -119,6 +121,7 @@ int main()
 	auto logger_single_sink = std::make_shared<lwlog::null_logger>("SINGLE_SINK", console_sink);
 	auto logger_combined = std::make_shared<
 		lwlog::logger<
+			lwlog::default_log_policy,
 			lwlog::static_storage_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_color_sink>
@@ -207,6 +210,7 @@ int main()
 {
 	auto console = std::make_shared<
 		lwlog::logger<
+			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_color_sink>
