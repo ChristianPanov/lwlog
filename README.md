@@ -21,8 +21,8 @@ git clone --recursive https://github.com/ChristianPanov/lwlog
 - Very configurable - it uses policy classes which you can just plug in based on your needs. At the same time, convenient easy-to-use predefined types are made for the
 people who want simplicity without too much configuration. Most of the time you will be just fine with using the predefined types.
 # Benchmarks
-I haven't had the chance  to conduct proper benchmarks, but I have benchmarked against spdlog, as well as logging a single synchronous message (which is NOT proper benchmarking, it is ego boost in terms of performance).\
-A single synchronous log call (single-threaded, formatted, and colored) takes ~8μs
+I haven't had the chance  to conduct proper benchmarks, but I have benchmarked against spdlog, as well as logging a single synchronous message.\
+A single synchronous log call (single-threaded, formatted, and colored) takes ~8μs (That is NOT proper benchmarking, it is ego boost in terms of performance. A proper benchmark would be to benchmark a lots of logs and get the average of it, although lwlog is surprisingly very consistent with it's latency, so these ~8μs are actually an accurate measurment).
 #### lwlog (colored and formatted, syncrhonous) vs spdlog (formatted, syncrhonous) - Benchmarked with picobench(https://github.com/iboB/picobench)
 ```
 ===============================================================================
