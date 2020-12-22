@@ -223,6 +223,11 @@ int main()
 ```dynamic_storage_policy``` - it configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks.\
 ```single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger.\
 ```multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety.
+## Null logger
+```cpp
+auto logger = std::make_shared<lwlog::null_logger>("LOGGER");
+```
+A null logger is simply a logger with dynamic_storage_policy and a threading policy, without any sinks. Use it if you don't want compile time sinks and you are only interested in adding sinks later at runtime
 
 ## Usage TIPS
 If you don't need to configure anything and if you want to have a simpler logger creation, you are always free to use the convenience aliases.\
