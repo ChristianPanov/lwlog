@@ -9,16 +9,21 @@
 
 namespace lwlog
 {
-	using console_color_logger	= logger<default_storage_policy, single_threaded_policy, sinks::stdout_color_sink>;
-	using console_logger		= logger<default_storage_policy, single_threaded_policy, sinks::stdout_sink>;
-	using file_logger			= logger<default_storage_policy, single_threaded_policy, sinks::file_sink>;
+	template<template<typename> typename... Sinks>
+	using basic_logger = logger<default_log_policy, default_storage_policy, single_threaded_policy, Sinks...>;
+	template<template<typename> typename... Sinks>
+	using basic_logger_mt = logger<default_log_policy, default_storage_policy, multi_threaded_policy, Sinks...>;
 
-	using console_color_logger_mt	= logger<default_storage_policy, multi_threaded_policy, sinks::stdout_color_sink>;
-	using console_logger_mt			= logger<default_storage_policy, multi_threaded_policy, sinks::stdout_sink>;
-	using file_logger_mt			= logger<default_storage_policy, multi_threaded_policy, sinks::file_sink>;
+	using console_color_logger	= basic_logger<sinks::stdout_color_sink>;
+	using console_logger		= basic_logger<sinks::stdout_sink>;
+	using file_logger			= basic_logger<sinks::file_sink>;
 
-	using null_logger		= logger<default_storage_policy, single_threaded_policy>;
-	using null_logger_mt	= logger<default_storage_policy, multi_threaded_policy>;
+	using console_color_logger_mt	= basic_logger_mt<sinks::stdout_color_sink>;
+	using console_logger_mt			= basic_logger_mt<sinks::stdout_sink>;
+	using file_logger_mt			= basic_logger_mt<sinks::file_sink>;
+
+	using null_logger		= basic_logger<>;
+	using null_logger_mt	= basic_logger_mt<>;
 }
 
 namespace lwlog
@@ -33,7 +38,6 @@ namespace lwlog
 	primitives::logger_ptr get(std::string_view logger_name);
 
 	void set_pattern(std::string_view pattern);
-	void add_pattern_attribute(primitives::attribute_t attribute);
 	void set_level_filter(level t_level);
 	void info(std::string_view message);
 	void warning(std::string_view message);
@@ -45,6 +49,5 @@ namespace lwlog
 namespace lwlog::global
 {
 	void set_pattern(std::string_view pattern);
-	void add_pattern_attribute(primitives::attribute_t attribute);
 	void set_level_filter(level t_level);
 }

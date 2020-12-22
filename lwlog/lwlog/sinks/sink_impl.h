@@ -1,8 +1,6 @@
 #pragma once
 
 #include "sink.h"
-#include "level.h"
-#include "details/formatter/formatter.h"
 
 namespace lwlog::sinks
 {
@@ -18,13 +16,6 @@ namespace lwlog::sinks
 		Lock lock(m_mtx);
 		m_pattern = pattern;
 		ColorPolicy::process_color(m_pattern);
-	}
-
-	template<typename ColorPolicy, typename ThreadingPolicy>
-	void sink<ColorPolicy, ThreadingPolicy>::add_pattern_attribute(primitives::attribute_t attribute)
-	{
-		Lock lock(m_mtx);
-		details::formatter::insert_pattern_data({ attribute });
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>

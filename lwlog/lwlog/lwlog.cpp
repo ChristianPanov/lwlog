@@ -47,11 +47,6 @@ namespace lwlog
 		registry::instance().default_logger()->set_pattern(pattern);
 	}
 
-	void add_pattern_attribute(primitives::attribute_t attribute)
-	{
-		registry::instance().default_logger()->add_pattern_attribute(attribute);
-	}
-
 	void set_level_filter(level t_level)
 	{
 		registry::instance().default_logger()->set_level_filter(t_level);
@@ -90,14 +85,6 @@ namespace lwlog::global
 		registry::instance().apply_to_all([pattern](primitives::logger_ptr logger)
 			{
 				logger->set_pattern(pattern);
-			});
-	}
-
-	void add_pattern_attribute(primitives::attribute_t attribute)
-	{
-		registry::instance().apply_to_all([attribute](primitives::logger_ptr logger)
-			{
-				logger->add_pattern_attribute(attribute);
 			});
 	}
 

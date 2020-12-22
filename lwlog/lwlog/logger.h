@@ -6,14 +6,15 @@
 #include "primitives.h"
 #include "interface/logger_interface.h"
 #include "sinks/sink.h"
+#include "policy/log_policy.h"
 #include "policy/sink_storage_policy.h"
 #include "details/formatter/formatter.h"
 
 namespace lwlog
 {
-	template<template<typename...> typename StoragePolicy, typename ThreadingPolicy, 
-		template<typename> typename... Sinks>
-	class logger : public interface::logger, public Sinks<ThreadingPolicy>...
+	template<typename LogPolicy, template<typename...> typename StoragePolicy,
+		typename ThreadingPolicy, template<typename> typename... Sinks>
+	class logger : public interface::logger, public LogPolicy, public Sinks<ThreadingPolicy>...
 	{
 	private:
 		using StoragePolicyT = typename StoragePolicy<Sinks<ThreadingPolicy>...>;
@@ -34,7 +35,6 @@ namespace lwlog
 		void remove_sink(primitives::sink_ptr sink);
 
 		void set_pattern(std::string_view pattern) override;
-		void add_pattern_attribute(primitives::attribute_t attribute) override;
 		void set_level_filter(level t_level) override;
 
 		void info(std::string_view message) override;

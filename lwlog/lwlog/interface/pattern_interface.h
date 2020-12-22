@@ -11,6 +11,5 @@ namespace lwlog::interface
 
 	public:
 		virtual void set_pattern(std::string_view) = 0;
-		virtual void add_pattern_attribute(primitives::attribute_t) = 0;
 	};
 }
