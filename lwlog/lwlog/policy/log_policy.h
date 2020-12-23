@@ -10,13 +10,13 @@ namespace lwlog
 		void log(primitives::sink_ptr t_sink, std::string_view message, level t_level);
 		void init_attributes(std::string_view message, level t_level);
 		[[deprecated("Forward(default) logging doesn't implement that function")]] 
-		void sink_logs() {};
+		void sink_logs() {}
 	};
 
 	struct deferred_log_policy
 	{
 		void log(primitives::sink_ptr t_sink, std::string_view t_message, level t_level);
-		void init_attributes(std::string_view message, level t_level) {};
+		void init_attributes(std::string_view message, level t_level) {}
 		void sink_logs();
 
 	private:

@@ -11,7 +11,7 @@ namespace lwlog::sinks
 		, public details::stream
 	{
 	public:
-		stdout_sink() : details::stream(stdout) {};
+		stdout_sink() : details::stream(stdout) {}
 		void sink_it(std::string_view message) override
 		{
 			details::stream::write(message);
