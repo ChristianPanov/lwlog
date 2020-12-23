@@ -310,15 +310,15 @@ int main()
 			>("CONSOLE");
 	
 	console->critical("First critical message");
-	console->critical("Second critical message");
-	console->critical("Third critical message");
+	console->info("First info message");
+	console->debug("First debug message");
 	
 	console->sink_logs();
 	
 	return 0;
 }
 ```
-By calling sink_logs() you sink all the logs that are deferred for later use. If sink_logs() is called by a forward logging logger it will emit an error.
+By calling sink_logs() you sink all the logs that are deferred for later use to their respective sinks with their respective patterns. If sink_logs() is called by a forward logging logger it will emit a warning.
 ## Thread-safety
 Both the sinks and the logger classes expect a threading policy as a template parameter, which will determine whether they will be thread-safe or not.
 However, if you want to use the convenienve aliases I meantioned above, you need to keep in mind they are not thread-safe. However, all of them have a thread-safe analog whith the same name and an _mt suffix.\
