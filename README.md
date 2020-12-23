@@ -24,7 +24,7 @@ people who want simplicity without too much configuration. Most of the time you 
 I haven't had the chance  to conduct proper benchmarks, but I have benchmarked against spdlog, as well as logging a single synchronous message.\
 A single synchronous log call (single-threaded, formatted, and colored) takes ~8μs\
 (That is NOT proper benchmarking, it is ego boost in terms of performance. A proper benchmark would be to benchmark a lots of logs and get the average of it, although lwlog is surprisingly very consistent with it's latency, so these ~8μs are actually an accurate measurment).
-#### lwlog (colored and formatted, syncrhonous) vs spdlog (formatted, syncrhonous) - Benchmarked with picobench(https://github.com/iboB/picobench)
+#### lwlog (colored and formatted, synchronous) vs spdlog (formatted, synchronous) - Benchmarked with picobench(https://github.com/iboB/picobench)
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
@@ -39,6 +39,23 @@ A single synchronous log call (single-threaded, formatted, and colored) takes ~8
              spdlog_bench |    4096 |   278.632 |   68025 | 37.365 |    14700.4
             lwlog_bench * |    8192 |    23.543 |    2873 |      - |   347959.1
              spdlog_bench |    8192 |   642.031 |   78372 | 27.271 |    12759.5
+===============================================================================
+```
+#### lwlog (colored and formatted, synchronous) vs spdlog (colored and formatted, synchronous) - Benchmarked with picobench(https://github.com/iboB/picobench)
+```
+===============================================================================
+   Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
+===============================================================================
+            lwlog_bench * |       8 |     0.018 |    2312 |      - |   432432.4
+             spdlog_bench |       8 |     1.292 |  161512 | 69.843 |     6191.5
+            lwlog_bench * |      64 |     0.166 |    2590 |      - |   386007.2
+             spdlog_bench |      64 |    14.400 |  225006 | 86.854 |     4444.3
+            lwlog_bench * |     512 |     0.798 |    1559 |      - |   641362.9
+             spdlog_bench |     512 |   122.694 |  239636 |153.694 |     4173.0
+            lwlog_bench * |    4096 |     6.724 |    1641 |      - |   609134.0
+             spdlog_bench |    4096 |   906.999 |  221435 |134.884 |     4516.0
+            lwlog_bench * |    8192 |    14.081 |    1718 |      - |   581781.0
+             spdlog_bench |    8192 |  1845.808 |  225318 |131.086 |     4438.2
 ===============================================================================
 ```
 # Usage
