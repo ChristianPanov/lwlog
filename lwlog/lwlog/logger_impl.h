@@ -51,7 +51,7 @@ namespace lwlog
 		typename ThreadingPolicy, template<typename> typename... Sinks>
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::add_sink(primitives::sink_ptr sink)
 	{
-		m_sink_storage.emplace_back(sink);
+		m_sink_storage.push_back(sink);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
