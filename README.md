@@ -296,6 +296,8 @@ int main()
 ```single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger\
 ```multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety
 ## Deferred logging
+Deferred logging provides extremely low latency, however it's only applicable when you don't need the logs to be outputted imediately.
+The low latency comes from the fact that with deferred logging a log call doesn't sink and doesn't format anything, it only stores data. This data is sinked and formatted at a later stage, only when needed.
 ```cpp
 #include "lwlog/lwlog.h"
 
