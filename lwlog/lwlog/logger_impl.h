@@ -16,7 +16,7 @@ namespace lwlog
 		details::formatter::insert_pattern_data({ {"{logger_name}", "%n", m_name} });
 		registry::instance().register_logger(this);
 
-		m_sink_buffer = { sinks::sink_factory<Sinks<ThreadingPolicy>>::request(
+		m_sink_storage = { sinks::sink_factory<Sinks<ThreadingPolicy>>::request(
 			std::forward<SinkParams>(params)...
 		)... };
 	}
@@ -28,7 +28,7 @@ namespace lwlog
 		Iterator begin, Iterator end, SinkParams&&... params)
 		: logger{ name, params... }
 	{
-		m_sink_buffer.insert(m_sink_buffer.end(), begin, end);
+		m_sink_storage.insert(m_sink_buffer.end(), begin, end);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
@@ -51,18 +51,18 @@ namespace lwlog
 		typename ThreadingPolicy, template<typename> typename... Sinks>
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::add_sink(primitives::sink_ptr sink)
 	{
-		m_sink_buffer.emplace_back(sink);
+		m_sink_storage.emplace_back(sink);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename ThreadingPolicy, template<typename> typename... Sinks>
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::remove_sink(primitives::sink_ptr sink)
 	{
-		for (std::size_t i = 0; i < m_sink_buffer.size(); ++i)
+		for (std::size_t i = 0; i < m_sink_storage.size(); ++i)
 		{
-			if (m_sink_buffer[i] == sink)
+			if (m_sink_storage[i] == sink)
 			{
-				m_sink_buffer.erase(m_sink_buffer.begin() + i);
+				m_sink_storage.erase(m_sink_storage.begin() + i);
 			}
 		}
 	}
@@ -79,7 +79,7 @@ namespace lwlog
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::log(std::string_view message, level t_level)
 	{
 		LogPolicy::init_attributes(message, t_level);
-		for (const auto& sink : m_sink_buffer)
+		for (const auto& sink : m_sink_storage)
 		{
 			if (sink->should_sink(t_level))
 			{
@@ -92,7 +92,7 @@ namespace lwlog
 		typename ThreadingPolicy, template<typename> typename... Sinks>
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::set_pattern(std::string_view pattern)
 	{
-		for (const auto& sink : m_sink_buffer)
+		for (const auto& sink : m_sink_storage)
 		{ 
 			sink->set_pattern(pattern);
 		}
@@ -102,7 +102,7 @@ namespace lwlog
 		typename ThreadingPolicy, template<typename> typename... Sinks>
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::set_level_filter(level t_level)
 	{
-		for (const auto& sink : m_sink_buffer)
+		for (const auto& sink : m_sink_storage)
 		{
 			sink->set_level_filter(t_level);
 		}
@@ -155,6 +155,6 @@ namespace lwlog
 	typename logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::Storage&
 		logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::sinks()
 	{
-		return m_sink_buffer;
+		return m_sink_storage;
 	}
 }

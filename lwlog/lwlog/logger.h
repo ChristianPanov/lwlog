@@ -52,7 +52,7 @@ namespace lwlog
 
 	private:
 		std::string m_name;
-		Storage m_sink_buffer;
+		Storage m_sink_storage;
 	};
 }
 
