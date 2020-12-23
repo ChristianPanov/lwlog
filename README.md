@@ -24,21 +24,21 @@ people who want simplicity without too much configuration. Most of the time you 
 I haven't had the chance  to conduct proper benchmarks, but I have benchmarked against spdlog, as well as logging a single synchronous message.\
 A single synchronous log call (single-threaded, formatted, and colored) takes ~8μs\
 (That is NOT proper benchmarking, it is ego boost in terms of performance. A proper benchmark would be to benchmark a lots of logs and get the average of it, although lwlog is surprisingly very consistent with it's latency, so these ~8μs are actually an accurate measurment).
-#### lwlog (colored and formatted, synchronous) vs spdlog (formatted, synchronous) - Benchmarked with picobench(https://github.com/iboB/picobench)
+#### lwlog (formatted, synchronous) vs spdlog (formatted, synchronous) - Benchmarked with picobench(https://github.com/iboB/picobench)
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
 ===============================================================================
-            lwlog_bench * |       8 |     0.017 |    2125 |      - |   470588.2
-             spdlog_bench |       8 |     0.487 |   60862 | 28.641 |    16430.5
-            lwlog_bench * |      64 |     0.103 |    1603 |      - |   623781.7
-             spdlog_bench |      64 |     3.171 |   49539 | 30.902 |    20186.1
-            lwlog_bench * |     512 |     0.818 |    1597 |      - |   625916.9
-             spdlog_bench |     512 |    38.332 |   74866 | 46.860 |    13357.1
-            lwlog_bench * |    4096 |     7.457 |    1820 |      - |   549275.2
-             spdlog_bench |    4096 |   278.632 |   68025 | 37.365 |    14700.4
-            lwlog_bench * |    8192 |    23.543 |    2873 |      - |   347959.1
-             spdlog_bench |    8192 |   642.031 |   78372 | 27.271 |    12759.5
+            lwlog_bench * |       8 |     0.015 |    1862 |      - |   536912.8
+             spdlog_bench |       8 |     0.559 |   69900 | 37.530 |    14306.2
+            lwlog_bench * |      64 |     0.096 |    1500 |      - |   666666.7
+             spdlog_bench |      64 |     3.660 |   57181 | 38.121 |    17488.3
+            lwlog_bench * |     512 |     0.764 |    1492 |      - |   669981.7
+             spdlog_bench |     512 |   123.881 |  241955 |162.106 |     4133.0
+            lwlog_bench * |    4096 |     6.319 |    1542 |      - |   648224.3
+             spdlog_bench |    4096 |   331.658 |   80971 | 52.487 |    12350.1
+            lwlog_bench * |    8192 |    14.872 |    1815 |      - |   550844.9
+             spdlog_bench |    8192 |   846.085 |  103281 | 56.892 |     9682.2
 ===============================================================================
 ```
 #### lwlog (colored and formatted, synchronous) vs spdlog (colored and formatted, synchronous) - Benchmarked with picobench(https://github.com/iboB/picobench)
@@ -56,6 +56,23 @@ A single synchronous log call (single-threaded, formatted, and colored) takes ~8
              spdlog_bench |    4096 |   906.999 |  221435 |134.884 |     4516.0
             lwlog_bench * |    8192 |    14.081 |    1718 |      - |   581781.0
              spdlog_bench |    8192 |  1845.808 |  225318 |131.086 |     4438.2
+===============================================================================
+```
+#### lwlog (colored and formatted, synchronous) vs spdlog (formatted, synchronous) - Benchmarked with picobench(https://github.com/iboB/picobench)
+```
+===============================================================================
+   Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
+===============================================================================
+            lwlog_bench * |       8 |     0.017 |    2125 |      - |   470588.2
+             spdlog_bench |       8 |     0.487 |   60862 | 28.641 |    16430.5
+            lwlog_bench * |      64 |     0.103 |    1603 |      - |   623781.7
+             spdlog_bench |      64 |     3.171 |   49539 | 30.902 |    20186.1
+            lwlog_bench * |     512 |     0.818 |    1597 |      - |   625916.9
+             spdlog_bench |     512 |    38.332 |   74866 | 46.860 |    13357.1
+            lwlog_bench * |    4096 |     7.457 |    1820 |      - |   549275.2
+             spdlog_bench |    4096 |   278.632 |   68025 | 37.365 |    14700.4
+            lwlog_bench * |    8192 |    23.543 |    2873 |      - |   347959.1
+             spdlog_bench |    8192 |   642.031 |   78372 | 27.271 |    12759.5
 ===============================================================================
 ```
 # Usage
