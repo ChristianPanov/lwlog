@@ -6,7 +6,7 @@ Very fast C++17 logging library
 git clone --recursive https://github.com/ChristianPanov/lwlog
 ```
 # Features
-- Written in modern C++17/20
+- Written in modern C++17
 - Very fast non-async logging (async logging is yet to be implemented)
 - Verbosity levels
 - Various log sinks
