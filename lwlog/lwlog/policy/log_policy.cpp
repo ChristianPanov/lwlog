@@ -19,20 +19,12 @@ namespace lwlog
 			});
 	}
 
-	struct deferred_log_policy::log_info
-	{
-		primitives::sink_ptr sink;
-		std::string message;
-		std::string pattern;
-		level t_level;
-	};
-
 	void deferred_log_policy::log(primitives::sink_ptr t_sink, std::string_view t_message, level t_level)
 	{
 		storage.push_back({ t_sink, t_message.data(), t_sink->pattern(), t_level });
 	}
 
-	void deferred_log_policy::flush_logs()
+	void deferred_log_policy::sink_logs()
 	{
 		for (const auto& [sink, message, pattern, level] : storage)
 		{

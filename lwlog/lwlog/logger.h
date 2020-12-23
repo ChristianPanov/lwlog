@@ -14,7 +14,7 @@ namespace lwlog
 {
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename ThreadingPolicy, template<typename> typename... Sinks>
-	class logger : public interface::logger, public LogPolicy, public Sinks<ThreadingPolicy>...
+	class logger : public interface::logger, private LogPolicy, public Sinks<ThreadingPolicy>...
 	{
 	private:
 		using StoragePolicyT = typename StoragePolicy<Sinks<ThreadingPolicy>...>;
@@ -33,6 +33,7 @@ namespace lwlog
 	public:
 		void add_sink(primitives::sink_ptr sink);
 		void remove_sink(primitives::sink_ptr sink);
+		void sink_logs() override;
 
 		void set_pattern(std::string_view pattern) override;
 		void set_level_filter(level t_level) override;

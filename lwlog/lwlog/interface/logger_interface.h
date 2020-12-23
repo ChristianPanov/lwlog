@@ -10,6 +10,7 @@ namespace lwlog::interface
 	{
 	public:
 		virtual ~logger() = default;
+		virtual void sink_logs() = 0;
 		virtual std::string name() const = 0;
 
 	protected:

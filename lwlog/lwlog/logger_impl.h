@@ -69,6 +69,13 @@ namespace lwlog
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename ThreadingPolicy, template<typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::sink_logs()
+	{
+		LogPolicy::sink_logs();
+	}
+
+	template<typename LogPolicy, template<typename...> typename StoragePolicy,
+		typename ThreadingPolicy, template<typename> typename... Sinks>
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::log(std::string_view message, level t_level)
 	{
 		LogPolicy::init_attributes(message, t_level);
