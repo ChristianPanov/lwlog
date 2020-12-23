@@ -125,7 +125,7 @@ int main()
 
 int main()
 {
-	auto console_sink = std::make_shared<lwlog::sinks::stdout_color_sink<lwlog::single_threaded_policy>>();
+	auto console_sink = std::make_shared<lwlog::sinks::stdout_sink<lwlog::single_threaded_policy>>();
 	auto file_sink = std::make_shared<lwlog::sinks::file_sink<lwlog::single_threaded_policy>>("C:/Users/user/Desktop/LogFolder/LOGS.txt");
 	lwlog::primitives::sink_list sinks = { console_sink, file_sink };
 
@@ -137,7 +137,7 @@ int main()
 			lwlog::default_log_policy,
 			lwlog::static_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_color_sink>
+			lwlog::sinks::stdout_sink>
 			>("COMBINED", file_sink);
 
 	return 0;
@@ -281,7 +281,7 @@ int main()
 			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_color_sink>
+			lwlog::sinks::stdout_sink>
 			>("CONSOLE");
 	
 	return 0;
@@ -295,6 +295,30 @@ int main()
 ```dynamic_storage_policy``` - it configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks\
 ```single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger\
 ```multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety
+## Deferred logging
+```cpp
+#include "lwlog/lwlog.h"
+
+int main()
+{
+	auto console = std::make_shared<
+		lwlog::logger<
+			lwlog::deferred_log_policy,
+			lwlog::default_storage_policy,
+			lwlog::single_threaded_policy,
+			lwlog::sinks::stdout_sink>
+			>("CONSOLE");
+	
+	console->critical("First critical message");
+	console->critical("Second critical message");
+	console->critical("Third critical message");
+	
+	console->sink_logs();
+	
+	return 0;
+}
+```
+By calling sink_logs() you sink all the logs that are deferred for later use. If sink_logs() is called by a forward logging logger it will emit an error.
 ## Thread-safety
 Both the sinks and the logger classes expect a threading policy as a template parameter, which will determine whether they will be thread-safe or not.
 However, if you want to use the convenienve aliases I meantioned above, you need to keep in mind they are not thread-safe. However, all of them have a thread-safe analog whith the same name and an _mt suffix.\
