@@ -210,7 +210,7 @@ namespace lwlog::sinks
 		, public details::stream
 	{
 	public:
-		stdout_color_sink() : details::stream(stdout) {};
+		stdout_color_sink() : details::stream(stdout) {}
 		void sink_it(std::string_view message) override
 		{
 			details::stream::write(message);
