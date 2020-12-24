@@ -1,5 +1,4 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/05f2384593ed49bbaa51fa2516793d99)](https://app.codacy.com/gh/ChristianPanov/lwlog?utm_source=github.com&utm_medium=referral&utm_content=ChristianPanov/lwlog&utm_campaign=Badge_Grade)
-[![License Badge](https://img.shields.io/github/license/ChristianPanov/lwlog)](https://github.com/ChristianPanov/lwlog/blob/master/LICENSE)\
 Very fast C++17 logging library
 # Install
 ```
