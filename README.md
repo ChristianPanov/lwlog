@@ -137,6 +137,18 @@ int main()
 ```cpp
 auto logger = std::make_shared<lwlog::null_logger>("LOGGER");
 ```
+## Formatting
+Formatting is handled in a very simple way. You set a pattern by which the log messages will be formatted and then the pattern is compiled.
+Now, how is it compiled exactly?\
+The formatter works with attributes. Each attribute has a verbose key, a shortened key, and a value.\
+```{"verbose", "shortened", "value"}```
+Whenever you use either verbose or shortened in the pattern, it will get replaced with value. Why is the key separated in verbose and shortened? Because of convenience.
+For example, let's take an existing attribute from the library.\
+```{"{time}", "%T", datetime::get_time()}```
+Both {time} and %T result into the current time. Some people are more comfortable with the first, more verbose version, others with the shorter one, the second.\
+When you set the pattern via the set_pattern() function, all color data, if any, is processed in place. Color processing doesn't need to happen in the log function call site, since it's non-dependant on log calls. That benefits performance a lot.\
+Then, when a log function is called, all datetime related attributes are processed, as well as all the custom attributes(attributes owned by the logger class itself, or ones that the user has created, everything that doesn't fall into the color or datetime category).\
+That's how a pattern is compiled currently. A better pattern compilation mechanism is yet to be implemented.
 ## Multiple sinks (compile-time)
 ```cpp
 #include "lwlog/lwlog.h"
