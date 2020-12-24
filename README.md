@@ -21,7 +21,7 @@ git clone --recursive https://github.com/ChristianPanov/lwlog
 - Very configurable - it uses policy classes which you can just plug in based on your needs. At the same time, convenient easy-to-use predefined types are made for the
 people who want simplicity without too much configuration. Most of the time you will be just fine with using the predefined types.
 # To be implemented
-- Fmt-like formatting
+- Fmt-like formatting(As soon as std::format gets implemented in MSVC, fmt-like formatting will be implemented in lwlog)
 - Portable colors
 - Meta-logging (also known as structured logging)
 - Asyncrhonous logging
