@@ -1,15 +1,18 @@
 #pragma once
 
-#include "level_filter_interface.h"
-#include "pattern_interface.h"
-
 namespace lwlog::interface
 {
-	class sink : public interface::level_filter, public interface::pattern
+	class sink
 	{
 	public:
 		virtual ~sink() = default;
+
+	public:
 		virtual void sink_it(std::string_view) = 0;
+
+	public:
+		virtual void set_pattern(std::string_view) = 0;
+		virtual void set_level_filter(level) = 0;
 		virtual bool should_sink(level) const = 0;
 		virtual std::string pattern() const = 0;
 	};

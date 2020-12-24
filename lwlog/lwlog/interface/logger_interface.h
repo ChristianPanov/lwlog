@@ -1,16 +1,24 @@
 #pragma once
 
-#include "log_level_interface.h"
-#include "level_filter_interface.h"
-#include "pattern_interface.h"
-
 namespace lwlog::interface
 {
-	class logger : public log_level, public level_filter, public pattern
+	class logger
 	{
 	public:
 		virtual ~logger() = default;
+
+	public:
 		virtual void sink_logs() = 0;
+
+		virtual void set_pattern(std::string_view) = 0;
+		virtual void set_level_filter(level) = 0;
+
+		virtual void info(std::string_view) = 0;
+		virtual void warning(std::string_view) = 0;
+		virtual void error(std::string_view) = 0;
+		virtual void critical(std::string_view) = 0;
+		virtual void debug(std::string_view) = 0;
+
 		virtual std::string name() const = 0;
 
 	protected:
