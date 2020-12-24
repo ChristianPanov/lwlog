@@ -234,7 +234,7 @@ int main()
 ```
 ## Creating your own sink
 As I said and promissed, lwlog is extremely easy to extend. Let's give an example with sinks.\
-To create your own sink, all you have to do is to inherit from lwlog::interface::sink and implement a sink_it() function. That's it.\
+To create your own sink, all you have to do is to inherit from lwlog::interface::sink and implement a sink_it() function. That's it.
 #### Example with an existing sink implementation
 ```cpp
 #include "policy/sink_color_policy.h"
@@ -304,6 +304,7 @@ int main()
 ## Deferred logging
 Deferred logging provides extremely low latency, however it's only applicable when you don't need the logs to be outputted imediately.\
 The low latency comes from the fact that with deferred logging a log call doesn't sink and doesn't format anything, it only stores data. This data is sinked and formatted at a later stage, only when needed.
+There is one problem with it - all log information will be lost if there is an application crash and you haven't sinked the deferred logs. On crash, all deferred logs should be automatically sinked, that's the solution that I will be working on.
 ```cpp
 #include "lwlog/lwlog.h"
 
