@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "details/formatter/formatter.h"
+#include "lwlog/details/formatter/formatter.h"
 
 namespace lwlog
 {

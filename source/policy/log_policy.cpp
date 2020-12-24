@@ -1,6 +1,6 @@
-#include "log_policy.h"
+#include "lwlog/policy/log_policy.h"
 
-#include "details/formatter/formatter.h"
+#include "lwlog/details/formatter/formatter.h"
 
 namespace lwlog
 {

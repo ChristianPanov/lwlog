@@ -1,4 +1,4 @@
-#include "lwlog.h"
+#include "lwlog/lwlog.h"
 
 namespace lwlog
 {

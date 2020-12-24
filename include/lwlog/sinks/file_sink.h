@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "sink.h"
-#include "details/file_helper.h"
+#include "lwlog/sinks/sink.h"
+#include "lwlog/details/file_helper.h"
 
 namespace lwlog::sinks
 {

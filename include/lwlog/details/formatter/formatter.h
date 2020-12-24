@@ -3,8 +3,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "formatter_primitives.h"
-#include "fwd.h"
+#include "lwlog/details/formatter/formatter_primitives.h"
+#include "lwlog/fwd.h"
 
 namespace lwlog::details
 {

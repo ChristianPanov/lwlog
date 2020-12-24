@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fwd.h"
+#include "lwlog/fwd.h"
 
 namespace lwlog::primitives
 {

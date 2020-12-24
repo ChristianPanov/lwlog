@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "fwd.h"
+#include "lwlog/fwd.h"
 
 namespace lwlog
 {

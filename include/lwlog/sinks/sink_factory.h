@@ -3,7 +3,7 @@
 #include <type_traits>
 #include <memory>
 
-#include "fwd.h"
+#include "lwlog/fwd.h"
 
 namespace lwlog::sinks
 {

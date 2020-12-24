@@ -3,7 +3,7 @@
 #include <array>
 #include <vector>
 
-#include "primitives.h"
+#include "lwlog/primitives.h"
 
 namespace lwlog
 {

@@ -1,6 +1,6 @@
-#include "registry.h"
-#include "logger.h"
-#include "sinks/stdout_color_sink.h"
+#include "lwlog/registry.h"
+#include "lwlog/logger.h"
+#include "lwlog/sinks/stdout_color_sink.h"
 
 namespace lwlog
 {

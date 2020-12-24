@@ -1,7 +1,7 @@
 #pragma once
 
-#include "sinks/sink.h"
-#include "primitives.h"
+#include "lwlog/sinks/sink.h"
+#include "lwlog/primitives.h"
 
 namespace lwlog
 {

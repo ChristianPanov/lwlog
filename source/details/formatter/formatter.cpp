@@ -1,5 +1,5 @@
-#include "formatter.h"
-#include "formatter_data.h"
+#include "lwlog/details/formatter/formatter.h"
+#include "lwlog/details/formatter/formatter_data.h"
 
 namespace lwlog::details
 {
