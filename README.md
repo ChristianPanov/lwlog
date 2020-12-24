@@ -20,6 +20,7 @@ git clone --recursive https://github.com/ChristianPanov/lwlog
 - Very configurable - it uses policy classes which you can just plug in based on your needs. At the same time, convenient easy-to-use predefined types are made for the
 people who want simplicity without too much configuration. Most of the time you will be just fine with using the predefined types.
 # To be implemented
+- File sink is not very performant yet - to be reimplemented in a performant way
 - Fmt-like formatting(As soon as std::format gets implemented in MSVC, fmt-like formatting will be implemented in lwlog)
 - Portable colors
 - Meta-logging (also known as structured logging)
@@ -111,7 +112,8 @@ In the file lwlog.h you can see several convenience aliases at your disposal. Th
 
 int main()
 {
-	auto logger = std::make_shared<lwlog::basic_logger<sinks::stdout_color_sink>>("CONSOLE"); // logger to stdout with default configuration
+ 	// logger to stdout with default configuration
+	auto logger = std::make_shared<lwlog::basic_logger<sinks::stdout_color_sink>>("CONSOLE");
 	
 	return 0;
 }
@@ -149,7 +151,8 @@ int main()
       			lwlog::sinks::file_sink>
 			>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 
-	logger->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^"); // Color attributes will be ignored for the file sink
+	// Color attributes will be ignored for the file sink
+	logger->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
 	logger->critical("First critical message"); // Log message will be distributed to both sinks
 	
 	return 0;
