@@ -74,7 +74,8 @@ set(lwlog_include_directory
         "${CMAKE_INSTALL_INCLUDEDIR}/${lwlog_directory}")
 
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
-        DESTINATION "${lwlog_include_directory}")
+        DESTINATION "${lwlog_include_directory}"
+        COMPONENT lwlog_Development)
 
 install(TARGETS lwlog
         EXPORT lwlogTargets
