@@ -79,7 +79,7 @@ install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
 install(TARGETS lwlog
         EXPORT lwlogTargets
         ARCHIVE #
-        DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/${lwlog_directory}"
         COMPONENT lwlog_Development
         INCLUDES #
         DESTINATION "${lwlog_include_directory}")
