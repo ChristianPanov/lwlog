@@ -77,22 +77,3 @@ namespace lwlog
 		registry::instance().default_logger()->debug(message);
 	}
 }
-
-namespace lwlog::global
-{
-	void set_pattern(std::string_view pattern)
-	{
-		registry::instance().apply_to_all([pattern](primitives::logger_ptr logger)
-			{
-				logger->set_pattern(pattern);
-			});
-	}
-
-	void set_level_filter(level t_level)
-	{
-		registry::instance().apply_to_all([t_level](primitives::logger_ptr logger)
-			{
-				logger->set_level_filter(t_level);
-			});
-	}
-}

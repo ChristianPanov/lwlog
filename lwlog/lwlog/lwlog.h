@@ -14,16 +14,16 @@ namespace lwlog
 	template<template<typename> typename... Sinks>
 	using basic_logger_mt = logger<default_log_policy, default_storage_policy, multi_threaded_policy, Sinks...>;
 
-	using console_color_logger	= basic_logger<sinks::stdout_color_sink>;
-	using console_logger		= basic_logger<sinks::stdout_sink>;
-	using file_logger			= basic_logger<sinks::file_sink>;
+	using console_color_logger = basic_logger<sinks::stdout_color_sink>;
+	using console_logger = basic_logger<sinks::stdout_sink>;
+	using file_logger = basic_logger<sinks::file_sink>;
 
-	using console_color_logger_mt	= basic_logger_mt<sinks::stdout_color_sink>;
-	using console_logger_mt			= basic_logger_mt<sinks::stdout_sink>;
-	using file_logger_mt			= basic_logger_mt<sinks::file_sink>;
+	using console_color_logger_mt = basic_logger_mt<sinks::stdout_color_sink>;
+	using console_logger_mt	= basic_logger_mt<sinks::stdout_sink>;
+	using file_logger_mt = basic_logger_mt<sinks::file_sink>;
 
-	using null_logger		= basic_logger<>;
-	using null_logger_mt	= basic_logger_mt<>;
+	using null_logger = basic_logger<>;
+	using null_logger_mt = basic_logger_mt<>;
 }
 
 namespace lwlog
@@ -44,12 +44,6 @@ namespace lwlog
 	void error(std::string_view message);
 	void critical(std::string_view message);
 	void debug(std::string_view message);
-}
-
-namespace lwlog::global
-{
-	void set_pattern(std::string_view pattern);
-	void set_level_filter(level t_level);
 }
 
 #ifndef LWLOG_DISABLE
