@@ -240,7 +240,7 @@ int main()
 }
 ```
 ## Global operations
-There are two convenient global operations. set_pattern() and set_level_filter(). Make no mistake from the name, they are not global because they process the global logger, they are global because they are processed for each logger that's present in the registry.
+In order to apply a logger function to all loggers present in the registry, you can use the function apply_to_all in such manner
 ```cpp
 #include "lwlog/lwlog.h"
 
@@ -250,7 +250,10 @@ int main()
 	auto file = std::make_shared<lwlog::file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 	
 	//Pattern will be applied to all loggers present in the registry
-	lwlog::global::set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	lwlog::apply_to_all([](lwlog::primitives::logger_ptr logger)
+		{
+			logger->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^ TEXT");
+		});
 	
 	return 0;
 }
