@@ -1,5 +1,5 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/05f2384593ed49bbaa51fa2516793d99)](https://app.codacy.com/gh/ChristianPanov/lwlog?utm_source=github.com&utm_medium=referral&utm_content=ChristianPanov/lwlog&utm_campaign=Badge_Grade)
-
+[![CodeFactor](https://www.codefactor.io/repository/github/christianpanov/lwlog/badge)](https://www.codefactor.io/repository/github/christianpanov/lwlog)\
 Very fast C++17 logging library
 # Install
 ```
@@ -20,6 +20,13 @@ git clone --recursive https://github.com/ChristianPanov/lwlog
 - High extensibility - very easy to add your own types of sinks and loggers
 - Very configurable - it uses policy classes which you can just plug in based on your needs. At the same time, convenient easy-to-use predefined types are made for the
 people who want simplicity without too much configuration. Most of the time you will be just fine with using the predefined types.
+# To be implemented
+- File sink is not very performant yet - to be reimplemented in a performant way
+- Fmt-like formatting(As soon as std::format gets implemented in MSVC, fmt-like formatting will be implemented in lwlog)
+- Portable colors
+- Meta-logging (also known as structured logging)
+- Asyncrhonous logging
+- Unicode support
 # Benchmarks
 I haven't had the chance  to conduct proper benchmarks, but I have benchmarked against spdlog, as well as logging a single synchronous message.\
 A single synchronous log call (single-threaded, formatted, and colored) takes ~8μs\
@@ -92,6 +99,7 @@ int main()
 	// or use the convenience logger aliases
 	auto console2 = std::make_shared<lwlog::console_color_logger>("CONSOLE");
 	
+	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
 	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
 	console->critical("First critical message");
 	
@@ -106,7 +114,8 @@ In the file lwlog.h you can see several convenience aliases at your disposal. Th
 
 int main()
 {
-	auto logger = std::make_shared<lwlog::basic_logger<sinks::stdout_color_sink>>("CONSOLE"); // logger to stdout with default configuration
+ 	// logger to stdout with default configuration
+	auto logger = std::make_shared<lwlog::basic_logger<sinks::stdout_color_sink>>("CONSOLE");
 	
 	return 0;
 }
@@ -129,6 +138,38 @@ int main()
 ```cpp
 auto logger = std::make_shared<lwlog::null_logger>("LOGGER");
 ```
+## Switching off logging
+If you want to be able to turn off logging completely, you can use the preprocessor directives.
+```cpp
+#LWLOG_DISABLE
+#LWLOG_ERROR_OFF
+#include "lwlog/lwlog.h"
+
+int main()
+{
+	LWLOG_SET_PATTERN("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	LWLOG_SET_LEVEL_FILTER(lwlog::sink_level::error | lwlog::sink_level::critical);
+	LWLOG_ERROR("Error message");
+	return 0;
+}
+```
+These directives use the default loggger and are present in the lwlog.h file.\
+They will log unless you disable logging with LWLOG_DISABLE(should always be at the very top of the file), or you switch off a specific logging level.\
+Levels can be switched off at runtime as well, just by using the LWLOG_SET_LEVEL_FILTER directive.\
+You can also set a pattern and set a filter for log levels.\
+If logging is disabled, the directives expand to nothing.
+## Formatting
+Formatting is handled in a very simple way. You set a pattern by which the log messages will be formatted and then the pattern is compiled.
+Now, how is it compiled exactly?\
+The formatter works with attributes. Each attribute has a verbose key, a shortened key, and a value.\
+```{"verbose", "shortened", "value"}```
+Whenever you use either verbose or shortened in the pattern, it will get replaced with value. Why is the key separated in verbose and shortened? Because of convenience.
+For example, let's take an existing attribute from the library.\
+```{"{time}", "%T", datetime::get_time()}```
+Both {time} and %T result into the current time. Some people are more comfortable with the first, more verbose version, others with the shorter one, the second.\
+When you set the pattern via the set_pattern() function, all color data, if any, is processed in place. Color processing doesn't need to happen in the log function call site, since it's non-dependant on log calls. That benefits performance a lot.\
+Then, when a log function is called, all datetime related attributes are processed, as well as all the custom attributes(attributes owned by the logger class itself, or ones that the user has created, everything that doesn't fall into the color or datetime category).\
+That's how a pattern is compiled currently. A better pattern compilation mechanism is yet to be implemented.
 ## Multiple sinks (compile-time)
 ```cpp
 #include "lwlog/lwlog.h"
@@ -144,7 +185,8 @@ int main()
       			lwlog::sinks::file_sink>
 			>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 
-	logger->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^"); // Color attributes will be ignored for the file sink
+	// Color attributes will be ignored for the file sink
+	logger->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
 	logger->critical("First critical message"); // Log message will be distributed to both sinks
 	
 	return 0;
@@ -228,7 +270,7 @@ int main()
 ```
 ## Creating your own sink
 As I said and promissed, lwlog is extremely easy to extend. Let's give an example with sinks.\
-To create your own sink, all you have to do is to inherit from lwlog::interface::sink and implement a sink_it() function. That's it.\
+To create your own sink, all you have to do is to inherit from lwlog::interface::sink and implement a sink_it() function. That's it.
 #### Example with an existing sink implementation
 ```cpp
 #include "policy/sink_color_policy.h"
@@ -298,6 +340,7 @@ int main()
 ## Deferred logging
 Deferred logging provides extremely low latency, however it's only applicable when you don't need the logs to be outputted imediately.\
 The low latency comes from the fact that with deferred logging a log call doesn't sink and doesn't format anything, it only stores data. This data is sinked and formatted at a later stage, only when needed.
+There is one problem with it - all log information will be lost if there is an application crash and you haven't sinked the deferred logs. On crash, all deferred logs should be automatically sinked, that's the solution that I will be working on.
 ```cpp
 #include "lwlog/lwlog.h"
 
