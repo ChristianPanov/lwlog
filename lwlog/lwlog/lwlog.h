@@ -51,3 +51,52 @@ namespace lwlog::global
 	void set_pattern(std::string_view pattern);
 	void set_level_filter(level t_level);
 }
+
+#ifndef LWLOG_DISABLE
+#define LWLOG_SET_PATTERN(pattern) \
+lwlog::set_pattern(pattern)
+#else
+#define LWLOG_SET_PATTERN(pattern)
+#endif
+
+#ifndef LWLOG_DISABLE
+#define LWLOG_SET_LEVEL_FILTER(...) \
+lwlog::set_level_filter(__VA__ARGS)
+#else
+#define LWLOG_SET_LEVEL_FILTER(...)
+#endif
+
+#ifndef LWLOG_DISABLE && LWLOG_INFO_OFF
+#define LWLOG_INFO(...)	\
+lwlog::info(__VA_ARGS__)
+#else
+#define LWLOG_INFO(...)
+#endif
+
+#ifndef LWLOG_DISABLE && LWLOG_WARNING_OFF
+#define LWLOG_WARNING(...) \
+lwlog::warning(__VA_ARGS__)
+#else
+#define LWLOG_WARNING(...)
+#endif
+
+#ifndef LWLOG_DISABLE && LWLOG_ERROR_OFF
+#define LWLOG_ERROR(...) \
+lwlog::error(__VA_ARGS__)
+#else
+#define LWLOG_ERROR(...)
+#endif
+
+#ifndef LWLOG_DISABLE && LWLOG_CRITICAL_OFF
+#define LWLOG_CRITICAL(...) \
+lwlog::critical(__VA_ARGS__)
+#else
+#define LWLOG_CRITICAL(...)
+#endif
+
+#ifndef LWLOG_DISABLE && LWLOG_DEBUG_OFF
+#define LWLOG_DEBUG(...) \
+lwlog::debug(__VA_ARGS__)
+#else
+#define LWLOG_DEBUG(...)
+#endif
