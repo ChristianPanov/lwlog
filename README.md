@@ -99,6 +99,7 @@ int main()
 	// or use the convenience logger aliases
 	auto console2 = std::make_shared<lwlog::console_color_logger>("CONSOLE");
 	
+	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
 	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
 	console->critical("First critical message");
 	
@@ -137,6 +138,26 @@ int main()
 ```cpp
 auto logger = std::make_shared<lwlog::null_logger>("LOGGER");
 ```
+## Switching off logging
+If you want to be able to turn off logging completely, you can use the preprocessor directives.
+```cpp
+#LWLOG_DISABLE
+#LWLOG_ERROR_OFF
+#include "lwlog/lwlog.h"
+
+int main()
+{
+	LWLOG_SET_PATTERN("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	LWLOG_SET_LEVEL_FILTER(lwlog::sink_level::error | lwlog::sink_level::critical);
+	LWLOG_ERROR("Error message");
+	return 0;
+}
+```
+These directives use the default loggger and are present in the lwlog.h file.\
+They will log unless you disable logging with LWLOG_DISABLE(should always be at the very top of the file), or you switch off a specific logging level.\
+Levels can be switched off at runtime as well, just by using the LWLOG_SET_LEVEL_FILTER directive.\
+You can also set a pattern and set a filter for log levels.\
+If logging is disabled, the directives expand to nothing.
 ## Formatting
 Formatting is handled in a very simple way. You set a pattern by which the log messages will be formatted and then the pattern is compiled.
 Now, how is it compiled exactly?\
