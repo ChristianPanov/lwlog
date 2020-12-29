@@ -216,8 +216,8 @@ int main()
 	return 0;
 }
 ```
-## Global logger
-The global logger is a logger object delievered to you by the library itself. It's registered in the logger registry, it has default configuration and is NOT thread-safe, sinks to stdout. It's convenient if you just need the logging functionality, but don't want to create loggers by yourself. You can access it from everywhere in your application.
+## Default logger
+The default logger is a logger object delievered to you by the library itself. It's registered in the logger registry, it's global, it has default configuration and is NOT thread-safe, sinks to stdout. It's convenient if you just need the logging functionality, but don't want to create loggers by yourself. You can access it from everywhere in your application.
 ```cpp
 #include "lwlog/lwlog.h"
 
