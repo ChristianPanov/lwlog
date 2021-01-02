@@ -107,7 +107,9 @@ int main()
 }
 ```
 ## Convenience logger aliases
-In the file lwlog.h you can see several convenience aliases at your disposal. They are intended for ease of use, so I encourage you to use them instead of the more complex way of creating loggers directly through the logger class. They are predefined with default configurations, so unless you need more special functionality, stick to using them.\
+In the file lwlog.h you can see several convenience aliases at your disposal.\
+They are intended for ease of use, so I encourage you to use them instead of the more complex way of creating loggers directly through the logger class.\
+They are predefined with default configurations, so unless you need more special functionality, stick to using them.\
 ```basic_logger``` - configured with a standard log mechanism(forward logging) and a standard sink storage(dynamic storage), not thread-safe
 ```cpp
 #include "lwlog/lwlog.h"
@@ -159,17 +161,20 @@ Levels can be switched off at runtime as well, just by using the LWLOG_SET_LEVEL
 You can also set a pattern and set a filter for log levels.\
 If logging is disabled, the directives expand to nothing.
 ## Formatting
-Formatting is handled in a very simple way. You set a pattern by which the log messages will be formatted and then the pattern is compiled.
+Formatting is handled in a very simple way. You set a pattern by which the log messages will be formatted and then the pattern is compiled.\
 Now, how is it compiled exactly?\
 The formatter works with attributes. Each attribute has a verbose key, a shortened key, and a value.\
 ```{"verbose", "shortened", "value"}```
-Whenever you use either verbose or shortened in the pattern, it will get replaced with value. Why is the key separated in verbose and shortened? Because of convenience.
+Whenever you use either verbose or shortened in the pattern, it will get replaced with value.\
+Why is the key separated in verbose and shortened? Because of convenience.\
 For example, let's take an existing attribute from the library.\
 ```{"{time}", "%T", datetime::get_time()}```
 Both {time} and %T result into the current time. Some people are more comfortable with the first, more verbose version, others with the shorter one, the second.\
-When you set the pattern via the set_pattern() function, all color data, if any, is processed in place. Color processing doesn't need to happen in the log function call site, since it's non-dependant on log calls. That benefits performance a lot.\
+When you set the pattern via the set_pattern() function, all color data, if any, is processed in place.\
+Color processing doesn't need to happen in the log function call site, since it's non-dependant on log calls. That benefits performance a lot.\
 Then, when a log function is called, all datetime related attributes are processed, as well as all the custom attributes(attributes owned by the logger class itself, or ones that the user has created, everything that doesn't fall into the color or datetime category).\
-That's how a pattern is compiled currently. A better pattern compilation mechanism is yet to be implemented.
+That's how a pattern is compiled currently.\
+A better pattern compilation mechanism is yet to be implemented.
 ## Multiple sinks (compile-time)
 ```cpp
 #include "lwlog/lwlog.h"
@@ -216,8 +221,10 @@ int main()
 	return 0;
 }
 ```
-## Global logger
-The global logger is a logger object delievered to you by the library itself. It's registered in the logger registry, it has default configuration and is NOT thread-safe, sinks to stdout. It's convenient if you just need the logging functionality, but don't want to create loggers by yourself. You can access it from everywhere in your application.
+## Default logger
+The default logger is a logger object delievered to you by the library itself.\
+It's registered in the logger registry, it's global, it has default configuration and is NOT thread-safe, sinks to stdout.\
+It's convenient if you just need the logging functionality, but don't want to create loggers by yourself. You can access it from everywhere in your application.
 ```cpp
 #include "lwlog/lwlog.h"
 
@@ -240,7 +247,7 @@ int main()
 }
 ```
 ## Global operations
-There are two convenient global operations. set_pattern() and set_level_filter(). Make no mistake from the name, they are not global because they process the global logger, they are global because they are processed for each logger that's present in the registry.
+In order to apply a logger function to all loggers present in the registry, you can use the function apply_to_all in such manner
 ```cpp
 #include "lwlog/lwlog.h"
 
@@ -250,7 +257,10 @@ int main()
 	auto file = std::make_shared<lwlog::file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 	
 	//Pattern will be applied to all loggers present in the registry
-	lwlog::global::set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	lwlog::apply_to_all([](lwlog::primitives::logger_ptr logger)
+		{
+			logger->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^ TEXT");
+		});
 	
 	return 0;
 }
@@ -338,8 +348,9 @@ int main()
 ```single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger\
 ```multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety
 ## Deferred logging
-Deferred logging provides extremely low latency, however it's only applicable when you don't need the logs to be outputted imediately.\
-The low latency comes from the fact that with deferred logging a log call doesn't sink and doesn't format anything, it only stores data. This data is sinked and formatted at a later stage, only when needed.
+Deferred logging provides extremely low latency, however it's only applicable when you don't need the logs to be outputted immediately.\
+The low latency comes from the fact that with deferred logging a log call doesn't sink and doesn't format anything, it only stores data.\
+This data is sinked and formatted at a later stage, only when needed.
 There is one problem with it - all log information will be lost if there is an application crash and you haven't sinked the deferred logs. On crash, all deferred logs should be automatically sinked, that's the solution that I will be working on.
 ```cpp
 #include "lwlog/lwlog.h"
@@ -363,8 +374,10 @@ int main()
 	return 0;
 }
 ```
-By calling sink_logs() you sink all the logs that are deferred for later use to their respective sinks with their respective patterns. If sink_logs() is called by a forward logging logger it will emit a warning.
+By calling sink_logs() you sink all the logs that are deferred for later use to their respective sinks with their respective patterns.\
+If sink_logs() is called by a forward logging logger it will emit a warning.
 ## Thread-safety
 Both the sinks and the logger classes expect a threading policy as a template parameter, which will determine whether they will be thread-safe or not.
-However, if you want to use the convenienve aliases I meantioned above, you need to keep in mind they are not thread-safe. However, all of them have a thread-safe analog whith the same name and an _mt suffix.\
+However, if you want to use the convenienve aliases I meantioned above, you need to keep in mind they are not thread-safe.\
+And for that reason all of them have a thread-safe analog whith the same name and an _mt suffix.\
 ```basic_logger_mt```, ```console_color_logger_mt```, ```console_logger_mt```, ```file_logger_mt```, ```null_logger_mt```
