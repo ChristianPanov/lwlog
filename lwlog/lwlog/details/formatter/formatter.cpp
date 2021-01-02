@@ -5,26 +5,33 @@ namespace lwlog::details
 {
 	std::string formatter::format(std::string pattern)
 	{
-		for (const auto& [key, value] : formatter_data::datetime_data)
+		if ((pattern.find("{") != std::string::npos) && 
+			(pattern.find("}") != std::string::npos))
 		{
-			const auto& [verbose, shortened] = key;
-			if (!verbose.empty())
+			for (const auto& [key, value] : formatter_data::datetime_data)
 			{
-				while (pattern.find(verbose) != std::string::npos)
+				const auto& [verbose, shortened] = key;
+				if (!verbose.empty())
 				{
-					pattern.replace(pattern.find(verbose), verbose.length(), value);
+					while (pattern.find(verbose) != std::string::npos)
+					{
+						pattern.replace(pattern.find(verbose), verbose.length(), value);
+					}
 				}
 			}
 		}
 
-		for (const auto& [key, value] : formatter_data::datetime_data)
+		if (pattern.find("%") != std::string::npos)
 		{
-			const auto& [verbose, shortened] = key;
-			if (!shortened.empty())
+			for (const auto& [key, value] : formatter_data::datetime_data)
 			{
-				while (pattern.find(shortened) != std::string::npos)
+				const auto& [verbose, shortened] = key;
+				if (!shortened.empty())
 				{
-					pattern.replace(pattern.find(shortened), shortened.length(), value);
+					while (pattern.find(shortened) != std::string::npos)
+					{
+						pattern.replace(pattern.find(shortened), shortened.length(), value);
+					}
 				}
 			}
 		}
@@ -34,11 +41,14 @@ namespace lwlog::details
 
 	void formatter::format_color(std::string& pattern)
 	{
-		for (const auto& [key, value] : formatter_data::color_data)
+		if (pattern.find("^") != std::string::npos)
 		{
-			while (pattern.find(key) != std::string::npos)
+			for (const auto& [key, value] : formatter_data::color_data)
 			{
-				pattern.replace(pattern.find(key), key.length(), value);
+				while (pattern.find(key) != std::string::npos)
+				{
+					pattern.replace(pattern.find(key), key.length(), value);
+				}
 			}
 		}
 	}
