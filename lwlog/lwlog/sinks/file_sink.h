@@ -1,23 +1,21 @@
 ﻿#pragma once
 
 #include "sink.h"
-#include "details/file_helper.h"
+#include "details/file_writer.h"
 
 namespace lwlog::sinks
 {
 	template<typename ThreadingPolicy>
-	class file_sink : public sink<uncolored_policy, ThreadingPolicy>
+	class file_sink 
+		: public sink<uncolored_policy, ThreadingPolicy>
+		, public details::file_writer
 	{
 	public:
 		file_sink() = default;
-		file_sink(std::string_view path, std::size_t size_limit = std::size_t{});
-		~file_sink();
-
-	public:
-		virtual void sink_it(std::string_view message) override;
-
-	private:
-		std::size_t m_size_limit{};
-		details::file m_file;
+		explicit file_sink(std::string_view path) : details::file_writer(path) {}
+		virtual void sink_it(std::string_view message) override 
+		{
+			details::file_writer::write(message.data());
+		}
 	};
 }

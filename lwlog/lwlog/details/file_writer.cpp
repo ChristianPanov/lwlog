@@ -1,19 +1,21 @@
-﻿#include "file_helper.h"
+﻿#include "file_writer.h"
 
 namespace lwlog::details
 {
-	file::file(std::string_view path, append mode)
-		: m_path{ path }
-		, m_mode{ mode }
-	{}
+	file_writer::file_writer(std::string_view path, append mode)
+	{
+		open(path, mode);
+	}
 
-	file::~file()
+	file_writer::~file_writer()
 	{
 		close();
 	}
 
-	void file::open()
+	void file_writer::open(std::string_view path, append mode)
 	{
+		m_mode = mode;
+		m_path = path;
 		if (!std::filesystem::exists(m_path.parent_path()))
 		{
 			std::filesystem::create_directory(m_path.parent_path());
@@ -22,7 +24,7 @@ namespace lwlog::details
 		m_file = std::fopen(m_path.string().data(), m_mode == append::on ? "a" : "w");
 	}
 
-	void file::reopen()
+	void file_writer::reopen()
 	{
 		if (std::filesystem::exists(m_path))
 		{
@@ -30,7 +32,7 @@ namespace lwlog::details
 		}
 	}
 
-	void file::write(std::string_view message)
+	void file_writer::write(std::string_view message)
 	{
 		if (m_file != nullptr)
 		{
@@ -38,7 +40,7 @@ namespace lwlog::details
 		}
 	}
 
-	void file::close()
+	void file_writer::close()
 	{
 		if (m_file != nullptr)
 		{
@@ -47,13 +49,18 @@ namespace lwlog::details
 		}
 	}
 
-	bool file::exists() const
+	bool file_writer::exists() const
 	{
 		return std::filesystem::exists(m_path);
 	}
 
-	std::size_t file::size() const
+	std::size_t file_writer::size() const
 	{
 		return std::filesystem::file_size(m_path);
+	}
+
+	std::FILE* file_writer::handle() const
+	{
+		return m_file;
 	}
 }
