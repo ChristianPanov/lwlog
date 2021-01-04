@@ -29,7 +29,7 @@ people who want simplicity without too much configuration. Most of the time you 
 - Unicode support
 # Benchmarks
 I haven't had the chance  to conduct proper benchmarks, but I have benchmarked against spdlog, as well as logging a single synchronous message.\
-A single synchronous log call (single-threaded, formatted, and colored) takes ~8μs\
+A single synchronous log call (single-threaded, formatted, and colored) takes ~6μs\
 (That is NOT proper benchmarking, it is ego boost in terms of performance. A proper benchmark would be to benchmark a lots of logs and get the average of it, although lwlog is surprisingly very consistent with it's latency, so these ~8μs are actually an accurate measurment).
 #### lwlog (formatted, synchronous) vs spdlog (formatted, synchronous) - Benchmarked with picobench(https://github.com/iboB/picobench)
 ```
