@@ -12,7 +12,7 @@ namespace lwlog::details
 		static constexpr std::uint32_t internal_size{ 4194304 };
 
 	public:
-		explicit stream_writer(stream_t stream, std::size_t size = 4194304);
+		explicit stream_writer(stream_t stream, std::size_t size = internal_size);
 		virtual ~stream_writer() = default;
 		void write(std::string_view message);
 
