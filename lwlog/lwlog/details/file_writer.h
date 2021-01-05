@@ -11,9 +11,8 @@ namespace lwlog::details
 		static constexpr std::uint32_t internal_size{ 4194304 };
 
 	public:
-		file_writer() = default;
 		file_writer(std::string_view path, std::size_t buffer_size = internal_size);
-		~file_writer();
+		virtual ~file_writer();
 
 	public:
 		void write(std::string_view message);
