@@ -7,17 +7,15 @@ namespace lwlog::details
 {
 	class file_writer
 	{
-	public:
-		enum class append { off = 0, on = 1 };
+	private:
+		static constexpr std::uint32_t internal_size{ 4194304 };
 
 	public:
 		file_writer() = default;
-		file_writer(std::string_view path, append mode = append::on);
+		file_writer(std::string_view path, std::size_t buffer_size = internal_size);
 		~file_writer();
 
 	public:
-		void open(std::string_view path, append mode = append::on);
-		void reopen();
 		void write(std::string_view message);
 		void close();
 		bool exists() const;
@@ -25,7 +23,6 @@ namespace lwlog::details
 		std::FILE* handle() const;
 
 	private:
-		append m_mode{ append::on };
 		std::filesystem::path m_path;
 		std::FILE* m_file{ nullptr };
 	};

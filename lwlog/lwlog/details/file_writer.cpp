@@ -2,34 +2,21 @@
 
 namespace lwlog::details
 {
-	file_writer::file_writer(std::string_view path, append mode)
+	file_writer::file_writer(std::string_view path, std::size_t buffer_size)
+		: m_path{ path }
 	{
-		open(path, mode);
-	}
-
-	file_writer::~file_writer()
-	{
-		close();
-	}
-
-	void file_writer::open(std::string_view path, append mode)
-	{
-		m_mode = mode;
-		m_path = path;
 		if (!std::filesystem::exists(m_path.parent_path()))
 		{
 			std::filesystem::create_directory(m_path.parent_path());
 		}
 
-		m_file = std::fopen(m_path.string().data(), m_mode == append::on ? "a" : "w");
+		m_file = std::fopen(m_path.string().data(), "a");
+		std::setvbuf(m_file, NULL, _IOFBF, buffer_size);
 	}
 
-	void file_writer::reopen()
+	file_writer::~file_writer()
 	{
-		if (std::filesystem::exists(m_path))
-		{
-			m_file = std::fopen(m_path.string().data(), m_mode == append::on ? "a" : "w");
-		}
+		close();
 	}
 
 	void file_writer::write(std::string_view message)
