@@ -82,6 +82,23 @@ A single synchronous log call (single-threaded, formatted, and colored) takes ~7
              spdlog_bench |    8192 |   642.031 |   78372 | 27.271 |    12759.5
 ===============================================================================
 ```
+#### lwlog (forward(default) logging) vs lwlog (deferred logging) - Benchmarked with picobench(https://github.com/iboB/picobench)
+```
+===============================================================================
+   Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
+===============================================================================
+   lwlog_deferred_bench * |       8 |     0.003 |     387 |      - |  2580645.2
+      lwlog_forward_bench |       8 |     0.015 |    1912 |  4.935 |   522875.8
+   lwlog_deferred_bench * |      64 |     0.021 |     329 |      - |  3033175.4
+      lwlog_forward_bench |      64 |     0.086 |    1351 |  4.100 |   739884.4
+   lwlog_deferred_bench * |     512 |     0.232 |     453 |      - |  2204046.5
+      lwlog_forward_bench |     512 |     0.634 |    1237 |  2.728 |   808080.8
+   lwlog_deferred_bench * |    4096 |     1.518 |     370 |      - |  2698109.5
+      lwlog_forward_bench |    4096 |     6.875 |    1678 |  4.529 |   595747.2
+   lwlog_deferred_bench * |    8192 |     3.074 |     375 |      - |  2664671.6
+      lwlog_forward_bench |    8192 |    10.454 |    1276 |  3.401 |   783593.5
+===============================================================================
+```
 # Usage
 ## Basic Usage
 ```cpp
