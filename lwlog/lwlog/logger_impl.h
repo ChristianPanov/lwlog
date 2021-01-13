@@ -44,7 +44,7 @@ namespace lwlog
 	template<typename... SinkParams>
 	logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name,
 		primitives::sink_ptr sink, SinkParams&&... params)
-		: logger{ name, { std::move(sink) }, params... }
+		: logger{ name, { sink }, params... }
 	{}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
