@@ -14,7 +14,7 @@ namespace lwlog::details::datetime
 		auto in_time_t = std::chrono::system_clock::to_time_t(now);
 
 		std::stringstream ss;
-		ss << std::put_time(std::gmtime(&in_time_t), format);
+		ss << std::put_time(std::localtime(&in_time_t), format);
 		return ss.str();
 	}
 
