@@ -75,6 +75,6 @@ namespace lwlog::details::formatter_data
 		{"^underlined^",	color::underlined()},
 		{"^reversed^",		color::reversed()},
 
-		{{					"^^"}, "^"}
+		{"^^", "^"}
 	};
 }
