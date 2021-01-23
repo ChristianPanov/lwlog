@@ -1,37 +1,11 @@
 #pragma once
 
-#include "details/datetime.h"
+#include <unordered_map>
+
 #include "details/color.h"
 
-namespace lwlog::details::formatter_data
+namespace lwlog::details
 {
-	static std::unordered_map<formatter_primitives::attribute_key, std::string,
-		formatter_primitives::attribute_key_hasher> datetime_data =
-	{
-		{{"{seconds}",			"%S"}, datetime::get_second()},
-		{{"{minute}",			"%M"}, datetime::get_minute()},
-		{{"{hour_24}",			"%H"}, datetime::get_hour_24()},
-		{{"{hour_12}",			"%I"}, datetime::get_hour_12()},
-		{{"{ampm}",				"%p"}, datetime::get_ampm()},
-		{{"{12_clock}",			"%r"}, datetime::get_12_hour_clock()},
-		{{"{24_clock}",			"%R"}, datetime::get_24_hour_clock()},
-		{{"{day}",				"%d"}, datetime::get_day()},
-		{{"{weekday_abr}",		"%a"}, datetime::get_weekday_abbreviated()},
-		{{"{weekday}",			"%A"}, datetime::get_weekday()},
-		{{"{month}",			"%m"}, datetime::get_month()},
-		{{"{mont_name_abr}",	"%b"}, datetime::get_month_name_abbreviated()},
-		{{"{month_name}",		"%B"}, datetime::get_month_name()},
-		{{"{year_short}",		"%y"}, datetime::get_year_short()},
-		{{"{year}",				"%Y"}, datetime::get_year()},
-		{{"{date_short}",		"%D"}, datetime::get_date_short()},
-		{{"{date}",				"%F"}, datetime::get_date()},
-		{{"{time}",				"%T"}, datetime::get_time()},
-
-		{{						"%%"}, "%"},
-		{{						"{{"}, "{"},
-		{{						"}}"}, "}"}
-	};
-
 	static std::unordered_map<std::string_view, std::string_view> color_data =
 	{
 		{"^black^",			color::foreground_black()},
@@ -73,8 +47,6 @@ namespace lwlog::details::formatter_data
 		{"^reset^",			color::reset()},
 		{"^bold^",			color::bold()},
 		{"^underlined^",	color::underlined()},
-		{"^reversed^",		color::reversed()},
-
-		{"^^", "^"}
+		{"^reversed^",		color::reversed()}
 	};
 }

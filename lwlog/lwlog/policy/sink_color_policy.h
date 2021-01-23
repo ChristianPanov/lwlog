@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "details/formatter/formatter.h"
+#include "details/pattern_compiler/pattern_compiler.h"
 
 namespace lwlog
 {
@@ -10,7 +10,7 @@ namespace lwlog
 	{
 		static void process_color(std::string& pattern) 
 		{
-			details::formatter::format_color(pattern);
+			details::pattern_compiler::compile_colors(pattern);
 		}
 	};
 

@@ -13,7 +13,6 @@ namespace lwlog
 	logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name, SinkParams&&... params)
 		: m_name{ name }
 	{
-		details::formatter::insert_pattern_data({ {"{logger_name}", "%n", m_name} });
 		registry::instance().register_logger(this);
 
 		m_sink_storage = { sinks::sink_factory<Sinks<ThreadingPolicy>>::request(
@@ -78,12 +77,13 @@ namespace lwlog
 		typename ThreadingPolicy, template<typename> typename... Sinks>
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::log(std::string_view message, level t_level)
 	{
-		LogPolicy::init_attributes(message, t_level);
 		for (const auto& sink : m_sink_storage)
 		{
 			if (sink->should_sink(t_level))
 			{
-				LogPolicy::log(sink, message.data(), t_level);
+				LogPolicy::log(sink,
+					details::log_message{ sink->pattern().data(), message.data(), m_name.data(), t_level }
+				);
 			}
 		}
 	}

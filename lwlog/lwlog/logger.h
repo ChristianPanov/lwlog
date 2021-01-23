@@ -3,12 +3,10 @@
 #include <string>
 #include <vector>
 
-#include "primitives.h"
-#include "interface/logger_interface.h"
-#include "sinks/sink.h"
 #include "policy/log_policy.h"
 #include "policy/sink_storage_policy.h"
-#include "details/formatter/formatter.h"
+#include "interface/logger_interface.h"
+#include "sinks/sink.h"
 
 namespace lwlog
 {

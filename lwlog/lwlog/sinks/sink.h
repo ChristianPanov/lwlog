@@ -6,7 +6,6 @@
 #include "interface/sink_interface.h"
 #include "policy/sink_color_policy.h"
 #include "policy/threading_policy.h"
-#include "details/formatter/formatter.h"
 #include "fwd.h"
 
 namespace lwlog::sinks
