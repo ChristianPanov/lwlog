@@ -4,9 +4,9 @@
 
 namespace lwlog
 {
-	void forward_log_policy::log(primitives::sink_ptr t_sink, std::string_view message, level t_level)
+	void forward_log_policy::log(primitives::sink_ptr sink, std::string_view message, level t_level)
 	{
-		t_sink->sink_it(details::formatter::format(t_sink->pattern()));
+		sink->sink_it(details::formatter::format(sink->pattern()));
 	}
 
 	void forward_log_policy::init_attributes(std::string_view message, level t_level)
@@ -19,9 +19,9 @@ namespace lwlog
 			});
 	}
 
-	void deferred_log_policy::log(primitives::sink_ptr t_sink, std::string_view t_message, level t_level)
+	void deferred_log_policy::log(primitives::sink_ptr sink, std::string_view message, level t_level)
 	{
-		storage.push_back({ t_sink, t_message.data(), t_sink->pattern(), t_level });
+		storage.push_back({ sink, message.data(), sink->pattern(), t_level });
 	}
 
 	void deferred_log_policy::sink_logs()
