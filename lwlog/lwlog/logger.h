@@ -15,8 +15,7 @@ namespace lwlog
 	class logger : public interface::logger, private LogPolicy, public Sinks<ThreadingPolicy>...
 	{
 	private:
-		using StoragePolicyT = typename StoragePolicy<Sinks<ThreadingPolicy>...>;
-		using Storage = typename StoragePolicyT::storage;
+		using Storage = typename StoragePolicy<Sinks<ThreadingPolicy>...>::storage;
 
 	public:
 		template<typename... SinkParams>
