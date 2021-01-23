@@ -5,15 +5,14 @@ namespace lwlog::details
 {
 	std::string formatter::format(std::string pattern)
 	{
-		if ((pattern.find("{") != std::string::npos) && 
-			(pattern.find("}") != std::string::npos))
+		if ((strstr(pattern.data(), "{")) && (strstr(pattern.data(), "}")))
 		{
 			for (const auto& [key, value] : formatter_data::datetime_data)
 			{
 				const auto& [verbose, shortened] = key;
 				if (!verbose.empty())
 				{
-					while (pattern.find(verbose) != std::string::npos)
+					while (strstr(pattern.data(), verbose.data()))
 					{
 						pattern.replace(pattern.find(verbose), verbose.length(), value);
 					}
@@ -21,14 +20,14 @@ namespace lwlog::details
 			}
 		}
 
-		if (pattern.find("%") != std::string::npos)
+		if (strstr(pattern.data(), "%"))
 		{
 			for (const auto& [key, value] : formatter_data::datetime_data)
 			{
 				const auto& [verbose, shortened] = key;
 				if (!shortened.empty())
 				{
-					while (pattern.find(shortened) != std::string::npos)
+					while (strstr(pattern.data(), shortened.data()))
 					{
 						pattern.replace(pattern.find(shortened), shortened.length(), value);
 					}
@@ -41,11 +40,11 @@ namespace lwlog::details
 
 	void formatter::format_color(std::string& pattern)
 	{
-		if (pattern.find("^") != std::string::npos)
+		if (strstr(pattern.data(), "^"))
 		{
 			for (const auto& [key, value] : formatter_data::color_data)
 			{
-				while (pattern.find(key) != std::string::npos)
+				while (strstr(pattern.data(), key.data()))
 				{
 					pattern.replace(pattern.find(key), key.length(), value);
 				}
