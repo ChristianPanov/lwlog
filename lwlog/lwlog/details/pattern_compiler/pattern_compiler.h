@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "details/log_message.h"
+#include "fwd.h"
 
 namespace lwlog::details
 {
@@ -25,13 +26,10 @@ namespace lwlog::details
 		static void compile_colors(std::string& pattern);
 
 	public:
-		static void format_attribute(log_message& message, std::string_view attribute, std::string_view value);
-		static void format_attribute(log_message& message, std::string_view verbose,
-			std::string_view shortened, std::string_view value);
+		static void format_attribute(log_message& message, flag::flag_pair flags, std::string_view value);
 
 	private:
-		bool contains(std::string_view attribute);
-		bool contains(std::string_view verbose, std::string_view shortened);
+		bool contains(flag::flag_pair flags);
 		formatter_storage handle_logger_formatters();
 		formatter_storage handle_datetime_formatters();
 

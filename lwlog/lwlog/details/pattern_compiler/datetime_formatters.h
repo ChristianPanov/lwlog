@@ -1,5 +1,7 @@
 #pragma once
 
+#include "flag_data.h"
+
 namespace lwlog::details
 {
 	struct date_formatter : public formatter
@@ -8,7 +10,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{date}", "%F",
+				flag::date,
 				datetime::get_date(log_msg.time_point)
 			);
 		}
@@ -20,7 +22,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{date_short}", "%D",
+				flag::date_short,
 				datetime::get_date_short(log_msg.time_point)
 			);
 		}
@@ -32,7 +34,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{year}", "%Y",
+				flag::year,
 				datetime::get_year(log_msg.time_point)
 			);
 		}
@@ -44,7 +46,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{year_short}", "%y",
+				flag::year_short,
 				datetime::get_year_short(log_msg.time_point)
 			);
 		}
@@ -56,7 +58,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{month}", "%m",
+				flag::month,
 				datetime::get_month(log_msg.time_point)
 			);
 		}
@@ -68,7 +70,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{month_name}", "%B",
+				flag::month_name,
 				datetime::get_month_name(log_msg.time_point)
 			);
 		}
@@ -80,7 +82,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{month_name_short}", "%b",
+				flag::month_name_short,
 				datetime::get_month_name_short(log_msg.time_point)
 			);
 		}
@@ -92,7 +94,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{day}", "%d",
+				flag::day,
 				datetime::get_day(log_msg.time_point)
 			);
 		}
@@ -104,7 +106,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{weekday}", "%A",
+				flag::weekday,
 				datetime::get_weekday_name(log_msg.time_point)
 			);
 		}
@@ -116,7 +118,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{weekday_short}", "%a",
+				flag::weekday_short,
 				datetime::get_weekday_name_short(log_msg.time_point)
 			);
 		}
@@ -128,7 +130,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{time}", "%T",
+				flag::time,
 				datetime::get_time(log_msg.time_point)
 			);
 		}
@@ -140,7 +142,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{24_clock}", "%R",
+				flag::hour_clock_24,
 				datetime::get_24_hour_clock(log_msg.time_point)
 			);
 		}
@@ -152,7 +154,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{12_clock}", "%r",
+				flag::hour_clock_12,
 				datetime::get_12_hour_clock(log_msg.time_point)
 			);
 		}
@@ -164,7 +166,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{ampm}", "%p",
+				flag::ampm,
 				datetime::get_ampm(log_msg.time_point)
 			);
 		}
@@ -176,7 +178,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{hour_24}", "%H",
+				flag::hour_24,
 				datetime::get_hour_24(log_msg.time_point)
 			);
 		}
@@ -188,7 +190,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{hour_12}", "%I",
+				flag::hour_12,
 				datetime::get_hour_12(log_msg.time_point)
 			);
 		}
@@ -200,7 +202,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{minute}", "%M",
+				flag::minute,
 				datetime::get_minute(log_msg.time_point)
 			);
 		}
@@ -212,7 +214,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{second}", "%S",
+				flag::second,
 				datetime::get_second(log_msg.time_point)
 			);
 		}

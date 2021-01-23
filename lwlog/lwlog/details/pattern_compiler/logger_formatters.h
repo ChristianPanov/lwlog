@@ -1,5 +1,7 @@
 #pragma once
 
+#include "flag_data.h"
+
 namespace lwlog::details
 {
 	struct logger_name_formatter : public formatter
@@ -8,7 +10,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{name}", "%n",
+				flag::logger_name,
 				log_msg.logger_name
 			);
 		}
@@ -21,7 +23,7 @@ namespace lwlog::details
 			auto level = lwlog::level_details::to_string(log_msg.level);
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{level}", "%l",
+				flag::level,
 				level
 			);
 		}
@@ -33,7 +35,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"^level^",
+				flag::level_color,
 				lwlog::level_details::color_value(log_msg.level)
 			);
 		}
@@ -45,7 +47,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{message}", "%v",
+				flag::message,
 				log_msg.message
 			);
 		}
@@ -57,7 +59,7 @@ namespace lwlog::details
 		{
 			pattern_compiler::format_attribute(
 				log_msg,
-				"{thread}", "%t",
+				flag::thread_id,
 				std::to_string(log_msg.thread_id)
 			);
 		}

@@ -37,51 +37,43 @@ namespace lwlog::details
 		}
 	}
 
-	void pattern_compiler::format_attribute(log_message& message, std::string_view attribute, std::string_view value)
+	void pattern_compiler::format_attribute(log_message& message, flag::flag_pair flags, std::string_view value)
 	{
-		while (strstr(message.pattern.data(), attribute.data()))
+		const auto& [verbose, shortened] = flags;
+		if (!verbose.empty())
 		{
-			message.pattern.replace(message.pattern.find(attribute), attribute.length(), value);
+			while (strstr(message.pattern.data(), verbose.data()))
+			{
+				message.pattern.replace(message.pattern.find(verbose), verbose.length(), value);
+			}
+		}
+		if (!shortened.empty())
+		{
+			while (strstr(message.pattern.data(), shortened.data()))
+			{
+				message.pattern.replace(message.pattern.find(shortened), shortened.length(), value);
+			}
 		}
 	}
 
-	void pattern_compiler::format_attribute(log_message& message, std::string_view verbose,
-		std::string_view shortened, std::string_view value)
+	bool pattern_compiler::contains(flag::flag_pair flags)
 	{
-		while (strstr(message.pattern.data(), verbose.data()))
-		{
-			message.pattern.replace(message.pattern.find(verbose), verbose.length(), value);
-		}
-
-		while (strstr(message.pattern.data(), shortened.data()))
-		{
-			message.pattern.replace(message.pattern.find(shortened), shortened.length(), value);
-		}
-	}
-
-	bool pattern_compiler::contains(std::string_view attribute)
-	{
-		return strstr(m_message.pattern.data(), attribute.data());
-	}
-
-	bool pattern_compiler::contains(std::string_view verbose, std::string_view shortened)
-	{
-		return strstr(m_message.pattern.data(), verbose.data()) ||
-			strstr(m_message.pattern.data(), shortened.data());
+		return strstr(m_message.pattern.data(), flags.verbose.data()) ||
+			strstr(m_message.pattern.data(), flags.shortened.data());
 	}
 
 	pattern_compiler::formatter_storage pattern_compiler::handle_logger_formatters()
 	{
 		formatter_storage storage;
-		if (contains("{name}", "%n"))
+		if (contains(flag::logger_name))
 			storage.push_back(std::make_shared<logger_name_formatter>());
-		if (contains("{level}", "%l"))
+		if (contains(flag::level))
 			storage.push_back(std::make_shared<level_formatter>());
-		if (contains("^level^"))
+		if (contains(flag::level_color))
 			storage.push_back(std::make_shared<level_color_formatter>());
-		if (contains("{message}", "%v"))
+		if (contains(flag::message))
 			storage.push_back(std::make_shared<message_formatter>());
-		if (contains("{thread}", "%t"))
+		if (contains(flag::thread_id))
 			storage.push_back(std::make_shared<thread_id_formatter>());
 		return storage;
 	}
@@ -89,41 +81,41 @@ namespace lwlog::details
 	pattern_compiler::formatter_storage pattern_compiler::handle_datetime_formatters()
 	{
 		formatter_storage storage;
-		if (contains("{date}", "%F"))
+		if (contains(flag::date))
 			storage.push_back(std::make_shared<date_formatter>());
-		if (contains("{date_short}", "%D"))
+		if (contains(flag::date_short))
 			storage.push_back(std::make_shared<date_short_formatter>());
-		if (contains("{year}", "%Y"))
+		if (contains(flag::year))
 			storage.push_back(std::make_shared<year_formatter>());
-		if (contains("{year_short}", "%y"))
+		if (contains(flag::year_short))
 			storage.push_back(std::make_shared<year_short_formatter>());
-		if (contains("{month}", "%m"))
+		if (contains(flag::month))
 			storage.push_back(std::make_shared<month_formatter>());
-		if (contains("{month_name}", "%B"))
+		if (contains(flag::month_name))
 			storage.push_back(std::make_shared<month_name_formatter>());
-		if (contains("{month_name_short}", "%b"))
+		if (contains(flag::month_name_short))
 			storage.push_back(std::make_shared<month_name_short_formatter>());
-		if (contains("{day}", "%d"))
+		if (contains(flag::day))
 			storage.push_back(std::make_shared<day_formatter>());
-		if (contains("{weekday}", "%A"))
+		if (contains(flag::weekday))
 			storage.push_back(std::make_shared<weekday_name_formatter>());
-		if (contains("{weekday_short}", "%a"))
+		if (contains(flag::weekday_short))
 			storage.push_back(std::make_shared<weekday_name_short_formatter>());
-		if (contains("{time}", "%T"))
+		if (contains(flag::time))
 			storage.push_back(std::make_shared<time_formatter>());
-		if (contains("{24_clock}", "%R"))
+		if (contains(flag::hour_clock_24))
 			storage.push_back(std::make_shared<hour_clock_24_formatter>());
-		if (contains("{12_clock}", "%r"))
+		if (contains(flag::hour_clock_12))
 			storage.push_back(std::make_shared<hour_clock_12_formatter>());
-		if (contains("{ampm}", "%p"))
+		if (contains(flag::ampm))
 			storage.push_back(std::make_shared<ampm_formatter>());
-		if (contains("{hour_24}", "%H"))
+		if (contains(flag::hour_24))
 			storage.push_back(std::make_shared<hour_24_formatter>());
-		if (contains("{hour_12}", "%I"))
+		if (contains(flag::hour_12))
 			storage.push_back(std::make_shared<hour_12_formatter>());
-		if (contains("{minute}", "%M"))
+		if (contains(flag::minute))
 			storage.push_back(std::make_shared<minute_formatter>());
-		if (contains("{second}", "%S"))
+		if (contains(flag::second))
 			storage.push_back(std::make_shared<second_formatter>());
 		return storage;
 	}
