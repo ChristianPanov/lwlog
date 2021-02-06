@@ -6,16 +6,18 @@ namespace lwlog::sinks
 {
 	template<typename ColorPolicy, typename ThreadingPolicy>
 	sink<ColorPolicy, ThreadingPolicy>::sink()
-		: m_level{ level::all }
-		, m_pattern{ "[%d, %T] [%l] [%n]: %v" }
-	{}
+	{
+		m_pattern.set_pattern("[%d, %T] [%l] [%n]: %v");
+		m_pattern.handle_flag_formatters();
+	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
 	void sink<ColorPolicy, ThreadingPolicy>::set_pattern(std::string_view pattern)
 	{
 		Lock lock(m_mtx);
-		m_pattern = pattern;
-		ColorPolicy::process_color(m_pattern);
+		m_pattern.set_pattern(pattern);
+		m_pattern.handle_flag_formatters();
+		ColorPolicy::process_color(m_pattern.data());
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
@@ -35,7 +37,7 @@ namespace lwlog::sinks
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
-	std::string sink<ColorPolicy, ThreadingPolicy>::pattern() const
+	details::pattern& sink<ColorPolicy, ThreadingPolicy>::pattern()
 	{
 		Lock lock(m_mtx);
 		return m_pattern;

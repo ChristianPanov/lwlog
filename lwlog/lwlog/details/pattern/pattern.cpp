@@ -1,26 +1,66 @@
 #include "pattern.h"
 #include "level.h"
-#include "logger_formatters.h"
-#include "datetime_formatters.h"
+#include "format_data.h"
 #include "color_format_data.h"
 
 namespace lwlog::details
 {
-	pattern::pattern(const log_message& message)
-		: m_message{ message }
-	{}
-
-	std::string pattern::compile()
+	std::string pattern::compile(log_message& log_msg)
 	{
-		for (const auto& formatter : handle_logger_formatters())
+		for (const auto& formatter : m_formatters)
 		{
-			formatter->format(m_message);
+			formatter->format(m_pattern, log_msg);
 		}
-		for (const auto& formatter : handle_datetime_formatters())
+
+		return m_pattern;
+	}
+
+	void pattern::handle_flag_formatters()
+	{
+		if (strstr(m_pattern.data(), "{") && strstr(m_pattern.data(), "}"))
 		{
-			formatter->format(m_message);
+			for (const auto& flag : this->verbose_flags())
+			{
+				if (verbose_logger_data[flag])
+				{
+					m_formatters.push_back(verbose_logger_data[flag]);
+				}
+			}
+			for (const auto& flag : this->verbose_flags())
+			{
+				if (verbose_datetime_data[flag])
+				{
+					m_formatters.push_back(verbose_datetime_data[flag]);
+				}
+			}
 		}
-		return m_message.pattern;
+		if (strstr(m_pattern.data(), "%"))
+		{
+			for (const auto& flag : this->short_flags())
+			{
+				if (shortened_logger_data[flag])
+				{
+					m_formatters.push_back(shortened_logger_data[flag]);
+				}
+			}
+			for (const auto& flag : this->short_flags())
+			{
+				if (shortened_datetime_data[flag])
+				{
+					m_formatters.push_back(shortened_datetime_data[flag]);
+				}
+			}
+		}
+	}
+
+	void pattern::set_pattern(std::string_view pattern)
+	{
+		m_pattern = pattern;
+	}
+
+	std::string& pattern::data()
+	{
+		return m_pattern;
 	}
 
 	void pattern::compile_colors(std::string& pattern)
@@ -37,86 +77,57 @@ namespace lwlog::details
 		}
 	}
 
-	void pattern::format_attribute(log_message& message, flag::flag_pair flags, std::string_view value)
+	void pattern::format_attribute(std::string& pattern, flag::flag_pair flags, std::string_view value)
 	{
 		const auto& [verbose, shortened] = flags;
 		if (!verbose.empty())
 		{
-			while (strstr(message.pattern.data(), verbose.data()))
+			while (strstr(pattern.data(), verbose.data()))
 			{
-				message.pattern.replace(message.pattern.find(verbose), verbose.length(), value);
+				pattern.replace(pattern.find(verbose), verbose.length(), value);
 			}
 		}
 		if (!shortened.empty())
 		{
-			while (strstr(message.pattern.data(), shortened.data()))
+			while (strstr(pattern.data(), shortened.data()))
 			{
-				message.pattern.replace(message.pattern.find(shortened), shortened.length(), value);
+				pattern.replace(pattern.find(shortened), shortened.length(), value);
 			}
 		}
 	}
 
 	bool pattern::contains(flag::flag_pair flags)
 	{
-		return strstr(m_message.pattern.data(), flags.verbose.data()) ||
-			strstr(m_message.pattern.data(), flags.shortened.data());
+		return strstr(m_pattern.data(), flags.verbose.data()) ||
+			strstr(m_pattern.data(), flags.shortened.data());
 	}
 
-	pattern::formatter_storage pattern::handle_logger_formatters()
+	std::vector<std::string> pattern::verbose_flags()
 	{
-		formatter_storage storage;
-		if (contains(flag::logger_name))
-			storage.push_back(std::make_shared<logger_name_formatter>());
-		if (contains(flag::level))
-			storage.push_back(std::make_shared<level_formatter>());
-		if (contains(flag::level_color))
-			storage.push_back(std::make_shared<level_color_formatter>());
-		if (contains(flag::message))
-			storage.push_back(std::make_shared<message_formatter>());
-		if (contains(flag::thread_id))
-			storage.push_back(std::make_shared<thread_id_formatter>());
-		return storage;
+		std::string temp = m_pattern;
+		std::vector<std::string> buff;
+		while (strstr(temp.data(), "{") && strstr(temp.data(), "}"))
+		{
+			std::size_t first_pos = temp.find("{");
+			std::size_t last_pos = temp.find("}", first_pos + 1);
+			std::size_t flag_length = last_pos - first_pos + 1;
+			buff.push_back(temp.substr(first_pos, flag_length));
+			temp.replace(first_pos, flag_length, "");
+		}
+		return buff;
 	}
 
-	pattern::formatter_storage pattern::handle_datetime_formatters()
+	std::vector<std::string> pattern::short_flags()
 	{
-		formatter_storage storage;
-		if (contains(flag::date))
-			storage.push_back(std::make_shared<date_formatter>());
-		if (contains(flag::date_short))
-			storage.push_back(std::make_shared<date_short_formatter>());
-		if (contains(flag::year))
-			storage.push_back(std::make_shared<year_formatter>());
-		if (contains(flag::year_short))
-			storage.push_back(std::make_shared<year_short_formatter>());
-		if (contains(flag::month))
-			storage.push_back(std::make_shared<month_formatter>());
-		if (contains(flag::month_name))
-			storage.push_back(std::make_shared<month_name_formatter>());
-		if (contains(flag::month_name_short))
-			storage.push_back(std::make_shared<month_name_short_formatter>());
-		if (contains(flag::day))
-			storage.push_back(std::make_shared<day_formatter>());
-		if (contains(flag::weekday))
-			storage.push_back(std::make_shared<weekday_name_formatter>());
-		if (contains(flag::weekday_short))
-			storage.push_back(std::make_shared<weekday_name_short_formatter>());
-		if (contains(flag::time))
-			storage.push_back(std::make_shared<time_formatter>());
-		if (contains(flag::hour_clock_24))
-			storage.push_back(std::make_shared<hour_clock_24_formatter>());
-		if (contains(flag::hour_clock_12))
-			storage.push_back(std::make_shared<hour_clock_12_formatter>());
-		if (contains(flag::ampm))
-			storage.push_back(std::make_shared<ampm_formatter>());
-		if (contains(flag::hour_24))
-			storage.push_back(std::make_shared<hour_24_formatter>());
-		if (contains(flag::hour_12))
-			storage.push_back(std::make_shared<hour_12_formatter>());
-		if (contains(flag::minute))
-			storage.push_back(std::make_shared<minute_formatter>());
-		if (contains(flag::second))
-			storage.push_back(std::make_shared<second_formatter>());
-		return storage;
+		std::string temp = m_pattern;
+		std::vector<std::string> buff;
+		while (strstr(temp.data(), "%"))
+		{
+			std::size_t found = temp.find("%", 0);
+			std::size_t flag_length = 2;
+			buff.push_back(temp.substr(found, 2));
+			temp.replace(found, 2, "");
+		}
+		return buff;
 	}
 }

@@ -8,7 +8,7 @@ namespace lwlog
 	struct forward_log_policy
 	{
 		void log(primitives::sink_ptr sink, details::log_message log_msg);
-		[[deprecated("Forward(default) logging doesn't implement that function")]] 
+		[[deprecated("Forward(default) logging doesn't implement that function")]]
 		void sink_logs() {}
 	};
 
@@ -18,7 +18,7 @@ namespace lwlog
 		void sink_logs();
 
 	private:
-		struct log_info 
+		struct log_info
 		{
 			primitives::sink_ptr sink;
 			details::log_message log_msg;

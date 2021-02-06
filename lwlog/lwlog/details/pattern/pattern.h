@@ -11,29 +11,28 @@ namespace lwlog::details
 	struct formatter
 	{
 		virtual ~formatter() = default;
-		virtual void format(log_message&) = 0;
+		virtual void format(std::string&, log_message&) = 0;
 	};
 
 	class pattern
 	{
-	private:
-		using formatter_storage = std::vector<std::shared_ptr<formatter>>;
+	public:
+		std::string compile(log_message& log_msg);
+		void handle_flag_formatters();
+		void set_pattern(std::string_view pattern);
+		std::string& data();
 
 	public:
-		pattern() = default;
-		pattern(const log_message& message);
-		std::string compile();
 		static void compile_colors(std::string& pattern);
-
-	public:
-		static void format_attribute(log_message& message, flag::flag_pair flags, std::string_view value);
+		static void format_attribute(std::string& pattern, flag::flag_pair flags, std::string_view value);
 
 	private:
 		bool contains(flag::flag_pair flags);
-		formatter_storage handle_logger_formatters();
-		formatter_storage handle_datetime_formatters();
+		std::vector<std::string> verbose_flags();
+		std::vector<std::string> short_flags();
 
 	private:
-		log_message m_message;
+		std::string m_pattern;
+		std::vector<std::shared_ptr<formatter>> m_formatters;
 	};
 }

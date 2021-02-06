@@ -14,6 +14,6 @@ namespace lwlog::interface
 		virtual void set_pattern(std::string_view) = 0;
 		virtual void set_level_filter(level) = 0;
 		virtual bool should_sink(level) const = 0;
-		virtual std::string pattern() const = 0;
+		virtual details::pattern& pattern() = 0;
 	};
 }

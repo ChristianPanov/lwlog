@@ -3,6 +3,7 @@
 #include <string>
 
 #include "level.h"
+#include "details/pattern/pattern.h"
 #include "interface/sink_interface.h"
 #include "policy/sink_color_policy.h"
 #include "policy/threading_policy.h"
@@ -25,12 +26,12 @@ namespace lwlog::sinks
 		void set_pattern(std::string_view pattern) override;
 		void set_level_filter(level level) override;
 		bool should_sink(level t_level) const override;
-		std::string pattern() const override;
+		details::pattern& pattern() override;
 
 	private:
 		mutable Mutex m_mtx;
-		std::string m_pattern;
-		level m_level;
+		details::pattern m_pattern;
+		level m_level{ level::all };
 	};
 }
 
