@@ -1,4 +1,4 @@
-#include "pattern_compiler.h"
+#include "pattern.h"
 #include "level.h"
 #include "logger_formatters.h"
 #include "datetime_formatters.h"
@@ -6,11 +6,11 @@
 
 namespace lwlog::details
 {
-	pattern_compiler::pattern_compiler(const log_message& message)
+	pattern::pattern(const log_message& message)
 		: m_message{ message }
 	{}
 
-	std::string pattern_compiler::compile()
+	std::string pattern::compile()
 	{
 		for (const auto& formatter : handle_logger_formatters())
 		{
@@ -23,7 +23,7 @@ namespace lwlog::details
 		return m_message.pattern;
 	}
 
-	void pattern_compiler::compile_colors(std::string& pattern)
+	void pattern::compile_colors(std::string& pattern)
 	{
 		if (strstr(pattern.data(), "^"))
 		{
@@ -37,7 +37,7 @@ namespace lwlog::details
 		}
 	}
 
-	void pattern_compiler::format_attribute(log_message& message, flag::flag_pair flags, std::string_view value)
+	void pattern::format_attribute(log_message& message, flag::flag_pair flags, std::string_view value)
 	{
 		const auto& [verbose, shortened] = flags;
 		if (!verbose.empty())
@@ -56,13 +56,13 @@ namespace lwlog::details
 		}
 	}
 
-	bool pattern_compiler::contains(flag::flag_pair flags)
+	bool pattern::contains(flag::flag_pair flags)
 	{
 		return strstr(m_message.pattern.data(), flags.verbose.data()) ||
 			strstr(m_message.pattern.data(), flags.shortened.data());
 	}
 
-	pattern_compiler::formatter_storage pattern_compiler::handle_logger_formatters()
+	pattern::formatter_storage pattern::handle_logger_formatters()
 	{
 		formatter_storage storage;
 		if (contains(flag::logger_name))
@@ -78,7 +78,7 @@ namespace lwlog::details
 		return storage;
 	}
 
-	pattern_compiler::formatter_storage pattern_compiler::handle_datetime_formatters()
+	pattern::formatter_storage pattern::handle_datetime_formatters()
 	{
 		formatter_storage storage;
 		if (contains(flag::date))

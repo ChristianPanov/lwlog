@@ -8,7 +8,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::logger_name,
 				log_msg.logger_name
@@ -21,7 +21,7 @@ namespace lwlog::details
 		virtual void format(log_message& log_msg) override
 		{
 			auto level = lwlog::level_details::to_string(log_msg.level);
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::level,
 				level
@@ -33,7 +33,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::level_color,
 				lwlog::level_details::color_value(log_msg.level)
@@ -45,7 +45,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::message,
 				log_msg.message
@@ -57,7 +57,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::thread_id,
 				std::to_string(log_msg.thread_id)

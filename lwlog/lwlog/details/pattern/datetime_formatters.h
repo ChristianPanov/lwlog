@@ -8,7 +8,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::date,
 				datetime::get_date(log_msg.time_point)
@@ -20,7 +20,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::date_short,
 				datetime::get_date_short(log_msg.time_point)
@@ -32,7 +32,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::year,
 				datetime::get_year(log_msg.time_point)
@@ -44,7 +44,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::year_short,
 				datetime::get_year_short(log_msg.time_point)
@@ -56,7 +56,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::month,
 				datetime::get_month(log_msg.time_point)
@@ -68,7 +68,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::month_name,
 				datetime::get_month_name(log_msg.time_point)
@@ -80,7 +80,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::month_name_short,
 				datetime::get_month_name_short(log_msg.time_point)
@@ -92,7 +92,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::day,
 				datetime::get_day(log_msg.time_point)
@@ -104,7 +104,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::weekday,
 				datetime::get_weekday_name(log_msg.time_point)
@@ -116,7 +116,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::weekday_short,
 				datetime::get_weekday_name_short(log_msg.time_point)
@@ -128,7 +128,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::time,
 				datetime::get_time(log_msg.time_point)
@@ -140,7 +140,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::hour_clock_24,
 				datetime::get_24_hour_clock(log_msg.time_point)
@@ -152,7 +152,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::hour_clock_12,
 				datetime::get_12_hour_clock(log_msg.time_point)
@@ -164,7 +164,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::ampm,
 				datetime::get_ampm(log_msg.time_point)
@@ -176,7 +176,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::hour_24,
 				datetime::get_hour_24(log_msg.time_point)
@@ -188,7 +188,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::hour_12,
 				datetime::get_hour_12(log_msg.time_point)
@@ -200,7 +200,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::minute,
 				datetime::get_minute(log_msg.time_point)
@@ -212,7 +212,7 @@ namespace lwlog::details
 	{
 		virtual void format(log_message& log_msg) override
 		{
-			pattern_compiler::format_attribute(
+			pattern::format_attribute(
 				log_msg,
 				flag::second,
 				datetime::get_second(log_msg.time_point)

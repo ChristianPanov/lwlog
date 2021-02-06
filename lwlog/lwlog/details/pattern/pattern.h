@@ -14,14 +14,14 @@ namespace lwlog::details
 		virtual void format(log_message&) = 0;
 	};
 
-	class pattern_compiler
+	class pattern
 	{
 	private:
 		using formatter_storage = std::vector<std::shared_ptr<formatter>>;
 
 	public:
-		pattern_compiler() = default;
-		pattern_compiler(const log_message& message);
+		pattern() = default;
+		pattern(const log_message& message);
 		std::string compile();
 		static void compile_colors(std::string& pattern);
 
