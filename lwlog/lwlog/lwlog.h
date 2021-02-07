@@ -3,9 +3,7 @@
 #include "logger.h"
 #include "sinks/file_sink.h"
 #include "sinks/stdout_sink.h"
-#include "sinks/stdout_color_sink.h"
 #include "sinks/stderr_sink.h"
-#include "sinks/stderr_color_sink.h"
 
 namespace lwlog
 {
@@ -14,11 +12,9 @@ namespace lwlog
 	template<template<typename> typename... Sinks>
 	using basic_logger_mt = logger<default_log_policy, default_storage_policy, multi_threaded_policy, Sinks...>;
 
-	using console_color_logger = basic_logger<sinks::stdout_color_sink>;
 	using console_logger = basic_logger<sinks::stdout_sink>;
 	using file_logger = basic_logger<sinks::file_sink>;
 
-	using console_color_logger_mt = basic_logger_mt<sinks::stdout_color_sink>;
 	using console_logger_mt	= basic_logger_mt<sinks::stdout_sink>;
 	using file_logger_mt = basic_logger_mt<sinks::file_sink>;
 

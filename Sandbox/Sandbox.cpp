@@ -2,7 +2,7 @@
 
 #include "lwlog/lwlog.h"
 #include "lwlog/logger.h"
-#include "lwlog/sinks/stdout_color_sink.h"
+#include "lwlog/sinks/stdout_sink.h"
 
 #include <iostream>
 
@@ -13,7 +13,7 @@ int main()
 			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_color_sink
+			lwlog::sinks::stdout_sink
 		>
 	>("CONSOLE");
 
@@ -24,6 +24,7 @@ int main()
 		Timer timer("timer");
 		console->critical("First critical message");
 	}
+
 
 	return 0;
 }

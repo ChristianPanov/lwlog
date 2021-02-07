@@ -1,12 +1,12 @@
 #include "registry.h"
 #include "logger.h"
-#include "sinks/stdout_color_sink.h"
+#include "sinks/stdout_sink.h"
 
 namespace lwlog
 {
 	std::unique_ptr<interface::logger> registry::m_default_logger 
 		= std::make_unique<
-		logger<default_log_policy, static_storage_policy, single_threaded_policy, sinks::stdout_color_sink>
+		logger<default_log_policy, static_storage_policy, single_threaded_policy, sinks::stdout_sink>
 		>("");
 
 	registry& registry::instance()

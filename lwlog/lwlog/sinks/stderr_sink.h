@@ -7,7 +7,7 @@ namespace lwlog::sinks
 {
 	template<typename ThreadingPolicy>
 	class stderr_sink 
-		: public sink<uncolored_policy, ThreadingPolicy>
+		: public sink<colored_policy, ThreadingPolicy>
 		, public details::stream_writer
 	{
 	public:
