@@ -176,20 +176,9 @@ Levels can be switched off at runtime as well, just by using the LWLOG_SET_LEVEL
 You can also set a pattern and set a filter for log levels.\
 If logging is disabled, the directives expand to nothing.
 ## Formatting
-Formatting is handled in a very simple way. You set a pattern by which the log messages will be formatted and then the pattern is compiled.\
-Now, how is it compiled exactly?\
-The formatter works with attributes. Each attribute has a verbose key, a shortened key, and a value.\
-```{"verbose", "shortened", "value"}```
-Whenever you use either verbose or shortened in the pattern, it will get replaced with value.\
-Why is the key separated in verbose and shortened? Because of convenience.\
-For example, let's take an existing attribute from the library.\
-```{"{time}", "%T", datetime::get_time()}```
-Both {time} and %T result into the current time. Some people are more comfortable with the first, more verbose version, others with the shorter one, the second.\
-When you set the pattern via the set_pattern() function, all color data, if any, is processed in place.\
-Color processing doesn't need to happen in the log function call site, since it's non-dependant on log calls. That benefits performance a lot.\
-Then, when a log function is called, all datetime related attributes are processed, as well as all the custom attributes(attributes owned by the logger class itself, or ones that the user has created, everything that doesn't fall into the color or datetime category).\
-That's how a pattern is compiled currently.\
-A better pattern compilation mechanism is yet to be implemented.
+Formatting is handled with a pay for what you need approach. Currently, there are still aspects which could be optimized further, which will result in even more literal meaning of paying for what you need.\
+The user is able to set a pattern, by which the log messages will be formatted. This pattern is an internal to the library language, which is a sequence of formatting flags, characters and color codes(which are optional). It allows flexibility in terms of configuring the output information in the most appropriate for the situation way, allowing as meaningful log output as possible.\
+How is formatting done? - A pattern is set, and then it gets compiled by the library. Compilation is done in the ```lwlog::details::pattern``` class. It firts parses the pattern, and extracts the formatting flags, which are then used to retrieve only the formatters the pattern will need. In the end, all the retrieved formatters are called on the pattern, and all formatting flags are replaced with their corresponding values.
 ## Multiple sinks (compile-time)
 ```cpp
 #include "lwlog/lwlog.h"
@@ -262,7 +251,7 @@ int main()
 }
 ```
 ## Global operations
-In order to apply a logger function to all loggers present in the registry, you can use the function apply_to_all in such manner
+In order to apply a logger function to all loggers present in the registry, you can use the function ```apply_to_all()``` in such manner
 ```cpp
 #include "lwlog/lwlog.h"
 
@@ -295,7 +284,7 @@ int main()
 ```
 ## Creating your own sink
 As I said and promissed, lwlog is extremely easy to extend. Let's give an example with sinks.\
-To create your own sink, all you have to do is to inherit from lwlog::interface::sink and implement a sink_it() function. That's it.
+To create your own sink, all you have to do is to inherit from ```lwlog::interface::sink``` and implement a ```sink_it()``` function. That's it.
 #### Example with an existing sink implementation
 ```cpp
 #include "policy/sink_color_policy.h"
@@ -317,9 +306,9 @@ namespace lwlog::sinks
 }
 ```
 Here we inherit from the sink base class, and configure it to be colored. Whether it's thread-safe or not is left up to the one using the sink.\
-The color policy could be either colored(```colored_policy```) or non-colored (```uncolored_policy```).\
+The color policy could be either colored(```lwlog::colored_policy```) or non-colored (```lwlog::uncolored_policy```).\
 The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them.\
-We only need the sink_it() function, which is called as the actual log call. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.
+We only need the ```sink_it()``` function, which is called as the actual log call. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.
 ```cpp
 #include "policy/sink_color_policy.h"
 
@@ -389,8 +378,8 @@ int main()
 	return 0;
 }
 ```
-By calling sink_logs() you sink all the logs that are deferred for later use to their respective sinks with their respective patterns.\
-If sink_logs() is called by a forward logging logger it will emit a warning.
+By calling ```sink_logs()``` you sink all the logs that are deferred for later use to their respective sinks with their respective patterns.\
+If ```sink_logs()``` is called by a forward logging logger it will emit a warning.
 ## Thread-safety
 Both the sinks and the logger classes expect a threading policy as a template parameter, which will determine whether they will be thread-safe or not.
 However, if you want to use the convenienve aliases I meantioned above, you need to keep in mind they are not thread-safe.\
