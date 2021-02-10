@@ -1,5 +1,4 @@
 #include "log_policy.h"
-#include "details/pattern/pattern.h"
 
 namespace lwlog
 {

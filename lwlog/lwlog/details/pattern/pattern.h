@@ -1,10 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <memory>
 
 #include "details/log_message.h"
-#include "fwd.h"
 
 namespace lwlog::details
 {

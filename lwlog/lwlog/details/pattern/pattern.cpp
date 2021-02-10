@@ -1,7 +1,6 @@
 #include "pattern.h"
-#include "level.h"
-#include "format_data.h"
 #include "color_format_data.h"
+#include "format_data.h"
 
 namespace lwlog::details
 {

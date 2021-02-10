@@ -1,9 +1,5 @@
 #pragma once
 
-#include <string>
-
-#include "details/pattern/pattern.h"
-
 namespace lwlog
 {
 	struct colored_policy

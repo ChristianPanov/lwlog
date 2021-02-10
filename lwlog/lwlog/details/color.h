@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 namespace lwlog::details::color
 {
 	constexpr const char* reset()		{ return "\u001b[0m"; }

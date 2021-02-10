@@ -1,10 +1,5 @@
 #pragma once
 
-#include <array>
-#include <vector>
-
-#include "primitives.h"
-
 namespace lwlog
 {
 	template<typename... Args>

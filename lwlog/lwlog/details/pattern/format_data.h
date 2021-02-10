@@ -1,8 +1,5 @@
 #pragma once
 
-#include <unordered_map>
-#include <memory>
-
 #include "logger_formatters.h"
 #include "datetime_formatters.h"
 

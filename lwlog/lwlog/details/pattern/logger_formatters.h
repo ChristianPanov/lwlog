@@ -1,5 +1,6 @@
 #pragma once
 
+#include "level.h"
 #include "flag_data.h"
 
 namespace lwlog::details

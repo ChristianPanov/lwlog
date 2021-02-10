@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string_view>
-#include <cstdio>
-
 namespace lwlog::details
 {
 	class stream_writer

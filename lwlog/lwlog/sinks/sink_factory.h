@@ -1,10 +1,5 @@
 #pragma once
 
-#include <type_traits>
-#include <memory>
-
-#include "fwd.h"
-
 namespace lwlog::sinks
 {
 	template<typename Sink>

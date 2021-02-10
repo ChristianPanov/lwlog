@@ -4,10 +4,9 @@
 
 #include "level.h"
 #include "details/pattern/pattern.h"
-#include "interface/sink_interface.h"
 #include "policy/sink_color_policy.h"
 #include "policy/threading_policy.h"
-#include "fwd.h"
+#include "interface/sink_interface.h"
 
 namespace lwlog::sinks
 {

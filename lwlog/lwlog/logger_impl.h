@@ -2,7 +2,6 @@
 
 #include "logger.h"
 #include "sinks/sink_factory.h"
-#include "level.h"
 #include "registry.h"
 
 namespace lwlog

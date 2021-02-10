@@ -1,12 +1,8 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
 #include "policy/log_policy.h"
 #include "policy/sink_storage_policy.h"
 #include "interface/logger_interface.h"
-#include "sinks/sink.h"
 
 namespace lwlog
 {

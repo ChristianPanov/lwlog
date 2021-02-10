@@ -23,12 +23,6 @@ namespace lwlog::interface
 	class sink;
 }
 
-namespace lwlog::primitives
-{
-	using sink_ptr = std::shared_ptr<interface::sink>;
-	using logger_ptr = interface::logger*;
-}
-
 namespace lwlog::details::flag
 {
 	struct flag_pair;
