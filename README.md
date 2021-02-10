@@ -109,10 +109,10 @@ int main()
 			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_color_sink>
+			lwlog::sinks::stdout_sink>
 			>("CONSOLE");
 	// or use the convenience logger aliases
-	auto console2 = std::make_shared<lwlog::console_color_logger>("CONSOLE");
+	auto console2 = std::make_shared<lwlog::console_logger>("CONSOLE");
 	
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
 	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
@@ -125,33 +125,31 @@ int main()
 In the file lwlog.h you can see several convenience aliases at your disposal.\
 They are intended for ease of use, so I encourage you to use them instead of the more complex way of creating loggers directly through the logger class.\
 They are predefined with default configurations, so unless you need more special functionality, stick to using them.\
-```basic_logger``` - configured with a standard log mechanism(forward logging) and a standard sink storage(dynamic storage), not thread-safe
+```lwlog::basic_logger``` - configured with a standard log mechanism(forward logging) and a standard sink storage(dynamic storage), not thread-safe
 ```cpp
 #include "lwlog/lwlog.h"
 
 int main()
 {
  	// logger to stdout with default configuration
-	auto logger = std::make_shared<lwlog::basic_logger<sinks::stdout_color_sink>>("CONSOLE");
+	auto console = std::make_shared<lwlog::basic_logger<sinks::stdout_sink>>("CONSOLE");
 	
 	return 0;
 }
 ```
-```console_color_logger``` - basic_logger with a colored sink to stdout\
-```console_logger``` - basic_logger with an uncolored sink to stdout\
-```file_logger``` - basic_logger with a file sink
+```lwlog::console_logger``` - basic_logger which sinks to stdout\
+```lwlog::file_logger``` - basic_logger which sinks to a file
 ```cpp
 #include "lwlog/lwlog.h"
 
 int main()
 {
-	auto console_colored = std::make_shared<console_color_logger>("CONSOLE_COLORED");
-	auto console_uncolored = std::make_shared<console_logger>("CONSOLE_UNCOLORED");
+	auto console = std::make_shared<console_logger>("CONSOLE")
 	auto file = std::make_shared<file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 	return 0;
 }
 ```
-```null_logger``` - A null logger is simply a logger with default configuration but without any sinks. Use it if you don't want compile time sinks and you are only interested in adding sinks later at runtime
+```lwlog::null_logger``` - A null logger is simply a logger with default configuration but without any sinks. Use it if you don't want compile time sinks and you are only interested in adding sinks later at runtime
 ```cpp
 auto logger = std::make_shared<lwlog::null_logger>("LOGGER");
 ```
@@ -190,7 +188,7 @@ int main()
 			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_color_sink, 
+			lwlog::sinks::stdout_sink, 
       			lwlog::sinks::file_sink>
 			>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 
@@ -243,8 +241,7 @@ int main()
 	lwlog::set_level_filter(lwlog::sink_level::debug | lwlog::sink_level::critical);
 	lwlog::info("Will not be displayed");
 
-	lwlog::add_pattern_attribute({ "{foo}", "%f", "FOO" });
-	lwlog::set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^ {foo}");
+	lwlog::set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
 	lwlog::debug("Will be displayed according to the new pattern");
 
 	return 0;
@@ -257,7 +254,7 @@ In order to apply a logger function to all loggers present in the registry, you 
 
 int main()
 {
-	auto console = std::make_shared<lwlog::console_color_logger>("CONSOLE");
+	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
 	auto file = std::make_shared<lwlog::file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 	
 	//Pattern will be applied to all loggers present in the registry
@@ -275,7 +272,7 @@ int main()
 
 int main()
 {
-	auto console = std::make_shared<lwlog::console_color_logger>("CONSOLE");
+	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
 	
 	lwlog::get("CONSOLE")->critical("First critical message");
 	
@@ -292,7 +289,7 @@ To create your own sink, all you have to do is to inherit from ```lwlog::interfa
 namespace lwlog::sinks
 {
 	template<typename ThreadingPolicy>
-	class stdout_color_sink
+	class stdout_sink
 		: public sink<colored_policy, ThreadingPolicy>
 		, public details::stream
 	{
@@ -307,7 +304,7 @@ namespace lwlog::sinks
 ```
 Here we inherit from the sink base class, and configure it to be colored. Whether it's thread-safe or not is left up to the one using the sink.\
 The color policy could be either colored(```lwlog::colored_policy```) or non-colored (```lwlog::uncolored_policy```).\
-The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them.\
+The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them. Using ```lwlog::colored_policy``` is most suitable for console sinks, since it relies on console specific color codes.\
 We only need the ```sink_it()``` function, which is called as the actual log call. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.
 ```cpp
 #include "policy/sink_color_policy.h"
@@ -343,14 +340,14 @@ int main()
 	return 0;
 }
 ```
-```default_log_policy``` - convenience alias for ```forward_log_policy```\
-```forward_log_policy``` - your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink\
-```deferred_log_policy``` - as the name suggests, log calls are deffered for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency, but use it only if you are sure you don't need your logs immediately\
-```default_storage_policy``` - convenienve alias for ```static_storage_policy```\
-```static_storage_policy``` - it configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks in at runtime, it is more lightweight than a dynamic sink storage\
-```dynamic_storage_policy``` - it configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks\
-```single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger\
-```multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety
+```lwlog::default_log_policy``` - convenience alias for ```forward_log_policy```\
+```lwlog::forward_log_policy``` - your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink\
+```lwlog::deferred_log_policy``` - as the name suggests, log calls are deffered for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency, but use it only if you are sure you don't need your logs immediately\
+```lwlog::default_storage_policy``` - convenienve alias for ```static_storage_policy```\
+```lwlog::static_storage_policy``` - it configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks in at runtime, it is more lightweight than a dynamic sink storage\
+```lwlog::dynamic_storage_policy``` - it configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks\
+```lwlog::single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger\
+```lwlog::multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety
 ## Deferred logging
 Deferred logging provides extremely low latency, however it's only applicable when you don't need the logs to be outputted immediately.\
 The low latency comes from the fact that with deferred logging a log call doesn't sink and doesn't format anything, it only stores data.\
@@ -384,4 +381,4 @@ If ```sink_logs()``` is called by a forward logging logger it will emit a warnin
 Both the sinks and the logger classes expect a threading policy as a template parameter, which will determine whether they will be thread-safe or not.
 However, if you want to use the convenienve aliases I meantioned above, you need to keep in mind they are not thread-safe.\
 And for that reason all of them have a thread-safe analog whith the same name and an _mt suffix.\
-```basic_logger_mt```, ```console_color_logger_mt```, ```console_logger_mt```, ```file_logger_mt```, ```null_logger_mt```
+```lwlog::basic_logger_mt```, ```lwlog::console_logger_mt```, ```lwlog::file_logger_mt```, ```lwlog::null_logger_mt```
