@@ -1,8 +1,8 @@
 #include "Benchmark.h"
 
-#include "lwlog/lwlog.h"
-#include "lwlog/logger.h"
-#include "lwlog/sinks/stdout_sink.h"
+#include "lwlog.h"
+#include "logger.h"
+#include "sinks/stdout_sink.h"
 
 #include <iostream>
 
@@ -24,7 +24,6 @@ int main()
 		Timer timer("timer");
 		console->critical("First critical message");
 	}
-
 
 	return 0;
 }

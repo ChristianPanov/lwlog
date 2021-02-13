@@ -24,12 +24,12 @@ project "lwlog"
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	files {
-		"%{prj.name}/lwlog/**.h",
-		"%{prj.name}/lwlog/**.cpp"
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
 	}
 
 	includedirs {
-		"%{prj.name}/lwlog"
+		"%{prj.name}/src"
 	}
 
 	defines {
@@ -65,7 +65,7 @@ project "Sandbox"
 	}
 
 	includedirs {
-		"lwlog"
+		"lwlog/src"
 	}
 
 	links {
