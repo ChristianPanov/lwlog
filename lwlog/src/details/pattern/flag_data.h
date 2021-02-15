@@ -8,11 +8,11 @@ namespace lwlog::details::flag
 		std::string_view shortened;
 	};
 
-	flag_pair logger_name	= { "{name}",		"%n" };
-	flag_pair level			= { "{level}",		"%l" };
-	flag_pair message		= { "{message}",	"%v" };
-	flag_pair thread_id		= { "{thread}",		"%t" };
-	flag_pair level_color	= { "^level^",		"" };
+	flag_pair logger_name	= { "{name}",			"%n" };
+	flag_pair level			= { "{level}",			"%l" };
+	flag_pair message		= { "{message}",		"%v" };
+	flag_pair thread_id		= { "{thread}",			"%t" };
+	flag_pair level_color	= { "{level_color}",	"%c" };
 
 	flag_pair date				= { "{date}",				"%F" };
 	flag_pair date_short		= { "{date_short}",			"%D" };
