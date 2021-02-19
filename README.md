@@ -21,12 +21,9 @@ git clone --recursive https://github.com/ChristianPanov/lwlog
 - Very configurable - it uses policy classes which you can just plug in based on your needs. At the same time, convenient easy-to-use predefined types are made for the
 people who want simplicity without too much configuration. Most of the time you will be just fine with using the predefined types.
 # To be implemented
-- File sink is not very performant yet - to be reimplemented in a performant way
 - Fmt-like formatting(As soon as std::format gets implemented in MSVC, fmt-like formatting will be implemented in lwlog)
-- Portable colors
 - Meta-logging (also known as structured logging)
 - Asyncrhonous logging
-- Unicode support
 # Benchmarks
 The benchmarks are still limited, since there still arent benchmarks for thread-safe logging, async logging, and loggers which sink to a file (they will be done)
 #### lwlog (formatted, synchronous) vs spdlog (formatted, synchronous) - Benchmarked with picobench(https://github.com/iboB/picobench)
