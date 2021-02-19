@@ -26,7 +26,7 @@ namespace lwlog
 		Iterator begin, Iterator end, SinkParams&&... params)
 		: logger{ name, params... }
 	{
-		m_sink_storage.insert(m_sink_buffer.end(), begin, end);
+		m_sink_storage.insert(m_sink_storage.end(), begin, end);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
