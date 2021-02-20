@@ -19,7 +19,7 @@ people who want simplicity without too much configuration. Most of the time you 
 	- Console (stdout, stderr)
 	- File
 	- Custom sinks (it's extremely easy to add your own custom sinks)
-- Support for both compile-time and runtime sink configuration
+- Support for both [compile-time](https://github.com/ChristianPanov/lwlog#multiple-sinks-compile-time) and [runtime](https://github.com/ChristianPanov/lwlog#multiple-sinks-runtime) sink configuration
 - Custom sink configuration - each sink can have a unique log pattern and verbosity level
 - Log formatting according to a custom user-defined pattern
 - Global logger registry
