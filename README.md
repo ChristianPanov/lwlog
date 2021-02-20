@@ -5,9 +5,15 @@ Very fast C++17 logging library
 ```
 git clone --recursive https://github.com/ChristianPanov/lwlog
 ```
+# Design Highlights
+- Extremely fast syncrhonous logging (Other logging libraries promise you speed by being asycnrhonous, which is not always a good idea, because it's hard to identify at what point the program crashed, causes more overhead and you can easily lose important messages, lwlog promises you both speed, as fast as synchronous logging can get, and keeping all your messages)
+- High extensibility - very easy to add your own types of sinks and loggers
+- Very configurable - lwlog uses policy classes which you can just plug in based on your needs. At the same time, convenient easy-to-use predefined types are made for the
+people who want simplicity without too much configuration. Most of the time you will be just fine with using the predefined types.
 # Features
 - Written in modern C++17
-- Very fast non-async logging (async logging is yet to be implemented)
+- Synchronous logging
+- Forward(default, linear) and deferred(non-linear) logging mechanisms
 - Verbosity levels
 - Various log sinks
 	- Console (stdout, stderr)
@@ -15,11 +21,7 @@ git clone --recursive https://github.com/ChristianPanov/lwlog
 - Support for both compile-time and runtime sink configuration
 - Custom sink configuration - each sink can have a unique log pattern and verbosity level
 - Log formatting according to a custom user-defined pattern
-- Custom pattern attributes
 - Global logger registry
-- High extensibility - very easy to add your own types of sinks and loggers
-- Very configurable - it uses policy classes which you can just plug in based on your needs. At the same time, convenient easy-to-use predefined types are made for the
-people who want simplicity without too much configuration. Most of the time you will be just fine with using the predefined types.
 # To be implemented
 - Fmt-like formatting(As soon as std::format gets implemented in MSVC, fmt-like formatting will be implemented in lwlog)
 - Meta-logging (also known as structured logging)
