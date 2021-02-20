@@ -6,7 +6,7 @@ Very fast C++17 logging library
 git clone --recursive https://github.com/ChristianPanov/lwlog
 ```
 # Design Highlights
-- Extremely fast syncrhonous logging (Other logging libraries promise you speed by being asycnrhonous, which is not always a good idea, because it's hard to identify at what point the program crashed, causes more overhead and you can easily lose important messages, lwlog promises you both speed, as fast as synchronous logging can get, and keeping all your messages)
+- Extremely fast syncrhonous logging (other logging libraries promise you speed by being asycnrhonous, which is not always a good idea, because it's hard to identify at what point the program crashed, causes more overhead and you can easily lose important messages, lwlog promises you both speed, as fast as synchronous logging can get, and keeping all your messages)
 - High extensibility - very easy to add your own types of sinks and loggers
 - Very configurable - lwlog uses policy classes which you can just plug in based on your needs. At the same time, convenient easy-to-use predefined types are made for the
 people who want simplicity without too much configuration. Most of the time you will be just fine with using the predefined types.
