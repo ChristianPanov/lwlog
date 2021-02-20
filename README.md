@@ -12,7 +12,7 @@ git clone --recursive https://github.com/ChristianPanov/lwlog
 people who want simplicity without too much configuration. Most of the time you will be just fine with using the predefined types.
 # Features
 - Written in modern C++17
-- Synchronous logging
+- Very fast synchronous logging
 - Forward(default, linear) and [deferred(non-linear)](https://github.com/ChristianPanov/lwlog#deferred-logging) logging mechanisms
 - Verbosity levels
 - Various log sinks
