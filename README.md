@@ -13,7 +13,7 @@ people who want simplicity without too much configuration. Most of the time you 
 # Features
 - Written in modern C++17
 - Synchronous logging
-- Forward(default, linear) and [deferred(non-linear)](https://github.com/ChristianPanov/lwlog#creating-your-own-sink) logging mechanisms
+- Forward(default, linear) and [deferred(non-linear)](https://github.com/ChristianPanov/lwlog#deferred-logging) logging mechanisms
 - Verbosity levels
 - Various log sinks
 	- Console (stdout, stderr)
