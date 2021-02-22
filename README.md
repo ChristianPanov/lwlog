@@ -152,34 +152,28 @@ int main()
 ## Convenience logger aliases
 In the file lwlog.h you can see several convenience aliases at your disposal.\
 They are intended for ease of use, so I encourage you to use them instead of the more complex way of creating loggers directly through the logger class.\
-They are predefined with default configurations, so unless you need more special functionality, stick to using them.\
-```lwlog::basic_logger``` - configured with a standard log mechanism(forward logging) and a standard sink storage(dynamic storage), not thread-safe
+They are predefined with default configurations, so unless you need more special functionality, stick to using them.
+Alias | Description
+------------ | -------------
+```lwlog::basic_logger``` | Configured with a standard log mechanism(forward logging) and a standard sink storage(dynamic storage), not thread-safe
+```lwlog::console_logger``` | basic_logger which sinks to stdout
+```lwlog::file_logger``` | basic_logger which sinks to a file
+```lwlog::null_logger``` | A null logger is simply a logger with default configuration but without any sinks. Use it if you don't want compile time sinks and you are only interested in adding sinks later at runtime
+#### Example
 ```cpp
 #include "lwlog/lwlog.h"
 
 int main()
 {
- 	// logger to stdout with default configuration
-	auto console = std::make_shared<lwlog::basic_logger<sinks::stdout_sink>>("CONSOLE");
+	auto basic = std::make_shared<lwlog::basic_logger<sinks::stdout_sink>>("CONSOLE");
+	
+	auto console = std::make_shared<console_logger>("CONSOLE");
+	auto file = std::make_shared<file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
+	
+	auto null = std::make_shared<lwlog::null_logger>("LOGGER");
 	
 	return 0;
 }
-```
-```lwlog::console_logger``` - basic_logger which sinks to stdout\
-```lwlog::file_logger``` - basic_logger which sinks to a file
-```cpp
-#include "lwlog/lwlog.h"
-
-int main()
-{
-	auto console = std::make_shared<console_logger>("CONSOLE");
-	auto file = std::make_shared<file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
-	return 0;
-}
-```
-```lwlog::null_logger``` - A null logger is simply a logger with default configuration but without any sinks. Use it if you don't want compile time sinks and you are only interested in adding sinks later at runtime
-```cpp
-auto logger = std::make_shared<lwlog::null_logger>("LOGGER");
 ```
 ## Logger configuration
 ```cpp
