@@ -175,7 +175,23 @@ int main()
 	return 0;
 }
 ```
+## Thread-safety
+Both the sinks and the logger classes expect a threading policy as a template parameter, which will determine whether they will be thread-safe or not.
+However, if you want to use the convenienve aliases I meantioned above, you need to keep in mind they are not thread-safe.\
+And for that reason all of them have a thread-safe analog whith the same name and an _mt suffix.\
+```lwlog::basic_logger_mt```, ```lwlog::console_logger_mt```, ```lwlog::file_logger_mt```, ```lwlog::null_logger_mt```
 ## Logger configuration
+Policy | Description
+------------ | -------------
+```lwlog::default_log_policy``` | Convenience alias for ```forward_log_policy```
+```lwlog::forward_log_policy``` | Your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink
+```lwlog::deferred_log_policy``` | As the name suggests, log calls are deffered for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency, but should be used only if you are sure you don't need your logs immediately
+```lwlog::default_storage_policy``` | Convenienve alias for ```static_storage_policy```
+```lwlog::static_storage_policy``` | Configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks at runtime, it is more lightweight than a dynamic sink storage
+```lwlog::dynamic_storage_policy``` | Configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks
+```lwlog::single_threaded_policy``` | Configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger
+```lwlog::multi_threaded_policy``` | Configures the sinks with a mutex and locks for thread-safety
+#### Example
 ```cpp
 #include "lwlog/lwlog.h"
 
@@ -192,21 +208,12 @@ int main()
 	return 0;
 }
 ```
-Policy | Description
------------- | -------------
-```lwlog::default_log_policy``` | Convenience alias for ```forward_log_policy```
-```lwlog::forward_log_policy``` | Your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink
-```lwlog::deferred_log_policy``` | As the name suggests, log calls are deffered for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency, but should be used only if you are sure you don't need your logs immediately
-```lwlog::default_storage_policy``` | Convenienve alias for ```static_storage_policy```
-```lwlog::static_storage_policy``` | Configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks at runtime, it is more lightweight than a dynamic sink storage
-```lwlog::dynamic_storage_policy``` | Configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks
-```lwlog::single_threaded_policy``` | Configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger
-```lwlog::multi_threaded_policy``` | Configures the sinks with a mutex and locks for thread-safety
 ## Deferred logging
 Deferred logging provides extremely low latency, however it's only applicable when you don't need the logs to be outputted immediately.\
 The low latency comes from the fact that with deferred logging a log call doesn't sink and doesn't format anything, it only stores data.\
 This data is sinked and formatted at a later stage, only when needed.
 There is one problem with it - all log information will be lost if there is an application crash and you haven't sinked the deferred logs. On crash, all deferred logs should be automatically sinked, that's the solution that I will be working on.
+#### Example
 ```cpp
 #include "lwlog/lwlog.h"
 
@@ -239,6 +246,7 @@ How is formatting done? - A pattern is set, and then it gets compiled by the lib
 Attribute - an object, which contains a pair of flags(verbose and shortened) and a value - each flag is replaced with it's corresponding value.
 Custom attributes allow for flexible patterns. A custom attribute represents a pair of flags and a reference to a value of a certain type.
 A custom attribute's value is an std::variant which contains a couple of reference types, to allow for more freedom in terms of having attribute values of different data types.
+#### Example
 ```cpp
 #include "lwlog/lwlog.h"
 
@@ -333,6 +341,7 @@ The color policy could be either colored(```lwlog::colored_policy```) or non-col
 The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them. Using ```lwlog::colored_policy``` is most suitable for console sinks, since it relies on console specific color codes.\
 We only need the ```sink_it()``` function, which is called as the actual log call. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.\
 As mentioned in [Logical Architecture](https://github.com/ChristianPanov/lwlog#logical-architecture), you can either use some kind of a writer class, which handles the actual writing, or you can directly handle the writing in the function.
+#### Example
 ```cpp
 #include "policy/sink_color_policy.h"
 
@@ -408,6 +417,12 @@ int main()
 ```
 ## Switching off logging
 If you want to be able to turn off logging completely, you can use the preprocessor directives.
+These directives use the default loggger and are present in the lwlog.h file.\
+They will log unless you disable logging with LWLOG_DISABLE(should always be at the very top of the file), or you switch off a specific logging level.\
+Levels can be switched off at runtime as well, just by using the LWLOG_SET_LEVEL_FILTER directive.\
+You can also set a pattern and set a filter for log levels.\
+If logging is disabled, the directives expand to nothing.
+#### Example
 ```cpp
 #LWLOG_DISABLE
 #LWLOG_ERROR_OFF
@@ -421,13 +436,3 @@ int main()
 	return 0;
 }
 ```
-These directives use the default loggger and are present in the lwlog.h file.\
-They will log unless you disable logging with LWLOG_DISABLE(should always be at the very top of the file), or you switch off a specific logging level.\
-Levels can be switched off at runtime as well, just by using the LWLOG_SET_LEVEL_FILTER directive.\
-You can also set a pattern and set a filter for log levels.\
-If logging is disabled, the directives expand to nothing.
-## Thread-safety
-Both the sinks and the logger classes expect a threading policy as a template parameter, which will determine whether they will be thread-safe or not.
-However, if you want to use the convenienve aliases I meantioned above, you need to keep in mind they are not thread-safe.\
-And for that reason all of them have a thread-safe analog whith the same name and an _mt suffix.\
-```lwlog::basic_logger_mt```, ```lwlog::console_logger_mt```, ```lwlog::file_logger_mt```, ```lwlog::null_logger_mt```
