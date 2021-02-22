@@ -98,6 +98,28 @@ The benchmarks are still limited, since there still arent benchmarks for thread-
       lwlog_forward_bench |    8192 |    10.454 |    1276 |  3.401 |   783593.5
 ===============================================================================
 ```
+# Logical Architecture
+```
+lwlog::registry
+└── lwlog::logger
+    ├── lwlog::sinks::sink
+        ├── lwlog::details::pattern
+        ├── lwlog::sinks::stdout_sink
+        |   └── lwlog::details::stream_writer
+        ├── lwlog::sinks::stderr_sink
+        |   └── lwlog::details::stream_writer
+        ├── lwlog::sinks::file_sink
+        |   └── lwlog::details::file_writer
+        └── *your custom sink*
+            └── *your custom writer(optional)*
+```
+The architecture of lwlog is very simple, it's divided into three main parts - the **registry**, the **logger**, and the **sinks**.\
+An optional fourth part is the **_writer_**.
+
+**writer** - it is an optional abstraction which outputs the data to the destination. It is optional, because it is not actually needed, and there is no strict specification for what a writer should be.\
+**sinks** - a sink is an object which sends(sinks) data to an output destination. Usually, the data could be handled by a writer object, or you can directly handle the output in the ```sink_it()``` function, without using a writer.\
+**logger** - a logger is just an object, which handles many sinks, nothing more than that. It provides the same functionality as a sink, with the difference being that it contains a storage of sinks, and every operation the logger performs, is ditributed to all the sinks it contains. However, I highly encourage using a logger, even when you are going to be using a single sink.\
+**registry** - it is a global singleton class, which contains all the created loggers. It provides an easy access to the created loggers from everywhere in your application. Each logger is registered in the registry(unless automatic_registry() is turned off).
 # Usage
 ## Basic Usage
 ```cpp
