@@ -102,7 +102,7 @@ The benchmarks are still limited, since there still arent benchmarks for thread-
 ```
 lwlog::registry
 └── lwlog::logger
-    ├── lwlog::sinks::sink
+    └── lwlog::sinks::sink
         ├── lwlog::details::pattern
         ├── lwlog::sinks::stdout_sink
         |   └── lwlog::details::stream_writer
