@@ -204,14 +204,16 @@ int main()
 	return 0;
 }
 ```
-```lwlog::default_log_policy``` - convenience alias for ```forward_log_policy```\
-```lwlog::forward_log_policy``` - your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink\
-```lwlog::deferred_log_policy``` - as the name suggests, log calls are deffered for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency, but use it only if you are sure you don't need your logs immediately\
-```lwlog::default_storage_policy``` - convenienve alias for ```static_storage_policy```\
-```lwlog::static_storage_policy``` - it configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks in at runtime, it is more lightweight than a dynamic sink storage\
-```lwlog::dynamic_storage_policy``` - it configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks\
-```lwlog::single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger\
-```lwlog::multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety
+Policy | Description
+------------ | -------------
+```lwlog::default_log_policy``` | Convenience alias for ```forward_log_policy```
+```lwlog::forward_log_policy``` | Your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink
+```lwlog::deferred_log_policy``` | As the name suggests, log calls are deffered for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency, but should be used only if you are sure you don't need your logs immediately
+```lwlog::default_storage_policy``` | Convenienve alias for ```static_storage_policy```
+```lwlog::static_storage_policy``` | Configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks at runtime, it is more lightweight than a dynamic sink storage
+```lwlog::dynamic_storage_policy``` | Configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks
+```lwlog::single_threaded_policy``` | Configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger
+```lwlog::multi_threaded_policy``` | Configures the sinks with a mutex and locks for thread-safety
 ## Deferred logging
 Deferred logging provides extremely low latency, however it's only applicable when you don't need the logs to be outputted immediately.\
 The low latency comes from the fact that with deferred logging a log call doesn't sink and doesn't format anything, it only stores data.\
