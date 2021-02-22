@@ -317,7 +317,7 @@ int main()
 ```
 ## Creating your own sink
 As I said and promissed, lwlog is extremely easy to extend. Let's give an example with sinks.\
-To create your own sink, all you have to do is to inherit from ```lwlog::interface::sink``` and implement a ```sink_it()``` function. That's it.
+To create your own sink, all you have to do is inherit from ```lwlog::interface::sink``` and implement a ```sink_it()``` function. That's it.
 #### Example with an existing sink implementation
 ```cpp
 #include "policy/sink_color_policy.h"
