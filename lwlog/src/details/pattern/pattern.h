@@ -1,7 +1,9 @@
 #pragma once
 
-#include <vector>
+#include <unordered_map>
+#include <variant>
 
+#include "attribute.h"
 #include "details/log_message.h"
 
 namespace lwlog::details
@@ -18,19 +20,21 @@ namespace lwlog::details
 		std::string compile(log_message& log_msg);
 		void handle_flag_formatters();
 		void set_pattern(std::string_view pattern);
+		void add_attribute(flag_pair flags, attrib_value value);
 		std::string& data();
 
 	public:
 		static void compile_colors(std::string& pattern);
-		static void format_attribute(std::string& pattern, flag::flag_pair flags, std::string_view value);
+		static void format_attribute(std::string& pattern, flag_pair flags, std::string_view value);
 
 	private:
-		bool contains(flag::flag_pair flags);
+		bool contains(flag_pair flags);
 		std::vector<std::string> verbose_flags();
 		std::vector<std::string> short_flags();
 
 	private:
 		std::string m_pattern;
 		std::vector<std::shared_ptr<formatter>> m_formatters;
+		std::unordered_map<flag_pair, attrib_value, attrib_hasher> m_custom_attributes;
 	};
 }

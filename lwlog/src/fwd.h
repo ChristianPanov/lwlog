@@ -23,7 +23,7 @@ namespace lwlog::interface
 	class sink;
 }
 
-namespace lwlog::details::flag
+namespace lwlog::details
 {
 	struct flag_pair;
 }

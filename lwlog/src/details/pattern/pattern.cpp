@@ -7,9 +7,11 @@ namespace lwlog::details
 	std::string pattern::compile(log_message& log_msg)
 	{
 		for (const auto& formatter : m_formatters)
-		{
 			formatter->format(m_pattern, log_msg);
-		}
+
+		for (const auto& [flags, value] : m_custom_attributes)
+			format_attribute(m_pattern, flags,
+				std::visit(attrib_value_visitor{}, value));
 
 		return m_pattern;
 	}
@@ -57,6 +59,11 @@ namespace lwlog::details
 		m_pattern = pattern;
 	}
 
+	void pattern::add_attribute(flag_pair flags, attrib_value value)
+	{
+		m_custom_attributes.insert_or_assign(flags, value);
+	}
+
 	std::string& pattern::data()
 	{
 		return m_pattern;
@@ -76,7 +83,7 @@ namespace lwlog::details
 		}
 	}
 
-	void pattern::format_attribute(std::string& pattern, flag::flag_pair flags, std::string_view value)
+	void pattern::format_attribute(std::string& pattern, flag_pair flags, std::string_view value)
 	{
 		const auto& [verbose, shortened] = flags;
 		if (!verbose.empty())
@@ -95,7 +102,7 @@ namespace lwlog::details
 		}
 	}
 
-	bool pattern::contains(flag::flag_pair flags)
+	bool pattern::contains(flag_pair flags)
 	{
 		return strstr(m_pattern.data(), flags.verbose.data()) ||
 			strstr(m_pattern.data(), flags.shortened.data());

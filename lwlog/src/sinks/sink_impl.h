@@ -21,6 +21,13 @@ namespace lwlog::sinks
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
+	void sink<ColorPolicy, ThreadingPolicy>::add_attribute(details::flag_pair flags, details::attrib_value value)
+	{
+		Lock lock(m_mtx);
+		m_pattern.add_attribute(flags, value);
+	}
+
+	template<typename ColorPolicy, typename ThreadingPolicy>
 	void sink<ColorPolicy, ThreadingPolicy>::set_level_filter(level level)
 	{
 		Lock lock(m_mtx);
@@ -31,8 +38,10 @@ namespace lwlog::sinks
 	bool sink<ColorPolicy, ThreadingPolicy>::should_sink(level t_level) const
 	{
 		Lock lock(m_mtx);
-		if (level_details::value(m_level) & level_details::value(t_level)) return true;
-		else if (level_details::value(m_level) & level_details::value(level::all)) return true;
+		if (level_details::value(m_level) & level_details::value(t_level)) 
+			return true;
+		else if (level_details::value(m_level) & level_details::value(level::all)) 
+			return true;
 		return false;
 	}
 

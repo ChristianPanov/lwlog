@@ -97,6 +97,17 @@ namespace lwlog
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename ThreadingPolicy, template<typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::add_attribute(details::flag_pair flags,
+			details::attrib_value value)
+	{
+		for (const auto& sink : m_sink_storage)
+		{
+			sink->add_attribute(flags, value);
+		}
+	}
+
+	template<typename LogPolicy, template<typename...> typename StoragePolicy,
+		typename ThreadingPolicy, template<typename> typename... Sinks>
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::set_level_filter(level t_level)
 	{
 		for (const auto& sink : m_sink_storage)
