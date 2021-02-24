@@ -434,7 +434,8 @@ Color processing is also done off the log call site. Color processing can be a b
 3. The pattern is parsed and only the needed formatters are pushed to a storage
 4. When a log function is called, the formatters in the storage are called on the pattern
 ### Output
-A very important performance improvement, probably the biggest one, is manual buffering. With manual buffering, I manually increase the stream buffering with a size of 2^22 bytes, bigger than the default one(512 bytes), which improves the performance of output to stdout, stderr and a file a lot.
+A very important performance improvement, probably the biggest one, is manual buffering.\
+With manual buffering, I manually increase the stream buffering with a size of **_2^22 bytes_**, bigger than the default one(**_512 bytes_**), which improves the performance of output to stdout, stderr and a file a lot.
 ```cpp
 std::setvbuf(stdout, NULL, _IOFBF, size);
 std::fwrite("Hello, World!", 14, 1, stdout);
