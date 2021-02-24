@@ -100,22 +100,10 @@ The benchmarks are still limited, since there still arent benchmarks for thread-
 ```
 # Logical Architecture
 ```
-lwlog::registry
-└── lwlog::logger
-    ├── lwlog::log_policy
-    ├── lwlog::sink_storage_policy
-    └── lwlog::sinks::sink
-        ├── lwlog::sink_color_policy
-	├── lwlog::threading_policy
-        ├── lwlog::details::pattern
-        ├── lwlog::sinks::stdout_sink
-        |   └── lwlog::details::stream_writer
-        ├── lwlog::sinks::stderr_sink
-        |   └── lwlog::details::stream_writer
-        ├── lwlog::sinks::file_sink
-        |   └── lwlog::details::file_writer
-        └── *your custom sink*
-            └── *your custom writer(optional)*
+Registry
+└── Logger
+    └── Sink
+        └── Writer(optional)
 ```
 The architecture of lwlog is very simple, it's divided into three main modules - the **registry**, the **logger**, and the **sinks**.\
 An optional fourth part is the **_writer_**.
@@ -436,3 +424,22 @@ int main()
 	return 0;
 }
 ```
+# Performance
+So how does lwlog achieve this performance? The answer lies in one very important acrhictectural decision and a couple of techniques.
+### Architecture
+The architectural decision that speeds up the performance is about how the formatting pattern compilation is handled. The pattern in question is parsed completely off the log call site, and all that's left for the log call functions is to do the replacement of the flags with their corresponding values.\
+Color processing is also done off the log call site. Color processing can be a big performance bottleneck, and it doesn't need to happen at the log call site, since colors have nothing to do with the current log information. Once the pattern is set, it immediately processes all the color codes in place.
+1. A pattern is set
+2. All color codes are processed 
+3. The pattern is parsed and only the needed formatters are pushed to a storage
+4. When a log function is called, the formatters in the storage are called on the pattern
+### Output
+A very important performance improvement, probably the biggest one, is manual buffering. With manual buffering, I manually increase the stream buffering with a size of 2^22 bytes, bigger than the default one(512 bytes), which improves the performance of output to stdout, stderr and a file a lot.
+```cpp
+std::setvbuf(stdout, NULL, _IOFBF, size);
+std::fwrite("Hello, World!", 14, 1, stdout);
+```
+This example here shows how this is achieved. This is as fast as console output can get.
+### Time
+Time is handled in a special way. First off, since std::chrono is not as performant on Windows as it is on Linux, a platform-dependant approach, which is much faster than std::chrono is, is taken for Windows.\
+Still, I take it even further. For some reason, getting the local time with std::chrono is faster than getting the UTC, and with the Windows API it's the opposite - getting the gmtime is faster than getting the UTC, so each implementation initially gets the faster of the two, and then arithmetically processes the time to the desired time format(either local time or UTC)
