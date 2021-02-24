@@ -405,7 +405,7 @@ int main()
 ```
 ## Switching off logging
 If you want to be able to turn off logging completely, you can use the preprocessor directives.
-These directives use the default loggger and are present in the lwlog.h file.\
+These directives use the default loggger and are present in the **_lwlog.h_** file.\
 They will log unless you disable logging with LWLOG_DISABLE(should always be at the very top of the file), or you switch off a specific logging level.\
 Levels can be switched off at runtime as well, just by using the LWLOG_SET_LEVEL_FILTER directive.\
 You can also set a pattern and set a filter for log levels.\
