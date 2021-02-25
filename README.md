@@ -31,7 +31,7 @@ people who want simplicity without too much configuration. Most of the time you 
 # Benchmarks
 The benchmarks are still limited, since there still arent benchmarks for thread-safe logging, async logging, and loggers which sink to a file (they will be done)\
 Benchmarked with picobench(https://github.com/iboB/picobench)
-#### lwlog (formatted, synchronous) vs spdlog (formatted, synchronous) - 
+#### lwlog (formatted, synchronous) vs spdlog (formatted, synchronous)
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
