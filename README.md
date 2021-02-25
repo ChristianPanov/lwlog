@@ -29,8 +29,9 @@ people who want simplicity without too much configuration. Most of the time you 
 - Meta-logging (also known as structured logging)
 - Asyncrhonous logging
 # Benchmarks
-The benchmarks are still limited, since there still arent benchmarks for thread-safe logging, async logging, and loggers which sink to a file (they will be done)
-#### lwlog (formatted, synchronous) vs spdlog (formatted, synchronous) - Benchmarked with picobench(https://github.com/iboB/picobench)
+The benchmarks are still limited, since there still arent benchmarks for thread-safe logging, async logging, and loggers which sink to a file (they will be done)\
+Benchmarked with picobench(https://github.com/iboB/picobench)
+#### lwlog (formatted, synchronous) vs spdlog (formatted, synchronous) - 
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
@@ -47,7 +48,7 @@ The benchmarks are still limited, since there still arent benchmarks for thread-
              spdlog_bench |    8192 |   754.117 |   92055 |133.347 |    10863.0
 ===============================================================================
 ```
-#### lwlog (colored and formatted, synchronous) vs spdlog (colored and formatted, synchronous) - Benchmarked with picobench(https://github.com/iboB/picobench)
+#### lwlog (colored and formatted, synchronous) vs spdlog (colored and formatted, synchronous)
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
@@ -64,7 +65,7 @@ The benchmarks are still limited, since there still arent benchmarks for thread-
              spdlog_bench |    8192 |  2549.965 |  311275 |436.496 |     3212.6
 ===============================================================================
 ```
-#### lwlog (forward(default) logging) vs lwlog (deferred logging) - Benchmarked with picobench(https://github.com/iboB/picobench)
+#### lwlog (forward(default) logging) vs lwlog (deferred logging)
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
