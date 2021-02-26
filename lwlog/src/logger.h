@@ -38,14 +38,14 @@ namespace lwlog
 		void critical(std::string_view message) override;
 		void debug(std::string_view message) override;
 
-		std::string name() const override;
+		std::string_view name() const override;
 		Storage& sinks();
 
 	private:
 		void log(std::string_view message, level t_level) override;
 
 	private:
-		std::string m_name;
+		std::string_view m_name;
 		Storage m_sink_storage;
 	};
 }

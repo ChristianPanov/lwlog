@@ -153,7 +153,7 @@ namespace lwlog
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename ThreadingPolicy, template<typename> typename... Sinks>
-	std::string logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::name() const
+	std::string_view logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::name() const
 	{
 		return m_name;
 	}

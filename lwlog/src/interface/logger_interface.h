@@ -19,7 +19,7 @@ namespace lwlog::interface
 		virtual void critical(std::string_view) = 0;
 		virtual void debug(std::string_view) = 0;
 
-		virtual std::string name() const = 0;
+		virtual std::string_view name() const = 0;
 
 	protected:
 		virtual void log(std::string_view, level) = 0;
