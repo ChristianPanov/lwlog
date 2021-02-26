@@ -4,10 +4,13 @@
 
 namespace lwlog
 {
-	std::unique_ptr<interface::logger> registry::m_default_logger 
-		= std::make_unique<
-		logger<default_log_policy, static_storage_policy, single_threaded_policy, sinks::stdout_sink>
-		>("");
+	std::unique_ptr<interface::logger> registry::m_default_logger = 
+		std::make_unique<logger<
+		default_log_policy, 
+		static_storage_policy, 
+		single_threaded_policy, 
+		sinks::stdout_sink
+		>>("");
 
 	registry& registry::instance()
 	{
@@ -30,7 +33,7 @@ namespace lwlog
 
 	void registry::drop(std::string_view logger_name)
 	{
-		m_loggers.erase(logger_name.data());
+		m_loggers.erase(logger_name);
 	}
 
 	void registry::drop_all()
@@ -56,33 +59,13 @@ namespace lwlog
 		return m_default_logger;
 	}
 
-	primitives::logger_ptr registry::get(std::string_view logger_name)
-	{
-		return m_loggers[logger_name.data()];
-	}
-
-	std::unordered_map<std::string, primitives::logger_ptr> registry::loggers()
+	const std::unordered_map<std::string_view, primitives::logger_ptr>& registry::loggers() const
 	{
 		return m_loggers;
 	}
 
-	std::unordered_map<std::string, primitives::logger_ptr>::iterator registry::begin()
+	primitives::logger_ptr registry::get(std::string_view logger_name)
 	{
-		return m_loggers.begin();
-	}
-
-	std::unordered_map<std::string, primitives::logger_ptr>::iterator registry::end()
-	{
-		return m_loggers.end();
-	}
-
-	std::unordered_map<std::string, primitives::logger_ptr>::const_iterator registry::cbegin()
-	{
-		return m_loggers.cbegin();
-	}
-
-	std::unordered_map<std::string, primitives::logger_ptr>::const_iterator registry::cend()
-	{
-		return m_loggers.cend();
+		return m_loggers[logger_name];
 	}
 }
