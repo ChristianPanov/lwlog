@@ -22,81 +22,81 @@ people who want simplicity without too much configuration. Most of the time you 
 - Support for both [compile-time](https://github.com/ChristianPanov/lwlog#multiple-sinks-compile-time) and [runtime](https://github.com/ChristianPanov/lwlog#multiple-sinks-runtime) sink configuration
 - Custom sink configuration - each sink can have a unique log pattern and verbosity level
 - Log formatting according to a custom user-defined pattern
+- [Custom attributes](https://github.com/ChristianPanov/lwlog#custom-attributes)
 - Global logger registry
 # To be implemented
 - Fmt-like formatting(As soon as std::format gets implemented in MSVC, fmt-like formatting will be implemented in lwlog)
 - Meta-logging (also known as structured logging)
 - Asyncrhonous logging
 # Benchmarks
-The benchmarks are still limited, since there still arent benchmarks for thread-safe logging, async logging, and loggers which sink to a file (they will be done)
-#### lwlog (formatted, synchronous) vs spdlog (formatted, synchronous) - Benchmarked with picobench(https://github.com/iboB/picobench)
+The benchmarks are still limited, since there still arent benchmarks for thread-safe logging, async logging, and loggers which sink to a file (they will be done)\
+Benchmarked with picobench(https://github.com/iboB/picobench)
+#### lwlog (formatted, synchronous) vs spdlog (formatted, synchronous)
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
 ===============================================================================
-            lwlog_bench * |       8 |     0.015 |    1862 |      - |   536912.8
-             spdlog_bench |       8 |     0.559 |   69900 | 37.530 |    14306.2
-            lwlog_bench * |      64 |     0.096 |    1500 |      - |   666666.7
-             spdlog_bench |      64 |     3.660 |   57181 | 38.121 |    17488.3
-            lwlog_bench * |     512 |     0.764 |    1492 |      - |   669981.7
-             spdlog_bench |     512 |   123.881 |  241955 |162.106 |     4133.0
-            lwlog_bench * |    4096 |     6.319 |    1542 |      - |   648224.3
-             spdlog_bench |    4096 |   331.658 |   80971 | 52.487 |    12350.1
-            lwlog_bench * |    8192 |    14.872 |    1815 |      - |   550844.9
-             spdlog_bench |    8192 |   846.085 |  103281 | 56.892 |     9682.2
+            lwlog_bench * |       8 |     0.009 |    1187 |      - |   842105.3
+             spdlog_bench |       8 |     0.454 |   56800 | 47.832 |    17605.6
+            lwlog_bench * |      64 |     0.048 |     743 |      - |  1344537.8
+             spdlog_bench |      64 |     6.100 |   95317 |128.158 |    10491.3
+            lwlog_bench * |     512 |     0.461 |     899 |      - |  1111352.3
+             spdlog_bench |     512 |    53.901 |  105275 |116.998 |     9498.9
+            lwlog_bench * |    4096 |     2.926 |     714 |      - |  1399767.6
+             spdlog_bench |    4096 |   349.674 |   85369 |119.498 |    11713.8
+            lwlog_bench * |    8192 |     5.655 |     690 |      - |  1448552.7
+             spdlog_bench |    8192 |   754.117 |   92055 |133.347 |    10863.0
 ===============================================================================
 ```
-#### lwlog (colored and formatted, synchronous) vs spdlog (colored and formatted, synchronous) - Benchmarked with picobench(https://github.com/iboB/picobench)
-```
-===============================================================================
-   Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
-===============================================================================
-            lwlog_bench * |       8 |     0.018 |    2312 |      - |   432432.4
-             spdlog_bench |       8 |     1.292 |  161512 | 69.843 |     6191.5
-            lwlog_bench * |      64 |     0.166 |    2590 |      - |   386007.2
-             spdlog_bench |      64 |    14.400 |  225006 | 86.854 |     4444.3
-            lwlog_bench * |     512 |     0.798 |    1559 |      - |   641362.9
-             spdlog_bench |     512 |   122.694 |  239636 |153.694 |     4173.0
-            lwlog_bench * |    4096 |     6.724 |    1641 |      - |   609134.0
-             spdlog_bench |    4096 |   906.999 |  221435 |134.884 |     4516.0
-            lwlog_bench * |    8192 |    14.081 |    1718 |      - |   581781.0
-             spdlog_bench |    8192 |  1845.808 |  225318 |131.086 |     4438.2
-===============================================================================
-```
-#### lwlog (colored and formatted, synchronous) vs spdlog (formatted, synchronous) - Benchmarked with picobench(https://github.com/iboB/picobench)
+#### lwlog (colored and formatted, synchronous) vs spdlog (colored and formatted, synchronous)
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
 ===============================================================================
-            lwlog_bench * |       8 |     0.017 |    2125 |      - |   470588.2
-             spdlog_bench |       8 |     0.487 |   60862 | 28.641 |    16430.5
-            lwlog_bench * |      64 |     0.103 |    1603 |      - |   623781.7
-             spdlog_bench |      64 |     3.171 |   49539 | 30.902 |    20186.1
-            lwlog_bench * |     512 |     0.818 |    1597 |      - |   625916.9
-             spdlog_bench |     512 |    38.332 |   74866 | 46.860 |    13357.1
-            lwlog_bench * |    4096 |     7.457 |    1820 |      - |   549275.2
-             spdlog_bench |    4096 |   278.632 |   68025 | 37.365 |    14700.4
-            lwlog_bench * |    8192 |    23.543 |    2873 |      - |   347959.1
-             spdlog_bench |    8192 |   642.031 |   78372 | 27.271 |    12759.5
+            lwlog_bench * |       8 |     0.008 |    1000 |      - |  1000000.0
+             spdlog_bench |       8 |     1.779 |  222425 |222.425 |     4495.9
+            lwlog_bench * |      64 |     0.049 |     771 |      - |  1295546.6
+             spdlog_bench |      64 |    22.737 |  355265 |460.263 |     2814.8
+            lwlog_bench * |     512 |     0.354 |     691 |      - |  1445103.0
+             spdlog_bench |     512 |   165.877 |  323979 |468.183 |     3086.6
+            lwlog_bench * |    4096 |     3.013 |     735 |      - |  1359352.2
+             spdlog_bench |    4096 |  1252.415 |  305765 |415.643 |     3270.5
+            lwlog_bench * |    8192 |     5.842 |     713 |      - |  1402283.5
+             spdlog_bench |    8192 |  2549.965 |  311275 |436.496 |     3212.6
 ===============================================================================
 ```
-#### lwlog (forward(default) logging) vs lwlog (deferred logging) - Benchmarked with picobench(https://github.com/iboB/picobench)
+#### lwlog (forward(default) logging) vs lwlog (deferred logging)
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
 ===============================================================================
-   lwlog_deferred_bench * |       8 |     0.003 |     387 |      - |  2580645.2
-      lwlog_forward_bench |       8 |     0.015 |    1912 |  4.935 |   522875.8
-   lwlog_deferred_bench * |      64 |     0.021 |     329 |      - |  3033175.4
-      lwlog_forward_bench |      64 |     0.086 |    1351 |  4.100 |   739884.4
-   lwlog_deferred_bench * |     512 |     0.232 |     453 |      - |  2204046.5
-      lwlog_forward_bench |     512 |     0.634 |    1237 |  2.728 |   808080.8
-   lwlog_deferred_bench * |    4096 |     1.518 |     370 |      - |  2698109.5
-      lwlog_forward_bench |    4096 |     6.875 |    1678 |  4.529 |   595747.2
-   lwlog_deferred_bench * |    8192 |     3.074 |     375 |      - |  2664671.6
-      lwlog_forward_bench |    8192 |    10.454 |    1276 |  3.401 |   783593.5
+   lwlog_deferred_bench * |       8 |     0.003 |     375 |      - |  2666666.7
+      lwlog_forward_bench |       8 |     0.010 |    1200 |  3.200 |   833333.3
+   lwlog_deferred_bench * |      64 |     0.024 |     376 |      - |  2655601.7
+      lwlog_forward_bench |      64 |     0.050 |     778 |  2.066 |  1285140.6
+   lwlog_deferred_bench * |     512 |     0.171 |     334 |      - |  2990654.2
+      lwlog_forward_bench |     512 |     0.356 |     694 |  2.077 |  1439820.0
+   lwlog_deferred_bench * |    4096 |     1.086 |     265 |      - |  3771986.4
+      lwlog_forward_bench |    4096 |     3.124 |     762 |  2.877 |  1311265.5
+   lwlog_deferred_bench * |    8192 |     2.034 |     248 |      - |  4028522.3
+      lwlog_forward_bench |    8192 |     6.122 |     747 |  3.011 |  1338146.7
 ===============================================================================
 ```
+# Logical Architecture
+```
+Registry
+└── Logger
+    └── Sink
+        └── Writer(optional)
+```
+The architecture of lwlog is very simple, it's divided into three main modules - the **registry**, the **logger**, and the **sinks**.\
+An optional fourth part is the **_writer_**.
+Module | Description
+------------ | -------------
+```Writer``` | Abstraction which outputs the data to the destination. It is optional, because it is not actually needed, and there is no strict specification for what a writer should be
+```Sink``` | An object which sends(sinks) data to an output destination. Usually, the data could be handled by a writer object, or you can directly handle the output in the ```sink_it()``` function, without using a writer. A sink uses two policy classes - ```lwlog::sink_color_policy``` and ```lwlog::threading_policy```
+```Logger``` | An object, which manages a number of sinks. It provides the same functionality as a sink, with the difference being that it contains a storage of sinks, and every operation the logger performs is distributed to all the sinks it contains. Also it can distribute data to each sink in different ways. You can log either with the forward logging mechanism, or the deferred logging mechanism. The logging mechanism are handled by the ```lwog::log_policy``` policy class, where the ```sink_it()``` function of each sink is called. **NOTE**: I highly encourage using a logger, even when you are going to be using a single sink
+```Registry``` | A global singleton class, which contains all the created loggers. It provides an easy access to the created loggers from everywhere in your application. Each logger is registered in the registry on creation, unless ```automatic_registry()``` is turned off
 # Usage
 ## Basic Usage
 ```cpp
@@ -124,59 +124,121 @@ int main()
 ## Convenience logger aliases
 In the file lwlog.h you can see several convenience aliases at your disposal.\
 They are intended for ease of use, so I encourage you to use them instead of the more complex way of creating loggers directly through the logger class.\
-They are predefined with default configurations, so unless you need more special functionality, stick to using them.\
-```lwlog::basic_logger``` - configured with a standard log mechanism(forward logging) and a standard sink storage(dynamic storage), not thread-safe
+They are predefined with default configurations, so unless you need more special functionality, stick to using them.
+Alias | Description
+------------ | -------------
+```lwlog::basic_logger``` | Configured with a standard log mechanism(forward logging) and a standard sink storage(dynamic storage), not thread-safe
+```lwlog::console_logger``` | basic_logger which sinks to stdout
+```lwlog::file_logger``` | basic_logger which sinks to a file
+```lwlog::null_logger``` | A null logger is simply a logger with default configuration but without any sinks. Use it if you don't want compile time sinks and you are only interested in adding sinks later at runtime
+#### Example
 ```cpp
 #include "lwlog/lwlog.h"
 
 int main()
 {
- 	// logger to stdout with default configuration
-	auto console = std::make_shared<lwlog::basic_logger<sinks::stdout_sink>>("CONSOLE");
+	auto basic = std::make_shared<lwlog::basic_logger<sinks::stdout_sink>>("CONSOLE");
+	
+	auto console = std::make_shared<console_logger>("CONSOLE");
+	auto file = std::make_shared<file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
+	
+	auto null = std::make_shared<lwlog::null_logger>("LOGGER");
 	
 	return 0;
 }
 ```
-```lwlog::console_logger``` - basic_logger which sinks to stdout\
-```lwlog::file_logger``` - basic_logger which sinks to a file
+## Thread-safety
+Both the sinks and the logger classes expect a threading policy as a template parameter, which will determine whether they will be thread-safe or not.
+However, if you want to use the convenienve aliases I meantioned above, you need to keep in mind they are not thread-safe.\
+And for that reason all of them have a thread-safe analog whith the same name and an _mt suffix.\
+```lwlog::basic_logger_mt```, ```lwlog::console_logger_mt```, ```lwlog::file_logger_mt```, ```lwlog::null_logger_mt```
+## Logger configuration
+Policy | Description
+------------ | -------------
+```lwlog::default_log_policy``` | Convenience alias for ```forward_log_policy```
+```lwlog::forward_log_policy``` | Your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink
+```lwlog::deferred_log_policy``` | As the name suggests, log calls are deffered for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency, but should be used only if you are sure you don't need your logs immediately
+```lwlog::default_storage_policy``` | Convenienve alias for ```static_storage_policy```
+```lwlog::static_storage_policy``` | Configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks at runtime, it is more lightweight than a dynamic sink storage
+```lwlog::dynamic_storage_policy``` | Configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks
+```lwlog::single_threaded_policy``` | Configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger
+```lwlog::multi_threaded_policy``` | Configures the sinks with a mutex and locks for thread-safety
+#### Example
 ```cpp
 #include "lwlog/lwlog.h"
 
 int main()
 {
-	auto console = std::make_shared<console_logger>("CONSOLE")
-	auto file = std::make_shared<file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
+	auto console = std::make_shared<
+		lwlog::logger<
+			lwlog::default_log_policy,
+			lwlog::default_storage_policy,
+			lwlog::single_threaded_policy,
+			lwlog::sinks::stdout_sink>
+			>("CONSOLE");
+	
 	return 0;
 }
 ```
-```lwlog::null_logger``` - A null logger is simply a logger with default configuration but without any sinks. Use it if you don't want compile time sinks and you are only interested in adding sinks later at runtime
+## Deferred logging
+Deferred logging provides extremely low latency, however it's only applicable when you don't need the logs to be outputted immediately.\
+The low latency comes from the fact that with deferred logging a log call doesn't sink and doesn't format anything, it only stores data.\
+This data is sinked and formatted at a later stage, only when needed.
+There is one problem with it - all log information will be lost if there is an application crash and you haven't sinked the deferred logs. On crash, all deferred logs should be automatically sinked, that's the solution that I will be working on.
+#### Example
 ```cpp
-auto logger = std::make_shared<lwlog::null_logger>("LOGGER");
-```
-## Switching off logging
-If you want to be able to turn off logging completely, you can use the preprocessor directives.
-```cpp
-#LWLOG_DISABLE
-#LWLOG_ERROR_OFF
 #include "lwlog/lwlog.h"
 
 int main()
 {
-	LWLOG_SET_PATTERN("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
-	LWLOG_SET_LEVEL_FILTER(lwlog::sink_level::error | lwlog::sink_level::critical);
-	LWLOG_ERROR("Error message");
+	auto console = std::make_shared<
+		lwlog::logger<
+			lwlog::deferred_log_policy,
+			lwlog::default_storage_policy,
+			lwlog::single_threaded_policy,
+			lwlog::sinks::stdout_sink>
+			>("CONSOLE");
+	
+	console->critical("First critical message");
+	console->info("First info message");
+	console->debug("First debug message");
+	
+	console->sink_logs();
+	
 	return 0;
 }
 ```
-These directives use the default loggger and are present in the lwlog.h file.\
-They will log unless you disable logging with LWLOG_DISABLE(should always be at the very top of the file), or you switch off a specific logging level.\
-Levels can be switched off at runtime as well, just by using the LWLOG_SET_LEVEL_FILTER directive.\
-You can also set a pattern and set a filter for log levels.\
-If logging is disabled, the directives expand to nothing.
+By calling ```sink_logs()``` you sink all the logs that are deferred for later use to their respective sinks with their respective patterns.\
+If ```sink_logs()``` is called by a forward logging logger it will emit a warning.
 ## Formatting
 Formatting is handled with a pay for what you need approach. Currently, there are still aspects which could be optimized further, which will result in even more literal meaning of paying for what you need.\
 The user is able to set a pattern, by which the log messages will be formatted. This pattern is an internal to the library language, which is a sequence of formatting flags, characters and color codes(which are optional). It allows flexibility in terms of configuring the output information in the most appropriate for the situation way, allowing as meaningful log output as possible.\
 How is formatting done? - A pattern is set, and then it gets compiled by the library. Compilation is done in the ```lwlog::details::pattern``` class. It firts parses the pattern, and extracts the formatting flags, which are then used to retrieve only the formatters the pattern will need. In the end, all the retrieved formatters are called on the pattern, and all formatting flags are replaced with their corresponding values.
+## Custom attributes
+Attribute - an object, which contains a pair of flags(verbose and shortened) and a value - each flag is replaced with it's corresponding value.
+Custom attributes allow for flexible patterns. A custom attribute represents a pair of flags and a reference to a value of a certain type.
+A custom attribute's value is an std::variant which contains a couple of reference types, to allow for more freedom in terms of having attribute values of different data types.
+#### Example
+```cpp
+#include "lwlog/lwlog.h"
+
+int main()
+{
+	std::string current_status = "inactive";
+	
+	auto console = std::make_shared<console_logger>("CONSOLE");
+	console->add_attribute({"{status}", "%s"}, current_status);
+	console->set_pattern("{status} --- ^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	
+	current_status = "active";
+	console->info("Some info message");
+	
+	return 0;
+}
+```
+#### Limitations
+Currently, an attribute can contain a reference to only a couple of types - int, float, double and std::string
+The reason for this is because more possible types in std::variant creates more overhead, so I've tried to select the most probable types a user can use for values.
 ## Multiple sinks (compile-time)
 ```cpp
 #include "lwlog/lwlog.h"
@@ -221,6 +283,52 @@ int main()
 			>("COMBINED", file_sink);
 
 	return 0;
+}
+```
+## Creating your own sink
+As I said and promissed, lwlog is extremely easy to extend. Let's give an example with sinks.\
+To create your own sink, all you have to do is inherit from ```lwlog::interface::sink``` and implement a ```sink_it()``` function. That's it.
+#### Example with an existing sink implementation
+```cpp
+#include "policy/sink_color_policy.h"
+
+namespace lwlog::sinks
+{
+	template<typename ThreadingPolicy>
+	class stdout_sink
+		: public sink<colored_policy, ThreadingPolicy>
+		, public details::stream
+	{
+	public:
+		stdout_color_sink() : details::stream(stdout) {}
+		void sink_it(std::string_view message) override
+		{
+			details::stream::write(message);
+		}
+	};
+}
+```
+Here we inherit from the sink base class, and configure it to be colored. Whether it's thread-safe or not is left up to the one using the sink.\
+The color policy could be either colored(```lwlog::colored_policy```) or non-colored (```lwlog::uncolored_policy```).\
+The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them. Using ```lwlog::colored_policy``` is most suitable for console sinks, since it relies on console specific color codes.\
+We only need the ```sink_it()``` function, which is called as the actual log call. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.\
+As mentioned in [Logical Architecture](https://github.com/ChristianPanov/lwlog#logical-architecture), you can either use some kind of a writer class, which handles the actual writing, or you can directly handle the writing in the function.
+#### Example
+```cpp
+#include "policy/sink_color_policy.h"
+
+namespace lwlog::sinks
+{
+	template<typename ThreadingPolicy>
+	class new_custom_sink
+		: public sink<colored_policy, ThreadingPolicy>
+	{
+	public:
+		void sink_it(std::string_view message) override
+		{
+			// sink message to somewhere
+		}
+	};
 }
 ```
 ## Default logger
@@ -279,106 +387,43 @@ int main()
 	return 0;
 }
 ```
-## Creating your own sink
-As I said and promissed, lwlog is extremely easy to extend. Let's give an example with sinks.\
-To create your own sink, all you have to do is to inherit from ```lwlog::interface::sink``` and implement a ```sink_it()``` function. That's it.
-#### Example with an existing sink implementation
+## Switching off logging
+If you want to be able to turn off logging completely, you can use the preprocessor directives.
+These directives use the default loggger and are present in the **_lwlog.h_** file.\
+They will log unless you disable logging with ```LWLOG_DISABLE```(should always be at the very top of the file), or you switch off a specific logging level.\
+Levels can be switched off at runtime as well, just by using the ```LWLOG_SET_LEVEL_FILTER``` directive.\
+If logging is disabled, the directives expand to nothing.
+#### Example
 ```cpp
-#include "policy/sink_color_policy.h"
-
-namespace lwlog::sinks
-{
-	template<typename ThreadingPolicy>
-	class stdout_sink
-		: public sink<colored_policy, ThreadingPolicy>
-		, public details::stream
-	{
-	public:
-		stdout_color_sink() : details::stream(stdout) {}
-		void sink_it(std::string_view message) override
-		{
-			details::stream::write(message);
-		}
-	};
-}
-```
-Here we inherit from the sink base class, and configure it to be colored. Whether it's thread-safe or not is left up to the one using the sink.\
-The color policy could be either colored(```lwlog::colored_policy```) or non-colored (```lwlog::uncolored_policy```).\
-The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them. Using ```lwlog::colored_policy``` is most suitable for console sinks, since it relies on console specific color codes.\
-We only need the ```sink_it()``` function, which is called as the actual log call. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.
-```cpp
-#include "policy/sink_color_policy.h"
-
-namespace lwlog::sinks
-{
-	template<typename ThreadingPolicy>
-	class new_custom_sink
-		: public sink<colored_policy, ThreadingPolicy>
-	{
-	public:
-		void sink_it(std::string_view message) override
-		{
-			// sink message to somewhere
-		}
-	};
-}
-```
-## Logger configuration
-```cpp
+#LWLOG_DISABLE
+#LWLOG_ERROR_OFF
 #include "lwlog/lwlog.h"
 
 int main()
 {
-	auto console = std::make_shared<
-		lwlog::logger<
-			lwlog::default_log_policy,
-			lwlog::default_storage_policy,
-			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_sink>
-			>("CONSOLE");
-	
+	LWLOG_SET_PATTERN("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	LWLOG_SET_LEVEL_FILTER(lwlog::sink_level::error | lwlog::sink_level::critical);
+	LWLOG_ERROR("Error message");
 	return 0;
 }
 ```
-```lwlog::default_log_policy``` - convenience alias for ```forward_log_policy```\
-```lwlog::forward_log_policy``` - your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink\
-```lwlog::deferred_log_policy``` - as the name suggests, log calls are deffered for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency, but use it only if you are sure you don't need your logs immediately\
-```lwlog::default_storage_policy``` - convenienve alias for ```static_storage_policy```\
-```lwlog::static_storage_policy``` - it configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks in at runtime, it is more lightweight than a dynamic sink storage\
-```lwlog::dynamic_storage_policy``` - it configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks\
-```lwlog::single_threaded_policy``` - configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger\
-```lwlog::multi_threaded_policy``` - configures the sinks with a mutex and locks for thread-safety
-## Deferred logging
-Deferred logging provides extremely low latency, however it's only applicable when you don't need the logs to be outputted immediately.\
-The low latency comes from the fact that with deferred logging a log call doesn't sink and doesn't format anything, it only stores data.\
-This data is sinked and formatted at a later stage, only when needed.
-There is one problem with it - all log information will be lost if there is an application crash and you haven't sinked the deferred logs. On crash, all deferred logs should be automatically sinked, that's the solution that I will be working on.
+# Performance
+So how does lwlog achieve this performance? The answer lies in one very important acrhictectural decision and a couple of techniques.
+### Architecture
+The architectural decision that speeds up the performance is about how the formatting pattern compilation is handled. The pattern in question is parsed completely off the log call site, and all that's left for the log call functions is to do the replacement of the flags with their corresponding values.\
+Color processing is also done off the log call site. Color processing can be a big performance bottleneck, and it doesn't need to happen at the log call site, since colors have nothing to do with the current log information. Once the pattern is set, it immediately processes all the color codes in place.
+1. A pattern is set
+2. All color codes are processed 
+3. The pattern is parsed and only the needed formatters are pushed to a storage
+4. When a log function is called, the formatters in the storage are called on the pattern
+### Output
+A very important performance improvement, probably the biggest one, is manual buffering.\
+With manual buffering, I manually increase the stream buffering with a size of **_2^22 bytes_**, bigger than the default one(**_512 bytes_**), which improves the performance of output to stdout, stderr and a file a lot.
 ```cpp
-#include "lwlog/lwlog.h"
-
-int main()
-{
-	auto console = std::make_shared<
-		lwlog::logger<
-			lwlog::deferred_log_policy,
-			lwlog::default_storage_policy,
-			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_sink>
-			>("CONSOLE");
-	
-	console->critical("First critical message");
-	console->info("First info message");
-	console->debug("First debug message");
-	
-	console->sink_logs();
-	
-	return 0;
-}
+std::setvbuf(stdout, NULL, _IOFBF, size);
+std::fwrite("Hello, World!", 14, 1, stdout);
 ```
-By calling ```sink_logs()``` you sink all the logs that are deferred for later use to their respective sinks with their respective patterns.\
-If ```sink_logs()``` is called by a forward logging logger it will emit a warning.
-## Thread-safety
-Both the sinks and the logger classes expect a threading policy as a template parameter, which will determine whether they will be thread-safe or not.
-However, if you want to use the convenienve aliases I meantioned above, you need to keep in mind they are not thread-safe.\
-And for that reason all of them have a thread-safe analog whith the same name and an _mt suffix.\
-```lwlog::basic_logger_mt```, ```lwlog::console_logger_mt```, ```lwlog::file_logger_mt```, ```lwlog::null_logger_mt```
+This example here shows how this is achieved. This is as fast as console output can get.
+### Time
+Time is handled in a special way. First off, since std::chrono is not as performant on Windows as it is on Linux, a platform-dependant approach, which is much faster than std::chrono is, is taken for Windows.\
+Still, I take it even further. For some reason, getting the local time with std::chrono is faster than getting the UTC, and with the Windows API it's the opposite - getting the gmtime is faster than getting the UTC, so each implementation initially gets the faster of the two, and then arithmetically processes the time to the desired time format(either local time or UTC)
