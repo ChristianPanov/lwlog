@@ -8,7 +8,7 @@ namespace lwlog::details
 	class file_writer
 	{
 	private:
-		static constexpr std::uint32_t internal_size{ 4194304 };
+		static constexpr std::uint32_t internal_size{ 8388608 };
 
 	public:
 		file_writer() = default;
