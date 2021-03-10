@@ -1,10 +1,6 @@
 #include "Benchmark.h"
 
 #include "lwlog.h"
-#include "logger.h"
-#include "sinks/stdout_sink.h"
-
-#include <iostream>
 
 int main()
 {
