@@ -11,7 +11,7 @@ namespace lwlog::details
 	struct formatter
 	{
 		virtual ~formatter() = default;
-		virtual void format(std::string&, log_message&) = 0;
+		virtual void format(std::string&, const log_message&) = 0;
 	};
 
 	class pattern

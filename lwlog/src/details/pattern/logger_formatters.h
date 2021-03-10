@@ -7,7 +7,7 @@ namespace lwlog::details
 {
 	struct logger_name_formatter : public formatter
 	{
-		virtual void format(std::string& pattern, log_message& log_msg) override
+		virtual void format(std::string& pattern, const log_message& log_msg) override
 		{
 			pattern::format_attribute(
 				pattern,
@@ -19,7 +19,7 @@ namespace lwlog::details
 
 	struct level_formatter : public formatter
 	{
-		virtual void format(std::string& pattern, log_message& log_msg) override
+		virtual void format(std::string& pattern, const log_message& log_msg) override
 		{
 			auto level = lwlog::level_details::to_string(log_msg.level);
 			pattern::format_attribute(
@@ -32,7 +32,7 @@ namespace lwlog::details
 
 	struct level_color_formatter : public formatter
 	{
-		virtual void format(std::string& pattern, log_message& log_msg) override
+		virtual void format(std::string& pattern, const log_message& log_msg) override
 		{
 			pattern::format_attribute(
 				pattern,
@@ -44,7 +44,7 @@ namespace lwlog::details
 
 	struct message_formatter : public formatter
 	{
-		virtual void format(std::string& pattern, log_message& log_msg) override
+		virtual void format(std::string& pattern, const log_message& log_msg) override
 		{
 			pattern::format_attribute(
 				pattern,
@@ -56,7 +56,7 @@ namespace lwlog::details
 
 	struct thread_id_formatter : public formatter
 	{
-		virtual void format(std::string& pattern, log_message& log_msg) override
+		virtual void format(std::string& pattern, const log_message& log_msg) override
 		{
 			pattern::format_attribute(
 				pattern,
