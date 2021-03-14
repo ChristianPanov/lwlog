@@ -219,7 +219,6 @@ Verbose flag | Short flag | Description | Example
 ------------ | ------------- | ------------- | -------------
 ```{name}``` | ```%n``` | Logger's identification name | "logger name"
  ```{level}``` | ```%l``` | Log level of the message | "info", "warning", "error", "critical", "debug"
-```{level_short}``` | ```%L``` | Short version of the log level | "I", "W", "E", "C", "D"
 ```{message}``` | ```%v``` | Log message | "Some log message"
 ```{thread}``` | ```%t``` | Thread id | "6567358443629571051"
 ```{level_color}``` | ```%c``` | The color corresponding to the level of the log message | -
