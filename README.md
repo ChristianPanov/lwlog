@@ -214,6 +214,33 @@ If ```sink_logs()``` is called by a forward logging logger it will emit a warnin
 Formatting is handled with a pay for what you need approach. Currently, there are still aspects which could be optimized further, which will result in even more literal meaning of paying for what you need.\
 The user is able to set a pattern, by which the log messages will be formatted. This pattern is an internal to the library language, which is a sequence of formatting flags, characters and color codes(which are optional). It allows flexibility in terms of configuring the output information in the most appropriate for the situation way, allowing as meaningful log output as possible.\
 How is formatting done? - A pattern is set, and then it gets compiled by the library. Compilation is done in the ```lwlog::details::pattern``` class. It firts parses the pattern, and extracts the formatting flags, which are then used to retrieve only the formatters the pattern will need. In the end, all the retrieved formatters are called on the pattern, and all formatting flags are replaced with their corresponding values.
+### Pattern Flags
+Verbose flag | Short flag | Description | Example
+------------ | ------------- | ------------- | -------------
+```{name}``` | ```%n``` | Logger's identification name | "logger name"
+ ```{level}``` | ```%l``` | Log level of the message | "info", "warning", "error", "critical", "debug"
+```{level_short}``` | ```%L``` | Short version of the log level | "I", "W", "E", "C", "D"
+```{message}``` | ```%v``` | Log message | "Some log message"
+```{thread}``` | ```%t``` | Tthread id | "6567358443629571051"
+```{level_color}``` | ```%c``` | The color corresponding to the level of the log message | -
+```{date}``` | ```%F``` | Current date YY-MM-DD | "2021-01-01"
+```{date_short}``` | ```%D``` | Current short date MM/DD/YY | "01/01/21"
+```{year}``` | ```%Y``` | Current year | "2021"
+```{year_short}``` | ```%y``` | Current short year | "21"
+```{month}``` | ```%m``` | Current month 01-12 | "01"
+```{month_name}``` | ```%B``` | Current month as name | "January"
+```{month_name_short}``` | ```%b``` | Current short month as name | "Jan"
+```{day}``` | ```%d``` | Current day of month 01-31 | "01"
+```{weekday}``` | ```%A``` | Current day of the week as name | "Friday"
+```{weekday_short}``` | ```%a``` | Current short day of the week as name | "Fri"
+```{time}``` | ```%T``` | Current time HH:MM:SS | "17:42:10"
+```{24_clock}``` | ```%R``` | Current 24-hour format time | "17:42"
+```{12_clock}``` | ```%r``` | Current 12-hour format time | "05:42:10pm"
+```{ampm}``` | ```%p``` | am/pm | "am", "pm"
+```{hour_24}``` | ```%H``` | Current hour in 24-hour format | "17"
+```{hour_12}``` | ```%I``` | Current hour in 12-hour format | "05"
+```{minute}``` | ```%m``` | Current minute | "42"
+```{second}``` | ```%s``` | Current second | "10"
 ## Custom attributes
 Attribute - an object, which contains a pair of flags(verbose and shortened) and a value - each flag is replaced with it's corresponding value.
 Custom attributes allow for flexible patterns. A custom attribute represents a pair of flags and a reference to a value of a certain type.
