@@ -221,7 +221,7 @@ Verbose flag | Short flag | Description | Example
  ```{level}``` | ```%l``` | Log level of the message | "info", "warning", "error", "critical", "debug"
 ```{level_short}``` | ```%L``` | Short version of the log level | "I", "W", "E", "C", "D"
 ```{message}``` | ```%v``` | Log message | "Some log message"
-```{thread}``` | ```%t``` | Tthread id | "6567358443629571051"
+```{thread}``` | ```%t``` | Thread id | "6567358443629571051"
 ```{level_color}``` | ```%c``` | The color corresponding to the level of the log message | -
 ```{date}``` | ```%F``` | Current date YY-MM-DD | "2021-01-01"
 ```{date_short}``` | ```%D``` | Current short date MM/DD/YY | "01/01/21"
