@@ -91,8 +91,8 @@ namespace lwlog::details::datetime
     static std::string get_date(time_point_t now)
     {
         return std::to_string(now.wYear) + "-" +
-            std::to_string(now.wMonth) + "-" +
-            std::to_string(now.wDay);
+            pad_with_zero_if_needed(now.wMonth) + "-" +
+            pad_with_zero_if_needed(now.wDay);
     }
 
     static std::string get_date_short(time_point_t now)
