@@ -4,11 +4,11 @@
 
 namespace lwlog
 {
-	std::unique_ptr<interface::logger> registry::m_default_logger = 
+	std::unique_ptr<interface::logger> registry::m_default_logger =
 		std::make_unique<logger<
-		default_log_policy, 
-		static_storage_policy, 
-		single_threaded_policy, 
+		default_log_policy,
+		static_storage_policy,
+		single_threaded_policy,
 		sinks::stdout_sink
 		>>("");
 
