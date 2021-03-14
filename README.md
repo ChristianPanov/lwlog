@@ -239,8 +239,8 @@ Verbose flag | Short flag | Description | Example
 ```{ampm}``` | ```%p``` | am/pm | "am", "pm"
 ```{hour_24}``` | ```%H``` | Current hour in 24-hour format | "17"
 ```{hour_12}``` | ```%I``` | Current hour in 12-hour format | "05"
-```{minute}``` | ```%m``` | Current minute | "42"
-```{second}``` | ```%s``` | Current second | "10"
+```{minute}``` | ```%m``` | Current minute 00-59 | "42"
+```{second}``` | ```%s``` | Current second 00-59 | "10"
 ## Custom attributes
 Attribute - an object, which contains a pair of flags(verbose and shortened) and a value - each flag is replaced with it's corresponding value.
 Custom attributes allow for flexible patterns. A custom attribute represents a pair of flags and a reference to a value of a certain type.
