@@ -6,14 +6,15 @@ namespace lwlog::details
 {
 	std::string pattern::compile(log_message& log_msg)
 	{
+		std::string pattern = m_pattern;
 		for (const auto& formatter : m_formatters)
-			formatter->format(m_pattern, log_msg);
+			formatter->format(pattern, log_msg);
 
 		for (const auto& [flags, value] : m_custom_attributes)
-			format_attribute(m_pattern, flags,
+			format_attribute(pattern, flags,
 				std::visit(attrib_value_visitor{}, value));
 
-		return m_pattern;
+		return pattern;
 	}
 
 	void pattern::handle_flag_formatters()
