@@ -112,7 +112,7 @@ namespace lwlog::details
 	std::vector<std::string> pattern::verbose_flags()
 	{
 		std::vector<std::string> buff;
-		size_t pos = m_pattern.find("{", 0);
+		std::size_t pos = m_pattern.find("{", 0);
 		while (pos != std::string::npos)
 		{
 			buff.push_back(m_pattern.substr(pos, m_pattern.find("}", pos) - pos + 1));
@@ -124,7 +124,7 @@ namespace lwlog::details
 	std::vector<std::string> pattern::short_flags()
 	{
 		std::vector<std::string> buff;
-		size_t pos = m_pattern.find("%", 0);
+		std::size_t pos = m_pattern.find("%", 0);
 		while (pos != std::string::npos)
 		{
 			buff.push_back(m_pattern.substr(pos, 2));
