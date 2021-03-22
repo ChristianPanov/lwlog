@@ -211,9 +211,9 @@ int main()
 By calling ```sink_logs()``` you sink all the logs that are deferred for later use to their respective sinks with their respective patterns.\
 If ```sink_logs()``` is called by a forward logging logger it will emit a warning.
 ## Formatting
-Formatting is handled with a pay for what you need approach. Currently, there are still aspects which could be optimized further, which will result in even more literal meaning of paying for what you need.\
-The user is able to set a pattern, by which the log messages will be formatted. This pattern is an internal to the library language, which is a sequence of formatting flags, characters and color codes(which are optional). It allows flexibility in terms of configuring the output information in the most appropriate for the situation way, allowing as meaningful log output as possible.\
-How is formatting done? - A pattern is set, and then it gets compiled by the library. Compilation is done in the ```lwlog::details::pattern``` class. It firts parses the pattern, and extracts the formatting flags, which are then used to retrieve only the formatters the pattern will need. In the end, all the retrieved formatters are called on the pattern, and all formatting flags are replaced with their corresponding values.
+Formatting is handled with a pay for what you need approach.\
+The user is able to set a pattern, by which the log messages will be formatted. This pattern is an internal to the library language, which is a sequence of formatting flags, alignment specifications(optional), characters and color codes(optional). It allows flexibility in terms of configuring the output information in the most appropriate for the situation way, allowing as meaningful log output as possible.\
+How is formatting done? - A pattern is set, and then it gets compiled by the library. Compilation is done in the ```lwlog::details::pattern``` class. It firts parses the pattern, and extracts the formatting flags, which are then used to retrieve only the formatters the pattern will need. It also parses the alignment specifications and extracts all the needed information for the alignments. In the end, all the retrieved formatters are called on the pattern and all formatting flags are replaced with their corresponding values and their corresponding alignment specifications(if any).
 ### Syntax
 Verbose flag | Short flag | Description | Example
 ------------ | ------------- | ------------- | -------------
@@ -240,6 +240,51 @@ Verbose flag | Short flag | Description | Example
 ```{hour_12}``` | ```%I``` | Current hour in 12-hour format | "05"
 ```{minute}``` | ```%m``` | Current minute 00-59 | "42"
 ```{second}``` | ```%s``` | Current second 00-59 | "10"
+### Alignment Syntax
+Alignment specifications are individual to an attribute alignment information. It contains an alignment side, width, and an optional fill character, which by default, if not specified, is an empty space.\
+
+Syntax | Example | Result
+------------ | ------------- | -------------
+```:< <width><flag>``` | ```[:<12%l]``` | "[info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]"
+```:> <width><flag>``` | ```[:>12%l]``` | "[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;info]"
+```:^ <width><flag>``` | ```[:^12%l]``` | "[&nbsp;&nbsp;&nbsp;&nbsp;info&nbsp;&nbsp;&nbsp;&nbsp;]"
+```:^ <fill_character><width><flag>``` | ```[:^-12%l]``` | "[----info----]"
+#### Example
+```cpp
+#include "lwlog/lwlog.h"
+
+int main()
+{
+	auto console = std::make_shared<console_logger>("CONSOLE");
+	console->set_pattern("[%T] [%n] [:^12%l]: %v");
+
+	console->info("First info message");
+	console->critical("First info message");
+	
+	return 0;
+}
+```
+### Color Codes
+Color codes are used for coloring a pattern. Each color code is scoped and needs to be ended with a ```^reset^``` code.
+#### Example
+```cpp
+#include "lwlog/lwlog.h"
+
+int main()
+{
+	auto console = std::make_shared<console_logger>("CONSOLE");
+	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+
+	console->critical("First critical message");
+	
+	return 0;
+}
+```
+##### Output
+```
+[19:44:50] [CONSOLE] [    info    ]: First info message
+[19:44:50] [CONSOLE] [  critical  ]: First critical message
+```
 ## Custom attributes
 Attribute - an object, which contains a pair of flags(verbose and shortened) and a value - each flag is replaced with it's corresponding value.
 Custom attributes allow for flexible patterns. A custom attribute represents a pair of flags and a reference to a value of a certain type.
@@ -257,7 +302,7 @@ int main()
 	console->set_pattern("{status} --- ^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
 	
 	current_status = "active";
-	console->info("Some info message");
+	console->info("First info message");
 	
 	return 0;
 }
@@ -375,7 +420,7 @@ int main()
 	lwlog::set_level_filter(lwlog::sink_level::debug | lwlog::sink_level::critical);
 	lwlog::info("Will not be displayed");
 
-	lwlog::set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	lwlog::set_pattern("[%T] [%n] [%l]: %v");
 	lwlog::debug("Will be displayed according to the new pattern");
 
 	return 0;
@@ -394,7 +439,7 @@ int main()
 	//Pattern will be applied to all loggers present in the registry
 	lwlog::apply_to_all([](lwlog::primitives::logger_ptr logger)
 		{
-			logger->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^ TEXT");
+			logger->set_pattern("[%T] [%n] [%l]: %v");
 		});
 	
 	return 0;
@@ -427,9 +472,9 @@ If logging is disabled, the directives expand to nothing.
 
 int main()
 {
-	LWLOG_SET_PATTERN("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	LWLOG_SET_PATTERN("[%T] [%n] [%l]: %v");
 	LWLOG_SET_LEVEL_FILTER(lwlog::sink_level::error | lwlog::sink_level::critical);
-	LWLOG_ERROR("Error message");
+	LWLOG_ERROR("First error message");
 	return 0;
 }
 ```
@@ -441,7 +486,8 @@ Color processing is also done off the log call site. Color processing can be a b
 1. A pattern is set
 2. All color codes are processed 
 3. The pattern is parsed and only the needed formatters are pushed to a storage
-4. When a log function is called, the formatters in the storage are called on the pattern
+4. The alignment specifications are parsed and all the needed information such as alignment side, width, and fill character is extracted
+5. When a log function is called, the formatters in the storage are called on the pattern with their appropriate alignment specifications
 ### Output
 A very important performance improvement, probably the biggest one, is manual buffering.\
 With manual buffering, I manually increase the stream buffering with a size of **_2^22 bytes_**, bigger than the default one(**_512 bytes_**), which improves the performance of output to stdout, stderr and a file a lot.
