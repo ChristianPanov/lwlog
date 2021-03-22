@@ -10,7 +10,7 @@ namespace lwlog
 		static_storage_policy,
 		single_threaded_policy,
 		sinks::stdout_sink
-		>>("");
+		>>("GLOBAL");
 
 	registry& registry::instance()
 	{
@@ -45,7 +45,7 @@ namespace lwlog
 	{
 		for (const auto& [name, logger] : m_loggers)
 		{
-			if (!name.empty()) function(logger);
+			if (name != "GLOBAL") function(logger);
 		}
 	}
 
