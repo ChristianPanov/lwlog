@@ -115,7 +115,7 @@ int main()
 	auto console2 = std::make_shared<lwlog::console_logger>("CONSOLE");
 	
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
-	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	console->set_pattern("[%T] [%n] [%l]: %v");
 	console->critical("First critical message");
 	
 	return 0;
@@ -264,6 +264,11 @@ int main()
 	return 0;
 }
 ```
+##### Output
+```
+[19:44:50] [CONSOLE] [    info    ]: First info message
+[19:44:50] [CONSOLE] [  critical  ]: First critical message
+```
 ### Color Codes
 Color codes are used for coloring a pattern. Each color code is scoped and needs to be ended with a ```^reset^``` code.
 #### Example
@@ -280,11 +285,6 @@ int main()
 	return 0;
 }
 ```
-##### Output
-```
-[19:44:50] [CONSOLE] [    info    ]: First info message
-[19:44:50] [CONSOLE] [  critical  ]: First critical message
-```
 ## Custom attributes
 Attribute - an object, which contains a pair of flags(verbose and shortened) and a value - each flag is replaced with it's corresponding value.
 Custom attributes allow for flexible patterns. A custom attribute represents a pair of flags and a reference to a value of a certain type.
@@ -299,7 +299,7 @@ int main()
 	
 	auto console = std::make_shared<console_logger>("CONSOLE");
 	console->add_attribute({"{status}", "%s"}, current_status);
-	console->set_pattern("{status} --- ^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	console->set_pattern("{status} --- [%T] [%n] [%l]: %v");
 	
 	current_status = "active";
 	console->info("First info message");
@@ -307,6 +307,8 @@ int main()
 	return 0;
 }
 ```
+##### Output
+```active --- [19:44:50] [CONSOLE] [info]: First critical message```
 #### Limitations
 Currently, an attribute can contain a reference to only a couple of types - int, float, double and std::string
 The reason for this is because more possible types in std::variant creates more overhead, so I've tried to select the most probable types a user can use for values.
@@ -326,7 +328,7 @@ int main()
 			>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 
 	// Color attributes will be ignored for the file sink
-	logger->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	logger->set_pattern("[%T] [%n] [%l]: %v");
 	logger->critical("First critical message"); // Log message will be distributed to both sinks
 	
 	return 0;
@@ -417,7 +419,7 @@ int main()
 	lwlog::critical("Critical message");
 	lwlog::debug("Debug message");
 
-	lwlog::set_level_filter(lwlog::sink_level::debug | lwlog::sink_level::critical);
+	lwlog::set_level_filter(lwlog::level::debug | lwlog::level::critical);
 	lwlog::info("Will not be displayed");
 
 	lwlog::set_pattern("[%T] [%n] [%l]: %v");
@@ -425,6 +427,15 @@ int main()
 
 	return 0;
 }
+```
+##### Output
+```
+[22, 20:00:15] [info] [GLOBAL]: Info message
+[22, 20:00:15] [warning] [GLOBAL]: Warning message
+[22, 20:00:15] [error] [GLOBAL]: Error message
+[22, 20:00:15] [critical] [GLOBAL]: Critical message
+[22, 20:00:15] [debug] [GLOBAL]: Debug message
+[20:00:15] [GLOBAL] [debug]: Will be displayed according to the new pattern
 ```
 ## Global operations
 In order to apply a logger function to all loggers present in the registry, you can use the function ```apply_to_all()``` in such manner
@@ -473,7 +484,7 @@ If logging is disabled, the directives expand to nothing.
 int main()
 {
 	LWLOG_SET_PATTERN("[%T] [%n] [%l]: %v");
-	LWLOG_SET_LEVEL_FILTER(lwlog::sink_level::error | lwlog::sink_level::critical);
+	LWLOG_SET_LEVEL_FILTER(lwlog::level::error | lwlog::level::critical);
 	LWLOG_ERROR("First error message");
 	return 0;
 }
