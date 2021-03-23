@@ -61,40 +61,21 @@ namespace lwlog::details
 
 	void pattern::handle_flag_formatters()
 	{
-		if (strstr(m_pattern.data(), "{") && strstr(m_pattern.data(), "}"))
-		{
-			for (const auto& flag : this->verbose_flags())
-			{
-				if (verbose_logger_data[flag])
-				{
-					m_formatters.push_back(verbose_logger_data[flag]);
-				}
-			}
-			for (const auto& flag : this->verbose_flags())
-			{
-				if (verbose_datetime_data[flag])
-				{
-					m_formatters.push_back(verbose_datetime_data[flag]);
-				}
-			}
-		}
-		if (strstr(m_pattern.data(), "%"))
-		{
-			for (const auto& flag : this->short_flags())
-			{
-				if (shortened_logger_data[flag])
-				{
-					m_formatters.push_back(shortened_logger_data[flag]);
-				}
-			}
-			for (const auto& flag : this->short_flags())
-			{
-				if (shortened_datetime_data[flag])
-				{
-					m_formatters.push_back(shortened_datetime_data[flag]);
-				}
-			}
-		}
+		for (const auto& flag : this->verbose_flags())
+			if (verbose_logger_data[flag])
+				m_formatters.push_back(verbose_logger_data[flag]);
+
+		for (const auto& flag : this->verbose_flags())
+			if (verbose_datetime_data[flag])
+				m_formatters.push_back(verbose_datetime_data[flag]);
+
+		for (const auto& flag : this->short_flags())
+			if (shortened_logger_data[flag])
+				m_formatters.push_back(shortened_logger_data[flag]);
+
+		for (const auto& flag : this->short_flags())
+			if (shortened_datetime_data[flag])
+				m_formatters.push_back(shortened_datetime_data[flag]);
 	}
 
 	void pattern::set_pattern(std::string_view pattern)
@@ -136,6 +117,7 @@ namespace lwlog::details
 				pattern.replace(pattern.find(verbose), verbose.length(), value);
 			}
 		}
+
 		if (!shortened.empty())
 		{
 			while (strstr(pattern.data(), shortened.data()))
