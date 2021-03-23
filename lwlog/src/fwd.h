@@ -1,11 +1,5 @@
 #pragma once
 
-namespace std
-{
-	template<class _Ty>
-	class shared_ptr;
-}
-
 namespace lwlog
 {
 	enum class level : std::uint8_t;
