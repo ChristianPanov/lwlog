@@ -14,7 +14,49 @@ namespace lwlog::details
 			format_attribute(pattern, flags,
 				std::visit(attrib_value_visitor{}, value));
 
+		for (const auto& spec : m_alignment_specs)
+			alignment_formatter::format(pattern, spec);
+
 		return pattern;
+	}
+
+	void pattern::handle_alignment_specs()
+	{
+		std::size_t start_pos{ 0 };
+		while ((start_pos = m_pattern.find(":<", start_pos)) != std::string::npos)
+		{
+			std::size_t flag_pos = m_pattern.find(":<", start_pos);
+			m_alignment_specs.emplace_back(
+				m_pattern.substr(flag_pos, m_pattern.find(" ", flag_pos) - flag_pos)
+			);
+			m_pattern.replace(m_pattern.find(m_alignment_specs.front().to_align, flag_pos),
+				m_alignment_specs.front().to_align.size(), m_alignment_specs.front().to_align + "|:");
+			start_pos += 2;
+		}
+
+		start_pos = 0;
+		while ((start_pos = m_pattern.find(":>", start_pos)) != std::string::npos)
+		{
+			std::size_t flag_pos = m_pattern.find(":>", start_pos);
+			m_alignment_specs.emplace_back(
+				m_pattern.substr(flag_pos, m_pattern.find(" ", flag_pos) - flag_pos)
+			);
+			m_pattern.replace(m_pattern.find(m_alignment_specs.front().to_align, flag_pos),
+				m_alignment_specs.front().to_align.size(), m_alignment_specs.front().to_align + "|:");
+			start_pos += 2;
+		}
+
+		start_pos = 0;
+		while ((start_pos = m_pattern.find(":^", start_pos)) != std::string::npos)
+		{
+			std::size_t flag_pos = m_pattern.find(":^", start_pos);
+			m_alignment_specs.emplace_back(
+				m_pattern.substr(flag_pos, m_pattern.find(" ", flag_pos) - flag_pos)
+			);
+			m_pattern.replace(m_pattern.find(m_alignment_specs.front().to_align, flag_pos),
+				m_alignment_specs.front().to_align.size(), m_alignment_specs.front().to_align + "|:");
+			start_pos += 2;
+		}
 	}
 
 	void pattern::handle_flag_formatters()

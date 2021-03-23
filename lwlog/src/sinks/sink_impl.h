@@ -16,6 +16,7 @@ namespace lwlog::sinks
 	{
 		Lock lock(m_mtx);
 		m_pattern.set_pattern(pattern);
+		m_pattern.handle_alignment_specs();
 		m_pattern.handle_flag_formatters();
 		ColorPolicy::process_color(m_pattern.data());
 	}

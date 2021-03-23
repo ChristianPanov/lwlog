@@ -5,6 +5,7 @@
 
 #include "attribute.h"
 #include "details/log_message.h"
+#include "alignment_formatter.h"
 
 namespace lwlog::details
 {
@@ -18,6 +19,7 @@ namespace lwlog::details
 	{
 	public:
 		std::string compile(log_message& log_msg);
+		void handle_alignment_specs();
 		void handle_flag_formatters();
 		void set_pattern(std::string_view pattern);
 		void add_attribute(flag_pair flags, attrib_value value);
@@ -35,6 +37,7 @@ namespace lwlog::details
 	private:
 		std::string m_pattern;
 		std::vector<std::shared_ptr<formatter>> m_formatters;
+		std::vector<alignment_specification> m_alignment_specs;
 		std::unordered_map<flag_pair, attrib_value, attrib_hasher> m_custom_attributes;
 	};
 }
