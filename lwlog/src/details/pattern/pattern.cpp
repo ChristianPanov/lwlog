@@ -61,19 +61,22 @@ namespace lwlog::details
 
 	void pattern::handle_flag_formatters()
 	{
-		for (const auto& flag : this->verbose_flags())
+		auto verbose_flags = this->verbose_flags();
+		auto short_flags = this->short_flags();
+
+		for (const auto& flag : verbose_flags)
 			if (verbose_logger_data[flag])
 				m_formatters.push_back(verbose_logger_data[flag]);
 
-		for (const auto& flag : this->verbose_flags())
+		for (const auto& flag : verbose_flags)
 			if (verbose_datetime_data[flag])
 				m_formatters.push_back(verbose_datetime_data[flag]);
 
-		for (const auto& flag : this->short_flags())
+		for (const auto& flag : short_flags)
 			if (shortened_logger_data[flag])
 				m_formatters.push_back(shortened_logger_data[flag]);
 
-		for (const auto& flag : this->short_flags())
+		for (const auto& flag : short_flags)
 			if (shortened_datetime_data[flag])
 				m_formatters.push_back(shortened_datetime_data[flag]);
 	}
