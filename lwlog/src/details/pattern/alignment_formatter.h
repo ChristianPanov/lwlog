@@ -2,6 +2,14 @@
 
 namespace lwlog::details
 {
+	struct alignment_flag
+	{
+		static constexpr auto end		{ ":|" };
+		static constexpr auto left		{ ":<" };
+		static constexpr auto right		{ ":>" };
+		static constexpr auto center	{ ":^" };
+	};
+
 	struct alignment_specification
 	{
 		enum class align_side { left, center, right };
@@ -50,10 +58,10 @@ namespace lwlog::details
 		static void format(std::string& pattern, alignment_specification spec)
 		{
 			std::string to_align_formatter = pattern.substr(pattern.find(spec.flag) + spec.flag.size(),
-				pattern.find("|:") - pattern.find(spec.flag) - spec.flag.size());
+				pattern.find(alignment_flag::end) - pattern.find(spec.flag) - spec.flag.size());
 
 			pattern.replace(pattern.find(spec.flag), spec.flag.size(), "");
-			pattern.replace(pattern.find("|:"), 2, "");
+			pattern.replace(pattern.find(alignment_flag::end), 2, "");
 			pattern.replace(pattern.find(to_align_formatter), to_align_formatter.size(),
 				align(to_align_formatter, spec.width, spec.fill_char, spec.side));
 		}
