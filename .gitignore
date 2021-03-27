@@ -4,7 +4,7 @@
 
 # Visual Studio
 .vs/
-lwlog.sln
+**.sln
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
