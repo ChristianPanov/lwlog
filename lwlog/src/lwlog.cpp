@@ -2,7 +2,7 @@
 
 namespace lwlog
 {
-	void register_logger(primitives::logger_ptr logger)
+	void register_logger(logger_ptr logger)
 	{
 		return registry::instance().register_logger(logger);
 	}
@@ -22,7 +22,7 @@ namespace lwlog
 		return registry::instance().drop_all();
 	}
 
-	void apply_to_all(const std::function<void(primitives::logger_ptr)>& function)
+	void apply_to_all(const std::function<void(logger_ptr)>& function)
 	{
 		registry::instance().apply_to_all(function);
 	}
@@ -37,7 +37,7 @@ namespace lwlog
 		return registry::instance().default_logger();
 	}
 
-	primitives::logger_ptr get(std::string_view logger_name)
+	logger_ptr get(std::string_view logger_name)
 	{
 		return registry::instance().get(logger_name);
 	}

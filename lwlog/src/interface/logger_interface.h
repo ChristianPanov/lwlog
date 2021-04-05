@@ -25,3 +25,8 @@ namespace lwlog::interface
 		virtual void log(std::string_view, level) = 0;
 	};
 }
+
+namespace lwlog
+{
+	using logger_ptr = interface::logger*;
+}

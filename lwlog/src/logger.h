@@ -19,13 +19,13 @@ namespace lwlog
 		template<typename Iterator, typename... SinkParams>
 		logger(std::string_view name, Iterator begin, Iterator end, SinkParams&&... params);
 		template<typename... SinkParams>
-		logger(std::string_view name, primitives::sink_list sink_list, SinkParams&&... params);
+		logger(std::string_view name, sink_list sink_list, SinkParams&&... params);
 		template<typename... SinkParams>
-		logger(std::string_view name, primitives::sink_ptr sink, SinkParams&&... params);
+		logger(std::string_view name, sink_ptr sink, SinkParams&&... params);
 
 	public:
-		void add_sink(primitives::sink_ptr sink);
-		void remove_sink(primitives::sink_ptr sink);
+		void add_sink(sink_ptr sink);
+		void remove_sink(sink_ptr sink);
 		void sink_logs() override;
 
 		void set_pattern(std::string_view pattern) override;

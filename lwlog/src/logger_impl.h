@@ -33,7 +33,7 @@ namespace lwlog
 		typename ThreadingPolicy, template<typename> typename... Sinks>
 	template<typename... SinkParams>
 	logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name,
-		primitives::sink_list sink_list, SinkParams&&... params)
+		sink_list sink_list, SinkParams&&... params)
 		: logger{ name, sink_list.begin(), sink_list.end(), params... }
 	{}
 
@@ -41,20 +41,20 @@ namespace lwlog
 		typename ThreadingPolicy, template<typename> typename... Sinks>
 	template<typename... SinkParams>
 	logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name,
-		primitives::sink_ptr sink, SinkParams&&... params)
+		sink_ptr sink, SinkParams&&... params)
 		: logger{ name, { sink }, params... }
 	{}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::add_sink(primitives::sink_ptr sink)
+	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::add_sink(sink_ptr sink)
 	{
 		m_sink_storage.push_back(sink);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::remove_sink(primitives::sink_ptr sink)
+	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::remove_sink(sink_ptr sink)
 	{
 		for (std::size_t i = 0; i < m_sink_storage.size(); ++i)
 		{

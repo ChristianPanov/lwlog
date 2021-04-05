@@ -6,7 +6,7 @@ namespace lwlog
 	struct static_storage_policy
 	{
 		using storage = std::array<
-			primitives::sink_ptr,
+			sink_ptr,
 			sizeof...(Args)
 		>;
 	};
@@ -15,7 +15,7 @@ namespace lwlog
 	struct dynamic_storage_policy
 	{
 		using storage = std::vector<
-			primitives::sink_ptr
+			sink_ptr
 		>;
 	};
 

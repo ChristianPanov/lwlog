@@ -18,3 +18,9 @@ namespace lwlog::interface
 		virtual details::pattern& pattern() = 0;
 	};
 }
+
+namespace lwlog
+{
+	using sink_ptr = std::shared_ptr<interface::sink>;
+	using sink_list = std::initializer_list<sink_ptr>;
+}
