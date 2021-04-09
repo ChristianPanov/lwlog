@@ -19,8 +19,8 @@ namespace lwlog::details
 	{
 	public:
 		std::string compile(log_message& log_msg);
-		void handle_alignment_specs();
-		void handle_flag_formatters();
+		void parse_alignment_specs();
+		void parse_flags();
 		void set_pattern(std::string_view pattern);
 		void add_attribute(flag_pair flags, attrib_value value);
 		std::string& data();
