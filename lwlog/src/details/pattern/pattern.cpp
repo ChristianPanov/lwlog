@@ -59,7 +59,7 @@ namespace lwlog::details
 		}
 	}
 
-	void pattern::parse_flags()
+	void pattern::handle_flag_formatters()
 	{
 		auto verbose_flags = this->verbose_flags();
 		auto short_flags = this->short_flags();
