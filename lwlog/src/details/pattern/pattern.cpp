@@ -61,8 +61,8 @@ namespace lwlog::details
 
 	void pattern::handle_flag_formatters()
 	{
-		auto verbose_flags = this->verbose_flags();
-		auto short_flags = this->short_flags();
+		auto verbose_flags = this->parse_verbose_flags();
+		auto short_flags = this->parse_short_flags();
 
 		for (const auto& flag : verbose_flags)
 			if (verbose_logger_data[flag])
@@ -136,7 +136,7 @@ namespace lwlog::details
 			strstr(m_pattern.data(), flags.shortened.data());
 	}
 
-	std::vector<std::string> pattern::verbose_flags()
+	std::vector<std::string> pattern::parse_verbose_flags()
 	{
 		std::vector<std::string> buff;
 		std::size_t pos = m_pattern.find("{", 0);
@@ -148,7 +148,7 @@ namespace lwlog::details
 		return buff;
 	}
 
-	std::vector<std::string> pattern::short_flags()
+	std::vector<std::string> pattern::parse_short_flags()
 	{
 		std::vector<std::string> buff;
 		std::size_t pos = m_pattern.find("%", 0);

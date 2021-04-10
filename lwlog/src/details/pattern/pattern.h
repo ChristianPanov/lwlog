@@ -31,8 +31,8 @@ namespace lwlog::details
 
 	private:
 		bool contains(flag_pair flags);
-		std::vector<std::string> verbose_flags();
-		std::vector<std::string> short_flags();
+		std::vector<std::string> parse_verbose_flags();
+		std::vector<std::string> parse_short_flags();
 
 	private:
 		std::string m_pattern;
