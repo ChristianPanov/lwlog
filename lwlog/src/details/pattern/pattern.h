@@ -30,7 +30,6 @@ namespace lwlog::details
 		static void format_attribute(std::string& pattern, flag_pair flags, std::string_view value);
 
 	private:
-		bool contains(flag_pair flags);
 		std::vector<std::string> parse_verbose_flags();
 		std::vector<std::string> parse_short_flags();
 

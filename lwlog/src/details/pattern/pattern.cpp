@@ -130,12 +130,6 @@ namespace lwlog::details
 		}
 	}
 
-	bool pattern::contains(flag_pair flags)
-	{
-		return strstr(m_pattern.data(), flags.verbose.data()) ||
-			strstr(m_pattern.data(), flags.shortened.data());
-	}
-
 	std::vector<std::string> pattern::parse_verbose_flags()
 	{
 		std::vector<std::string> buff;
