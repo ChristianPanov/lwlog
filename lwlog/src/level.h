@@ -13,7 +13,7 @@ namespace lwlog
 		all			=	(1 << 6)
 	};
 
-	static level operator|(level lhs, level rhs)
+	constexpr level operator|(level lhs, level rhs)
 	{
 		return static_cast<level>(
 			static_cast<std::underlying_type_t<level>>(lhs) |
@@ -21,7 +21,7 @@ namespace lwlog
 			);
 	}
 
-	static level operator&(level lhs, level rhs)
+	constexpr level operator&(level lhs, level rhs)
 	{
 		return static_cast<level>(
 			static_cast<std::underlying_type_t<level>>(lhs) &
