@@ -25,6 +25,7 @@ people who want simplicity without too much configuration. Most of the time you 
 - [Custom attributes](https://github.com/ChristianPanov/lwlog#custom-attributes)
 - Global logger registry
 # To be implemented
+- Compile-time pattern parsing
 - Fmt-like formatting(As soon as std::format gets implemented in MSVC, fmt-like formatting will be implemented in lwlog)
 - Meta-logging (also known as structured logging)
 - Asyncrhonous logging
