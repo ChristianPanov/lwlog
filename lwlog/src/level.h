@@ -37,9 +37,9 @@ namespace lwlog::level_details
 		return static_cast<std::underlying_type_t<level>>(t_level);
 	}
 
-	constexpr const char* to_string(level level)
+	constexpr const char* to_string(level t_level)
 	{
-		switch (level)
+		switch (t_level)
 		{
 		case level::info:		return "info";		break;
 		case level::warning:	return "warning";	break;
@@ -49,9 +49,9 @@ namespace lwlog::level_details
 		}
 	}
 
-	constexpr const char* color_value(level level)
+	constexpr const char* color_value(level t_level)
 	{
-		switch (level)
+		switch (t_level)
 		{
 		case level::info:		return "\u001b[30;1m";  break;
 		case level::warning:	return "\u001b[33;1m";  break;
