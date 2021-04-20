@@ -6,7 +6,7 @@ namespace lwlog::details
 {
 	struct date_formatter : public formatter
 	{
-		virtual void format(std::string& pattern, const const const log_message& log_msg) override
+		virtual void format(std::string& pattern, const log_message& log_msg) override
 		{
 			pattern::format_attribute(
 				pattern,
@@ -18,7 +18,7 @@ namespace lwlog::details
 
 	struct date_short_formatter : public formatter
 	{
-		virtual void format(std::string& pattern, const const log_message& log_msg) override
+		virtual void format(std::string& pattern, const log_message& log_msg) override
 		{
 			pattern::format_attribute(
 				pattern,
