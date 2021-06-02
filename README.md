@@ -22,7 +22,7 @@ people who want simplicity without too much configuration. Most of the time you 
 - Support for both [compile-time](https://github.com/ChristianPanov/lwlog#multiple-sinks-compile-time) and [runtime](https://github.com/ChristianPanov/lwlog#multiple-sinks-runtime) sink configuration
 - Custom sink configuration - each sink can have a unique log pattern and verbosity level
 - Log formatting according to a custom user-defined pattern
-- Source metainformation attributes (function name, file path, current line)
+- [Source metainformation attributes (function name, file path, current line)](https://github.com/ChristianPanov/lwlog/blob/master/README.md#source-metainformation-function-name-file-path-current-line)
 - [Custom attributes](https://github.com/ChristianPanov/lwlog#custom-attributes)
 - Global logger registry
 # To be implemented
@@ -224,7 +224,7 @@ Verbose flag | Short flag | Description | Example
 ```{message}``` | ```%v``` | Log message | "Some log message"
 ```{thread}``` | ```%t``` | Thread id | "6567358443629571051"
 ```{line}``` | ```%#``` | Current line on which the log function is called | "84"
-```{file}``` | ```%@``` | Path of the file in which the log function is called | - "C:\Users\user\Desktop\lwlog\Sandbox\Sandbox.cpp"
+```{file}``` | ```%@``` | Path of the file in which the log function is called | "C:\Users\user\Desktop\lwlog\Sandbox\Sandbox.cpp"
 ```{func}``` | ```%!``` | Name of the function in which the log function is called | "main"
 ```{thread}``` | ```%t``` | Thread id | "6567358443629571051"
 ```{date}``` | ```%F``` | Current date YY-MM-DD | "2021-01-01"
