@@ -9,8 +9,7 @@ namespace lwlog
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename ThreadingPolicy, template<typename> typename... Sinks>
 	template<typename... SinkParams>
-	logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name, 
-		SinkParams&&... params)
+	logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name, SinkParams&&... params)
 		: m_name{ name }
 	{
 		registry::instance().register_logger(this);
