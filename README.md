@@ -22,6 +22,7 @@ people who want simplicity without too much configuration. Most of the time you 
 - Support for both [compile-time](https://github.com/ChristianPanov/lwlog#multiple-sinks-compile-time) and [runtime](https://github.com/ChristianPanov/lwlog#multiple-sinks-runtime) sink configuration
 - Custom sink configuration - each sink can have a unique log pattern and verbosity level
 - Log formatting according to a custom user-defined pattern
+- [Source metainformation attributes](https://github.com/ChristianPanov/lwlog/blob/master/README.md#source-metainformation-function-name-file-path-current-line)
 - [Custom attributes](https://github.com/ChristianPanov/lwlog#custom-attributes)
 - Global logger registry
 # To be implemented
@@ -219,10 +220,13 @@ How is formatting done? - A pattern is set, and then it gets compiled by the lib
 Verbose flag | Short flag | Description | Example
 ------------ | ------------- | ------------- | -------------
 ```{name}``` | ```%n``` | Logger's identification name | "logger name"
- ```{level}``` | ```%l``` | Log level of the message | "info", "warning", "error", "critical", "debug"
+```{level}``` | ```%l``` | Log level of the message | "info", "warning", "error", "critical", "debug"
 ```{message}``` | ```%v``` | Log message | "Some log message"
 ```{thread}``` | ```%t``` | Thread id | "6567358443629571051"
-```{level_color}``` | ```%c``` | The color corresponding to the level of the log message | -
+```{line}``` | ```%#``` | Current line on which the log function is called | "84"
+```{file}``` | ```%@``` | Path of the file in which the log function is called | "C:\Users\user\Desktop\lwlog\Sandbox\Sandbox.cpp"
+```{func}``` | ```%!``` | Name of the function in which the log function is called | "main"
+```{thread}``` | ```%t``` | Thread id | "6567358443629571051"
 ```{date}``` | ```%F``` | Current date YY-MM-DD | "2021-01-01"
 ```{date_short}``` | ```%D``` | Current short date MM/DD/YY | "01/01/21"
 ```{year}``` | ```%Y``` | Current year | "2021"
@@ -241,6 +245,8 @@ Verbose flag | Short flag | Description | Example
 ```{hour_12}``` | ```%I``` | Current hour in 12-hour format | "05"
 ```{minute}``` | ```%m``` | Current minute 00-59 | "42"
 ```{second}``` | ```%s``` | Current second 00-59 | "10"
+### Source metainformation (function name, file path, current line)
+lwlog gives you the ability to get source code metainformation in the form of attributes. One can get the current line on which the log function is called, the file path in which it is called, or the function name in which it is called, and all of that without macros. It is possible because of compiler intrinsics, which were first introduced in GCC, and now they are also implemented in MSVC. lwlog doesn't use c++20's std::source_location, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.
 ### Alignment Syntax
 Alignment specifications are individual to an attribute alignment information. It contains an alignment side, width, and an optional fill character, which by default, if not specified, is an empty space.\
 
