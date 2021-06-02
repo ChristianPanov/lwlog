@@ -35,11 +35,12 @@ namespace lwlog
 
 	void set_pattern(std::string_view pattern);
 	void set_level_filter(level t_level);
-	void info(std::string_view message);
-	void warning(std::string_view message);
-	void error(std::string_view message);
-	void critical(std::string_view message);
-	void debug(std::string_view message);
+
+	void info(std::string_view message, details::source_meta meta = details::source_meta::current());
+	void warning(std::string_view message, details::source_meta meta = details::source_meta::current());
+	void error(std::string_view message, details::source_meta meta = details::source_meta::current());
+	void critical(std::string_view message, details::source_meta meta = details::source_meta::current());
+	void debug(std::string_view message, details::source_meta meta = details::source_meta::current());
 }
 
 #ifndef LWLOG_DISABLE

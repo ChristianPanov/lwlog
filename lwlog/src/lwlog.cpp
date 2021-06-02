@@ -52,28 +52,28 @@ namespace lwlog
 		registry::instance().default_logger()->set_level_filter(t_level);
 	}
 
-	void info(std::string_view message)
+	void info(std::string_view message, details::source_meta meta)
 	{
-		registry::instance().default_logger()->info(message);
+		registry::instance().default_logger()->info(message, meta);
 	}
 
-	void warning(std::string_view message)
+	void warning(std::string_view message, details::source_meta meta)
 	{
-		registry::instance().default_logger()->warning(message);
+		registry::instance().default_logger()->warning(message, meta);
 	}
 
-	void error(std::string_view message)
+	void error(std::string_view message, details::source_meta meta)
 	{
-		registry::instance().default_logger()->error(message);
+		registry::instance().default_logger()->error(message, meta);
 	}
 
-	void critical(std::string_view message)
+	void critical(std::string_view message, details::source_meta meta)
 	{
-		registry::instance().default_logger()->critical(message);
+		registry::instance().default_logger()->critical(message, meta);
 	}
 
-	void debug(std::string_view message)
+	void debug(std::string_view message, details::source_meta meta)
 	{
-		registry::instance().default_logger()->debug(message);
+		registry::instance().default_logger()->debug(message, meta);
 	}
 }

@@ -65,4 +65,40 @@ namespace lwlog::details
 			);
 		}
 	};
+
+	struct line_formatter : public formatter
+	{
+		virtual void format(std::string& pattern, const log_message& log_msg) override
+		{
+			pattern::format_attribute(
+				pattern,
+				flag::line,
+				std::to_string(log_msg.meta.line())
+			);
+		}
+	};
+
+	struct file_formatter : public formatter
+	{
+		virtual void format(std::string& pattern, const log_message& log_msg) override
+		{
+			pattern::format_attribute(
+				pattern,
+				flag::file,
+				log_msg.meta.file_name()
+			);
+		}
+	};
+
+	struct function_formatter : public formatter
+	{
+		virtual void format(std::string& pattern, const log_message& log_msg) override
+		{
+			pattern::format_attribute(
+				pattern,
+				flag::function,
+				log_msg.meta.function_name()
+			);
+		}
+	};
 }

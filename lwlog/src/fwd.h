@@ -20,4 +20,5 @@ namespace lwlog::interface
 namespace lwlog::details
 {
 	struct flag_pair;
+	struct source_meta;
 }

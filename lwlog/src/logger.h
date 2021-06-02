@@ -32,17 +32,17 @@ namespace lwlog
 		void add_attribute(details::flag_pair flags, details::attrib_value value) override;
 		void set_level_filter(level t_level) override;
 
-		void info(std::string_view message) override;
-		void warning(std::string_view message) override;
-		void error(std::string_view message) override;
-		void critical(std::string_view message) override;
-		void debug(std::string_view message) override;
+		void info(std::string_view message, details::source_meta meta = details::source_meta::current()) override;
+		void warning(std::string_view message, details::source_meta meta = details::source_meta::current()) override;
+		void error(std::string_view message, details::source_meta meta = details::source_meta::current()) override;
+		void critical(std::string_view message, details::source_meta meta = details::source_meta::current()) override;
+		void debug(std::string_view message, details::source_meta meta = details::source_meta::current()) override;
 
 		std::string_view name() const override;
 		Storage& sinks();
 
 	private:
-		void log(std::string_view message, level t_level) override;
+		void log(std::string_view message, level t_level, details::source_meta meta) override;
 
 	private:
 		std::string_view m_name;

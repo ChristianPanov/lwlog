@@ -13,16 +13,16 @@ namespace lwlog::interface
 		virtual void set_pattern(std::string_view) = 0;
 		virtual void set_level_filter(level) = 0;
 
-		virtual void info(std::string_view) = 0;
-		virtual void warning(std::string_view) = 0;
-		virtual void error(std::string_view) = 0;
-		virtual void critical(std::string_view) = 0;
-		virtual void debug(std::string_view) = 0;
+		virtual void info(std::string_view, details::source_meta) = 0;
+		virtual void warning(std::string_view, details::source_meta) = 0;
+		virtual void error(std::string_view, details::source_meta) = 0;
+		virtual void critical(std::string_view, details::source_meta) = 0;
+		virtual void debug(std::string_view, details::source_meta) = 0;
 
 		virtual std::string_view name() const = 0;
 
 	protected:
-		virtual void log(std::string_view, level) = 0;
+		virtual void log(std::string_view, level, details::source_meta) = 0;
 	};
 }
 
