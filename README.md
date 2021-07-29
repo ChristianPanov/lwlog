@@ -484,8 +484,8 @@ Levels can be switched off at runtime as well, just by using the ```LWLOG_SET_LE
 If logging is disabled, the directives expand to nothing.
 #### Example
 ```cpp
-#LWLOG_DISABLE
-#LWLOG_ERROR_OFF
+#define LWLOG_DISABLE
+#define LWLOG_ERROR_OFF
 #include "lwlog/lwlog.h"
 
 int main()
