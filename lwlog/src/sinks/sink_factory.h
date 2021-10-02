@@ -6,7 +6,7 @@ namespace lwlog::sinks
 	class sink_factory
 	{
 	public:
-		template <typename... SinkParams>
+		template<typename... SinkParams>
 		static sink_ptr request(SinkParams&&... params);
 	};
 
