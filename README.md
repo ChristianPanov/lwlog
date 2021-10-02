@@ -38,16 +38,16 @@ Benchmarked with picobench(https://github.com/iboB/picobench)
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
 ===============================================================================
-            lwlog_bench * |       8 |     0.009 |    1187 |      - |   842105.3
-             spdlog_bench |       8 |     0.454 |   56800 | 47.832 |    17605.6
-            lwlog_bench * |      64 |     0.048 |     743 |      - |  1344537.8
-             spdlog_bench |      64 |     6.100 |   95317 |128.158 |    10491.3
-            lwlog_bench * |     512 |     0.461 |     899 |      - |  1111352.3
-             spdlog_bench |     512 |    53.901 |  105275 |116.998 |     9498.9
-            lwlog_bench * |    4096 |     2.926 |     714 |      - |  1399767.6
-             spdlog_bench |    4096 |   349.674 |   85369 |119.498 |    11713.8
-            lwlog_bench * |    8192 |     5.655 |     690 |      - |  1448552.7
-             spdlog_bench |    8192 |   754.117 |   92055 |133.347 |    10863.0
+            lwlog_bench * |       8 |     0.012 |    1450 |      - |   689655.2
+             spdlog_bench |       8 |     0.447 |   55912 | 38.560 |    17885.1
+            lwlog_bench * |      64 |     0.057 |     889 |      - |  1124780.3
+             spdlog_bench |      64 |     3.687 |   57610 | 64.800 |    17357.8
+            lwlog_bench * |     512 |     0.450 |     879 |      - |  1137272.3
+             spdlog_bench |     512 |    36.991 |   72248 | 82.166 |    13841.2
+            lwlog_bench * |    4096 |     3.944 |     962 |      - |  1038513.2
+             spdlog_bench |    4096 |   317.930 |   77619 | 80.609 |    12883.4
+            lwlog_bench * |    8192 |     6.893 |     841 |      - |  1188452.1
+             spdlog_bench |    8192 |   648.315 |   79140 | 94.054 |    12635.8
 ===============================================================================
 ```
 #### lwlog (colored and formatted, synchronous) vs spdlog (colored and formatted, synchronous)
@@ -55,16 +55,16 @@ Benchmarked with picobench(https://github.com/iboB/picobench)
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
 ===============================================================================
-            lwlog_bench * |       8 |     0.008 |    1000 |      - |  1000000.0
-             spdlog_bench |       8 |     1.779 |  222425 |222.425 |     4495.9
-            lwlog_bench * |      64 |     0.049 |     771 |      - |  1295546.6
-             spdlog_bench |      64 |    22.737 |  355265 |460.263 |     2814.8
-            lwlog_bench * |     512 |     0.354 |     691 |      - |  1445103.0
-             spdlog_bench |     512 |   165.877 |  323979 |468.183 |     3086.6
-            lwlog_bench * |    4096 |     3.013 |     735 |      - |  1359352.2
-             spdlog_bench |    4096 |  1252.415 |  305765 |415.643 |     3270.5
-            lwlog_bench * |    8192 |     5.842 |     713 |      - |  1402283.5
-             spdlog_bench |    8192 |  2549.965 |  311275 |436.496 |     3212.6
+            lwlog_bench * |       8 |     0.012 |    1537 |      - |   650406.5
+             spdlog_bench |       8 |     1.927 |  240850 |156.650 |     4152.0
+            lwlog_bench * |      64 |     0.058 |     904 |      - |  1105354.1
+             spdlog_bench |      64 |    16.164 |  252556 |279.164 |     3959.5
+            lwlog_bench * |     512 |     0.720 |    1406 |      - |   711209.9
+             spdlog_bench |     512 |   142.256 |  277842 |197.605 |     3599.2
+            lwlog_bench * |    4096 |     5.702 |    1392 |      - |   718369.6
+             spdlog_bench |    4096 |  1135.223 |  277154 |199.099 |     3608.1
+            lwlog_bench * |    8192 |     6.763 |     825 |      - |  1211260.9
+             spdlog_bench |    8192 |  2225.977 |  271725 |329.131 |     3680.2
 ===============================================================================
 ```
 #### lwlog (forward(default) logging) vs lwlog (deferred logging)
@@ -484,8 +484,8 @@ Levels can be switched off at runtime as well, just by using the ```LWLOG_SET_LE
 If logging is disabled, the directives expand to nothing.
 #### Example
 ```cpp
-#LWLOG_DISABLE
-#LWLOG_ERROR_OFF
+#define LWLOG_DISABLE
+#define LWLOG_ERROR_OFF
 #include "lwlog/lwlog.h"
 
 int main()
