@@ -104,12 +104,11 @@ namespace lwlog::details
 			if (width <= to_align.size()) return to_align;
 			else
 			{
-				std::uint8_t half_width = (width - to_align.size()) / 2;
-				if (half_width == 0)
-					return std::string(half_width, fill_char) + to_align + std::string(half_width, fill_char);
-				else
-					return std::string(half_width, fill_char) + to_align +
-					std::string(half_width + (width - to_align.size()) % 2, fill_char);
+				auto alignment_width = width - to_align.size();
+				auto left_width = alignment_width / 2;
+				auto right_width = alignment_width % 2 ? left_width + 1 : left_width;
+
+				return std::string(left_width, fill_char) + to_align + std::string(right_width, fill_char);
 			}
 		}
 	};
