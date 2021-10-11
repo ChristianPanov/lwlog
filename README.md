@@ -26,10 +26,9 @@ people who want simplicity without too much configuration. Most of the time you 
 - [Custom attributes](https://github.com/ChristianPanov/lwlog#custom-attributes)
 - Global logger registry
 # To be implemented
-- Compile-time pattern parsing
-- Fmt-like formatting(As soon as std::format gets implemented in MSVC, fmt-like formatting will be implemented in lwlog)
+- Cross-platform colors
+- Fmt-like formatting
 - Meta-logging (also known as structured logging)
-- Asyncrhonous logging
 # Benchmarks
 The benchmarks are still limited, since there still arent benchmarks for thread-safe logging, async logging, and loggers which sink to a file (they will be done)\
 Benchmarked with picobench(https://github.com/iboB/picobench)
