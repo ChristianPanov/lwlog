@@ -51,8 +51,8 @@ lwlog::set_pattern(pattern)
 #endif
 
 #ifndef LWLOG_DISABLE
-#define LWLOG_SET_LEVEL_FILTER(...) \
-lwlog::set_level_filter(__VA__ARGS)
+#define LWLOG_SET_LEVEL_FILTER(level) \
+lwlog::set_level_filter(level)
 #else
 #define LWLOG_SET_LEVEL_FILTER(...)
 #endif
