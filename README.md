@@ -251,10 +251,10 @@ Alignment specifications are individual to an attribute alignment information. I
 
 Syntax | Example | Result
 ------------ | ------------- | -------------
-```:< <width><flag>``` | ```[:<12%l]``` | "[info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]"
-```:> <width><flag>``` | ```[:>12%l]``` | "[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;info]"
-```:^ <width><flag>``` | ```[:^12%l]``` | "[&nbsp;&nbsp;&nbsp;&nbsp;info&nbsp;&nbsp;&nbsp;&nbsp;]"
-```:^ <fill_character><width><flag>``` | ```[:^-12%l]``` | "[----info----]"
+```:<<width><flag>``` | ```[:<12%l]``` | "[info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]"
+```:><width><flag>``` | ```[:>12%l]``` | "[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;info]"
+```:^<width><flag>``` | ```[:^12%l]``` | "[&nbsp;&nbsp;&nbsp;&nbsp;info&nbsp;&nbsp;&nbsp;&nbsp;]"
+```:^<fill_character><width><flag>``` | ```[:^-12%l]``` | "[----info----]"
 #### Example
 ```cpp
 #include "lwlog/lwlog.h"
