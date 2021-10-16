@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "level.h"
 #include "details/pattern/pattern.h"
 #include "policy/sink_color_policy.h"

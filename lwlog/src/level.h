@@ -1,5 +1,7 @@
 #pragma once
 
+#include <type_traits>
+
 namespace lwlog
 {
 	enum class level : std::uint8_t
