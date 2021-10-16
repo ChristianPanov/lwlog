@@ -26,7 +26,6 @@ namespace lwlog::details
 		std::string& data();
 
 	public:
-		static void compile_colors(std::string& pattern);
 		static void format_attribute(std::string& pattern, flag_pair flags, std::string_view value);
 
 	private:

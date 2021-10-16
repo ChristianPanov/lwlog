@@ -1,5 +1,4 @@
 #include "pattern.h"
-#include "color_format_data.h"
 #include "format_data.h"
 
 namespace lwlog::details
@@ -94,20 +93,6 @@ namespace lwlog::details
 	std::string& pattern::data()
 	{
 		return m_pattern;
-	}
-
-	void pattern::compile_colors(std::string& pattern)
-	{
-		if (strstr(pattern.data(), "^"))
-		{
-			for (const auto& [key, value] : color_data)
-			{
-				while (strstr(pattern.data(), key.data()))
-				{
-					pattern.replace(pattern.find(key), key.length(), value);
-				}
-			}
-		}
 	}
 
 	void pattern::format_attribute(std::string& pattern, flag_pair flags, std::string_view value)

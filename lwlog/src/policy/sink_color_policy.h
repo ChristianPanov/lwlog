@@ -1,12 +1,14 @@
 #pragma once
 
+#include "details/pattern/color_compiler.h"
+
 namespace lwlog
 {
 	struct colored_policy
 	{
 		static void process_color(std::string& pattern) 
 		{
-			details::pattern::compile_colors(pattern);
+			details::color_compiler::compile(pattern);
 		}
 	};
 
@@ -14,12 +16,7 @@ namespace lwlog
 	{
 		static void process_color(std::string& pattern)
 		{
-			while (pattern.find('^') != std::string::npos)
-			{
-				auto first_pos = pattern.find_first_of('^');
-				auto last_pos = pattern.find('^', first_pos + 1);
-				pattern.erase(first_pos, last_pos - first_pos + 1);
-			}
+			details::color_compiler::drop_flags(pattern);
 		}
 	};
 }
