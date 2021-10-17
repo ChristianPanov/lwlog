@@ -32,7 +32,7 @@ namespace lwlog::details
 		if (strstr(str.data(), "^"))
 		{
 			terminate_scopes(str);
-			compile_basic(str);
+			compile_predefined(str);
 			compile_rgb(str);
 		}
 	}
@@ -58,7 +58,7 @@ namespace lwlog::details
 		}
 	}
 
-	void color_compiler::compile_basic(std::string& str)
+	void color_compiler::compile_predefined(std::string& str)
 	{
 		for (const auto& [key, value] : m_data)
 		{

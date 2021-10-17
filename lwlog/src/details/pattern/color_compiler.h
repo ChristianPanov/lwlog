@@ -12,7 +12,7 @@ namespace lwlog::details
 
 	private:
 		static void compile_rgb(std::string& str);
-		static void compile_basic(std::string& str);
+		static void compile_predefined(std::string& str);
 		static void terminate_scopes(std::string& str);
 		static std::vector<std::string> parse_rgb_flags(const std::string& str);
 		static std::string_view to_ansiec(const std::string& flag);
