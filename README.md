@@ -306,8 +306,10 @@ Background Color Flag | Bright Background Color Flag
 int main()
 {
 	auto console = std::make_shared<console_logger>("CONSOLE");
-	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^"); //Predefined flags
-	console->set_pattern("^255:0:0^[%T] [%n]^reset^ ^0:128:0^[%l]^reset^: ^0:255:255^%v^reset^"); //RGB flags
+	//Predefined flags
+	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	//RGB flags
+	console->set_pattern("^255:0:0^[%T] [%n]^reset^ ^0:128:0^[%l]^reset^: ^0:255:255^%v^reset^");
 
 	console->critical("First critical message");
 	
