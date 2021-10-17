@@ -277,7 +277,6 @@ int main()
 ```
 ### Color Flags
 Color flags are used for coloring a pattern. Each color code is scoped and needs to be ended with a ```^reset^``` flag.
-The basic 8-bit colors have predefined flags. 24-bit colors are also supported, although only for the foreground text. They require specifying the RGB value as the flag.
 Foreground Color Flag | Bright Foreground Color Flag
 ------------ | -------------
 ```^black^``` | ```^br_black^```
@@ -306,10 +305,7 @@ Background Color Flag | Bright Background Color Flag
 int main()
 {
 	auto console = std::make_shared<console_logger>("CONSOLE");
-	//Predefined flags
 	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
-	//RGB flags
-	console->set_pattern("^255:0:0^[%T] [%n]^reset^ ^0:128:0^[%l]^reset^: ^0:255:255^%v^reset^");
 
 	console->critical("First critical message");
 	
