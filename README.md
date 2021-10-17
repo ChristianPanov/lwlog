@@ -213,8 +213,8 @@ By calling ```sink_logs()``` you sink all the logs that are deferred for later u
 If ```sink_logs()``` is called by a forward logging logger it will emit a warning.
 ## Formatting
 Formatting is handled with a pay for what you need approach.\
-The user is able to set a pattern, by which the log messages will be formatted. This pattern is an internal to the library language, which is a sequence of formatting flags, alignment specifications(optional), characters and color codes(optional). It allows flexibility in terms of configuring the output information in the most appropriate for the situation way, allowing as meaningful log output as possible.\
-How is formatting done? - A pattern is set, and then it gets compiled by the library. Compilation is done in the ```lwlog::details::pattern``` class. It firts parses the pattern, and extracts the formatting flags, which are then used to retrieve only the formatters the pattern will need. It also parses the alignment specifications and extracts all the needed information for the alignments. In the end, all the retrieved formatters are called on the pattern and all formatting flags are replaced with their corresponding values and their corresponding alignment specifications(if any).
+The user is able to set a pattern, by which the log messages will be formatted. This pattern is an internal to the library language, which is a sequence of formatting flags, alignment specifications(optional), characters and color flags(optional). It allows flexibility in terms of configuring the output information in the most appropriate for the situation way, allowing as meaningful log output as possible.\
+How is formatting done? - A pattern is set, and then it gets compiled by the library. Compilation is done in the ```lwlog::details::pattern``` class. It first parses the pattern, and extracts the formatting flags, which are then used to retrieve only the formatters the pattern will need. It also parses the alignment specifications and extracts all the needed information for the alignments. In the end, all the retrieved formatters are called on the pattern and all formatting flags are replaced with their corresponding values and their corresponding alignment specifications(if any).
 ### Syntax
 Verbose flag | Short flag | Description | Example
 ------------ | ------------- | ------------- | -------------
@@ -275,8 +275,30 @@ int main()
 [19:44:50] [CONSOLE] [    info    ]: First info message
 [19:44:50] [CONSOLE] [  critical  ]: First critical message
 ```
-### Color Codes
-Color codes are used for coloring a pattern. Each color code is scoped and needs to be ended with a ```^reset^``` code.
+### Color Flags
+Color flags are used for coloring a pattern. Each color code is scoped and needs to be ended with a ```^reset^``` flag.
+The basic 8-bit colors have predefined flags. 24-bit colors are also supported, although only for the foreground text. They require specifying the RGB value as the flag.
+Foreground Color Flag | Bright Foreground Color Flag
+------------ | -------------
+```^black^``` | ```^br_black^```
+```^red^``` | ```^br_red^```
+```^green^``` | ```^br_green^```
+```^yellow^``` | ```^br_yellow^```
+```^blue^``` |```^br_blue^```
+```^magenta^``` | ```^br_magenta^```
+```^cyan^``` | ```^br_cyan^```
+```^white^``` | ```^br_white^```
+
+Background Color Flag | Bright Background Color Flag
+------------ | -------------
+```^bg_black^``` | ```^bg_br_black^```
+```^bg_red^``` | ```^bg_br_red^```
+```^bg_green^``` | ```^bg_br_green^```
+```^bg_yellow^``` | ```^bg_br_yellow^```
+```^bg_blue^``` | ```^bg_br_blue^```
+```^bg_magenta^``` | ```^bg_br_magenta^```
+```^bg_cyan^``` | ```^bg_br_cyan^```
+```^bg_white^``` | ```^bg_br_white^```
 #### Example
 ```cpp
 #include "lwlog/lwlog.h"
@@ -284,7 +306,10 @@ Color codes are used for coloring a pattern. Each color code is scoped and needs
 int main()
 {
 	auto console = std::make_shared<console_logger>("CONSOLE");
+	//Predefined flags
 	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	//RGB flags
+	console->set_pattern("^255:0:0^[%T] [%n]^reset^ ^0:128:0^[%l]^reset^: ^0:255:255^%v^reset^");
 
 	console->critical("First critical message");
 	
@@ -499,9 +524,9 @@ int main()
 So how does lwlog achieve this performance? The answer lies in one very important acrhictectural decision and a couple of techniques.
 ### Architecture
 The architectural decision that speeds up the performance is about how the formatting pattern compilation is handled. The pattern in question is parsed completely off the log call site, and all that's left for the log call functions is to do the replacement of the flags with their corresponding values.\
-Color processing is also done off the log call site. Color processing can be a big performance bottleneck, and it doesn't need to happen at the log call site, since colors have nothing to do with the current log information. Once the pattern is set, it immediately processes all the color codes in place.
+Color processing is also done off the log call site. Color processing can be a big performance bottleneck, and it doesn't need to happen at the log call site, since colors have nothing to do with the current log information. Once the pattern is set, it immediately processes all the color flags in place.
 1. A pattern is set
-2. All color codes are processed 
+2. All color flags are processed 
 3. The pattern is parsed and only the needed formatters are pushed to a storage
 4. The alignment specifications are parsed and all the needed information such as alignment side, width, and fill character is extracted
 5. When a log function is called, the formatters in the storage are called on the pattern with their appropriate alignment specifications
