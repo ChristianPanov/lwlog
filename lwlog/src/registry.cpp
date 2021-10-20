@@ -4,7 +4,7 @@
 
 namespace lwlog
 {
-	std::unique_ptr<interface::logger> registry::m_default_logger =
+	std::unique_ptr<interface::logger> registry::s_default_logger =
 		std::make_unique<logger<
 		default_log_policy,
 		static_storage_policy,
@@ -56,7 +56,7 @@ namespace lwlog
 
 	const std::unique_ptr<interface::logger>& registry::default_logger() const
 	{
-		return m_default_logger;
+		return s_default_logger;
 	}
 
 	const std::unordered_map<std::string_view, logger_ptr>& registry::loggers() const

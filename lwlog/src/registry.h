@@ -32,7 +32,7 @@ namespace lwlog
 
 	private:
 		bool m_automatic_registry{ true };
-		static std::unique_ptr<interface::logger> m_default_logger;
 		std::unordered_map<std::string_view, logger_ptr> m_loggers;
+		static std::unique_ptr<interface::logger> s_default_logger;
 	};
 }
