@@ -18,7 +18,7 @@ namespace lwlog::details
 	};
 
 	inline stream_writer::stream_writer(stream_t stream, std::size_t size)
-		: m_stream(stream)
+		: m_stream{ stream }
 	{
 		std::setvbuf(m_stream, NULL, _IOFBF, size);
 	}
