@@ -2,7 +2,7 @@
 
 namespace lwlog::details
 {
-	file_writer::file_writer(std::string_view path, std::size_t buffer_size)
+	file_writer::file_writer(std::string_view path)
 		: m_path{ path }
 	{
 		if (!std::filesystem::exists(m_path.parent_path()))
@@ -11,7 +11,7 @@ namespace lwlog::details
 		}
 
 		m_file = std::fopen(m_path.string().data(), "a");
-		std::setvbuf(m_file, NULL, _IOFBF, buffer_size);
+		std::setvbuf(m_file, NULL, _IOFBF, s_buffer_size);
 	}
 
 	file_writer::~file_writer()
@@ -46,7 +46,7 @@ namespace lwlog::details
 		return std::filesystem::file_size(m_path);
 	}
 
-	std::FILE* file_writer::handle() const
+	file_writer::stream_t file_writer::handle() const
 	{
 		return m_file;
 	}
