@@ -20,7 +20,7 @@ namespace lwlog::details
 		return pattern;
 	}
 
-	void pattern::parse_alignment_specs()
+	void pattern::handle_alignment_specs()
 	{
 		std::size_t start_pos{ 0 };
 		while ((start_pos = m_pattern.find(alignment_flag::left, start_pos)) != std::string::npos)
@@ -29,8 +29,11 @@ namespace lwlog::details
 			m_alignment_specs.emplace_back(
 				m_pattern.substr(flag_pos, m_pattern.find(" ", flag_pos) - flag_pos)
 			);
-			m_pattern.replace(m_pattern.find(m_alignment_specs.front().to_align, flag_pos),
-				m_alignment_specs.front().to_align.size(), m_alignment_specs.front().to_align + alignment_flag::end);
+			m_pattern.replace(
+				m_pattern.find(m_alignment_specs.front().to_align, flag_pos),
+				m_alignment_specs.front().to_align.size(), 
+				m_alignment_specs.front().to_align + alignment_flag::end
+			);
 			start_pos += 2;
 		}
 
@@ -41,8 +44,11 @@ namespace lwlog::details
 			m_alignment_specs.emplace_back(
 				m_pattern.substr(flag_pos, m_pattern.find(" ", flag_pos) - flag_pos)
 			);
-			m_pattern.replace(m_pattern.find(m_alignment_specs.front().to_align, flag_pos),
-				m_alignment_specs.front().to_align.size(), m_alignment_specs.front().to_align + alignment_flag::end);
+			m_pattern.replace(
+				m_pattern.find(m_alignment_specs.front().to_align, flag_pos),
+				m_alignment_specs.front().to_align.size(), 
+				m_alignment_specs.front().to_align + alignment_flag::end
+			);
 			start_pos += 2;
 		}
 
@@ -53,8 +59,11 @@ namespace lwlog::details
 			m_alignment_specs.emplace_back(
 				m_pattern.substr(flag_pos, m_pattern.find(" ", flag_pos) - flag_pos)
 			);
-			m_pattern.replace(m_pattern.find(m_alignment_specs.front().to_align, flag_pos),
-				m_alignment_specs.front().to_align.size(), m_alignment_specs.front().to_align + alignment_flag::end);
+			m_pattern.replace(
+				m_pattern.find(m_alignment_specs.front().to_align, flag_pos),
+				m_alignment_specs.front().to_align.size(), 
+				m_alignment_specs.front().to_align + alignment_flag::end
+			);
 			start_pos += 2;
 		}
 	}
