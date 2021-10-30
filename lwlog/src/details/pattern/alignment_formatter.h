@@ -41,7 +41,7 @@ namespace lwlog::details
 			{
 				if (c == '%')
 				{
-					to_align = std::string(1, c) + std::string(1, *(&c + 1));
+					to_align = c + *(&c + 1);
 				}
 				else if (c == '{')
 				{
