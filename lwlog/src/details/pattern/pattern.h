@@ -17,7 +17,7 @@ namespace lwlog::details
 	class pattern
 	{
 	public:
-		std::string compile(log_message& log_msg);
+		std::string compile(const log_message& log_msg);
 		void handle_alignment_specs();
 		void handle_flag_formatters();
 		void set_pattern(std::string_view pattern);

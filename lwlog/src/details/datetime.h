@@ -88,106 +88,106 @@ namespace lwlog::details::datetime
         return (digit <= 9 ? "0" : "") + std::to_string(digit);
     }
 
-    static std::string get_date(time_point_t now)
+    static std::string get_date(const time_point_t& now)
     {
         return std::to_string(now.wYear) + "-" +
             pad_with_zero_if_needed(now.wMonth) + "-" +
             pad_with_zero_if_needed(now.wDay);
     }
 
-    static std::string get_date_short(time_point_t now)
+    static std::string get_date_short(const time_point_t& now)
     {
         return pad_with_zero_if_needed(now.wMonth) + "/"
             + pad_with_zero_if_needed(now.wDay) + "/"
             + pad_with_zero_if_needed(now.wYear % 100);
     }
 
-    static std::string get_year(time_point_t now)
+    static std::string get_year(const time_point_t& now)
     {
         return std::to_string(now.wYear);
     }
 
-    static std::string get_year_short(time_point_t now)
+    static std::string get_year_short(const time_point_t& now)
     {
         return pad_with_zero_if_needed(now.wYear % 100);
     }
 
-    static std::string get_month(time_point_t now)
+    static std::string get_month(const time_point_t& now)
     {
         return pad_with_zero_if_needed(now.wMonth);
     }
 
-    static std::string get_month_name(time_point_t now)
+    static std::string get_month_name(const time_point_t& now)
     {
         return month[now.wMonth - 1];
     }
 
-    static std::string get_month_name_short(time_point_t now)
+    static std::string get_month_name_short(const time_point_t& now)
     {
         return month_abbreviated[now.wMonth - 1];
     }
 
-    static std::string get_day(time_point_t now)
+    static std::string get_day(const time_point_t& now)
     {
         return pad_with_zero_if_needed(now.wDay);
     }
 
-    static std::string get_weekday_name(time_point_t now)
+    static std::string get_weekday_name(const time_point_t& now)
     {
         return weekday[now.wDayOfWeek - 1];
     }
 
-    static std::string get_weekday_name_short(time_point_t now)
+    static std::string get_weekday_name_short(const time_point_t& now)
     {
         return weekday_abbreviated[now.wDayOfWeek - 1];
     }
 
-    static std::string get_time(time_point_t now)
+    static std::string get_time(const time_point_t& now)
     {
         return pad_with_zero_if_needed(to_local(now.wHour)) + ":" +
             pad_with_zero_if_needed(now.wMinute) + ":" +
             pad_with_zero_if_needed(now.wSecond);
     }
 
-    static std::string get_24_hour_clock(time_point_t now)
+    static std::string get_24_hour_clock(const time_point_t& now)
     {
         return pad_with_zero_if_needed(to_local(now.wHour)) + ":" +
             pad_with_zero_if_needed(now.wMinute);
     }
 
-    static std::string get_12_hour_clock(time_point_t now)
+    static std::string get_12_hour_clock(const time_point_t& now)
     {
         return pad_with_zero_if_needed(to_12h(to_local(now.wHour))) + ":" +
             pad_with_zero_if_needed(now.wMinute) + ":" +
             pad_with_zero_if_needed(now.wSecond) + ampm(now.wHour);
     }
 
-    static std::string get_ampm(time_point_t now)
+    static std::string get_ampm(const time_point_t& now)
     {
         return ampm(to_local(now.wHour));
     }
 
-    static std::string get_hour_24(time_point_t now)
+    static std::string get_hour_24(const time_point_t& now)
     {
         return pad_with_zero_if_needed(to_local(now.wHour));
     }
 
-    static std::string get_hour_12(time_point_t now)
+    static std::string get_hour_12(const time_point_t& now)
     {
         return pad_with_zero_if_needed(to_12h(to_local(now.wHour)));
     }
 
-    static std::string get_minute(time_point_t now)
+    static std::string get_minute(const time_point_t& now)
     {
         return pad_with_zero_if_needed(now.wMinute);
     }
 
-    static std::string get_second(time_point_t now)
+    static std::string get_second(const time_point_t& now)
     {
         return pad_with_zero_if_needed(now.wSecond);
     }
 #else
-    static std::string format_time(const char* format, time_point_t now)
+    static std::string format_time(const char* format, const time_point_t& now)
     {
         char buff[256];
         auto in_time_t = std::chrono::system_clock::to_time_t(now);

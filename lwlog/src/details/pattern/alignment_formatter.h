@@ -55,7 +55,7 @@ namespace lwlog::details
 
 	struct alignment_formatter
 	{
-		static void format(std::string& pattern, alignment_specification spec)
+		static void format(std::string& pattern, const alignment_specification& spec)
 		{
 			std::string to_align_formatter = pattern.substr(pattern.find(spec.flag) + spec.flag.size(),
 				pattern.find(alignment_flag::end) - pattern.find(spec.flag) - spec.flag.size());
@@ -66,7 +66,7 @@ namespace lwlog::details
 				align(to_align_formatter, spec.width, spec.fill_char, spec.side));
 		}
 
-		static std::string align(std::string to_align, std::uint8_t width,
+		static std::string align(const std::string& to_align, std::uint8_t width,
 			char fill_char, alignment_specification::align_side side)
 		{
 			switch (side)
@@ -83,7 +83,7 @@ namespace lwlog::details
 			}
 		}
 
-		static std::string align_left(std::string to_align, std::uint8_t width, char fill_char)
+		static std::string align_left(const std::string& to_align, std::uint8_t width, char fill_char)
 		{
 			if (width <= to_align.size())
 				return to_align;
@@ -91,7 +91,7 @@ namespace lwlog::details
 				return to_align + std::string(width - to_align.size(), fill_char);
 		}
 
-		static std::string align_right(std::string to_align, std::uint8_t width, char fill_char)
+		static std::string align_right(const std::string& to_align, std::uint8_t width, char fill_char)
 		{
 			if (width <= to_align.size())
 				return to_align;
@@ -99,7 +99,7 @@ namespace lwlog::details
 				return std::string(width - to_align.size(), fill_char) + to_align;
 		}
 
-		static std::string align_center(std::string to_align, std::uint8_t width, char fill_char)
+		static std::string align_center(const std::string& to_align, std::uint8_t width, char fill_char)
 		{
 			if (width <= to_align.size()) return to_align;
 			else
