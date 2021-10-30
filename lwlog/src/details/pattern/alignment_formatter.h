@@ -40,9 +40,14 @@ namespace lwlog::details
 			for (const auto& c : str)
 			{
 				if (c == '%')
+				{
 					to_align = std::string(1, c) + std::string(1, *(&c + 1));
+				}
 				else if (c == '{')
-					to_align = str.substr(str.find(c), str.find('}') - str.find(c) + 1);
+				{
+					std::size_t flag_pos = str.find(c);
+					to_align = str.substr(flag_pos, str.find('}') - flag_pos + 1);
+				}
 			}
 		}
 
@@ -57,11 +62,13 @@ namespace lwlog::details
 	{
 		static void format(std::string& pattern, const alignment_specification& spec)
 		{
-			std::string to_align_formatter = pattern.substr(pattern.find(spec.flag) + spec.flag.size(),
-				pattern.find(alignment_flag::end) - pattern.find(spec.flag) - spec.flag.size());
+			std::size_t flag_pos = pattern.find(spec.flag);
+			std::size_t end_pos = pattern.find(alignment_flag::end);
+			std::string to_align_formatter = pattern.substr(flag_pos + spec.flag.size(),
+				end_pos - flag_pos - spec.flag.size());
 
 			pattern.replace(pattern.find(spec.flag), spec.flag.size(), "");
-			pattern.replace(pattern.find(alignment_flag::end), 2, "");
+			pattern.replace(end_pos, 2, "");
 			pattern.replace(pattern.find(to_align_formatter), to_align_formatter.size(),
 				align(to_align_formatter, spec.width, spec.fill_char, spec.side));
 		}
