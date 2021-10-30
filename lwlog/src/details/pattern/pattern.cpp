@@ -155,7 +155,7 @@ namespace lwlog::details
 		std::size_t pos = m_pattern.find('{', 0);
 		while (pos != std::string::npos)
 		{
-			buff.push_back(m_pattern.substr(pos, m_pattern.find('}', pos) - pos + 1));
+			buff.emplace_back(m_pattern.substr(pos, m_pattern.find('}', pos) - pos + 1));
 			pos = m_pattern.find('{', pos + 1);
 		}
 		return buff;
@@ -167,7 +167,7 @@ namespace lwlog::details
 		std::size_t pos = m_pattern.find('%', 0);
 		while (pos != std::string::npos)
 		{
-			buff.push_back(m_pattern.substr(pos, 2));
+			buff.emplace_back(m_pattern.substr(pos, 2));
 			pos = m_pattern.find('%', pos + 1);
 		}
 		return buff;
