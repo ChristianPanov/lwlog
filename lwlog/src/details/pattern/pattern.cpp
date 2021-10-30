@@ -27,7 +27,7 @@ namespace lwlog::details
 		{
 			std::size_t flag_pos = m_pattern.find(alignment_flag::left, start_pos);
 			m_alignment_specs.emplace_back(
-				m_pattern.substr(flag_pos, m_pattern.find(" ", flag_pos) - flag_pos)
+				m_pattern.substr(flag_pos, m_pattern.find(' ', flag_pos) - flag_pos)
 			);
 			m_pattern.replace(
 				m_pattern.find(m_alignment_specs.front().to_align, flag_pos),
@@ -42,7 +42,7 @@ namespace lwlog::details
 		{
 			std::size_t flag_pos = m_pattern.find(alignment_flag::right, start_pos);
 			m_alignment_specs.emplace_back(
-				m_pattern.substr(flag_pos, m_pattern.find(" ", flag_pos) - flag_pos)
+				m_pattern.substr(flag_pos, m_pattern.find(' ', flag_pos) - flag_pos)
 			);
 			m_pattern.replace(
 				m_pattern.find(m_alignment_specs.front().to_align, flag_pos),
@@ -57,7 +57,7 @@ namespace lwlog::details
 		{
 			std::size_t flag_pos = m_pattern.find(alignment_flag::center, start_pos);
 			m_alignment_specs.emplace_back(
-				m_pattern.substr(flag_pos, m_pattern.find(" ", flag_pos) - flag_pos)
+				m_pattern.substr(flag_pos, m_pattern.find(' ', flag_pos) - flag_pos)
 			);
 			m_pattern.replace(
 				m_pattern.find(m_alignment_specs.front().to_align, flag_pos),
@@ -107,7 +107,7 @@ namespace lwlog::details
 
 	void pattern::compile_colors(std::string& pattern)
 	{
-		if (strstr(pattern.data(), "^"))
+		if (strchr(pattern.data(), '^'))
 		{
 			for (const auto& [key, value] : color_data)
 			{
@@ -121,7 +121,7 @@ namespace lwlog::details
 
 	void pattern::drop_color_flags(std::string& pattern)
 	{
-		while (strstr(pattern.data(), "^"))
+		while (strchr(pattern.data(), '^'))
 		{
 			std::size_t first_pos = pattern.find_first_of('^');
 			std::size_t last_pos = pattern.find('^', first_pos + 1);
@@ -152,11 +152,11 @@ namespace lwlog::details
 	std::vector<std::string> pattern::parse_verbose_flags()
 	{
 		std::vector<std::string> buff;
-		std::size_t pos = m_pattern.find("{", 0);
+		std::size_t pos = m_pattern.find('{', 0);
 		while (pos != std::string::npos)
 		{
-			buff.push_back(m_pattern.substr(pos, m_pattern.find("}", pos) - pos + 1));
-			pos = m_pattern.find("{", pos + 1);
+			buff.push_back(m_pattern.substr(pos, m_pattern.find('}', pos) - pos + 1));
+			pos = m_pattern.find('{', pos + 1);
 		}
 		return buff;
 	}
@@ -164,11 +164,11 @@ namespace lwlog::details
 	std::vector<std::string> pattern::parse_short_flags()
 	{
 		std::vector<std::string> buff;
-		std::size_t pos = m_pattern.find("%", 0);
+		std::size_t pos = m_pattern.find('%', 0);
 		while (pos != std::string::npos)
 		{
 			buff.push_back(m_pattern.substr(pos, 2));
-			pos = m_pattern.find("%", pos + 1);
+			pos = m_pattern.find('%', pos + 1);
 		}
 		return buff;
 	}

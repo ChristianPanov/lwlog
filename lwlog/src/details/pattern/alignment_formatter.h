@@ -42,7 +42,7 @@ namespace lwlog::details
 				if (c == '%')
 					to_align = std::string(1, c) + std::string(1, *(&c + 1));
 				else if (c == '{')
-					to_align = str.substr(str.find(c), str.find("}") - str.find(c) + 1);
+					to_align = str.substr(str.find(c), str.find('}') - str.find(c) + 1);
 			}
 		}
 
