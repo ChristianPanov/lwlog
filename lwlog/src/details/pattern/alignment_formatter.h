@@ -63,12 +63,11 @@ namespace lwlog::details
 		static void format(std::string& pattern, const alignment_specification& spec)
 		{
 			std::size_t flag_pos = pattern.find(spec.flag);
-			std::size_t end_pos = pattern.find(alignment_flag::end);
 			std::string to_align_formatter = pattern.substr(flag_pos + spec.flag.size(),
-				end_pos - flag_pos - spec.flag.size());
+				pattern.find(alignment_flag::end) - flag_pos - spec.flag.size());
 
 			pattern.replace(pattern.find(spec.flag), spec.flag.size(), "");
-			pattern.replace(end_pos, 2, "");
+			pattern.replace(pattern.find(alignment_flag::end), 2, "");
 			pattern.replace(pattern.find(to_align_formatter), to_align_formatter.size(),
 				align(to_align_formatter, spec.width, spec.fill_char, spec.side));
 		}
