@@ -23,7 +23,8 @@ namespace lwlog::details
 	{
 		if (m_file != nullptr)
 		{
-			std::fwrite((std::string(message) + "\n").data(), message.size() + 1, 1, m_file);
+			std::fwrite(message.data(), message.size(), 1, m_file);
+			std::fwrite("\n", 1, 1, m_file);
 		}
 	}
 
