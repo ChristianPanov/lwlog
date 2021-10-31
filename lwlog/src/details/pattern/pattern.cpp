@@ -107,11 +107,11 @@ namespace lwlog::details
 
 	void pattern::compile_colors(std::string& pattern)
 	{
-		if (strchr(pattern.data(), '^'))
+		if (std::strchr(pattern.data(), '^'))
 		{
 			for (const auto& [key, value] : color_data)
 			{
-				while (strstr(pattern.data(), key.data()))
+				while (std::strstr(pattern.data(), key.data()))
 				{
 					pattern.replace(pattern.find(key), key.length(), value);
 				}
@@ -121,7 +121,7 @@ namespace lwlog::details
 
 	void pattern::drop_color_flags(std::string& pattern)
 	{
-		while (strchr(pattern.data(), '^'))
+		while (std::strchr(pattern.data(), '^'))
 		{
 			std::size_t first_pos = pattern.find_first_of('^');
 			std::size_t last_pos = pattern.find('^', first_pos + 1);
@@ -134,7 +134,7 @@ namespace lwlog::details
 		const auto& [verbose, shortened] = flags;
 		if (!verbose.empty())
 		{
-			while (strstr(pattern.data(), verbose.data()))
+			while (std::strstr(pattern.data(), verbose.data()))
 			{
 				pattern.replace(pattern.find(verbose), verbose.length(), value);
 			}
@@ -142,7 +142,7 @@ namespace lwlog::details
 
 		if (!shortened.empty())
 		{
-			while (strstr(pattern.data(), shortened.data()))
+			while (std::strstr(pattern.data(), shortened.data()))
 			{
 				pattern.replace(pattern.find(shortened), shortened.length(), value);
 			}
