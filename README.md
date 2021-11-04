@@ -245,9 +245,10 @@ Verbose flag | Short flag | Description | Example
 ```{minute}``` | ```%m``` | Current minute 00-59 | "42"
 ```{second}``` | ```%s``` | Current second 00-59 | "10"
 ### Source metainformation (function name, file path, current line)
-lwlog gives you the ability to get source code metainformation in the form of attributes. One can get the current line on which the log function is called, the file path in which it is called, or the function name in which it is called, and all of that without macros. It is possible because of compiler intrinsics, which were first introduced in GCC, and now they are also implemented in MSVC. lwlog doesn't use c++20's std::source_location, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.
+lwlog gives you the ability to get source code metainformation in the form of attributes. One can get the current line on which the log function is called, the file path in which it is called, or the function name in which it is called, and all of that without macros.\
+It is possible because of compiler intrinsics, which were first introduced in GCC, and now they are also implemented in MSVC. lwlog doesn't use c++20's std::source_location, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.
 ### Alignment Syntax
-Alignment specifications are individual to an attribute alignment information. It contains an alignment side, width, and an optional fill character, which by default, if not specified, is an empty space.\
+Alignment specifications are individual to an attribute alignment information. It contains an alignment side, width, and an optional fill character, which by default, if not specified, is an empty space.
 
 Syntax | Example | Result
 ------------ | ------------- | -------------
