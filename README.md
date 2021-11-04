@@ -184,8 +184,8 @@ int main()
 ## Deferred logging
 Deferred logging provides extremely low latency, however it's only applicable when you don't need the logs to be outputted immediately.\
 The low latency comes from the fact that with deferred logging a log call doesn't sink and doesn't format anything, it only stores data.\
-This data is sinked and formatted at a later stage, only when needed.
-There is one problem with it - all log information will be lost if there is an application crash and you haven't sinked the deferred logs. On crash, all deferred logs should be automatically sinked, that's the solution that I will be working on.
+This data is sent to a sink and formatted at a later stage, only when needed.
+There is one problem with it - all log information will be lost if there is an application crash and you haven't sinked the deferred logs.
 #### Example
 ```cpp
 #include "lwlog/lwlog.h"
@@ -248,7 +248,7 @@ Verbose flag | Short flag | Description | Example
 lwlog gives you the ability to get source code metainformation in the form of attributes. One can get the current line on which the log function is called, the file path in which it is called, or the function name in which it is called, and all of that without macros.\
 It is possible because of compiler intrinsics, which were first introduced in GCC, and now they are also implemented in MSVC. lwlog doesn't use c++20's std::source_location, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.
 ### Alignment Syntax
-Alignment specifications are individual to an attribute alignment information. It contains an alignment side, width, and an optional fill character, which by default, if not specified, is an empty space.
+Alignment specifications are individual to an attribute, and they contain an alignment side, width, and an optional fill character, which by default, if not specified, is an empty space.
 
 Syntax | Example | Result
 ------------ | ------------- | -------------
