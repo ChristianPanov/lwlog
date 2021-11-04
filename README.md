@@ -518,7 +518,7 @@ int main()
 }
 ```
 # Performance
-So how does lwlog achieve this performance? The answer lies in one very important acrhictectural decision and a couple of techniques.
+So how does lwlog achieve this performance? The answer lies in one very important architectural decision and a couple of techniques.
 ### Architecture
 The architectural decision that speeds up the performance is about how the formatting pattern compilation is handled. The pattern in question is parsed completely off the log call site, and all that's left for the log call functions is to do the replacement of the flags with their corresponding values.\
 Color processing is also done off the log call site. Color processing can be a big performance bottleneck, and it doesn't need to happen at the log call site, since colors have nothing to do with the current log information. Once the pattern is set, it immediately processes all the color flags in place.
