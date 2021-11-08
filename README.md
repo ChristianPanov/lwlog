@@ -388,23 +388,21 @@ int main()
 ```
 ## Creating your own sink
 As I said and promissed, lwlog is extremely easy to extend. Let's give an example with sinks.\
-To create your own sink, all you have to do is inherit from ```lwlog::interface::sink``` and implement a ```sink_it()``` function. That's it.
+To create your own sink, all you have to do is inherit from ```lwlog::sinks::sink``` and implement a ```sink_it()``` function. That's it.
 #### Example with an existing sink implementation
 ```cpp
-#include "policy/sink_color_policy.h"
-
 namespace lwlog::sinks
 {
 	template<typename ThreadingPolicy>
-	class stdout_sink
+	class stdout_sink 
 		: public sink<colored_policy, ThreadingPolicy>
-		, public details::stream
+		, public details::stream_writer
 	{
 	public:
-		stdout_color_sink() : details::stream(stdout) {}
+		stdout_sink() : details::stream_writer(stdout) {}
 		void sink_it(std::string_view message) override
 		{
-			details::stream::write(message);
+			details::stream_writer::write(message);
 		}
 	};
 }
@@ -416,6 +414,7 @@ We only need the ```sink_it()``` function, which is called as the actual log cal
 As mentioned in [Logical Architecture](https://github.com/ChristianPanov/lwlog#logical-architecture), you can either use some kind of a writer class, which handles the actual writing, or you can directly handle the writing in the function.
 #### Example
 ```cpp
+#include "sink.h"
 #include "policy/sink_color_policy.h"
 
 namespace lwlog::sinks
