@@ -112,8 +112,6 @@ int main()
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_sink>
 			>("CONSOLE");
-	// or use the convenience logger aliases
-	auto console2 = std::make_shared<lwlog::console_logger>("CONSOLE");
 	
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
 	console->set_pattern("[%T] [%n] [%l]: %v");
@@ -277,7 +275,7 @@ int main()
 [19:44:50] [CONSOLE] [  critical  ]: First critical message
 ```
 ### Color Flags
-Color flags are used for coloring a pattern. Each color code is scoped and needs to be ended with a ```^reset^``` flag.
+Color flags are used for coloring a pattern. Each color flag is scoped.
 Foreground Color Flag | Bright Foreground Color Flag
 ------------ | -------------
 ```^black^``` | ```^br_black^```
@@ -306,7 +304,7 @@ Background Color Flag | Bright Background Color Flag
 int main()
 {
 	auto console = std::make_shared<console_logger>("CONSOLE");
-	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	console->set_pattern(".br_red([%T] [%n]) .green([%l]): .br_cyan(%v)");
 
 	console->critical("First critical message");
 	
