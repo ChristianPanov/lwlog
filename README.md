@@ -184,8 +184,8 @@ int main()
 ## Deferred logging
 Deferred logging provides extremely low latency, however it's only applicable when you don't need the logs to be outputted immediately.\
 The low latency comes from the fact that with deferred logging a log call doesn't sink and doesn't format anything, it only stores data.\
-This data is sinked and formatted at a later stage, only when needed.
-There is one problem with it - all log information will be lost if there is an application crash and you haven't sinked the deferred logs. On crash, all deferred logs should be automatically sinked, that's the solution that I will be working on.
+This data is sent to a sink and formatted at a later stage, only when needed.
+There is one problem with it - all log information will be lost if there is an application crash and you haven't sinked the deferred logs.
 #### Example
 ```cpp
 #include "lwlog/lwlog.h"
@@ -245,9 +245,10 @@ Verbose flag | Short flag | Description | Example
 ```{minute}``` | ```%m``` | Current minute 00-59 | "42"
 ```{second}``` | ```%s``` | Current second 00-59 | "10"
 ### Source metainformation (function name, file path, current line)
-lwlog gives you the ability to get source code metainformation in the form of attributes. One can get the current line on which the log function is called, the file path in which it is called, or the function name in which it is called, and all of that without macros. It is possible because of compiler intrinsics, which were first introduced in GCC, and now they are also implemented in MSVC. lwlog doesn't use c++20's std::source_location, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.
+lwlog gives you the ability to get source code metainformation in the form of attributes. One can get the current line on which the log function is called, the file path in which it is called, or the function name in which it is called, and all of that without macros.\
+It is possible because of compiler intrinsics, which were first introduced in GCC, and now they are also implemented in MSVC. lwlog doesn't use c++20's std::source_location, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.
 ### Alignment Syntax
-Alignment specifications are individual to an attribute alignment information. It contains an alignment side, width, and an optional fill character, which by default, if not specified, is an empty space.\
+Alignment specifications are individual to an attribute, and they contain an alignment side, width, and an optional fill character, which by default, if not specified, is an empty space.
 
 Syntax | Example | Result
 ------------ | ------------- | -------------
@@ -387,23 +388,21 @@ int main()
 ```
 ## Creating your own sink
 As I said and promissed, lwlog is extremely easy to extend. Let's give an example with sinks.\
-To create your own sink, all you have to do is inherit from ```lwlog::interface::sink``` and implement a ```sink_it()``` function. That's it.
+To create your own sink, all you have to do is inherit from ```lwlog::sinks::sink``` and implement a ```sink_it()``` function. That's it.
 #### Example with an existing sink implementation
 ```cpp
-#include "policy/sink_color_policy.h"
-
 namespace lwlog::sinks
 {
 	template<typename ThreadingPolicy>
-	class stdout_sink
+	class stdout_sink 
 		: public sink<colored_policy, ThreadingPolicy>
-		, public details::stream
+		, public details::stream_writer
 	{
 	public:
-		stdout_color_sink() : details::stream(stdout) {}
+		stdout_sink() : details::stream_writer(stdout) {}
 		void sink_it(std::string_view message) override
 		{
-			details::stream::write(message);
+			details::stream_writer::write(message);
 		}
 	};
 }
@@ -415,6 +414,7 @@ We only need the ```sink_it()``` function, which is called as the actual log cal
 As mentioned in [Logical Architecture](https://github.com/ChristianPanov/lwlog#logical-architecture), you can either use some kind of a writer class, which handles the actual writing, or you can directly handle the writing in the function.
 #### Example
 ```cpp
+#include "sink.h"
 #include "policy/sink_color_policy.h"
 
 namespace lwlog::sinks
@@ -517,7 +517,7 @@ int main()
 }
 ```
 # Performance
-So how does lwlog achieve this performance? The answer lies in one very important acrhictectural decision and a couple of techniques.
+So how does lwlog achieve this performance? The answer lies in one very important architectural decision and a couple of techniques.
 ### Architecture
 The architectural decision that speeds up the performance is about how the formatting pattern compilation is handled. The pattern in question is parsed completely off the log call site, and all that's left for the log call functions is to do the replacement of the flags with their corresponding values.\
 Color processing is also done off the log call site. Color processing can be a big performance bottleneck, and it doesn't need to happen at the log call site, since colors have nothing to do with the current log information. Once the pattern is set, it immediately processes all the color flags in place.
