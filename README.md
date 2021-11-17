@@ -289,14 +289,14 @@ Foreground Color Flag | Bright Foreground Color Flag
 
 Background Color Flag | Bright Background Color Flag
 ------------ | -------------
-```.bg_black()``` | ```.bg_br_black()```
-```.bg_red()``` | ```.bg_br_red()```
-```.bg_green()``` | ```.bg_br_green()```
-```.bg_yellow()``` | ```.bg_br_yellow()```
-```.bg_blue()``` | ```.bg_br_blue()```
-```.bg_magenta()``` | ```.bg_br_magenta()```
-```.bg_cyan()``` | ```.bg_br_cyan()```
-```.bg_white()``` | ```.bg_br_white()```
+```.bg_black()``` | ```.br_bg_black()```
+```.bg_red()``` | ```.br_bg_red()```
+```.bg_green()``` | ```.br_bg_green()```
+```.bg_yellow()``` | ```.br_bg_yellow()```
+```.bg_blue()``` | ```.br_bg_blue()```
+```.bg_magenta()``` | ```.br_bg_magenta()```
+```.bg_cyan()``` | ```.br_bg_cyan()```
+```.bg_white()``` | ```.br_bg_white()```
 #### Example
 ```cpp
 #include "lwlog/lwlog.h"
