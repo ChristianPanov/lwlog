@@ -107,7 +107,7 @@ namespace lwlog::details
 
 	void pattern::compile_colors(std::string& pattern)
 	{
-		if (std::strchr(pattern.data(), '^'))
+		if (std::strchr(pattern.data(), ')'))
 		{
 			for (const auto& [key, value] : color_data)
 			{
@@ -121,10 +121,10 @@ namespace lwlog::details
 
 	void pattern::drop_color_flags(std::string& pattern)
 	{
-		while (std::strchr(pattern.data(), '^'))
+		while (std::strchr(pattern.data(), ')'))
 		{
-			std::size_t first_pos = pattern.find_first_of('^');
-			std::size_t last_pos = pattern.find('^', first_pos + 1);
+			std::size_t first_pos = pattern.find_first_of('.');
+			std::size_t last_pos = pattern.find(')', first_pos + 1);
 			pattern.erase(first_pos, last_pos - first_pos + 1);
 		}
 	}

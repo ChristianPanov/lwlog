@@ -14,7 +14,7 @@ int main()
 	>("CONSOLE");
 
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
-	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^ TEXT");
+	console->set_pattern(".br_red([%T] [%n]) .green([%l]): .br_cyan(%v) TEXT");
 
 	{
 		Timer timer("timer");
