@@ -279,24 +279,24 @@ Color flags are used for coloring a pattern. Each color flag is scoped.
 Foreground Color Flag | Bright Foreground Color Flag
 ------------ | -------------
 ```.black()``` | ```.br_black()```
-```.red(``` | ```.br_red()```
-```.green(``` | ```.br_green()```
-```.yellow(``` | ```.br_yellow()```
-```.blue(``` |```.br_blue()```
-```.magenta(``` | ```.br_magenta()```
-```.cyan(``` | ```.br_cyan()```
-```.white(``` | ```.br_white()```
+```.red()``` | ```.br_red()```
+```.green()``` | ```.br_green()```
+```.yellow()``` | ```.br_yellow()```
+```.blue()``` |```.br_blue()```
+```.magenta()``` | ```.br_magenta()```
+```.cyan()``` | ```.br_cyan()```
+```.white()``` | ```.br_white()```
 
 Background Color Flag | Bright Background Color Flag
 ------------ | -------------
-```.bg_black^``` | ```.bg_br_black()```
-```.bg_red^``` | ```.bg_br_red()```
-```.bg_green^``` | ```.bg_br_green()```
-```.bg_yellow^``` | ```.bg_br_yellow()```
-```.bg_blue^``` | ```.bg_br_blue()```
-```.bg_magenta^``` | ```.bg_br_magenta()```
-```.bg_cyan^``` | ```.bg_br_cyan()```
-```.bg_white^``` | ```.bg_br_white()```
+```.bg_black()``` | ```.bg_br_black()```
+```.bg_red()``` | ```.bg_br_red()```
+```.bg_green()``` | ```.bg_br_green()```
+```.bg_yellow()``` | ```.bg_br_yellow()```
+```.bg_blue()``` | ```.bg_br_blue()```
+```.bg_magenta()``` | ```.bg_br_magenta()```
+```.bg_cyan()``` | ```.bg_br_cyan()```
+```.bg_white()``` | ```.bg_br_white()```
 #### Example
 ```cpp
 #include "lwlog/lwlog.h"
