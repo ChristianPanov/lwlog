@@ -112,8 +112,6 @@ int main()
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_sink>
 			>("CONSOLE");
-	// or use the convenience logger aliases
-	auto console2 = std::make_shared<lwlog::console_logger>("CONSOLE");
 	
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
 	console->set_pattern("[%T] [%n] [%l]: %v");
@@ -277,28 +275,28 @@ int main()
 [19:44:50] [CONSOLE] [  critical  ]: First critical message
 ```
 ### Color Flags
-Color flags are used for coloring a pattern. Each color code is scoped and needs to be ended with a ```^reset^``` flag.
+Color flags are used for coloring a pattern. Each color flag is scoped.
 Foreground Color Flag | Bright Foreground Color Flag
 ------------ | -------------
-```^black^``` | ```^br_black^```
-```^red^``` | ```^br_red^```
-```^green^``` | ```^br_green^```
-```^yellow^``` | ```^br_yellow^```
-```^blue^``` |```^br_blue^```
-```^magenta^``` | ```^br_magenta^```
-```^cyan^``` | ```^br_cyan^```
-```^white^``` | ```^br_white^```
+```.black()``` | ```.br_black()```
+```.red()``` | ```.br_red()```
+```.green()``` | ```.br_green()```
+```.yellow()``` | ```.br_yellow()```
+```.blue()``` |```.br_blue()```
+```.magenta()``` | ```.br_magenta()```
+```.cyan()``` | ```.br_cyan()```
+```.white()``` | ```.br_white()```
 
 Background Color Flag | Bright Background Color Flag
 ------------ | -------------
-```^bg_black^``` | ```^bg_br_black^```
-```^bg_red^``` | ```^bg_br_red^```
-```^bg_green^``` | ```^bg_br_green^```
-```^bg_yellow^``` | ```^bg_br_yellow^```
-```^bg_blue^``` | ```^bg_br_blue^```
-```^bg_magenta^``` | ```^bg_br_magenta^```
-```^bg_cyan^``` | ```^bg_br_cyan^```
-```^bg_white^``` | ```^bg_br_white^```
+```.bg_black()``` | ```.br_bg_black()```
+```.bg_red()``` | ```.br_bg_red()```
+```.bg_green()``` | ```.br_bg_green()```
+```.bg_yellow()``` | ```.br_bg_yellow()```
+```.bg_blue()``` | ```.br_bg_blue()```
+```.bg_magenta()``` | ```.br_bg_magenta()```
+```.bg_cyan()``` | ```.br_bg_cyan()```
+```.bg_white()``` | ```.br_bg_white()```
 #### Example
 ```cpp
 #include "lwlog/lwlog.h"
@@ -306,7 +304,7 @@ Background Color Flag | Bright Background Color Flag
 int main()
 {
 	auto console = std::make_shared<console_logger>("CONSOLE");
-	console->set_pattern("^br_red^[%T] [%n]^reset^ ^green^[%l]^reset^: ^br_cyan^%v^reset^");
+	console->set_pattern(".br_red([%T] [%n]) .green([%l]): .br_cyan(%v)");
 
 	console->critical("First critical message");
 	
