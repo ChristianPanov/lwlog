@@ -110,7 +110,7 @@ namespace lwlog::details
 		if (std::strchr(pattern.data(), ')'))
 		{
 			while (std::strstr(pattern.data(), ")"))
-				pattern.replace(pattern.find(")"), 2, "\u001b[0m");
+				pattern.replace(pattern.find(")"), 1, "\u001b[0m");
 
 			for (const auto& [key, value] : color_data)
 				while (std::strstr(pattern.data(), key.data()))
@@ -120,11 +120,11 @@ namespace lwlog::details
 
 	void pattern::drop_color_flags(std::string& pattern)
 	{
-		while (std::strchr(pattern.data(), ')'))
+		if (std::strchr(pattern.data(), ')'))
 		{
-			std::size_t first_pos = pattern.find_first_of('.');
-			std::size_t last_pos = pattern.find(')', first_pos + 1);
-			pattern.erase(first_pos, last_pos - first_pos + 1);
+			for (const auto& [key, value] : color_data)
+				while (std::strstr(pattern.data(), key.data()))
+					pattern.replace(pattern.find(key), key.length(), "");
 		}
 	}
 
