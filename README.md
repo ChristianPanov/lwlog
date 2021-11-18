@@ -355,7 +355,8 @@ int main()
 
 	// Color attributes will be ignored for the file sink
 	logger->set_pattern("[%T] [%n] [%l]: %v");
-	logger->critical("First critical message"); // Log message will be distributed to both sinks
+	// Log message will be distributed to both sinks
+	logger->critical("First critical message");
 	
 	return 0;
 }
@@ -368,7 +369,7 @@ int main()
 {
 	auto console_sink = std::make_shared<lwlog::sinks::stdout_sink<lwlog::single_threaded_policy>>();
 	auto file_sink = std::make_shared<lwlog::sinks::file_sink<lwlog::single_threaded_policy>>("C:/Users/user/Desktop/LogFolder/LOGS.txt");
-	lwlog::primitives::sink_list sinks = { console_sink, file_sink };
+	lwlog::sink_list sinks = { console_sink, file_sink };
 
 	auto logger_iterator = std::make_shared<lwlog::null_logger>("ITERATOR", sinks.begin(), sinks.end());
 	auto logger_sink_list = std::make_shared<lwlog::null_logger>("SINK_LIST", sinks);
@@ -473,7 +474,7 @@ int main()
 	auto file = std::make_shared<lwlog::file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 	
 	//Pattern will be applied to all loggers present in the registry
-	lwlog::apply_to_all([](lwlog::primitives::logger_ptr logger)
+	lwlog::apply_to_all([](lwlog::logger_ptr logger)
 		{
 			logger->set_pattern("[%T] [%n] [%l]: %v");
 		});
