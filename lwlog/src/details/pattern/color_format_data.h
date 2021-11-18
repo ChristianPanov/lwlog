@@ -1,45 +1,43 @@
 #pragma once
 
-#include "details/color.h"
-
 namespace lwlog::details
 {
 	static std::unordered_map<std::string_view, std::string_view> color_data =
 	{
-		{".black(",			color::foreground_black()},
-		{".red(",			color::foreground_red()},
-		{".green(",			color::foreground_green()},
-		{".yellow(",		color::foreground_yellow()},
-		{".blue(",			color::foreground_blue()},
-		{".magenta(",		color::foreground_magenta()},
-		{".cyan(",			color::foreground_cyan()},
-		{".white(",			color::foreground_white()},
+		{".black(",			"\u001b[30m"},
+		{".red(",			"\u001b[31m"},
+		{".green(",			"\u001b[32m"},
+		{".yellow(",		"\u001b[33m"},
+		{".blue(",			"\u001b[34m"},
+		{".magenta(",		"\u001b[35m"},
+		{".cyan(",			"\u001b[36m"},
+		{".white(",			"\u001b[37m"},
 
-		{".br_black(",		color::foreground_bright_black()},
-		{".br_red(",		color::foreground_bright_red()},
-		{".br_green(",		color::foreground_bright_green()},
-		{".br_yellow(",		color::foreground_bright_yellow()},
-		{".br_blue(",		color::foreground_bright_blue()},
-		{".br_magenta(",	color::foreground_bright_magenta()},
-		{".br_cyan(",		color::foreground_bright_cyan()},
-		{".br_white(",		color::foreground_bright_white()},
+		{".br_black(",		"\u001b[30;1m"},
+		{".br_red(",		"\u001b[31;1m"},
+		{".br_green(",		"\u001b[32;1m"},
+		{".br_yellow(",		"\u001b[33;1m"},
+		{".br_blue(",		"\u001b[34;1m"},
+		{".br_magenta(",	"\u001b[35;1m"},
+		{".br_cyan(",		"\u001b[36;1m"},
+		{".br_white(",		"\u001b[37;1m"},
 
-		{".bg_black(",		color::background_black()},
-		{".bg_red(",		color::background_red()},
-		{".bg_green(",		color::background_green()},
-		{".bg_yellow(",		color::background_yellow()},
-		{".bg_blue(",		color::background_blue()},
-		{".bg_magenta(",	color::background_magenta()},
-		{".bg_cyan(",		color::background_cyan()},
-		{".bg_white(",		color::background_white()},
+		{".bg_black(",		"\u001b[40m"},
+		{".bg_red(",		"\u001b[41m"},
+		{".bg_green(",		"\u001b[42m"},
+		{".bg_yellow(",		"\u001b[43m"},
+		{".bg_blue(",		"\u001b[44m"},
+		{".bg_magenta(",	"\u001b[45m"},
+		{".bg_cyan(",		"\u001b[46m"},
+		{".bg_white(",		"\u001b[47m"},
 
-		{".br_bg_black(",	color::background_bright_black()},
-		{".br_bg_red(",		color::background_bright_red()},
-		{".br_bg_green(",	color::background_bright_green()},
-		{".br_bg_yellow(",	color::background_bright_yellow()},
-		{".br_bg_blue(",	color::background_bright_blue()},
-		{".br_bg_magenta(", color::background_bright_magenta()},
-		{".br_bg_cyan(",	color::background_bright_cyan()},
-		{".br_bg_white(",	color::background_bright_white()}
+		{".br_bg_black(",	"\u001b[40;1m"},
+		{".br_bg_red(",		"\u001b[41;1m"},
+		{".br_bg_green(",	"\u001b[42;1m"},
+		{".br_bg_yellow(",	"\u001b[43;1m"},
+		{".br_bg_blue(",	"\u001b[44;1m"},
+		{".br_bg_magenta(", "\u001b[45;1m"},
+		{".br_bg_cyan(",	"\u001b[46;1m"},
+		{".br_bg_white(",	"\u001b[47;1m"}
 	};
 }
