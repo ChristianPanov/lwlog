@@ -131,20 +131,14 @@ namespace lwlog::details
 	void pattern::format_attribute(std::string& pattern, flag_pair flags, std::string_view value)
 	{
 		const auto& [verbose, shortened] = flags;
-		if (!verbose.empty())
+		while (std::strstr(pattern.data(), verbose.data()))
 		{
-			while (std::strstr(pattern.data(), verbose.data()))
-			{
-				pattern.replace(pattern.find(verbose), verbose.length(), value);
-			}
+			pattern.replace(pattern.find(verbose), verbose.length(), value);
 		}
 
-		if (!shortened.empty())
+		while (std::strstr(pattern.data(), shortened.data()))
 		{
-			while (std::strstr(pattern.data(), shortened.data()))
-			{
-				pattern.replace(pattern.find(shortened), shortened.length(), value);
-			}
+			pattern.replace(pattern.find(shortened), shortened.length(), value);
 		}
 	}
 
