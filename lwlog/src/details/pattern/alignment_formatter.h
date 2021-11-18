@@ -41,12 +41,11 @@ namespace lwlog::details
 			{
 				if (c == '%')
 				{
-					to_align = c + *(&c + 1);
+					to_align = { c, *(&c + 1) };
 				}
 				else if (c == '{')
 				{
-					std::size_t flag_pos = str.find(c);
-					to_align = str.substr(flag_pos, str.find('}') - flag_pos + 1);
+					to_align = str.substr(str.find(c), str.find('}') - str.find(c) + 1);
 				}
 			}
 		}
