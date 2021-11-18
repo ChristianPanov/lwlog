@@ -109,13 +109,12 @@ namespace lwlog::details
 	{
 		if (std::strchr(pattern.data(), ')'))
 		{
+			while (std::strstr(pattern.data(), ")"))
+				pattern.replace(pattern.find(")"), 2, "\u001b[0m");
+
 			for (const auto& [key, value] : color_data)
-			{
 				while (std::strstr(pattern.data(), key.data()))
-				{
 					pattern.replace(pattern.find(key), key.length(), value);
-				}
-			}
 		}
 	}
 

@@ -6,8 +6,6 @@ namespace lwlog::details
 {
 	static std::unordered_map<std::string_view, std::string_view> color_data =
 	{
-		{")",				color::reset()},
-
 		{".black(",			color::foreground_black()},
 		{".red(",			color::foreground_red()},
 		{".green(",			color::foreground_green()},
