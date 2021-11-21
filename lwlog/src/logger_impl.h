@@ -81,7 +81,7 @@ namespace lwlog
 		{
 			if (sink->should_sink(t_level))
 			{
-				LogPolicy::log(sink, details::log_message(message.data(), m_name.data(), t_level, meta));
+				LogPolicy::log(sink, details::log_message(message, m_name, t_level, meta));
 			}
 		}
 	}
