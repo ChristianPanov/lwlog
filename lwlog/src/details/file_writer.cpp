@@ -47,7 +47,7 @@ namespace lwlog::details
 		return std::filesystem::file_size(m_path);
 	}
 
-	file_writer::stream_t file_writer::handle() const
+	std::FILE* file_writer::handle() const
 	{
 		return m_file;
 	}

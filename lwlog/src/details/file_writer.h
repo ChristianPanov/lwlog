@@ -8,7 +8,6 @@ namespace lwlog::details
 	class file_writer
 	{
 	private:
-		using stream_t = std::FILE*;
 		static constexpr std::uint32_t s_buffer_size{ 8388608 };
 
 	public:
@@ -21,10 +20,10 @@ namespace lwlog::details
 		void close();
 		bool exists() const;
 		std::size_t size() const;
-		stream_t handle() const;
+		std::FILE* handle() const;
 
 	private:
 		std::filesystem::path m_path;
-		stream_t m_file{ nullptr };
+		std::FILE* m_file{ nullptr };
 	};
 }
