@@ -17,12 +17,11 @@ namespace lwlog::details
 	public:
 		void write(std::string_view message);
 		void close();
-		bool exists() const;
-		std::size_t size() const;
 		std::FILE* handle() const;
+		std::filesystem::path& filesystem_path();
 
 	private:
-		std::filesystem::path m_path;
 		std::FILE* m_file{ nullptr };
+		std::filesystem::path m_path;
 	};
 }

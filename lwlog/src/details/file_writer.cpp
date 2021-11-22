@@ -37,18 +37,13 @@ namespace lwlog::details
 		}
 	}
 
-	bool file_writer::exists() const
-	{
-		return std::filesystem::exists(m_path);
-	}
-
-	std::size_t file_writer::size() const
-	{
-		return std::filesystem::file_size(m_path);
-	}
-
 	std::FILE* file_writer::handle() const
 	{
 		return m_file;
+	}
+
+	std::filesystem::path& file_writer::filesystem_path()
+	{
+		return m_path;
 	}
 }
