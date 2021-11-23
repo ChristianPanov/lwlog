@@ -90,18 +90,14 @@ namespace lwlog::details
 
 		static std::string align_left(const std::string& to_align, std::uint8_t width, char fill_char)
 		{
-			if (width <= to_align.size())
-				return to_align;
-			else
-				return to_align + std::string(width - to_align.size(), fill_char);
+			if (width <= to_align.size()) return to_align;
+			return to_align + std::string(width - to_align.size(), fill_char);
 		}
 
 		static std::string align_right(const std::string& to_align, std::uint8_t width, char fill_char)
 		{
-			if (width <= to_align.size())
-				return to_align;
-			else
-				return std::string(width - to_align.size(), fill_char) + to_align;
+			if (width <= to_align.size()) return to_align;
+			return std::string(width - to_align.size(), fill_char) + to_align;
 		}
 
 		static std::string align_center(const std::string& to_align, std::uint8_t width, char fill_char)
