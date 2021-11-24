@@ -107,7 +107,7 @@ namespace lwlog::details
 
 	void pattern::compile_colors(std::string& pattern)
 	{
-		if (std::strchr(pattern.data(), ')'))
+		if (std::strchr(pattern.data(), '.'))
 		{
 			while (std::strstr(pattern.data(), ")"))
 				pattern.replace(pattern.find(")"), 1, "\u001b[0m");
@@ -120,7 +120,7 @@ namespace lwlog::details
 
 	void pattern::drop_color_flags(std::string& pattern)
 	{
-		if (std::strchr(pattern.data(), ')'))
+		if (std::strchr(pattern.data(), '.'))
 		{
 			while (std::strstr(pattern.data(), ")"))
 				pattern.replace(pattern.find(")"), 1, "");
