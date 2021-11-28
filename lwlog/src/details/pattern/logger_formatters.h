@@ -21,11 +21,10 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			auto level = lwlog::level_details::to_string(log_msg.level);
 			pattern::format_attribute(
 				pattern,
 				flag::level,
-				level
+				lwlog::level_details::to_string(log_msg.level)
 			);
 		}
 	};
