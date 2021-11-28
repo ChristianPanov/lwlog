@@ -9,7 +9,6 @@ namespace lwlog::details
 
 	public:
 		explicit stream_writer(std::FILE* stream);
-		virtual ~stream_writer() = default;
 		void write(std::string_view message);
 
 	private:
