@@ -29,23 +29,23 @@ namespace lwlog::details::datetime
 
 namespace lwlog::details::datetime
 {
-#ifdef LWLOG_USE_LOCALTIME
 #ifdef _WIN64
-    static int timezone_offset()
+#ifdef LWLOG_USE_LOCALTIME
+    static std::uint16_t timezone_offset()
     {
         auto offset_epoch = std::localtime(new std::time_t(0));
         return offset_epoch->tm_hour;
     }
-    static auto g_cached_timezone_offset = timezone_offset();
+    static std::uint16_t g_cached_timezone_offset = timezone_offset();
 #else
-    static std::tm* time_standard(const std::time_t* time) { return std::localtime(time); }
+    static std::uint16_t timezone_offset() { return 0; }
+    static std::uint16_t g_cached_timezone_offset = timezone_offset();
 #endif
 #else
-#ifdef _WIN64
-    static int timezone_offset() { return 0; }
-    static auto g_cached_timezone_offset = timezone_offset();
+#ifdef LWLOG_USE_LOCALTIME
+    static std::tm* time_standard(const std::time_t* time) { return std::localtime(time); }
 #else
-    static std::tm* time_standard(const std::time_t* time) { return std::gmtime(time); }
+    static std::tm* time_standard(const std::time_t* time) { return std::localtime(time); }
 #endif
 #endif
 }
