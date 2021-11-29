@@ -45,7 +45,7 @@ namespace lwlog::details::datetime
 #ifdef LWLOG_USE_LOCALTIME
     static std::tm* time_standard(const std::time_t* time) { return std::localtime(time); }
 #else
-    static std::tm* time_standard(const std::time_t* time) { return std::localtime(time); }
+    static std::tm* time_standard(const std::time_t* time) { return std::gmtime(time); }
 #endif
 #endif
 }
