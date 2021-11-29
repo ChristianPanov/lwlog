@@ -76,11 +76,8 @@ namespace lwlog::details::datetime
 
     static std::uint16_t to_local(std::uint16_t hour)
     {
-        int local = hour + g_cached_timezone_offset;
-        if (local <= 23) return local;
-        else {
-            return local - 24;
-        }
+        std::uint16_t local = hour + g_cached_timezone_offset;
+        return local <= 23 ? local : local - 24;
     }
 
     static std::string pad_with_zero_if_needed(std::uint16_t digit)
