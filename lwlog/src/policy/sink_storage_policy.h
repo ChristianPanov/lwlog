@@ -18,7 +18,4 @@ namespace lwlog
 			sink_ptr
 		>;
 	};
-
-	template<typename... Args>
-	using default_storage_policy = dynamic_storage_policy<Args...>;
 }

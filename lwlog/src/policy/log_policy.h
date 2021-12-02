@@ -24,6 +24,4 @@ namespace lwlog
 		};
 		std::vector<log_info> storage;
 	};
-
-	using default_log_policy = forward_log_policy;
 }
