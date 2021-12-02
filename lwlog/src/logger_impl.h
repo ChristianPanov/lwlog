@@ -26,7 +26,7 @@ namespace lwlog
 		Iterator begin, Iterator end, SinkParams&&... params)
 		: logger{ name, params... }
 	{
-		m_sink_storage.insert(m_sink_storage.end(), begin, end);
+		StoragePolicy<Sinks<ThreadingPolicy>...>::insert_range(m_sink_storage, begin, end);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
@@ -49,20 +49,14 @@ namespace lwlog
 		typename ThreadingPolicy, template<typename> typename... Sinks>
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::add_sink(sink_ptr sink)
 	{
-		m_sink_storage.push_back(sink);
+		StoragePolicy<Sinks<ThreadingPolicy>...>::add_sink(m_sink_storage, sink);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename ThreadingPolicy, template<typename> typename... Sinks>
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::remove_sink(sink_ptr sink)
 	{
-		for (std::size_t i = 0; i < m_sink_storage.size(); ++i)
-		{
-			if (m_sink_storage[i] == sink)
-			{
-				m_sink_storage.erase(m_sink_storage.begin() + i);
-			}
-		}
+		StoragePolicy<Sinks<ThreadingPolicy>...>::remove_sink(m_sink_storage, sink);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
