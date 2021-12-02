@@ -39,9 +39,8 @@ namespace lwlog::sinks
 	bool sink<ColorPolicy, ThreadingPolicy>::should_sink(level t_level) const
 	{
 		Lock lock(m_mtx);
-		if (level_details::value(m_level) & level_details::value(t_level)) 
-			return true;
-		else if (level_details::value(m_level) & level_details::value(level::all)) 
+		if (level_details::has_level(m_level, t_level) || 
+			level_details::has_level(m_level, level::all))
 			return true;
 		return false;
 	}

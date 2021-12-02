@@ -34,9 +34,10 @@ namespace lwlog
 
 namespace lwlog::level_details
 {
-	constexpr std::underlying_type_t<level> value(level t_level)
+	constexpr bool has_level(level lhs, level rhs)
 	{
-		return static_cast<std::underlying_type_t<level>>(t_level);
+		return static_cast<std::underlying_type_t<level>>(lhs) &
+			static_cast<std::underlying_type_t<level>>(rhs);
 	}
 
 	constexpr const char* to_string(level t_level)
