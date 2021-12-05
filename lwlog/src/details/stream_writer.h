@@ -4,9 +4,6 @@ namespace lwlog::details
 {
 	class stream_writer
 	{
-	private:
-		static constexpr std::uint32_t s_buffer_size{ 4194304 };
-
 	public:
 		explicit stream_writer(std::FILE* stream);
 		void write(std::string_view message);
@@ -18,7 +15,7 @@ namespace lwlog::details
 	inline stream_writer::stream_writer(std::FILE* stream)
 		: m_stream{ stream }
 	{
-		std::setvbuf(m_stream, NULL, _IOFBF, s_buffer_size);
+		std::setvbuf(m_stream, NULL, _IOFBF, 4194304);
 	}
 
 	inline void stream_writer::write(std::string_view message)

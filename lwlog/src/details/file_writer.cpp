@@ -11,12 +11,16 @@ namespace lwlog::details
 		}
 
 		m_file = std::fopen(m_path.string().data(), "a");
-		std::setvbuf(m_file, NULL, _IOFBF, s_buffer_size);
+		std::setvbuf(m_file, NULL, _IOFBF, 8388608);
 	}
 
 	file_writer::~file_writer()
 	{
-		close();
+		if (m_file != nullptr)
+		{
+			std::fclose(m_file);
+			m_file = nullptr;
+		}
 	}
 
 	void file_writer::write(std::string_view message)
@@ -25,15 +29,6 @@ namespace lwlog::details
 		{
 			std::fwrite(message.data(), message.size(), 1, m_file);
 			std::fwrite("\n", 1, 1, m_file);
-		}
-	}
-
-	void file_writer::close()
-	{
-		if (m_file != nullptr)
-		{
-			std::fclose(m_file);
-			m_file = nullptr;
 		}
 	}
 
