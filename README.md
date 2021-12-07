@@ -5,6 +5,14 @@ Very fast C++17 logging library
 ```
 git clone --recursive https://github.com/ChristianPanov/lwlog
 ```
+# The Most Important Question - Why Yet Another Logging Library?
+_I will cut short on the speed or code simplicity which every other logging library boasts about, and will leave them for later.\
+The actual importance of the library hides within its meaning to me. This library has served as an amazing journey.\
+I started it when I knew very little about C++, let alone software engineering, and when I still made no distinction between writing reusable pieces of code and crafting libraries.\
+I can say that I am proud of what I've made, for it has been a long journey comprised of not-giving up and constantly daring to do the currently-impossible for me, according to my knowledge back then.\
+As you will see later in the documentation, I do claim this library to be very fast and to have very clean code. I do claim to have designed it in a good way. However, even if that weren't objectively true, that would make no difference in the importance of this work to me, I would still be just as proud of it.\
+No matter what you do or say, there will always be people who will hold a different view. It might always happen that you were in the wrong, or you could have done better. Anybody could take away the joy of your creation. However, no one can take away the hours you've spent crafting it, no one can take away the hours you've spent studying and learning in the process, no one can take away the times when you've felt like a god among men when you've faced the impossible, was stubborn enough to not give up, and actually did it. No one can take away any of that, any of the things which should make you proud. That's part of what craftsmanship is._
+
 # Design Highlights
 - Clean and descriptive code
 - Extremely fast synchronous logging (other logging libraries promise you speed by being asynchronous, which is not always a good idea, because it's hard to identify at what point the program crashed, causes more overhead and you can easily lose important messages, lwlog promises you both speed, as fast as synchronous logging can get, and keeping all your messages)
