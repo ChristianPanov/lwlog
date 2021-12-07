@@ -22,6 +22,6 @@ namespace lwlog
 			sink_ptr sink;
 			details::log_message log_msg;
 		};
-		std::vector<log_info> storage;
+		std::vector<log_info> m_storage;
 	};
 }
