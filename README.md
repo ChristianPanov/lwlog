@@ -122,7 +122,7 @@ int main()
 }
 ```
 ## Convenience logger aliases
-In the file lwlog.h you can see several convenience aliases at your disposal.\
+In the file **_lwlog.h_** you can see several convenience aliases at your disposal.\
 They are intended for ease of use, so I encourage you to use them instead of the more complex way of creating loggers directly through the logger class.\
 They are predefined with default configurations, so unless you need more special functionality, stick to using them.
 Alias | Description
@@ -244,8 +244,11 @@ Verbose flag | Short flag | Description | Example
 ```{minute}``` | ```%m``` | Current minute 00-59 | "42"
 ```{second}``` | ```%s``` | Current second 00-59 | "10"
 ### Source metainformation (function name, file path, current line)
-lwlog gives you the ability to get source code metainformation in the form of attributes. One can get the current line on which the log function is called, the file path in which it is called, or the function name in which it is called, and all of that without macros.\
-It is possible because of compiler intrinsics, which were first introduced in GCC, and now they are also implemented in MSVC. lwlog doesn't use c++20's std::source_location, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.
+lwlog gives you the ability to get source code metainformation in the form of attributes.\
+One can get the current line on which the log function is called, the file path in which it is called, or the function name in which it is called, and all of that without macros.\
+It is possible because of compiler intrinsics, which were first introduced in GCC, and now are also implemented in MSVC.\
+lwlog doesn't use c++20's std::source_location, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.\
+If a newer version is not present, the metainformation flags will result into nothing.
 ### Alignment Syntax
 Alignment specifications are individual to an attribute, and they contain an alignment side, width, and an optional fill character, which by default, if not specified, is an empty space.
 
@@ -313,9 +316,9 @@ int main()
 }
 ```
 ## Custom attributes
-Attribute - an object, which contains a pair of flags(verbose and shortened) and a value - each flag is replaced with it's corresponding value.
-Custom attributes allow for flexible patterns. A custom attribute represents a pair of flags and a reference to a value of a certain type.
-A custom attribute's value is an std::variant which contains a couple of reference types, to allow for more freedom in terms of having attribute values of different data types.
+Attribute - an object, which contains a pair of flags(verbose and shortened) and a value - each flag is replaced with it's corresponding value.\
+Custom attributes allow for flexible patterns - it represents a pair of flags and a reference to a value of a certain type.\
+The value is an std::variant which contains a couple of reference types, to allow for more freedom in terms of having attribute values of different data types.
 #### Example
 ```cpp
 #include "lwlog/lwlog.h"
@@ -337,8 +340,8 @@ int main()
 ##### Output
 ```active --- [19:44:50] [CONSOLE] [info]: First critical message```
 #### Limitations
-Currently, an attribute can contain a reference to only a couple of types - int, float, double and std::string.\
-The reason for this is because more possible types in std::variant creates more overhead, so I've tried to select the most probable types a user can use for values.
+Currently, an attribute can contain a reference to only a couple of types - ```int```, ```float```, ```double``` and ```std::string```.\
+The reason for this is because more possible types in ```std::variant``` creates more overhead, so I've tried to select the most probable types a user can use for values.
 ## Multiple sinks (compile-time)
 ```cpp
 #include "lwlog/lwlog.h"
@@ -387,8 +390,8 @@ int main()
 }
 ```
 ## Creating your own sink
-As I said and promissed, lwlog is extremely easy to extend. Let's give an example with sinks.\
-To create your own sink, all you have to do is inherit from ```lwlog::sinks::sink``` and implement a ```sink_it()``` function. That's it.
+As already mentioned, lwlog is extremely easy to extend. Let's give an example with sinks.\
+To create your own sink, all you have to do is inherit from ```lwlog::sinks::sink``` and implement a ```sink_it()``` function, which takes a ```const details::log_message&```  as a parameter. That's it.
 #### Example with an existing sink implementation
 ```cpp
 namespace lwlog::sinks
@@ -418,7 +421,7 @@ namespace lwlog::sinks
 Here we inherit from the sink base class, and configure it to be colored. Whether it's thread-safe or not is left up to the one using the sink.\
 The color policy could be either colored(```lwlog::colored_policy```) or non-colored (```lwlog::uncolored_policy```).\
 The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them. Using ```lwlog::colored_policy``` is most suitable for console sinks, since it relies on console specific color codes.\
-We only need the ```sink_it()``` function, which is called as the actual log call. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.\
+We only need the ```sink_it()``` function. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.\
 As mentioned in [Logical Architecture](https://github.com/ChristianPanov/lwlog#logical-architecture), you can either use some kind of a writer class, which handles the actual writing, or you can directly handle the writing in the function.\
 The compiled and formatted message is recieved with ```m_pattern.compile(log_msg)```. We access the pattern member from the sink base class and then compile it with the log message.
 #### Example
@@ -526,23 +529,29 @@ int main()
 }
 ```
 # Performance
-So how does lwlog achieve this performance? The answer lies in one very important architectural decision and a couple of techniques.
-### Architecture
-The architectural decision that speeds up the performance is about how the formatting pattern compilation is handled. The pattern in question is parsed completely off the log call site, and all that's left for the log call functions is to do the replacement of the flags with their corresponding values.\
-Color processing is also done off the log call site. Color processing can be a big performance bottleneck, and it doesn't need to happen at the log call site, since colors have nothing to do with the current log information. Once the pattern is set, it immediately processes all the color flags in place.
+So how does lwlog achieve this performance? In the following section I will break down all the performance-enhancing decisions that I've made.
+### Formatting pattern
+Formatting is usually the bottleneck in loggging solutions and for that reason it's usually handled on a background thread so it doesn't impede performance.\
+However, because of lwlog's synchronous nature, we cannot take that route, and thus cannot take any liberties in how the compilation process of the pattern is done.\
+The formatting pattern in question is parsed completely off the log call site, and all that's left for the log call functions is to do the replacement of the flags with their corresponding values. That way we do not burden every log call with doing the extra work of parsing the pattern every time, and it's parsed only once.\
+The same goes for colors. They are only processed once right after the pattern flags are parsed.\
+Pattern compilation process:
 1. A pattern is set
-2. All color flags are processed 
-3. The pattern is parsed and only the needed formatters are pushed to a storage
-4. The alignment specifications are parsed and all the needed information such as alignment side, width, and fill character is extracted
+2. The flags are parsed and only the needed formatters are created and pushed in a storage
+3. The alignment specifications are parsed for all the needed information such as alignment side, width, and fill character
+4. All color flags are processed 
 5. When a log function is called, the formatters in the storage are called on the pattern with their appropriate alignment specifications
-### Output
-A very important performance improvement, probably the biggest one, is manual buffering.\
-With manual buffering, I manually increase the stream buffering with a size of **_2^22 bytes_**, bigger than the default one(**_512 bytes_**), which improves the performance of output to stdout, stderr and a file a lot.
+### Console output(stdout, stderr)
+I/O in logging solutions is the second biggest, if not the biggest, performance bottleneck. Spewing data in the form of a human-readable medium(text) is heavy-duty.\
+The best that could be done as of now, is manual buffering.\
+With manual buffering, I manually increase the stream buffering with a size of **_2^22 bytes_**, bigger than the default one(**_512 bytes_**), which improves the performance of output to stdout, stderr a lot.
 ```cpp
-std::setvbuf(stdout, NULL, _IOFBF, size);
+std::setvbuf(stdout, NULL, _IOFBF, 4194304);
 std::fwrite("Hello, World!", 14, 1, stdout);
 ```
 This example here shows how this is achieved. This is as fast as console output can get.
+### File output
+The same technique goes for file output, but I take it further. I've taken the liberty of deferring all file writes. In other words, a file sink does not write to the file, it only pushes the message in a storage, which is finally outputted in the destructor of the file sink.
 ### Time
 Time is handled in a special way. First off, since std::chrono is not as performant on Windows as it is on Linux, a platform-dependant approach, which is much faster than std::chrono is, is taken for Windows.\
 Still, I take it even further. For some reason, getting the local time with std::chrono is faster than getting the UTC, and with the Windows API it's the opposite - getting the gmtime is faster than getting the UTC, so each implementation initially gets the faster of the two, and then arithmetically processes the time to the desired time format(either local time or UTC)
