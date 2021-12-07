@@ -97,7 +97,7 @@ Module | Description
 ------------ | -------------
 ```Writer``` | Abstraction which outputs the data to the destination. It is optional, because it is not actually needed, and there is no strict specification for what a writer should be
 ```Sink``` | An object which sends(sinks) data to an output destination. Usually, the data could be handled by a writer object, or you can directly handle the output in the ```sink_it()``` function, without using a writer. A sink uses two policy classes - ```lwlog::sink_color_policy``` and ```lwlog::threading_policy```
-```Logger``` | An object, which manages a number of sinks. It provides the same functionality as a sink, with the difference being that it contains a storage of sinks, and every operation the logger performs is distributed to all the sinks it contains. Also it can distribute data to each sink in different ways. You can log either with the forward logging mechanism, or the deferred logging mechanism. The logging mechanism are handled by the ```lwog::log_policy``` policy class, where the ```sink_it()``` function of each sink is called. **NOTE**: I highly encourage using a logger, even when you are going to be using a single sink
+```Logger``` | An object, which manages a number of sinks. It provides the same functionality as a sink, with the difference being that it contains a storage of sinks, and every operation the logger performs is distributed to all the sinks it contains. Also it can distribute data to each sink in different ways. You can log either with the forward logging mechanism, or the deferred logging mechanism. The logging mechanism is handled by the ```lwog::log_policy``` policy class, where the ```sink_it()``` function of each sink is called. **NOTE**: I highly encourage using a logger, even when you are going to be using a single sink
 ```Registry``` | A global singleton class, which contains all the created loggers. It provides an easy access to the created loggers from everywhere in your application. Each logger is registered in the registry on creation, unless ```automatic_registry()``` is turned off
 # Usage
 ## Basic Usage
@@ -149,7 +149,7 @@ int main()
 ```
 ## Thread-safety
 Both the sinks and the logger classes expect a threading policy as a template parameter, which will determine whether they will be thread-safe or not.
-However, if you want to use the convenienve aliases I meantioned above, you need to keep in mind they are not thread-safe.\
+However, if you want to use the convenience aliases I meantioned above, you need to keep in mind they are not thread-safe.\
 And for that reason all of them have a thread-safe analog whith the same name and an _mt suffix.\
 ```lwlog::basic_logger_mt```, ```lwlog::console_logger_mt```, ```lwlog::file_logger_mt```, ```lwlog::null_logger_mt```
 ## Logger configuration
@@ -159,9 +159,9 @@ Policy | Description
 ```lwlog::forward_log_policy``` | Your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink
 ```lwlog::deferred_log_policy``` | As the name suggests, log calls are deffered for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency, but should be used only if you are sure you don't need your logs immediately
 ```lwlog::default_storage_policy``` | Convenienve alias for ```static_storage_policy```
-```lwlog::static_storage_policy``` | Configures the sink storage as an std::array - use it if you only set sinks in compile time and you know for sure you won't add sinks at runtime, it is more lightweight than a dynamic sink storage
-```lwlog::dynamic_storage_policy``` | Configures the sink storage as std::vector - use it if you may add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks
-```lwlog::single_threaded_policy``` | Configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than thread-safe logger
+```lwlog::static_storage_policy``` | Configures the sink storage as an std::array - use it if you only set sinks at compile time and you know for sure you won't add sinks at runtime, it is more lightweight than a dynamic sink storage
+```lwlog::dynamic_storage_policy``` | Configures the sink storage as an std::vector - use it if you will add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks
+```lwlog::single_threaded_policy``` | Configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than a thread-safe logger
 ```lwlog::multi_threaded_policy``` | Configures the sinks with a mutex and locks for thread-safety
 #### Example
 ```cpp
