@@ -14,7 +14,7 @@ namespace lwlog
 
 	void deferred_log_policy::sink_logs()
 	{
-		for (auto& [sink, log_msg] : storage)
+		for (const auto& [sink, log_msg] : storage)
 		{
 			sink->sink_it(sink->pattern().compile(log_msg));
 		}
