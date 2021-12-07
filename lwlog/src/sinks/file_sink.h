@@ -13,9 +13,9 @@ namespace lwlog::sinks
 	public:
 		file_sink() = default;
 		explicit file_sink(std::string_view path) : details::file_writer(path) {}
-		void sink_it(std::string_view message) override 
+		void sink_it(const details::log_message& log_msg) override
 		{
-			details::file_writer::write(message.data());
+			details::file_writer::write(m_pattern.compile(log_msg));
 		}
 	};
 }

@@ -8,7 +8,7 @@ namespace lwlog::interface
 		virtual ~sink() = default;
 
 	public:
-		virtual void sink_it(std::string_view) = 0;
+		virtual void sink_it(const details::log_message&) = 0;
 
 	public:
 		virtual void set_pattern(std::string_view) = 0;

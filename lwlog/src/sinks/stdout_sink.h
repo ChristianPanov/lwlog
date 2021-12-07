@@ -12,9 +12,9 @@ namespace lwlog::sinks
 	{
 	public:
 		stdout_sink() : details::stream_writer(stdout) {}
-		void sink_it(std::string_view message) override
+		void sink_it(const details::log_message& log_msg) override
 		{
-			details::stream_writer::write(message);
+			details::stream_writer::write(m_pattern.compile(log_msg));
 		}
 	};
 }

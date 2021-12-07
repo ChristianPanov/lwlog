@@ -26,7 +26,7 @@ namespace lwlog::sinks
 		bool should_sink(level t_level) const override;
 		details::pattern& pattern() override;
 
-	private:
+	protected:
 		mutable Mutex m_mtx;
 		details::pattern m_pattern;
 		level m_level{ level::all };

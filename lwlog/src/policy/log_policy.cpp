@@ -4,7 +4,7 @@ namespace lwlog
 {
 	void forward_log_policy::log(sink_ptr sink, const details::log_message& log_msg)
 	{
-		sink->sink_it(sink->pattern().compile(log_msg));
+		sink->sink_it(log_msg);
 	}
 
 	void deferred_log_policy::log(sink_ptr sink, const details::log_message& log_msg)
@@ -16,7 +16,7 @@ namespace lwlog
 	{
 		for (const auto& [sink, log_msg] : m_storage)
 		{
-			sink->sink_it(sink->pattern().compile(log_msg));
+			sink->sink_it(log_msg);
 		}
 	}
 }
