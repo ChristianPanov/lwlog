@@ -98,7 +98,7 @@ Module | Description
 ```Writer``` | Abstraction which outputs the data to the destination. It is optional, because it is not actually needed, and there is no strict specification for what a writer should be
 ```Sink``` | An object which sends(sinks) data to an output destination. Usually, the data could be handled by a writer object, or you can directly handle the output in the ```sink_it()``` function, without using a writer. A sink uses two policy classes - ```lwlog::sink_color_policy``` and ```lwlog::threading_policy```
 ```Logger``` | An object, which manages a number of sinks. It provides the same functionality as a sink, with the difference being that it contains a storage of sinks, and every operation the logger performs is distributed to all the sinks it contains. Also it can distribute data to each sink in different ways. You can log either with the forward logging mechanism, or the deferred logging mechanism. The logging mechanism is handled by the ```lwog::log_policy``` policy class, where the ```sink_it()``` function of each sink is called. **NOTE**: I highly encourage using a logger, even when you are going to be using a single sink
-```Registry``` | A global singleton class, which contains all the created loggers. It provides an easy access to the created loggers from everywhere in your application. Each logger is registered in the registry on creation, unless ```automatic_registry()``` is turned off
+```Registry``` | A global singleton class, which contains all the created loggers. It provides an easy access to the created loggers from everywhere in your application. Each logger is registered in the registry on creation, unless ```lwlog::automatic_registry()``` is turned off
 # Usage
 ## Basic Usage
 ```cpp
@@ -111,8 +111,9 @@ int main()
 			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_sink>
-			>("CONSOLE");
+			lwlog::sinks::stdout_sink
+			>
+		>("CONSOLE");
 	
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
 	console->set_pattern("[%T] [%n] [%l]: %v");
@@ -155,12 +156,12 @@ And for that reason all of them have a thread-safe analog whith the same name an
 ## Logger configuration
 Policy | Description
 ------------ | -------------
-```lwlog::default_log_policy``` | Convenience alias for ```forward_log_policy```
+```lwlog::default_log_policy``` | Convenience alias for ```lwlog::forward_log_policy```
 ```lwlog::forward_log_policy``` | Your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink
 ```lwlog::deferred_log_policy``` | As the name suggests, log calls are deffered for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency, but should be used only if you are sure you don't need your logs immediately
-```lwlog::default_storage_policy``` | Convenienve alias for ```static_storage_policy```
-```lwlog::static_storage_policy``` | Configures the sink storage as an std::array - use it if you only set sinks at compile time and you know for sure you won't add sinks at runtime, it is more lightweight than a dynamic sink storage
-```lwlog::dynamic_storage_policy``` | Configures the sink storage as an std::vector - use it if you will add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks
+```lwlog::default_storage_policy``` | Convenienve alias for ```lwlog::static_storage_policy```
+```lwlog::static_storage_policy``` | Configures the sink storage as an ```std::array``` - use it if you only set sinks at compile time and you know for sure you won't add sinks at runtime, it is more lightweight than a dynamic sink storage
+```lwlog::dynamic_storage_policy``` | Configures the sink storage as an ```std::vector``` - use it if you will add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks
 ```lwlog::single_threaded_policy``` | Configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than a thread-safe logger
 ```lwlog::multi_threaded_policy``` | Configures the sinks with a mutex and locks for thread-safety
 #### Example
@@ -174,8 +175,9 @@ int main()
 			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_sink>
-			>("CONSOLE");
+			lwlog::sinks::stdout_sink
+			>
+		>("CONSOLE");
 	
 	return 0;
 }
@@ -196,8 +198,9 @@ int main()
 			lwlog::deferred_log_policy,
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_sink>
-			>("CONSOLE");
+			lwlog::sinks::stdout_sink
+			>
+		>("CONSOLE");
 	
 	console->critical("First critical message");
 	console->info("First info message");
@@ -244,10 +247,10 @@ Verbose flag | Short flag | Description | Example
 ```{minute}``` | ```%m``` | Current minute 00-59 | "42"
 ```{second}``` | ```%s``` | Current second 00-59 | "10"
 ### Source metainformation (function name, file path, current line)
-lwlog gives you the ability to get source code metainformation in the form of attributes.\
+**_lwlog_** gives you the ability to get source code metainformation in the form of attributes.\
 One can get the current line on which the log function is called, the file path in which it is called, or the function name in which it is called, and all of that without macros.\
 It is possible because of compiler intrinsics, which were first introduced in GCC, and now are also implemented in MSVC.\
-lwlog doesn't use c++20's std::source_location, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.\
+lwlog doesn't use C++20's ```std::source_location```, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.\
 If a newer version is not present, the metainformation flags will result into nothing.
 ### Alignment Syntax
 Alignment specifications are individual to an attribute, and they contain an alignment side, width, and an optional fill character, which by default, if not specified, is an empty space.
@@ -318,7 +321,7 @@ int main()
 ## Custom attributes
 Attribute - an object, which contains a pair of flags(verbose and shortened) and a value - each flag is replaced with it's corresponding value.\
 Custom attributes allow for flexible patterns - it represents a pair of flags and a reference to a value of a certain type.\
-The value is an std::variant which contains a couple of reference types, to allow for more freedom in terms of having attribute values of different data types.
+The value is an ```std::variant``` which contains a couple of reference types, to allow for more freedom in terms of having attribute values of different data types.
 #### Example
 ```cpp
 #include "lwlog/lwlog.h"
@@ -477,7 +480,7 @@ int main()
 [20:00:15] [GLOBAL] [debug]: Will be displayed according to the new pattern
 ```
 ## Global operations
-In order to apply a logger function to all loggers present in the registry, you can use the function ```apply_to_all()``` in such manner
+In order to apply a logger function to all loggers present in the registry, you can use the function ```lwlog::apply_to_all()``` in such manner
 ```cpp
 #include "lwlog/lwlog.h"
 
@@ -532,7 +535,7 @@ int main()
 So how does lwlog achieve this performance? In the following section I will break down all the performance-enhancing decisions that I've made.
 ### Formatting pattern
 Formatting is usually the bottleneck in loggging solutions and for that reason it's usually handled on a background thread so it doesn't impede performance.\
-However, because of lwlog's synchronous nature, we cannot take that route, and thus cannot take any liberties in how the compilation process of the pattern is done.\
+However, because of **_lwlog_**'s synchronous nature, we cannot take that route, and thus cannot take any liberties in how the compilation process of the pattern is done.\
 The formatting pattern in question is parsed completely off the log call site, and all that's left for the log call functions is to do the replacement of the flags with their corresponding values. That way we do not burden every log call with doing the extra work of parsing the pattern every time, and it's parsed only once.\
 The same goes for colors. They are only processed once right after the pattern flags are parsed.\
 Pattern compilation process:
@@ -553,5 +556,11 @@ This example here shows how this is achieved. This is as fast as console output 
 ### File output
 The same technique goes for file output, but I take it further. I've taken the liberty of deferring all file writes. In other words, a file sink does not write to the file, it only pushes the message in a storage, which is finally outputted in the destructor of the file sink.
 ### Time
-Time is handled in a special way. First off, since std::chrono is not as performant on Windows as it is on Linux, a platform-dependant approach, which proves to be much faster than its standard portable counterpart, is taken for Windows.\
-It's taken even further. For some reason, getting the local time with std::chrono is faster than getting the UTC, and with the Windows API it's the opposite - getting the gmtime is faster than getting the UTC, so each implementation initially gets the faster of the two, and then arithmetically processes the time to the desired time format(either local time or UTC)
+Time is handled in a special way. First off, since ```std::chrono``` is not as performant on Windows as it is on Linux, a platform-dependant approach, which proves to be much faster than its standard portable counterpart, is taken for Windows.\
+It's taken even further. For some reason, getting the local time with ```std::chrono``` is faster than getting the UTC, and with the Windows API it's the opposite - getting the gmtime is faster than getting the UTC, so each implementation initially gets the faster of the two, and then arithmetically processes the time to the desired time format(either local time or UTC)
+### Heuristics
+For those of you who happen to not know, heuristics are logical shortcuts, approximate assumptions, which trade optimality, completeness, accuracy, or precision for speed.\
+One example could be that **_lwlog_** does not use exception handling and performs almost no checks. That means that misusing the library could result in undefined behaviour, memory leaks or crashes. Fortunately, the design is simple enough to make it hard to misuse it, but all in all, it will not hold your hand if you do not use it properly.\
+To further the example, **_lwlog_** assumes that the formatting pattern you've written is correct, with no syntax errors, so it doesn't perform any syntax checks which would impact the performance.\
+These heuristics, which are present in almost any part of the library, benefit the performance greatly.\
+**NOTE:** Every library could be misused, some more than others, but if we want speed, we as library crafters must take the responsibility to provide a simple enough interface, as straight-forward and as intuitive as possible, so the client would not misuse the library unless it's intentional.
