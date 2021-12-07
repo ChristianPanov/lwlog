@@ -11,10 +11,18 @@ namespace lwlog::sinks
 		, public details::stream_writer
 	{
 	public:
-		stdout_sink() : details::stream_writer(stdout) {}
-		void sink_it(const details::log_message& log_msg) override
-		{
-			details::stream_writer::write(m_pattern.compile(log_msg));
-		}
+		stdout_sink();
+		void sink_it(const details::log_message& log_msg) override;
 	};
+
+	template<typename ThreadingPolicy>
+	stdout_sink<ThreadingPolicy>::stdout_sink()
+		: details::stream_writer(stdout)
+	{}
+
+	template<typename ThreadingPolicy>
+	void stdout_sink<ThreadingPolicy>::sink_it(const details::log_message& log_msg)
+	{
+		details::stream_writer::write(m_pattern.compile(log_msg));
+	}
 }
