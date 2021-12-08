@@ -225,7 +225,7 @@ By calling ```sink_logs()``` you sink all the logs that are deferred for later u
 If ```sink_logs()``` is called by a forward logging logger it will emit a warning.
 ## Formatting
 Formatting is handled with a pay for what you need approach.\
-The user is able to set a pattern, by which the log messages will be formatted. This pattern is an internal to the library language, which is a sequence of formatting flags, alignment specifications(optional), characters and color flags(optional). It allows flexibility in terms of configuring the output information in the most appropriate for the situation way, allowing as meaningful log output as possible.\
+The user can set a pattern, by which the log messages will be formatted. This pattern is an internal to the library language, which is a sequence of formatting flags, alignment specifications(optional), characters and color flags(optional). It allows flexibility in terms of configuring the output information in the most appropriate for the situation way, allowing as meaningful log output as possible.\
 How is formatting done? - A pattern is set, and then it gets compiled by the library. Compilation is done in the ```lwlog::details::pattern``` class. It first parses the pattern, and extracts the formatting flags, which are then used to retrieve only the formatters the pattern will need. It also parses the alignment specifications and extracts all the needed information for the alignments. In the end, all the retrieved formatters are called on the pattern and all formatting flags are replaced with their corresponding values and their corresponding alignment specifications(if any).
 ### Syntax
 Verbose flag | Short flag | Description | Example
