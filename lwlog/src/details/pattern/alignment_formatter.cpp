@@ -34,7 +34,8 @@ namespace lwlog::details
 			}
 			else if (c == '{')
 			{
-				to_align = str.substr(str.find(c), str.find('}') - str.find(c) + 1);
+				std::size_t found = str.find(c);
+				to_align = str.substr(found, str.find('}') - found + 1);
 			}
 		}
 	}
