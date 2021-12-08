@@ -109,8 +109,8 @@ namespace lwlog::details
 	{
 		if (std::strchr(pattern.data(), '.'))
 		{
-			while (std::strstr(pattern.data(), ")"))
-				pattern.replace(pattern.find(")"), 1, "\u001b[0m");
+			while (std::strchr(pattern.data(), ')'))
+				pattern.replace(pattern.find(')'), 1, "\u001b[0m");
 
 			for (const auto& [key, value] : color_data)
 				while (std::strstr(pattern.data(), key.data()))
@@ -122,8 +122,8 @@ namespace lwlog::details
 	{
 		if (std::strchr(pattern.data(), '.'))
 		{
-			while (std::strstr(pattern.data(), ")"))
-				pattern.replace(pattern.find(")"), 1, "");
+			while (std::strchr(pattern.data(), ')'))
+				pattern.replace(pattern.find(')'), 1, "");
 
 			for (const auto& [key, value] : color_data)
 				while (std::strstr(pattern.data(), key.data()))
