@@ -489,6 +489,7 @@ int main()
 [22, 20:00:15] [debug] [GLOBAL]: Debug message
 [20:00:15] [GLOBAL] [debug]: Will be displayed according to the new pattern
 ```
+**WARNING:** _See [Issue #18](https://github.com/ChristianPanov/lwlog/issues/18); Do not use the default logger until the issue is resolved, use a manually created one._
 ## Global operations
 In order to apply a logger function to all loggers present in the registry, you can use the function ```lwlog::apply_to_all()``` in such manner
 ```cpp
@@ -541,6 +542,7 @@ int main()
 	return 0;
 }
 ```
+**WARNING:** _See [Issue #18](https://github.com/ChristianPanov/lwlog/issues/18); Do not use the default logger until the issue is resolved, use a manually created one._
 # Performance
 So how does lwlog achieve this performance? In the following section, I will break down all the performance-enhancing decisions that I've made.
 ### Formatting pattern
