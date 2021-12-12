@@ -11,7 +11,7 @@ namespace lwlog::details
 			formatter->format(pattern, log_msg);
 
 		for (const auto& [flags, value] : m_custom_attributes)
-			format_attribute(pattern, flags,
+			formatter::format_attribute(pattern, flags,
 				std::visit(attrib_value_visitor{}, value));
 
 		for (const auto& spec : m_alignment_specs)
@@ -128,20 +128,6 @@ namespace lwlog::details
 			for (const auto& [key, value] : color_data)
 				while (std::strstr(pattern.data(), key.data()))
 					pattern.replace(pattern.find(key), key.length(), "");
-		}
-	}
-
-	void pattern::format_attribute(std::string& pattern, flag_pair flags, std::string_view value)
-	{
-		const auto& [verbose, shortened] = flags;
-		while (std::strstr(pattern.data(), verbose.data()))
-		{
-			pattern.replace(pattern.find(verbose), verbose.length(), value);
-		}
-
-		while (std::strstr(pattern.data(), shortened.data()))
-		{
-			pattern.replace(pattern.find(shortened), shortened.length(), value);
 		}
 	}
 

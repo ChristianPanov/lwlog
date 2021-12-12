@@ -1,5 +1,6 @@
 #pragma once
 
+#include "formatter.h"
 #include "flag_data.h"
 
 namespace lwlog::details
@@ -8,7 +9,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::date,
 				datetime::get_date(log_msg.time_point)
@@ -20,7 +21,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::date_short,
 				datetime::get_date_short(log_msg.time_point)
@@ -32,7 +33,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::year,
 				datetime::get_year(log_msg.time_point)
@@ -44,7 +45,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::year_short,
 				datetime::get_year_short(log_msg.time_point)
@@ -56,7 +57,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::month,
 				datetime::get_month(log_msg.time_point)
@@ -68,7 +69,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::month_name,
 				datetime::get_month_name(log_msg.time_point)
@@ -80,7 +81,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::month_name_short,
 				datetime::get_month_name_short(log_msg.time_point)
@@ -92,7 +93,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::day,
 				datetime::get_day(log_msg.time_point)
@@ -104,7 +105,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::weekday,
 				datetime::get_weekday_name(log_msg.time_point)
@@ -116,7 +117,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::weekday_short,
 				datetime::get_weekday_name_short(log_msg.time_point)
@@ -128,7 +129,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::time,
 				datetime::get_time(log_msg.time_point)
@@ -140,7 +141,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::hour_clock_24,
 				datetime::get_24_hour_clock(log_msg.time_point)
@@ -152,7 +153,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::hour_clock_12,
 				datetime::get_12_hour_clock(log_msg.time_point)
@@ -164,7 +165,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::ampm,
 				datetime::get_ampm(log_msg.time_point)
@@ -176,7 +177,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::hour_24,
 				datetime::get_hour_24(log_msg.time_point)
@@ -188,7 +189,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::hour_12,
 				datetime::get_hour_12(log_msg.time_point)
@@ -200,7 +201,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::minute,
 				datetime::get_minute(log_msg.time_point)
@@ -212,7 +213,7 @@ namespace lwlog::details
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
 		{
-			pattern::format_attribute(
+			formatter::format_attribute(
 				pattern,
 				flag::second,
 				datetime::get_second(log_msg.time_point)

@@ -2,18 +2,13 @@
 
 #include <unordered_map>
 
+#include "fwd.h"
 #include "attribute.h"
 #include "details/log_message.h"
 #include "alignment_formatter.h"
 
 namespace lwlog::details
 {
-	struct formatter
-	{
-		virtual ~formatter() = default;
-		virtual void format(std::string&, const log_message&) = 0;
-	};
-
 	class pattern
 	{
 	public:
@@ -27,7 +22,6 @@ namespace lwlog::details
 	public:
 		static void compile_colors(std::string& pattern);
 		static void drop_color_flags(std::string& pattern);
-		static void format_attribute(std::string& pattern, flag_pair flags, std::string_view value);
 
 	private:
 		std::vector<std::string> parse_verbose_flags();

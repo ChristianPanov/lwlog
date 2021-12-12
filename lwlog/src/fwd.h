@@ -19,6 +19,7 @@ namespace lwlog::interface
 
 namespace lwlog::details
 {
+	struct formatter;
 	struct flag_pair;
 	struct source_meta;
 }
