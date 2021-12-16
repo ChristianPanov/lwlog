@@ -6,7 +6,6 @@ namespace lwlog::details::flag
 	static flag_pair level			= { "{level}",			"%l" };
 	static flag_pair message		= { "{message}",		"%v" };
 	static flag_pair thread_id		= { "{thread}",			"%t" };
-	static flag_pair level_color	= { "{level_color}",	"%c" };
 	static flag_pair line			= { "{line}",			"%#" };
 	static flag_pair file			= { "{file}",			"%@" };
 	static flag_pair function		= { "{func}",			"%!" };

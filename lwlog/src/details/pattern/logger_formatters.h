@@ -30,18 +30,6 @@ namespace lwlog::details
 		}
 	};
 
-	struct level_color_formatter : public formatter
-	{
-		void format(std::string& pattern, const log_message& log_msg) override
-		{
-			formatter::format_attribute(
-				pattern,
-				flag::level_color,
-				lwlog::level_details::color_value(log_msg.level)
-			);
-		}
-	};
-
 	struct message_formatter : public formatter
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
