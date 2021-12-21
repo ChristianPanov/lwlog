@@ -20,7 +20,7 @@ namespace lwlog::details
 		return compiled;
 	}
 
-	void pattern::handle_alignment_specs()
+	void pattern::parse_alignment_specs()
 	{
 		std::size_t start_pos{ 0 };
 		while ((start_pos = m_pattern.find(alignment_flag::left, start_pos)) != std::string::npos)
@@ -68,7 +68,7 @@ namespace lwlog::details
 		}
 	}
 
-	void pattern::handle_flag_formatters()
+	void pattern::parse_flag_formatters()
 	{
 		auto verbose_flags = this->parse_verbose_flags();
 		auto short_flags = this->parse_short_flags();
