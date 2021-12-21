@@ -6,18 +6,18 @@ namespace lwlog::details
 {
 	std::string pattern::compile(const log_message& log_msg)
 	{
-		std::string pattern = m_pattern;
+		std::string compiled = m_pattern;
 		for (const auto& formatter : m_formatters)
-			formatter->format(pattern, log_msg);
+			formatter->format(compiled, log_msg);
 
 		for (const auto& [flags, value] : m_custom_attributes)
-			formatter::format_attribute(pattern, flags,
+			formatter::format_attribute(compiled, flags,
 				std::visit(attrib_value_visitor{}, value));
 
 		for (const auto& spec : m_alignment_specs)
-			alignment_formatter::format(pattern, spec);
+			alignment_formatter::format(compiled, spec);
 
-		return pattern;
+		return compiled;
 	}
 
 	void pattern::handle_alignment_specs()
