@@ -8,7 +8,7 @@ namespace lwlog::sinks
 	sink<ColorPolicy, ThreadingPolicy>::sink()
 	{
 		m_pattern.set_pattern("[%d, %T] [%l] [%n]: %v");
-		m_pattern.parse_flag_formatters();
+		m_pattern.request_flag_formatters();
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
@@ -17,7 +17,7 @@ namespace lwlog::sinks
 		Lock lock(m_mtx);
 		m_pattern.set_pattern(pattern);
 		m_pattern.parse_alignment_specs();
-		m_pattern.parse_flag_formatters();
+		m_pattern.request_flag_formatters();
 		ColorPolicy::process_color(m_pattern.data());
 	}
 
