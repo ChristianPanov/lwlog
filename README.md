@@ -44,55 +44,72 @@ people who want simplicity without too much configuration. Most of the time you 
 # Benchmarks
 The benchmarks are still limited since there still aren't benchmarks for thread-safe logging, async logging, and loggers which sink to a file (they will be done)\
 Benchmarked with picobench(https://github.com/iboB/picobench)
-#### lwlog (formatted, synchronous) vs spdlog (formatted, synchronous)
+#### lwlog (stdout log, formatted, synchronous) vs spdlog (stdout log, formatted, synchronous)
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
 ===============================================================================
-            lwlog_bench * |       8 |     0.012 |    1450 |      - |   689655.2
-             spdlog_bench |       8 |     0.447 |   55912 | 38.560 |    17885.1
-            lwlog_bench * |      64 |     0.057 |     889 |      - |  1124780.3
-             spdlog_bench |      64 |     3.687 |   57610 | 64.800 |    17357.8
-            lwlog_bench * |     512 |     0.450 |     879 |      - |  1137272.3
-             spdlog_bench |     512 |    36.991 |   72248 | 82.166 |    13841.2
-            lwlog_bench * |    4096 |     3.944 |     962 |      - |  1038513.2
-             spdlog_bench |    4096 |   317.930 |   77619 | 80.609 |    12883.4
-            lwlog_bench * |    8192 |     6.893 |     841 |      - |  1188452.1
-             spdlog_bench |    8192 |   648.315 |   79140 | 94.054 |    12635.8
+            lwlog_bench * |       8 |     0.008 |     950 |      - |  1052631.6
+             spdlog_bench |       8 |     0.403 |   50325 | 52.974 |    19870.8
+            lwlog_bench * |      64 |     0.071 |    1107 |      - |   902679.8
+             spdlog_bench |      64 |     3.232 |   50506 | 45.591 |    19799.5
+            lwlog_bench * |     512 |     0.866 |    1691 |      - |   591019.3
+             spdlog_bench |     512 |    34.119 |   66638 | 39.385 |    15006.3
+            lwlog_bench * |    4096 |     5.150 |    1257 |      - |   795386.1
+             spdlog_bench |    4096 |   311.846 |   76134 | 60.556 |    13134.7
+            lwlog_bench * |    8192 |     7.365 |     898 |      - |  1112348.3
+             spdlog_bench |    8192 |   610.478 |   74521 | 82.894 |    13419.0
 ===============================================================================
 ```
-#### lwlog (colored and formatted, synchronous) vs spdlog (colored and formatted, synchronous)
-```
-===============================================================================
-   Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
-===============================================================================
-            lwlog_bench * |       8 |     0.012 |    1537 |      - |   650406.5
-             spdlog_bench |       8 |     1.927 |  240850 |156.650 |     4152.0
-            lwlog_bench * |      64 |     0.058 |     904 |      - |  1105354.1
-             spdlog_bench |      64 |    16.164 |  252556 |279.164 |     3959.5
-            lwlog_bench * |     512 |     0.720 |    1406 |      - |   711209.9
-             spdlog_bench |     512 |   142.256 |  277842 |197.605 |     3599.2
-            lwlog_bench * |    4096 |     5.702 |    1392 |      - |   718369.6
-             spdlog_bench |    4096 |  1135.223 |  277154 |199.099 |     3608.1
-            lwlog_bench * |    8192 |     6.763 |     825 |      - |  1211260.9
-             spdlog_bench |    8192 |  2225.977 |  271725 |329.131 |     3680.2
-===============================================================================
-```
-#### lwlog (forward(default) logging) vs lwlog (deferred logging)
+#### lwlog (stdout log, colored and formatted, synchronous) vs spdlog (stdout log, colored and formatted, synchronous)
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
 ===============================================================================
-   lwlog_deferred_bench * |       8 |     0.003 |     375 |      - |  2666666.7
-      lwlog_forward_bench |       8 |     0.010 |    1200 |  3.200 |   833333.3
-   lwlog_deferred_bench * |      64 |     0.024 |     376 |      - |  2655601.7
-      lwlog_forward_bench |      64 |     0.050 |     778 |  2.066 |  1285140.6
-   lwlog_deferred_bench * |     512 |     0.171 |     334 |      - |  2990654.2
-      lwlog_forward_bench |     512 |     0.356 |     694 |  2.077 |  1439820.0
-   lwlog_deferred_bench * |    4096 |     1.086 |     265 |      - |  3771986.4
-      lwlog_forward_bench |    4096 |     3.124 |     762 |  2.877 |  1311265.5
-   lwlog_deferred_bench * |    8192 |     2.034 |     248 |      - |  4028522.3
-      lwlog_forward_bench |    8192 |     6.122 |     747 |  3.011 |  1338146.7
+            lwlog_bench * |       8 |     0.010 |    1262 |      - |   792079.2
+             spdlog_bench |       8 |     1.875 |  234337 |185.614 |     4267.3
+            lwlog_bench * |      64 |     0.078 |    1225 |      - |   816326.5
+             spdlog_bench |      64 |    20.370 |  318275 |259.816 |     3141.9
+            lwlog_bench * |     512 |     0.691 |    1348 |      - |   741384.3
+             spdlog_bench |     512 |   592.973 | 1158149 |858.634 |      863.4
+            lwlog_bench * |    4096 |     8.363 |    2041 |      - |   489788.1
+             spdlog_bench |    4096 |  3186.113 |  777859 |380.986 |     1285.6
+            lwlog_bench * |    8192 |     9.786 |    1194 |      - |   837148.5
+             spdlog_bench |    8192 |  2384.691 |  291100 |243.694 |     3435.2
+===============================================================================
+```
+#### lwlog (file log, formatted, synchronous) vs spdlog (file log, formatted, synchronous)
+```
+===============================================================================
+   Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
+===============================================================================
+            lwlog_bench * |       8 |     0.001 |      75 |      - | 13333333.3
+             spdlog_bench |       8 |     0.002 |     200 |  2.667 |  5000000.0
+            lwlog_bench * |      64 |     0.004 |      68 |      - | 14545454.5
+             spdlog_bench |      64 |     0.024 |     368 |  5.364 |  2711864.4
+            lwlog_bench * |     512 |     0.034 |      67 |      - | 14883720.9
+             spdlog_bench |     512 |     0.117 |     228 |  3.395 |  4383561.6
+            lwlog_bench * |    4096 |     0.411 |     100 |      - |  9975645.4
+             spdlog_bench |    4096 |     1.345 |     328 |  3.277 |  3044447.7
+            lwlog_bench * |    8192 |     1.341 |     163 |      - |  6108874.0
+             spdlog_bench |    8192 |     2.273 |     277 |  1.695 |  3604206.1
+===============================================================================
+```
+#### lwlog (stdout log, forward(default) logging) vs lwlog (stdout log, deferred logging)
+```
+===============================================================================
+   Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
+===============================================================================
+   lwlog_deferred_bench * |       8 |     0.001 |     100 |      - | 10000000.0
+      lwlog_forward_bench |       8 |     0.010 |    1212 | 12.125 |   824742.3
+   lwlog_deferred_bench * |      64 |     0.005 |      79 |      - | 12549019.6
+      lwlog_forward_bench |      64 |     0.125 |    1956 | 24.549 |   511182.1
+   lwlog_deferred_bench * |     512 |     0.050 |      97 |      - | 10240000.0
+      lwlog_forward_bench |     512 |     0.662 |    1292 | 13.238 |   773530.7
+   lwlog_deferred_bench * |    4096 |     0.423 |     103 |      - |  9674067.1
+      lwlog_forward_bench |    4096 |     6.427 |    1569 | 15.179 |   637331.2
+   lwlog_deferred_bench * |    8192 |     2.221 |     271 |      - |  3688262.6
+      lwlog_forward_bench |    8192 |     9.877 |    1205 |  4.447 |   829443.6
 ===============================================================================
 ```
 # Logical Architecture
