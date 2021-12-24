@@ -35,7 +35,8 @@ people who want simplicity without too much configuration. Most of the time you 
 - [Source metainformation attributes](https://github.com/ChristianPanov/lwlog/blob/master/README.md#source-metainformation-function-name-file-path-current-line)
 - [Custom attributes](https://github.com/ChristianPanov/lwlog#custom-attributes)
 - Global logger registry
-# To be implemented
+# TODO (Temporary section)
+- Coloring based on log level
 - Proper CMake to replace the Premake which is currently used
 - Cross-platform colors
 - Fmt-like formatting
