@@ -278,7 +278,7 @@ Verbose flag | Short flag | Description | Example
 **_lwlog_** gives you the ability to get source code metainformation in the form of attributes.\
 One can get the current line on which the log function is called, the file path in which it is called, or the function name in which it is called, and all of that without macros.\
 It is possible because of compiler intrinsics, which were first introduced in GCC, and now are also implemented in MSVC.\
-lwlog doesn't use C++20's ```std::source_location```, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.\
+**_lwlog_** doesn't use C++20's ```std::source_location```, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.\
 If a newer version is not present, the metainformation flags will result into nothing.
 ### Alignment Syntax
 Alignment specifications are individual to an attribute, and they contain an alignment side, width, and an optional fill character, which by default, if not specified, is an empty space.
