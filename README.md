@@ -385,8 +385,9 @@ int main()
 			lwlog::default_storage_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_sink, 
-      			lwlog::sinks::file_sink>
-			>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
+      			lwlog::sinks::file_sink
+			>
+		>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 
 	// Color attributes will be ignored for the file sink
 	logger->set_pattern("[%T] [%n] [%l]: %v");
@@ -402,20 +403,22 @@ int main()
 
 int main()
 {
-	auto console_sink = std::make_shared<lwlog::sinks::stdout_sink<lwlog::single_threaded_policy>>();
-	auto file_sink = std::make_shared<lwlog::sinks::file_sink<lwlog::single_threaded_policy>>("C:/Users/user/Desktop/LogFolder/LOGS.txt");
-	lwlog::sink_list sinks = { console_sink, file_sink };
+	auto console_sink 	= std::make_shared<lwlog::sinks::stdout_sink<lwlog::single_threaded_policy>>();
+	auto file_sink 		= std::make_shared<lwlog::sinks::file_sink<lwlog::single_threaded_policy>>("C:/Users/user/Desktop/LogFolder/LOGS.txt");
+	lwlog::sink_list sinks 	= { console_sink, file_sink };
 
-	auto logger_iterator = std::make_shared<lwlog::null_logger>("ITERATOR", sinks.begin(), sinks.end());
-	auto logger_sink_list = std::make_shared<lwlog::null_logger>("SINK_LIST", sinks);
+	auto logger_iterator 	= std::make_shared<lwlog::null_logger>("ITERATOR", sinks.begin(), sinks.end());
+	auto logger_sink_list 	= std::make_shared<lwlog::null_logger>("SINK_LIST", sinks);
 	auto logger_single_sink = std::make_shared<lwlog::null_logger>("SINGLE_SINK", console_sink);
+	
 	auto logger_combined = std::make_shared<
 		lwlog::logger<
 			lwlog::default_log_policy,
 			lwlog::static_storage_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_sink>
-			>("COMBINED", file_sink);
+			lwlog::sinks::stdout_sink
+			>
+		>("COMBINED", file_sink);
 
 	return 0;
 }
