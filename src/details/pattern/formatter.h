@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstring>
+
 namespace lwlog::details
 {
 	struct formatter

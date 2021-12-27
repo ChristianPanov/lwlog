@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string_view>
+
 namespace lwlog::interface
 {
 	class logger
