@@ -182,16 +182,17 @@ However, if you want to use the convenience aliases I mentioned above, you need 
 And for that reason, all of them have a thread-safe analog with the same name and an _mt suffix.\
 ```lwlog::basic_logger_mt```, ```lwlog::console_logger_mt```, ```lwlog::file_logger_mt```, ```lwlog::null_logger_mt```
 ## Logger configuration
-Policy | Description
------------- | -------------
-```lwlog::default_log_policy``` | Convenience alias for ```lwlog::forward_log_policy```
-```lwlog::forward_log_policy``` | Your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink
-```lwlog::deferred_log_policy``` | As the name suggests, log calls are deferred for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency but should be used only if you are sure you don't need your logs immediately
-```lwlog::default_storage_policy``` | Convenience alias for ```lwlog::static_storage_policy```
-```lwlog::static_storage_policy``` | Configures the sink storage as an ```std::array``` - use it if you only set sinks at compile time and you know for sure you won't add sinks at runtime, it is more lightweight than a dynamic sink storage
-```lwlog::dynamic_storage_policy``` | Configures the sink storage as an ```std::vector``` - use it if you will add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks
-```lwlog::single_threaded_policy``` | Configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than a thread-safe logger
-```lwlog::multi_threaded_policy``` | Configures the sinks with a mutex and locks for thread-safety
+| Policy                              | Description                                                                                                                                                                                                                                                                                 |
+|-------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ```lwlog::default_log_policy```     | Convenience alias for ```lwlog::forward_log_policy```                                                                                                                                                                                                                                       |
+| ```lwlog::forward_log_policy```     | Your standard linear logging mechanism. You call a log function, and it's outputted to the specified sink                                                                                                                                                                                   |
+| ```lwlog::deferred_log_policy```    | As the name suggests, log calls are deferred for later use. When a log function is called, instead of directly sinking the data, it's stored in a storage for later use. This method provides very low latency but should be used only if you are sure you don't need your logs immediately |
+| ```lwlog::default_storage_policy``` | Convenience alias for ```lwlog::static_storage_policy```                                                                                                                                                                                                                                    |
+| ```lwlog::static_storage_policy```  | Configures the sink storage as an ```std::array``` - use it if you only set sinks at compile time and you know for sure you won't add sinks at runtime, it is more lightweight than a dynamic sink storage                                                                                  |
+| ```lwlog::dynamic_storage_policy``` | Configures the sink storage as an ```std::vector``` - use it if you will add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks                                                                                                         |
+| ```lwlog::single_threaded_policy``` | Configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than a thread-safe logger                                                                                                                                          |
+| ```lwlog::multi_threaded_policy```  | Configures the sinks with a mutex and locks for thread-safety                                                                                                                                                                                                                               |
+
 #### Example
 ```cpp
 #include "lwlog/lwlog.h"
@@ -246,34 +247,35 @@ Formatting is handled with a pay for what you need approach.\
 The user can set a pattern, by which the log messages will be formatted. This pattern is internal to the library language, which is a sequence of formatting flags, alignment specifications(optional), characters, and color flags(optional). It allows flexibility in terms of configuring the output information in the most appropriate for the situation way, allowing as meaningful log output as possible.\
 How is formatting done? - A pattern is set, and then it gets compiled by the library. Compilation is done in the ```lwlog::details::pattern``` class. It first parses the pattern and extracts the formatting flags, which are then used to retrieve only the formatters the pattern will need. It also parses the alignment specifications and extracts all the needed information for the alignments. In the end, all the retrieved formatters are called on the pattern and all formatting flags are replaced with their corresponding values and their corresponding alignment specifications(if any).
 ### Syntax
-Verbose flag | Short flag | Description | Example
------------- | ------------- | ------------- | -------------
-```{name}``` | ```%n``` | Logger's identification name | "logger name"
-```{level}``` | ```%l``` | Log level of the message | "info", "warning", "error", "critical", "debug"
-```{message}``` | ```%v``` | Log message | "Some log message"
-```{thread}``` | ```%t``` | Thread id | "6567358443629571051"
-```{line}``` | ```%#``` | Current line on which the log function is called | "84"
-```{file}``` | ```%@``` | Path of the file in which the log function is called | "C:\Users\user\Desktop\lwlog\Sandbox\Sandbox.cpp"
-```{func}``` | ```%!``` | Name of the function in which the log function is called | "main"
-```{thread}``` | ```%t``` | Thread id | "6567358443629571051"
-```{date}``` | ```%F``` | Current date YY-MM-DD | "2021-01-01"
-```{date_short}``` | ```%D``` | Current short date MM/DD/YY | "01/01/21"
-```{year}``` | ```%Y``` | Current year | "2021"
-```{year_short}``` | ```%y``` | Current short year | "21"
-```{month}``` | ```%m``` | Current month 01-12 | "01"
-```{month_name}``` | ```%B``` | Current month as name | "January"
-```{month_name_short}``` | ```%b``` | Current short month as name | "Jan"
-```{day}``` | ```%d``` | Current day of month 01-31 | "01"
-```{weekday}``` | ```%A``` | Current day of the week as name | "Friday"
-```{weekday_short}``` | ```%a``` | Current short day of the week as name | "Fri"
-```{time}``` | ```%T``` | Current time HH:MM:SS | "17:42:10"
-```{24_clock}``` | ```%R``` | Current 24-hour format time | "17:42"
-```{12_clock}``` | ```%r``` | Current 12-hour format time | "05:42:10pm"
-```{ampm}``` | ```%p``` | am/pm | "am", "pm"
-```{hour_24}``` | ```%H``` | Current hour in 24-hour format | "17"
-```{hour_12}``` | ```%I``` | Current hour in 12-hour format | "05"
-```{minute}``` | ```%m``` | Current minute 00-59 | "42"
-```{second}``` | ```%s``` | Current second 00-59 | "10"
+| Verbose flag             | Short flag | Description                                              | Example                                           |
+|--------------------------|------------|----------------------------------------------------------|---------------------------------------------------|
+| ```{name}```             | ```%n```   | Logger's identification name                             | "logger name"                                     |
+| ```{level}```            | ```%l```   | Log level of the message                                 | "info", "warning", "error", "critical", "debug"   |
+| ```{message}```          | ```%v```   | Log message                                              | "Some log message"                                |
+| ```{thread}```           | ```%t```   | Thread id                                                | "6567358443629571051"                             |
+| ```{line}```             | ```%#```   | Current line on which the log function is called         | "84"                                              |
+| ```{file}```             | ```%@```   | Path of the file in which the log function is called     | "C:\Users\user\Desktop\lwlog\Sandbox\Sandbox.cpp" |
+| ```{func}```             | ```%!```   | Name of the function in which the log function is called | "main"                                            |
+| ```{thread}```           | ```%t```   | Thread id                                                | "6567358443629571051"                             |
+| ```{date}```             | ```%F```   | Current date YY-MM-DD                                    | "2021-01-01"                                      |
+| ```{date_short}```       | ```%D```   | Current short date MM/DD/YY                              | "01/01/21"                                        |
+| ```{year}```             | ```%Y```   | Current year                                             | "2021"                                            |
+| ```{year_short}```       | ```%y```   | Current short year                                       | "21"                                              |
+| ```{month}```            | ```%m```   | Current month 01-12                                      | "01"                                              |
+| ```{month_name}```       | ```%B```   | Current month as name                                    | "January"                                         |
+| ```{month_name_short}``` | ```%b```   | Current short month as name                              | "Jan"                                             |
+| ```{day}```              | ```%d```   | Current day of month 01-31                               | "01"                                              |
+| ```{weekday}```          | ```%A```   | Current day of the week as name                          | "Friday"                                          |
+| ```{weekday_short}```    | ```%a```   | Current short day of the week as name                    | "Fri"                                             |
+| ```{time}```             | ```%T```   | Current time HH:MM:SS                                    | "17:42:10"                                        |
+| ```{24_clock}```         | ```%R```   | Current 24-hour format time                              | "17:42"                                           |
+| ```{12_clock}```         | ```%r```   | Current 12-hour format time                              | "05:42:10pm"                                      |
+| ```{ampm}```             | ```%p```   | am/pm                                                    | "am", "pm"                                        |
+| ```{hour_24}```          | ```%H```   | Current hour in 24-hour format                           | "17"                                              |
+| ```{hour_12}```          | ```%I```   | Current hour in 12-hour format                           | "05"                                              |
+| ```{minute}```           | ```%m```   | Current minute 00-59                                     | "42"                                              |
+| ```{second}```           | ```%s```   | Current second 00-59                                     | "10"                                              |
+
 ### Source metainformation (function name, file path, current line)
 **_lwlog_** gives you the ability to get source code metainformation in the form of attributes.\
 One can get the current line on which the log function is called, the file path in which it is called, or the function name in which it is called, and all of that without macros.\
@@ -283,12 +285,13 @@ If a newer version is not present, the metainformation flags will result into no
 ### Alignment Syntax
 Alignment specifications are individual to an attribute, and they contain an alignment side, width, and an optional fill character, which by default, if not specified, is an empty space.
 
-Syntax | Example | Result
------------- | ------------- | -------------
-```:<<width><flag>``` | ```[:<12%l]``` | "[info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]"
-```:><width><flag>``` | ```[:>12%l]``` | "[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;info]"
-```:^<width><flag>``` | ```[:^12%l]``` | "[&nbsp;&nbsp;&nbsp;&nbsp;info&nbsp;&nbsp;&nbsp;&nbsp;]"
-```:^<fill_character><width><flag>``` | ```[:^-12%l]``` | "[----info----]"
+| Syntax                                | Example         | Result                                                   |
+|---------------------------------------|-----------------|----------------------------------------------------------|
+| ```:<<width><flag>```                 | ```[:<12%l]```  | "[info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]" |
+| ```:><width><flag>```                 | ```[:>12%l]```  | "[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;info]" |
+| ```:^<width><flag>```                 | ```[:^12%l]```  | "[&nbsp;&nbsp;&nbsp;&nbsp;info&nbsp;&nbsp;&nbsp;&nbsp;]" |
+| ```:^<fill_character><width><flag>``` | ```[:^-12%l]``` | "[----info----]"                                         |
+
 #### Example
 ```cpp
 #include "lwlog/lwlog.h"
@@ -322,16 +325,17 @@ Foreground Color Flag | Bright Foreground Color Flag
 ```.cyan()``` | ```.br_cyan()```
 ```.white()``` | ```.br_white()```
 
-Background Color Flag | Bright Background Color Flag
------------- | -------------
-```.bg_black()``` | ```.br_bg_black()```
-```.bg_red()``` | ```.br_bg_red()```
-```.bg_green()``` | ```.br_bg_green()```
-```.bg_yellow()``` | ```.br_bg_yellow()```
-```.bg_blue()``` | ```.br_bg_blue()```
-```.bg_magenta()``` | ```.br_bg_magenta()```
-```.bg_cyan()``` | ```.br_bg_cyan()```
-```.bg_white()``` | ```.br_bg_white()```
+| Background Color Flag | Bright Background Color Flag |
+|-----------------------|------------------------------|
+| ```.bg_black()```     | ```.br_bg_black()```         |
+| ```.bg_red()```       | ```.br_bg_red()```           |
+| ```.bg_green()```     | ```.br_bg_green()```         |
+| ```.bg_yellow()```    | ```.br_bg_yellow()```        |
+| ```.bg_blue()```      | ```.br_bg_blue()```          |
+| ```.bg_magenta()```   | ```.br_bg_magenta()```       |
+| ```.bg_cyan()```      | ```.br_bg_cyan()```          |
+| ```.bg_white()```     | ```.br_bg_white()```         |
+
 #### Example
 ```cpp
 #include "lwlog/lwlog.h"
