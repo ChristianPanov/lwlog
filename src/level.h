@@ -50,6 +50,7 @@ namespace lwlog::level_details
 		case level::error:		return "error";		break;
 		case level::critical:	return "critical";	break;
 		case level::debug:		return "debug";		break;
+		default:		return "";
 		}
 	}
 
@@ -62,6 +63,7 @@ namespace lwlog::level_details
 		case level::error:		return "\u001b[31;1m";  break;
 		case level::critical:	return "\u001b[41;1m";  break;
 		case level::debug:		return "\u001b[37;1m";  break;
+		default:		return "";
 		}
 	}
 }

@@ -94,11 +94,12 @@ private:
 
 class InstrumentationTimer
 {
+  using clock = std::chrono::high_resolution_clock;
 public:
 	InstrumentationTimer(std::string_view name)
 		: m_Name(name), m_Stopped(false)
 	{
-		m_StartTimepoint = std::chrono::high_resolution_clock::now();
+		m_StartTimepoint = clock::now();
 	}
 
 	~InstrumentationTimer()
@@ -110,7 +111,7 @@ public:
 
 private:
 	void stop() {
-		auto end_timepoint = std::chrono::high_resolution_clock::now();
+		auto end_timepoint = clock::now();
 		long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch().count();
 		long long end = std::chrono::time_point_cast<std::chrono::microseconds>(end_timepoint).time_since_epoch().count();
 
@@ -123,16 +124,17 @@ private:
 private:
 	std::string m_Name;
 	bool m_Stopped;
-	std::chrono::time_point<std::chrono::steady_clock> m_StartTimepoint;
+	clock::time_point m_StartTimepoint;
 };
 
 class Timer
 {
+  using clock = std::chrono::high_resolution_clock;
 public:
 	Timer(std::string_view name)
 		: m_name(name), m_stopped(false)
 	{
-		m_start_timepoint = std::chrono::high_resolution_clock::now();
+		m_start_timepoint = clock::now();
 	}
 
 	~Timer()
@@ -144,7 +146,7 @@ public:
 
 private:
 	void stop() {
-		auto end_timepoint = std::chrono::high_resolution_clock::now();
+		auto end_timepoint = clock::now();
 		long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_start_timepoint).time_since_epoch().count();
 		long long end = std::chrono::time_point_cast<std::chrono::microseconds>(end_timepoint).time_since_epoch().count();
 
@@ -159,5 +161,5 @@ private:
 private:
 	std::string m_name;
 	bool m_stopped;
-	std::chrono::time_point<std::chrono::steady_clock> m_start_timepoint;
+	clock::time_point m_start_timepoint;
 };
