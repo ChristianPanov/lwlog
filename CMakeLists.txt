@@ -1,20 +1,33 @@
 cmake_minimum_required(VERSION 3.16)
-project(lwlog CXX)
+project(lwlog
+  LANGUAGES CXX
+  DESCRIPTION "Light Weight Logging Library"
+  HOMEPAGE_URL "https://github.com/ChristianPanov/lwlog"
+  VERSION 1.0.0)
 
 option(LWLOG_BUILD_EXAMPLES "Build example program" ON)
 
+include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
+set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake)
+
 find_package(Threads REQUIRED)
 
-add_library(lwlog
-    src/registry.cpp
-    src/lwlog.cpp
-    src/policy/log_policy.cpp
-    src/details/pattern/alignment_formatter.cpp
-    src/details/pattern/pattern.cpp
-    src/details/file_writer.cpp)
-add_library(lwlog::lwlog ALIAS lwlog)
-target_include_directories(lwlog PUBLIC src)
-target_link_libraries(lwlog PUBLIC Threads::Threads)
-target_compile_features(lwlog PUBLIC cxx_std_17)
+add_subdirectory(lwlog)
 
-add_subdirectory(examples)
+configure_package_config_file(cmake/lwlog-config.cmake.in
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/lwlog/lwlog-config.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_CMAKEDIR}/lwlog
+  PATH_VARS CMAKE_INSTALL_INCLUDEDIR
+  )
+write_basic_package_version_file(
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/lwlog/lwlog-version.cmake
+  COMPATIBILITY AnyNewerVersion)
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/lwlog/lwlog-version.cmake
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/lwlog/lwlog-config.cmake
+  DESTINATION ${CMAKE_INSTALL_CMAKEDIR}/lwlog)
+
+if(LWLOG_BUILD_EXAMPLES)
+  add_subdirectory(examples)
+endif()
