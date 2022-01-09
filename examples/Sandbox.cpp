@@ -1,6 +1,6 @@
 #include "Benchmark.h"
 
-#include "lwlog.h"
+#include "lwlog/lwlog.h"
 
 int main()
 {
