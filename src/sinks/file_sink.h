@@ -10,6 +10,7 @@ namespace lwlog::sinks
 		: public sink<uncolored_policy, ThreadingPolicy>
 		, public details::file_writer
 	{
+	  using sink_t = sink<colored_policy, ThreadingPolicy>;
 	public:
 		file_sink() = default;
 		explicit file_sink(std::string_view path);
@@ -31,7 +32,7 @@ namespace lwlog::sinks
 	file_sink<ThreadingPolicy>::~file_sink()
 	{
 		for (const auto& log_msg : m_messages)
-			details::file_writer::write(m_pattern.compile(log_msg));
+			details::file_writer::write(sink_t::m_pattern.compile(log_msg));
 	}
 
 	template<typename ThreadingPolicy>

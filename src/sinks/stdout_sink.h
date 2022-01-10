@@ -10,6 +10,7 @@ namespace lwlog::sinks
 		: public sink<colored_policy, ThreadingPolicy>
 		, public details::stream_writer
 	{
+	  using sink_t = sink<colored_policy, ThreadingPolicy>;
 	public:
 		stdout_sink();
 		void sink_it(const details::log_message& log_msg) override;
@@ -23,6 +24,6 @@ namespace lwlog::sinks
 	template<typename ThreadingPolicy>
 	void stdout_sink<ThreadingPolicy>::sink_it(const details::log_message& log_msg)
 	{
-		details::stream_writer::write(m_pattern.compile(log_msg));
+		details::stream_writer::write(sink_t::m_pattern.compile(log_msg));
 	}
 }
