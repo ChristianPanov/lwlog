@@ -1,7 +1,7 @@
 #pragma once
 
-#include "formatter.h"
-#include "flag_data.h"
+#include "lwlog/details/pattern/formatter.h"
+#include "lwlog/details/pattern/flag_data.h"
 
 namespace lwlog::details
 {

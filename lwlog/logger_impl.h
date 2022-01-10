@@ -1,8 +1,8 @@
 #pragma once
 
-#include "logger.h"
-#include "sinks/sink_factory.h"
-#include "registry.h"
+#include "lwlog/logger.h"
+#include "lwlog/sinks/sink_factory.h"
+#include "lwlog/registry.h"
 
 namespace lwlog
 {

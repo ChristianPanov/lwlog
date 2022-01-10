@@ -1,9 +1,9 @@
 #pragma once
 
-#include "logger.h"
-#include "sinks/file_sink.h"
-#include "sinks/stdout_sink.h"
-#include "sinks/stderr_sink.h"
+#include "lwlog/logger.h"
+#include "lwlog/sinks/file_sink.h"
+#include "lwlog/sinks/stdout_sink.h"
+#include "lwlog/sinks/stderr_sink.h"
 
 namespace lwlog
 {

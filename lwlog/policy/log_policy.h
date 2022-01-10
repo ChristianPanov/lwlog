@@ -1,6 +1,6 @@
 #pragma once
 
-#include "sinks/sink.h"
+#include "lwlog/sinks/sink.h"
 
 namespace lwlog
 {

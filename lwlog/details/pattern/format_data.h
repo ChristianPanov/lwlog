@@ -1,7 +1,7 @@
 #pragma once
 
-#include "logger_formatters.h"
-#include "datetime_formatters.h"
+#include "lwlog/details/pattern/logger_formatters.h"
+#include "lwlog/details/pattern/datetime_formatters.h"
 
 namespace lwlog::details
 {

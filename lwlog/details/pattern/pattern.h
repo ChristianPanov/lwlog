@@ -4,10 +4,10 @@
 #include <unordered_map>
 #include <vector>
 
-#include "fwd.h"
-#include "attribute.h"
-#include "details/log_message.h"
-#include "alignment_formatter.h"
+#include "lwlog/fwd.h"
+#include "lwlog/details/log_message.h"
+#include "lwlog/details/pattern/attribute.h"
+#include "lwlog/details/pattern/alignment_formatter.h"
 
 namespace lwlog::details
 {

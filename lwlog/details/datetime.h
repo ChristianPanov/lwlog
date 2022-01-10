@@ -4,7 +4,7 @@
 #include <ctime>
 
 #ifdef _WIN64
-#include "windows_lightweight.h"
+#include "lwlog/windows_lightweight.h"
 #include <array>
 #else
 #include <chrono>

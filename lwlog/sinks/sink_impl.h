@@ -1,7 +1,3 @@
-#pragma once
-
-#include "sink.h"
-
 namespace lwlog::sinks
 {
 	template<typename ColorPolicy, typename ThreadingPolicy>
