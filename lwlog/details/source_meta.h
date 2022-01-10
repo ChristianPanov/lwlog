@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string_view>
+#include <cstddef>
+
 #if defined(_MSC_VER) && (_MSC_VER < 1929)
 #define BUILTIN_LINE {}
 #define BUILTIN_FILE {}

@@ -2,9 +2,9 @@
 
 #include <thread>
 
-#include "source_meta.h"
-#include "datetime.h"
-#include "fwd.h"
+#include "lwlog/details/source_meta.h"
+#include "lwlog/details/datetime.h"
+#include "lwlog/fwd.h"
 
 namespace lwlog::details
 {
