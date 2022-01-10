@@ -1,0 +1,7 @@
+set(LWLOG_VERSION @PROJECT_VERSION@)
+
+@PACKAGE_INIT@
+
+find_package(Threads)
+
+set_and_check(lwlog_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
