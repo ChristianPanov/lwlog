@@ -31,7 +31,7 @@ people who want simplicity without too much configuration. Most of the time you 
 	- Custom sinks (it's extremely easy to add your own custom sinks)
 - Support for both [compile-time](https://github.com/ChristianPanov/lwlog#multiple-sinks-compile-time) and [runtime](https://github.com/ChristianPanov/lwlog#multiple-sinks-runtime) sink configuration
 - Custom sink configuration - each sink can have a unique log pattern and verbosity level
-- Log formatting according to a custom user-defined pattern
+- Log formatting according to a [custom user-defined pattern](https://github.com/ChristianPanov/lwlog#formatting)
 - [Source metainformation attributes](https://github.com/ChristianPanov/lwlog/blob/master/README.md#source-metainformation-function-name-file-path-current-line)
 - [Custom attributes](https://github.com/ChristianPanov/lwlog#custom-attributes)
 - Global logger registry
