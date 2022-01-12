@@ -6,7 +6,7 @@ project(lwlog
   VERSION 1.0.0)
 
 option(LWLOG_BUILD_EXAMPLES "Build example program" ON)
-option(ENABLE_TESTING ON "Enable tests (implicitly builds examples)")
+option(ENABLE_TESTING "Enable tests (implicitly builds examples)")
 
 include(GNUInstallDirs)
 set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
