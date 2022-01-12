@@ -299,7 +299,7 @@ int main()
 	console->set_pattern("[%T] [%n] [:^12%l]: %v");
 
 	console->info("First info message");
-	console->critical("First info message");
+	console->critical("First critical message");
 	
 	return 0;
 }
