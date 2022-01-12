@@ -1,10 +1,46 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/05f2384593ed49bbaa51fa2516793d99)](https://app.codacy.com/gh/ChristianPanov/lwlog?utm_source=github.com&utm_medium=referral&utm_content=ChristianPanov/lwlog&utm_campaign=Badge_Grade)
 [![CodeFactor](https://www.codefactor.io/repository/github/christianpanov/lwlog/badge)](https://www.codefactor.io/repository/github/christianpanov/lwlog)\
 Very fast C++17 logging library
-# Install
+
+# Build and Install with CMake
+
+Building and installation follow the standard CMake pattern.
+
+## Building
+
+Make a build directory and run cmake in the build directory.
+
+First run configure.
+
 ```
-git clone --recursive https://github.com/ChristianPanov/lwlog
+cmake /path/to/lwlog/source
 ```
+
+Options available for configuration are
+
+| Option | Default | Description |
+| ------ | ------- | ----------- |
+| LWLOG_BUILD_EXAMPLES | ON | Build the examples. |
+| ENABLE_TESTING | ON | Enable running tests with CTest. Implies LWLOG_BUILD_EXAMPLES. |
+
+
+Then run the build step.
+
+```
+cmake --build .
+```
+
+## Installation
+
+In the build directory run
+
+```
+cmake --install .
+```
+
+By default, CMake will install with the [default prefix](https://cmake.org/cmake/help/latest/variable/CMAKE_INSTALL_PREFIX.html) unless
+`CMAKE_INSTALL_PREFIX` is set during configuration or `--prefix` is used during install.
+
 # The Most Important Question - Why Yet Another Logging Library?
 _I will cut short on the speed or code simplicity that every other logging library boasts about, and will leave them for later.\
 The actual importance of the library hides within its meaning to me. This library has served as an amazing journey.\
@@ -459,8 +495,8 @@ As mentioned in [Logical Architecture](https://github.com/ChristianPanov/lwlog#l
 The compiled and formatted message is received with ```m_pattern.compile(log_msg)```. We access the pattern member from the sink base class and then compile it with the log message.
 #### Example
 ```cpp
-#include "sink.h"
-#include "policy/sink_color_policy.h"
+#include "lwlog/sinks/sink.h"
+#include "lwlog/policy/sink_color_policy.h"
 
 namespace lwlog::sinks
 {
