@@ -495,8 +495,8 @@ As mentioned in [Logical Architecture](https://github.com/ChristianPanov/lwlog#l
 The compiled and formatted message is received with ```m_pattern.compile(log_msg)```. We access the pattern member from the sink base class and then compile it with the log message.
 #### Example
 ```cpp
-#include "sink.h"
-#include "policy/sink_color_policy.h"
+#include "lwlog/sinks/sink.h"
+#include "lwlog/policy/sink_color_policy.h"
 
 namespace lwlog::sinks
 {
