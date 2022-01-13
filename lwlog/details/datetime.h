@@ -1,5 +1,7 @@
 #pragma once
 
+#include "lwlog/options.h"
+
 #include <string>
 #include <ctime>
 
