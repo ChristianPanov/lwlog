@@ -1,0 +1,6 @@
+#ifndef lwlog_options_h
+#define lwlog_options_h
+
+#cmakedefine LWLOG_USE_LOCALTIME
+
+#endif // lwlog_options_h

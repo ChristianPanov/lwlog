@@ -7,6 +7,7 @@ project(lwlog
 
 option(LWLOG_BUILD_EXAMPLES "Build example program" ON)
 option(ENABLE_TESTING "Enable tests (implicitly builds examples)" ON)
+option(LWLOG_USE_LOCALTIME "Use the local time instead of GMT" OFF)
 
 include(GNUInstallDirs)
 set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
@@ -14,7 +15,6 @@ set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 find_package(Threads REQUIRED)
 
 add_subdirectory(lwlog)
-
 
 # Install Package
 include(CMakePackageConfigHelpers)
