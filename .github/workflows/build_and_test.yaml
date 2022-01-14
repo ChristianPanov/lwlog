@@ -1,0 +1,35 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - dev
+      - master
+      - github_actions_linux 
+  pull_request:
+    branches:
+      - dev
+      - master 
+
+jobs:
+  linux-build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      CMAKE_GENERATOR: Ninja
+      CXX: clang++
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Deps
+        run: .github/ci/linux/install_deps.sh
+      - name: Configure
+        run: ctest -S .github/ci/ctest_configure.cmake
+      - name: Build
+        run: ctest -S .github/ci/ctest_build.cmake
+      - name: Test
+        run: ctest -S .github/ci/ctest_test.cmake
+      - name: Save Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifact
+          path: build
+          retention-days: 1
