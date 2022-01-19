@@ -25,9 +25,9 @@ namespace lwlog::details
 
 		std::string_view message;
 		std::string_view logger_name;
-		level level;
-		datetime::time_point_t time_point;
-		std::size_t thread_id{ 0 };
+		level level{};
+		datetime::time_point_t time_point{};
+		std::size_t thread_id{};
 		source_meta meta;
 	};
 }
