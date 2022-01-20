@@ -166,10 +166,10 @@ Alias | Description
 
 int main()
 {
-	auto basic = std::make_shared<lwlog::basic_logger<sinks::stdout_sink>>("CONSOLE");
+	auto basic = std::make_shared<lwlog::basic_logger<lwlog::sinks::stdout_sink>>("CONSOLE");
 	
-	auto console = std::make_shared<console_logger>("CONSOLE");
-	auto file = std::make_shared<file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
+	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
+	auto file = std::make_shared<lwlog::file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 	
 	auto null = std::make_shared<lwlog::null_logger>("LOGGER");
 	
@@ -294,7 +294,7 @@ Syntax | Example | Result
 
 int main()
 {
-	auto console = std::make_shared<console_logger>("CONSOLE");
+	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
 	console->set_pattern("[%T] [%n] [:^12%l]: %v");
 
 	console->info("First info message");
@@ -357,7 +357,7 @@ int main()
 {
 	std::string current_status = "inactive";
 	
-	auto console = std::make_shared<console_logger>("CONSOLE");
+	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
 	console->add_attribute({"{status}", "%s"}, current_status);
 	console->set_pattern("{status} --- [%T] [%n] [%l]: %v");
 	
