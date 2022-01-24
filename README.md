@@ -18,7 +18,7 @@ _No matter what you do or say, there will always be people who will hold a diffe
 - Clean and descriptive code
 - Extremely fast synchronous logging (other logging libraries promise you speed by being asynchronous, which is not always a good idea, because it's hard to identify at what point the program crashed, causes more overhead and you can easily lose important messages, lwlog promises you both speed, as fast as synchronous logging can get, and keeping all your messages)
 - High extensibility - [very easy to add your own types of sinks and loggers](https://github.com/ChristianPanov/lwlog#creating-your-own-sink)
-- Very configurable - lwlog uses [policy classes](https://github.com/ChristianPanov/lwlog#logger-configuration) which you can just plug in based on your needs. At the same time, convenient easy-to-use predefined types([convenience aliases](https://github.com/ChristianPanov/lwlog#convenience-logger-aliases)) are made for the
+- Very configurable - ***lwlog*** uses [policy classes](https://github.com/ChristianPanov/lwlog#logger-configuration) which you can just plug in based on your needs. At the same time, convenient easy-to-use predefined types([convenience aliases](https://github.com/ChristianPanov/lwlog#convenience-logger-aliases)) are made for the
 people who want simplicity without too much configuration. Most of the time you will be just fine with using the predefined types
 # Features
 - Written in modern C++17
@@ -120,7 +120,7 @@ Registry
         └── Writer(optional)
 ```
 The architecture of lwlog is very simple, it's divided into three main modules - the **registry**, the **logger**, and the **sinks**.\
-An optional fourth part is the **_writer_**.
+An optional fourth part is the ***writer***.
 Module | Description
 ------------ | -------------
 ```Writer``` | Abstraction which outputs the data to the destination. It is optional, because it is not actually needed, and there is no strict specification for what a writer should be
@@ -151,7 +151,7 @@ int main()
 }
 ```
 ## Convenience logger aliases
-In the file **_lwlog.h_** you can see several convenience aliases at your disposal.\
+In the file ***lwlog.h*** you can see several convenience aliases at your disposal.\
 They are intended for ease of use, so I encourage you to use them instead of the more complex way of creating loggers directly through the logger class.\
 They are predefined with default configurations, so unless you need more special functionality, stick to using them.
 Alias | Description
@@ -166,10 +166,10 @@ Alias | Description
 
 int main()
 {
-	auto basic = std::make_shared<lwlog::basic_logger<sinks::stdout_sink>>("CONSOLE");
+	auto basic = std::make_shared<lwlog::basic_logger<lwlog::sinks::stdout_sink>>("CONSOLE");
 	
-	auto console = std::make_shared<console_logger>("CONSOLE");
-	auto file = std::make_shared<file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
+	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
+	auto file = std::make_shared<lwlog::file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 	
 	auto null = std::make_shared<lwlog::null_logger>("LOGGER");
 	
@@ -274,10 +274,10 @@ Verbose flag | Short flag | Description | Example
 ```{minute}``` | ```%m``` | Current minute 00-59 | "42"
 ```{second}``` | ```%s``` | Current second 00-59 | "10"
 ### Source metainformation (function name, file path, current line)
-**_lwlog_** gives you the ability to get source code metainformation in the form of attributes.\
+***lwlog*** gives you the ability to get source code metainformation in the form of attributes.\
 One can get the current line on which the log function is called, the file path in which it is called, or the function name in which it is called, and all of that without macros.\
 It is possible because of compiler intrinsics, which were first introduced in GCC, and now are also implemented in MSVC.\
-**_lwlog_** doesn't use C++20's ```std::source_location```, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.\
+***lwlog*** doesn't use C++20's ```std::source_location```, because I don't want to force users to use the new standard. Instead, the only requirement is to have a newer version of Visual Studio (>= 1927), which implements the needed intrinsics.\
 If a newer version is not present, the metainformation flags will result into nothing.
 ### Alignment Syntax
 Alignment specifications are individual to an attribute, and they contain an alignment side, width, and an optional fill character, which by default, if not specified, is an empty space.
@@ -294,7 +294,7 @@ Syntax | Example | Result
 
 int main()
 {
-	auto console = std::make_shared<console_logger>("CONSOLE");
+	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
 	console->set_pattern("[%T] [%n] [:^12%l]: %v");
 
 	console->info("First info message");
@@ -357,7 +357,7 @@ int main()
 {
 	std::string current_status = "inactive";
 	
-	auto console = std::make_shared<console_logger>("CONSOLE");
+	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
 	console->add_attribute({"{status}", "%s"}, current_status);
 	console->set_pattern("{status} --- [%T] [%n] [%l]: %v");
 	
@@ -544,7 +544,7 @@ int main()
 ```
 ## Switching off logging
 If you want to be able to turn off logging completely, you can use the preprocessor directives.
-These directives use the default logger and are present in the **_lwlog.h_** file.\
+These directives use the default logger and are present in the ***lwlog.h*** file.\
 They will log unless you disable logging with ```LWLOG_DISABLE```(should always be at the very top of the file), or you switch off a specific logging level.\
 Levels can be switched off at runtime as well, just by using the ```LWLOG_SET_LEVEL_FILTER``` directive.\
 If logging is disabled, the directives expand to nothing.
@@ -567,7 +567,7 @@ int main()
 So how does lwlog achieve this performance? In the following section, I will break down all the performance-enhancing decisions that I've made.
 ### Formatting pattern
 Formatting is usually the bottleneck in logging solutions and for that reason, it's usually handled on a background thread so it doesn't impede performance.\
-However, because of **_lwlog_**'s synchronous nature, we cannot take that route, and thus cannot take any liberties in how the compilation process of the pattern is done.\
+However, because of ***lwlog***'s synchronous nature, we cannot take that route, and thus cannot take any liberties in how the compilation process of the pattern is done.\
 The formatting pattern in question is parsed completely off the log call site, and all that's left for the log call functions is to do the replacement of the flags with their corresponding values. That way we do not burden every log call with doing the extra work of parsing the pattern every time, and it's parsed only once.\
 The same goes for colors. They are only processed once right after the pattern flags are parsed.\
 Pattern compilation process:
@@ -579,7 +579,7 @@ Pattern compilation process:
 ### Console output(stdout, stderr)
 I/O in logging solutions is the second biggest, if not the biggest, performance bottleneck. Spewing data in the form of a human-readable medium(text) is heavy-duty.\
 The best that could be done as of now, is manual buffering.\
-With manual buffering, I manually increase the stream buffering with a size of **_2^22 bytes_**, bigger than the default one(**_512 bytes_**), which improves the performance of output to stdout, stderr a lot.
+With manual buffering, I manually increase the stream buffering with a size of ***2^22 bytes***, bigger than the default one(***512 bytes***), which improves the performance of output to stdout, stderr a lot.
 ```cpp
 std::setvbuf(stdout, NULL, _IOFBF, 4194304);
 std::fwrite("Hello, World!", 14, 1, stdout);
@@ -592,7 +592,7 @@ Time is handled in a special way. First off, since ```std::chrono``` is not as p
 It's taken even further. For some reason, getting the local time with ```std::chrono``` is faster than getting the UTC, and with the Windows API it's the opposite - getting the gmtime is faster than getting the UTC, so each implementation initially gets the faster of the two, and then arithmetically processes the time to the desired time format(either local time or UTC)
 ### Heuristics
 For those of you who happen to not know, heuristics are logical shortcuts, approximate assumptions, which trade optimality, completeness, accuracy, or precision for speed.\
-One example could be that **_lwlog_** does not use exception handling and performs almost no checks. That means that misusing the library could result in undefined behavior, memory leaks, or crashes. Fortunately, the design is simple enough to make it hard to misuse it, but all in all, it will not hold your hand if you do not use it properly.\
-To further the example, **_lwlog_** assumes that the formatting pattern you've written is correct, with no syntax errors, so it doesn't perform any syntax checks which would impact the performance.\
+One example could be that ***lwlog*** does not use exception handling and performs almost no checks. That means that misusing the library could result in undefined behavior, memory leaks, or crashes. Fortunately, the design is simple enough to make it hard to misuse it, but all in all, it will not hold your hand if you do not use it properly.\
+To further the example, ***lwlog*** assumes that the formatting pattern you've written is correct, with no syntax errors, so it doesn't perform any syntax checks which would impact the performance.\
 These heuristics, which are present in almost any part of the library, benefit the performance greatly.\
 **NOTE:** Every library could be misused, some more than others, but if we want speed, we as library crafters must take the responsibility to provide a simple enough interface, as straight-forward and as intuitive as possible, so the client would not misuse the library unless it's intentional.
