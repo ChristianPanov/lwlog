@@ -12,11 +12,11 @@ namespace lwlog
 
 		template<typename Iterator>
 		[[deprecated("Static storage logger doesn't implement that function")]]
-		static void insert_range(storage_t&, Iterator, Iterator end) {}
+		static void insert_range(storage_t&, Iterator, Iterator) {}
 		[[deprecated("Static storage logger doesn't implement that function")]]
-		static void add_sink(storage_t& storage, sink_ptr sink) {}
+		static void add_sink(storage_t&, sink_ptr) {}
 		[[deprecated("Static storage logger doesn't implement that function")]]
-		static void remove_sink(storage_t& storage, sink_ptr sink) {}
+		static void remove_sink(storage_t&, sink_ptr) {}
 	};
 
 	template<typename... Args>
