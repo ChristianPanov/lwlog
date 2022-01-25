@@ -17,8 +17,7 @@ datetime::init_time_point(time_point)
 
 #if LWLOG_USE_THREAD_ID == 1
 #define LWLOG_THREAD_ID_TYPE std::size_t
-#define LWLOG_THREAD_ID_FUNC(...)\
-std::hash<std::thread::id>{}(std::this_thread::get_id())
+#define LWLOG_THREAD_ID_FUNC(...) os::thread_id()
 #else
 #define LWLOG_THREAD_ID_TYPE void*
 #define LWLOG_THREAD_ID_FUNC(...) nullptr
