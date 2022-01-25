@@ -49,7 +49,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::thread_id,
-				std::to_string(log_msg.thread_id)
+				log_msg.thread_id
 			);
 		}
 	};
@@ -61,7 +61,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::line,
-				std::to_string(log_msg.meta.line())
+				log_msg.meta.line()
 			);
 		}
 	};
