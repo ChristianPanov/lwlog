@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <ctime>
 
 #include "tweakme_macros.h"
 #ifdef _WIN64
@@ -13,10 +14,10 @@
 namespace lwlog::details::datetime
 {
 #ifdef _WIN64
-    using time_point_t = SYSTEMTIME;
+    using time_point_t = ::SYSTEMTIME;
     static void init_time_point(time_point_t& time_point)
     {
-        GetSystemTime(&time_point);
+        ::GetSystemTime(&time_point);
     }
 #else
     using time_point_t = std::chrono::system_clock::time_point;

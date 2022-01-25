@@ -2,11 +2,12 @@
 
 #ifdef _WIN32
 #include "windows_lightweight.h"
-#else
+#elif defined(__linux__) || defined(__APPLE__)
 #include <unistd.h>
 #include <sys/syscall.h>
-#endif
+#else
 #include <thread>
+#endif
 
 namespace lwlog::details::os
 {
@@ -22,6 +23,15 @@ namespace lwlog::details::os
 		return tid;
 		#else
 		return std::hash<std::thread::id>{}(std::this_thread::get_id());
+		#endif
+	}
+
+	static std::size_t process_id()
+	{
+		#if defined(_WIN32)
+		return static_cast<std::size_t>(::GetCurrentProcessId());
+		#elif defined(__linux__) || defined(__APPLE__)
+		return static_cast<std::size_t>(::getpid());
 		#endif
 	}
 }

@@ -4,7 +4,6 @@
 #include "source_meta.h"
 #include "datetime.h"
 #include "os.h"
-#include "fwd.h"
 
 namespace lwlog::details
 {
@@ -21,13 +20,15 @@ namespace lwlog::details
 		{
 			LWLOG_TIME_FUNC(time_point);
 			thread_id = LWLOG_THREAD_ID_FUNC();
+			process_id = LWLOG_PROCESS_ID_FUNC();
 		}
 
 		std::string_view message;
 		std::string_view logger_name;
-		level level{};
+		level level;
 		LWLOG_TIME_TYPE time_point{};
 		LWLOG_THREAD_ID_TYPE thread_id{};
+		LWLOG_PROCESS_ID_TYPE process_id{};
 		source_meta meta;
 	};
 }

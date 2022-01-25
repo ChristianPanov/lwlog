@@ -22,3 +22,11 @@ datetime::init_time_point(time_point)
 #define LWLOG_THREAD_ID_TYPE void*
 #define LWLOG_THREAD_ID_FUNC(...) nullptr
 #endif
+
+#if LWLOG_USE_PROCESS_ID == 1
+#define LWLOG_PROCESS_ID_TYPE std::size_t
+#define LWLOG_PROCESS_ID_FUNC(...) os::process_id()
+#else
+#define LWLOG_PROCESS_ID_TYPE void*
+#define LWLOG_PROCESS_ID_FUNC(...) nullptr
+#endif

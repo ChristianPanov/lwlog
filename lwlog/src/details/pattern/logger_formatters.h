@@ -54,6 +54,18 @@ namespace lwlog::details
 		}
 	};
 
+	struct process_id_formatter : public formatter
+	{
+		void format(std::string& pattern, const log_message& log_msg) override
+		{
+			formatter::format_attribute(
+				pattern,
+				flag::process_id,
+				log_msg.process_id
+			);
+		}
+	};
+
 	struct line_formatter : public formatter
 	{
 		void format(std::string& pattern, const log_message& log_msg) override
