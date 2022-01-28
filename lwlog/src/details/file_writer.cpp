@@ -11,7 +11,7 @@ namespace lwlog::details
 		}
 
 		m_file = std::fopen(m_path.string().data(), "a");
-		std::setvbuf(m_file, NULL, _IOFBF, 8388608);
+		std::setvbuf(m_file, nullptr, _IOFBF, 8388608);
 	}
 
 	file_writer::~file_writer()

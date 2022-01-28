@@ -15,7 +15,7 @@ namespace lwlog::details
 	inline stream_writer::stream_writer(std::FILE* stream)
 		: m_stream{ stream }
 	{
-		std::setvbuf(m_stream, NULL, _IOFBF, 4194304);
+		std::setvbuf(m_stream, nullptr, _IOFBF, 4194304);
 	}
 
 	inline void stream_writer::write(std::string_view message)
