@@ -59,13 +59,10 @@ namespace lwlog::details
 		{
 		case alignment_specification::align_side::left:
 			return align_left(to_align, width, fill_char);
-			break;
 		case alignment_specification::align_side::right:
 			return align_right(to_align, width, fill_char);
-			break;
 		case alignment_specification::align_side::center:
 			return align_center(to_align, width, fill_char);
-			break;
 		}
 	}
 

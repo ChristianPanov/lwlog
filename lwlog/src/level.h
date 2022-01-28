@@ -44,11 +44,11 @@ namespace lwlog::level_details
 	{
 		switch (t_level)
 		{
-		case level::info:		return "info";		break;
-		case level::warning:	return "warning";	break;
-		case level::error:		return "error";		break;
-		case level::critical:	return "critical";	break;
-		case level::debug:		return "debug";		break;
+		case level::info:		return "info";
+		case level::warning:	return "warning";
+		case level::error:		return "error";
+		case level::critical:	return "critical";
+		case level::debug:		return "debug";
 		}
 	}
 
@@ -56,11 +56,11 @@ namespace lwlog::level_details
 	{
 		switch (t_level)
 		{
-		case level::info:		return "\u001b[30;1m";  break;
-		case level::warning:	return "\u001b[33;1m";  break;
-		case level::error:		return "\u001b[31;1m";  break;
-		case level::critical:	return "\u001b[41;1m";  break;
-		case level::debug:		return "\u001b[37;1m";  break;
+		case level::info:		return "\u001b[30;1m";
+		case level::warning:	return "\u001b[33;1m";
+		case level::error:		return "\u001b[31;1m";
+		case level::critical:	return "\u001b[41;1m";
+		case level::debug:		return "\u001b[37;1m";
 		}
 	}
 }
