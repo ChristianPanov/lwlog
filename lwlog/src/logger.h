@@ -8,7 +8,7 @@ namespace lwlog
 {
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename ThreadingPolicy, template<typename> typename... Sinks>
-	class logger : public interface::logger, private LogPolicy, private Sinks<ThreadingPolicy>...
+	class logger : public interface::logger
 	{
 	private:
 		using Storage = typename StoragePolicy<Sinks<ThreadingPolicy>...>::storage_t;

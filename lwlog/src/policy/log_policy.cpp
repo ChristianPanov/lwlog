@@ -2,6 +2,8 @@
 
 namespace lwlog
 {
+	std::vector<deferred_log_policy::log_info> deferred_log_policy::m_storage;
+
 	void forward_log_policy::log(sink_ptr sink, const details::log_message& log_msg)
 	{
 		sink->sink_it(log_msg);

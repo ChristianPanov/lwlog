@@ -1,5 +1,7 @@
 #pragma once
 
+#include "details/pattern/attribute.h"
+
 namespace lwlog::interface
 {
 	class logger
@@ -11,6 +13,7 @@ namespace lwlog::interface
 		virtual void sink_logs() = 0;
 
 		virtual void set_pattern(std::string_view) = 0;
+		virtual void add_attribute(details::flag_pair, details::attrib_value) = 0;
 		virtual void set_level_filter(level) = 0;
 
 		virtual void info(std::string_view, details::source_meta) = 0;
