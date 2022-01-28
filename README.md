@@ -151,7 +151,7 @@ int main()
 }
 ```
 ## Convenience logger aliases
-In the file ***lwlog.h*** you can see several convenience aliases at your disposal.\
+In the file [***lwlog.h***](https://github.com/ChristianPanov/lwlog/blob/master/lwlog/src/lwlog.h) you can see several convenience aliases at your disposal.\
 They are intended for ease of use, so I encourage you to use them instead of the more complex way of creating loggers directly through the logger class.\
 They are predefined with default configurations, so unless you need more special functionality, stick to using them.
 Alias | Description
@@ -547,7 +547,7 @@ int main()
 ```
 ## Switching off logging
 If you want to be able to turn off logging completely, you can use the preprocessor directives.
-These directives use the default logger and are present in the ***lwlog.h*** file.\
+These directives use the default logger and are present in the [***lwlog.h***](https://github.com/ChristianPanov/lwlog/blob/master/lwlog/src/lwlog.h) file.\
 They will log unless you disable logging with ```LWLOG_DISABLE```(should always be at the very top of the file), or you switch off a specific logging level.\
 Levels can be switched off at runtime as well, just by using the ```LWLOG_SET_LEVEL_FILTER``` directive.\
 If logging is disabled, the directives expand to nothing.
@@ -566,6 +566,15 @@ int main()
 }
 ```
 **WARNING:** _See [Issue #18](https://github.com/ChristianPanov/lwlog/issues/18); Do not use the default logger until the issue is resolved, use a manually created one._
+# Tweakme
+The [***tweakme.h***](https://github.com/ChristianPanov/lwlog/blob/master/lwlog/src/tweakme.h) file contains macros which serve the purpose of configurations.\
+Depending on your needs, you can switch on and off certain features. Switching them off will completely remove them from the ***lwlog*** code which will increase performance and reduce overhead, because you shouldn't pay for what you don't need.
+Macro | Off(0) - Default | On(1)
+------------ | ------------- | -------------
+```LWLOG_NO_TIME``` | Decreased performance. Has overhead of retrieving the system time and saving it in memory | Heavily increased performance. No overhead. Time flags will result into nothing
+```LWLOG_USE_LOCALTIME``` | Time flags will result into local time | Time flags will result into UTC(GMT) time
+```LWLOG_USE_THREAD_ID``` | Slightly increased performance. No overhead. ```{thread}``` or ```%t``` will result into nothing | Slightly decreased performance. Has overhead of retrieving the current thread id(tid) and saving it in memory
+```LWLOG_USE_PROCESS_ID``` | Slightly increased performance. No overhead. ```{process}``` or  ```%P``` will result into nothing | Slightly decreased performance. Has overhead of retrieving the current process id(pid) and saving it in memory
 # Performance
 So how does lwlog achieve this performance? In the following section, I will break down all the performance-enhancing decisions that I've made.
 ### Formatting pattern
