@@ -63,35 +63,35 @@ lwlog::set_level_filter(level)
 #define LWLOG_SET_LEVEL_FILTER
 #endif
 
-#ifndef LWLOG_DISABLE && LWLOG_INFO_OFF
+#if !defined(LWLOG_DISABLE) && !defined(LWLOG_INFO_OFF)
 #define LWLOG_INFO(...)	\
 lwlog::info(__VA_ARGS__)
 #else
 #define LWLOG_INFO
 #endif
 
-#ifndef LWLOG_DISABLE && LWLOG_WARNING_OFF
+#if !defined(LWLOG_DISABLE) && !defined(LWLOG_WARNING_OFF)
 #define LWLOG_WARNING(...) \
 lwlog::warning(__VA_ARGS__)
 #else
 #define LWLOG_WARNING
 #endif
 
-#ifndef LWLOG_DISABLE && LWLOG_ERROR_OFF
+#if !defined(LWLOG_DISABLE) && !defined(LWLOG_ERROR_OFF)
 #define LWLOG_ERROR(...) \
 lwlog::error(__VA_ARGS__)
 #else
 #define LWLOG_ERROR
 #endif
 
-#ifndef LWLOG_DISABLE && LWLOG_CRITICAL_OFF
+#if !defined(LWLOG_DISABLE) && !defined(LWLOG_CRITICAL_OFF)
 #define LWLOG_CRITICAL(...) \
 lwlog::critical(__VA_ARGS__)
 #else
 #define LWLOG_CRITICAL
 #endif
 
-#ifndef LWLOG_DISABLE && LWLOG_DEBUG_OFF
+#if !defined(LWLOG_DISABLE) && !defined(LWLOG_DEBUG_OFF)
 #define LWLOG_DEBUG(...) \
 lwlog::debug(__VA_ARGS__)
 #else
