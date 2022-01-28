@@ -23,7 +23,7 @@ namespace lwlog
 	{
 		if (m_automatic_registry && !logger->name().empty())
 		{
-			m_loggers[logger->name()] = std::move(logger);
+			m_loggers[logger->name()] = logger;
 		}
 	}
 

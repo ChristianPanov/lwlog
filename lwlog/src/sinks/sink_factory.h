@@ -15,11 +15,11 @@ namespace lwlog::sinks
 	[[nodiscard("This method is supposed to be initialized to a sink object")]]
 	constexpr sink_ptr sink_factory<Sink>::request(SinkParams&&... params)
 	{
-		if constexpr (std::is_constructible<Sink, SinkParams...>::value)
+		if constexpr (std::is_constructible_v<Sink, SinkParams...>)
 		{
 			return std::make_shared<Sink>(std::forward<SinkParams>(params)...);
 		}
-		else if constexpr (std::is_default_constructible<Sink>::value)
+		else if constexpr (std::is_default_constructible_v<Sink>)
 		{
 			return std::make_shared<Sink>();
 		}

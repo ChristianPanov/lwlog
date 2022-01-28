@@ -17,9 +17,9 @@ namespace lwlog::details
 		enum class align_side { left, center, right };
 		explicit alignment_specification(std::string str);
 
-		char fill_char{};
-		align_side side{};
-		std::uint8_t width{};
+		char fill_char;
+		align_side side;
+		std::uint8_t width;
 		std::string to_align;
 		std::string flag;
 	};

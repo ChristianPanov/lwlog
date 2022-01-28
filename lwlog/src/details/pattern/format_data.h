@@ -5,7 +5,7 @@
 
 namespace lwlog::details
 {
-	std::unordered_map<std::string_view, std::shared_ptr<formatter>> verbose_logger_data
+	static std::unordered_map<std::string_view, std::shared_ptr<formatter>> verbose_logger_data
 	{
 		{flag::logger_name.verbose,		std::make_shared<logger_name_formatter>()},
 		{flag::level.verbose,			std::make_shared<level_formatter>()},
@@ -17,7 +17,7 @@ namespace lwlog::details
 		{flag::function.verbose,		std::make_shared<function_formatter>()}
 	};
 
-	std::unordered_map<std::string_view, std::shared_ptr<formatter>> shortened_logger_data
+	static std::unordered_map<std::string_view, std::shared_ptr<formatter>> shortened_logger_data
 	{
 		{flag::logger_name.shortened,	std::make_shared<logger_name_formatter>()},
 		{flag::level.shortened,			std::make_shared<level_formatter>()},
@@ -29,7 +29,7 @@ namespace lwlog::details
 		{flag::function.shortened,		std::make_shared<function_formatter>()}
 	};
 
-	std::unordered_map<std::string_view, std::shared_ptr<formatter>> verbose_datetime_data
+	static std::unordered_map<std::string_view, std::shared_ptr<formatter>> verbose_datetime_data
 	{
 		{flag::date.verbose,				std::make_shared<date_formatter>()},
 		{flag::date_short.verbose,			std::make_shared<date_short_formatter>()},
@@ -51,7 +51,7 @@ namespace lwlog::details
 		{flag::second.verbose,				std::make_shared<second_formatter>()}
 	};
 
-	std::unordered_map<std::string_view, std::shared_ptr<formatter>> shortened_datetime_data
+	static std::unordered_map<std::string_view, std::shared_ptr<formatter>> shortened_datetime_data
 	{
 		{flag::date.shortened,				std::make_shared<date_formatter>()},
 		{flag::date_short.shortened,		std::make_shared<date_short_formatter>()},

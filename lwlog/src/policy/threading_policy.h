@@ -6,8 +6,8 @@ namespace lwlog
 {
 	struct null_mutex 
 	{
-		void lock() {}
-		void unlock() {}
+		static void lock() {}
+		static void unlock() {}
 	};
 
 	template<typename Mutex>

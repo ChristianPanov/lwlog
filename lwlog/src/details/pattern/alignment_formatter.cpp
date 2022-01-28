@@ -5,6 +5,7 @@ namespace lwlog::details
 	alignment_specification::alignment_specification(std::string str)
 		: fill_char{ ' ' }
 		, side{ align_side::left }
+		, width{ 0 }
 	{
 		const bool has_fill_char = !std::isdigit(str[2]) ? true : false;
 		const std::uint8_t flag_length = has_fill_char ? 3 : 2;
@@ -23,7 +24,7 @@ namespace lwlog::details
 		{
 			if (std::isdigit(c)) width_str += c;
 		}
-		width = std::stoi(width_str);
+		width = static_cast<std::uint8_t>(std::stoi(width_str));
 		flag += width_str;
 
 		for (const auto& c : str)

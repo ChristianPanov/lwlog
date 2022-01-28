@@ -9,7 +9,7 @@ namespace lwlog
 {
 	class registry
 	{
-	private:
+	public:
 		registry() = default;
 		registry(const registry&) = delete;
 		registry(registry&&) = delete;
