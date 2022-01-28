@@ -44,36 +44,36 @@ namespace lwlog
 
 	void set_pattern(std::string_view pattern)
 	{
-		registry::instance().default_logger()->set_pattern(pattern);
+		registry::default_logger()->set_pattern(pattern);
 	}
 
 	void set_level_filter(level t_level)
 	{
-		registry::instance().default_logger()->set_level_filter(t_level);
+		registry::default_logger()->set_level_filter(t_level);
 	}
 
 	void info(std::string_view message, details::source_meta meta)
 	{
-		registry::instance().default_logger()->info(message, meta);
+		registry::default_logger()->info(message, meta);
 	}
 
 	void warning(std::string_view message, details::source_meta meta)
 	{
-		registry::instance().default_logger()->warning(message, meta);
+		registry::default_logger()->warning(message, meta);
 	}
 
 	void error(std::string_view message, details::source_meta meta)
 	{
-		registry::instance().default_logger()->error(message, meta);
+		registry::default_logger()->error(message, meta);
 	}
 
 	void critical(std::string_view message, details::source_meta meta)
 	{
-		registry::instance().default_logger()->critical(message, meta);
+		registry::default_logger()->critical(message, meta);
 	}
 
 	void debug(std::string_view message, details::source_meta meta)
 	{
-		registry::instance().default_logger()->debug(message, meta);
+		registry::default_logger()->debug(message, meta);
 	}
 }
