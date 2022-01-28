@@ -6,8 +6,8 @@ namespace lwlog::details
 		: fill_char{ ' ' }
 		, side{ align_side::left }
 	{
-		bool has_fill_char = !std::isdigit(str[2]) ? true : false;
-		std::uint8_t flag_length = has_fill_char ? 3 : 2;
+		const bool has_fill_char = !std::isdigit(str[2]) ? true : false;
+		const std::uint8_t flag_length = has_fill_char ? 3 : 2;
 		flag = str.substr(0, flag_length);
 		if (has_fill_char) fill_char = flag[2];
 
@@ -34,7 +34,7 @@ namespace lwlog::details
 			}
 			else if (c == '{')
 			{
-				std::size_t found = str.find(c);
+				const std::size_t found = str.find(c);
 				to_align = str.substr(found, str.find('}') - found + 1);
 			}
 		}
@@ -42,8 +42,8 @@ namespace lwlog::details
 
 	void alignment_formatter::format(std::string& pattern, const alignment_specification& spec)
 	{
-		std::size_t flag_pos = pattern.find(spec.flag);
-		std::string to_align_formatted = pattern.substr(flag_pos + spec.flag.size(),
+		const std::size_t flag_pos = pattern.find(spec.flag);
+		const std::string to_align_formatted = pattern.substr(flag_pos + spec.flag.size(),
 			pattern.find(alignment_flag::end) - flag_pos - spec.flag.size());
 
 		pattern.replace(pattern.find(spec.flag), spec.flag.size(), "");
@@ -83,9 +83,9 @@ namespace lwlog::details
 		if (width <= to_align.size()) return to_align;
 		else
 		{
-			auto alignment_width = width - to_align.size();
-			auto left_width = alignment_width / 2;
-			auto right_width = alignment_width % 2 ? left_width + 1 : left_width;
+			const auto alignment_width = width - to_align.size();
+			const auto left_width = alignment_width / 2;
+			const auto right_width = alignment_width % 2 ? left_width + 1 : left_width;
 
 			return std::string(left_width, fill_char) + to_align + std::string(right_width, fill_char);
 		}

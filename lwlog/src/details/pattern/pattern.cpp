@@ -25,7 +25,7 @@ namespace lwlog::details
 		std::size_t start_pos{ 0 };
 		while ((start_pos = m_pattern.find(alignment_flag::left, start_pos)) != std::string::npos)
 		{
-			std::size_t flag_pos = m_pattern.find(alignment_flag::left, start_pos);
+			const std::size_t flag_pos = m_pattern.find(alignment_flag::left, start_pos);
 			m_alignment_specs.emplace_back(
 				m_pattern.substr(flag_pos, m_pattern.find(' ', flag_pos) - flag_pos)
 			);
@@ -40,7 +40,7 @@ namespace lwlog::details
 		start_pos = 0;
 		while ((start_pos = m_pattern.find(alignment_flag::right, start_pos)) != std::string::npos)
 		{
-			std::size_t flag_pos = m_pattern.find(alignment_flag::right, start_pos);
+			const std::size_t flag_pos = m_pattern.find(alignment_flag::right, start_pos);
 			m_alignment_specs.emplace_back(
 				m_pattern.substr(flag_pos, m_pattern.find(' ', flag_pos) - flag_pos)
 			);
@@ -55,7 +55,7 @@ namespace lwlog::details
 		start_pos = 0;
 		while ((start_pos = m_pattern.find(alignment_flag::center, start_pos)) != std::string::npos)
 		{
-			std::size_t flag_pos = m_pattern.find(alignment_flag::center, start_pos);
+			const std::size_t flag_pos = m_pattern.find(alignment_flag::center, start_pos);
 			m_alignment_specs.emplace_back(
 				m_pattern.substr(flag_pos, m_pattern.find(' ', flag_pos) - flag_pos)
 			);
@@ -70,8 +70,8 @@ namespace lwlog::details
 
 	void pattern::request_flag_formatters()
 	{
-		auto verbose_flags = this->parse_verbose_flags();
-		auto short_flags = this->parse_short_flags();
+		const auto verbose_flags = this->parse_verbose_flags();
+		const auto short_flags = this->parse_short_flags();
 
 		for (const auto& flag : verbose_flags)
 			if (verbose_logger_data[flag])
