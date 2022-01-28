@@ -11,24 +11,24 @@ namespace lwlog::details
 	{
 		log_message() = default;
 		log_message(std::string_view message,
-			std::string_view logger_name, level level,
+			std::string_view logger_name, level t_level,
 			const source_meta& meta)
 			: message{ message }
 			, logger_name{ logger_name }
-			, level{ level }
+			, level{ t_level }
+			, thread_id{ LWLOG_THREAD_ID_FUNC() }
+			, process_id{ LWLOG_PROCESS_ID_FUNC() }
 			, meta{ meta }
 		{
 			LWLOG_TIME_FUNC(time_point);
-			thread_id = LWLOG_THREAD_ID_FUNC();
-			process_id = LWLOG_PROCESS_ID_FUNC();
 		}
 
 		std::string_view message;
 		std::string_view logger_name;
 		level level;
 		LWLOG_TIME_TYPE time_point{};
-		LWLOG_THREAD_ID_TYPE thread_id{};
-		LWLOG_PROCESS_ID_TYPE process_id{};
+		LWLOG_THREAD_ID_TYPE thread_id;
+		LWLOG_PROCESS_ID_TYPE process_id;
 		source_meta meta;
 	};
 }
