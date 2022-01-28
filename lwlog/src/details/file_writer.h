@@ -12,7 +12,7 @@ namespace lwlog::details
 		virtual ~file_writer();
 
 	public:
-		void write(std::string_view message);
+		void write(std::string_view message) const;
 		std::FILE* handle() const;
 		std::filesystem::path& filesystem_path();
 

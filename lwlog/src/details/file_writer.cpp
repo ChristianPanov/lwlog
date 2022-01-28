@@ -23,7 +23,7 @@ namespace lwlog::details
 		}
 	}
 
-	void file_writer::write(std::string_view message)
+	void file_writer::write(std::string_view message) const
 	{
 		if (m_file != nullptr)
 		{

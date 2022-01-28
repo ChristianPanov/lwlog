@@ -6,7 +6,7 @@ namespace lwlog::details
 	{
 	public:
 		explicit stream_writer(std::FILE* stream);
-		void write(std::string_view message);
+		void write(std::string_view message) const;
 
 	private:
 		std::FILE* m_stream;
@@ -18,7 +18,7 @@ namespace lwlog::details
 		std::setvbuf(m_stream, nullptr, _IOFBF, 4194304);
 	}
 
-	inline void stream_writer::write(std::string_view message)
+	inline void stream_writer::write(std::string_view message) const
 	{
 		std::fwrite(message.data(), message.size(), 1, m_stream);
 		std::fwrite("\n", 1, 1, m_stream);

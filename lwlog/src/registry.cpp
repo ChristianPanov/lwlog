@@ -50,7 +50,7 @@ namespace lwlog
 		}
 	}
 
-	bool registry::is_registry_automatic()
+	bool registry::is_registry_automatic() const
 	{
 		return m_automatic_registry;
 	}
