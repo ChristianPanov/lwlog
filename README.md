@@ -151,7 +151,7 @@ int main()
 }
 ```
 ## Convenience logger aliases
-In the file ***lwlog.h*** you can see several convenience aliases at your disposal.\
+In the file [***lwlog.h***](https://github.com/ChristianPanov/lwlog/blob/master/lwlog/src/lwlog.h) you can see several convenience aliases at your disposal.\
 They are intended for ease of use, so I encourage you to use them instead of the more complex way of creating loggers directly through the logger class.\
 They are predefined with default configurations, so unless you need more special functionality, stick to using them.
 Alias | Description
@@ -424,7 +424,7 @@ int main()
 }
 ```
 ## Creating your own sink
-As already mentioned, lwlog is extremely easy to extend. Let's give an example with sinks.\
+As already mentioned, ***lwlog*** is extremely easy to extend. Let's give an example with sinks.\
 To create your own sink, all you have to do is inherit from ```lwlog::sinks::sink``` and implement a ```sink_it()``` function, which takes a ```const details::log_message&```  as a parameter. That's it.
 #### Example with an existing sink implementation
 ```cpp
@@ -435,6 +435,7 @@ namespace lwlog::sinks
 		: public sink<colored_policy, ThreadingPolicy>
 		, public details::stream_writer
 	{
+		using sink_t = sink<colored_policy, ThreadingPolicy>;
 	public:
 		stdout_sink();
 		void sink_it(const details::log_message& log_msg) override;
@@ -448,7 +449,7 @@ namespace lwlog::sinks
 	template<typename ThreadingPolicy>
 	void stdout_sink<ThreadingPolicy>::sink_it(const details::log_message& log_msg)
 	{
-		details::stream_writer::write(m_pattern.compile(log_msg));
+		details::stream_writer::write(sink_t::m_pattern.compile(log_msg));
 	}
 }
 ```
@@ -457,7 +458,7 @@ The color policy could be either colored(```lwlog::colored_policy```) or non-col
 The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them. Using ```lwlog::colored_policy``` is most suitable for console sinks, since it relies on console-specific color codes.\
 We only need the ```sink_it()``` function. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.\
 As mentioned in [Logical Architecture](https://github.com/ChristianPanov/lwlog#logical-architecture), you can either use some kind of a writer class, which handles the actual writing, or you can directly handle the writing in the function.\
-The compiled and formatted message is received with ```m_pattern.compile(log_msg)```. We access the pattern member from the sink base class and then compile it with the log message.
+The compiled and formatted message is received with ```sink_t::m_pattern.compile(log_msg)```. We access the pattern member from the sink base class and then compile it with the log message.
 #### Example
 ```cpp
 #include "sink.h"
@@ -469,6 +470,7 @@ namespace lwlog::sinks
 	class new_custom_sink
 		: public sink<colored_policy, ThreadingPolicy>
 	{
+		using sink_t = sink<colored_policy, ThreadingPolicy>;
 	public:
 		void sink_it(const details::log_message& log_msg) override
 		{
@@ -545,7 +547,7 @@ int main()
 ```
 ## Switching off logging
 If you want to be able to turn off logging completely, you can use the preprocessor directives.
-These directives use the default logger and are present in the ***lwlog.h*** file.\
+These directives use the default logger and are present in the [***lwlog.h***](https://github.com/ChristianPanov/lwlog/blob/master/lwlog/src/lwlog.h) file.\
 They will log unless you disable logging with ```LWLOG_DISABLE```(should always be at the very top of the file), or you switch off a specific logging level.\
 Levels can be switched off at runtime as well, just by using the ```LWLOG_SET_LEVEL_FILTER``` directive.\
 If logging is disabled, the directives expand to nothing.
@@ -564,6 +566,15 @@ int main()
 }
 ```
 **WARNING:** _See [Issue #18](https://github.com/ChristianPanov/lwlog/issues/18); Do not use the default logger until the issue is resolved, use a manually created one._
+# Tweakme
+The [***tweakme.h***](https://github.com/ChristianPanov/lwlog/blob/master/lwlog/src/tweakme.h) file contains macros which serve the purpose of configurations.\
+Depending on your needs, you can switch on and off certain features. Switching them off will completely remove them from the ***lwlog*** code which will increase performance and reduce overhead, because you shouldn't pay for what you don't need.
+Macro | Off(0) - Default | On(1)
+------------ | ------------- | -------------
+```LWLOG_NO_TIME``` | Decreased performance. Has overhead of retrieving the system time and saving it in memory | Heavily increased performance. No overhead. Time flags will result into nothing
+```LWLOG_USE_LOCALTIME``` | Time flags will result into local time | Time flags will result into UTC(GMT) time
+```LWLOG_USE_THREAD_ID``` | Slightly increased performance. No overhead. ```{thread}``` or ```%t``` will result into nothing | Slightly decreased performance. Has overhead of retrieving the current thread id(tid) and saving it in memory
+```LWLOG_USE_PROCESS_ID``` | Slightly increased performance. No overhead. ```{process}``` or  ```%P``` will result into nothing | Slightly decreased performance. Has overhead of retrieving the current process id(pid) and saving it in memory
 # Performance
 So how does lwlog achieve this performance? In the following section, I will break down all the performance-enhancing decisions that I've made.
 ### Formatting pattern
