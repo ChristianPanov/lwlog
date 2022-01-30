@@ -2,6 +2,8 @@
 
 #include <type_traits>
 
+#include "tweakme.h"
+
 namespace lwlog
 {
 	enum class level : std::uint8_t
