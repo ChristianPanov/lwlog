@@ -2,6 +2,8 @@
 
 #include <type_traits>
 
+#include "tweakme.h"
+
 namespace lwlog
 {
 	enum class level : std::uint8_t
@@ -44,11 +46,11 @@ namespace lwlog::level_details
 	{
 		switch (t_level)
 		{
-		case level::info:		return "info";
-		case level::warning:	return "warning";
-		case level::error:		return "error";
-		case level::critical:	return "critical";
-		case level::debug:		return "debug";
+		case level::info:		return LWLOG_INFO_STR;
+		case level::warning:	return LWLOG_WARNING_STR;
+		case level::error:		return LWLOG_ERROR_STR;
+		case level::critical:	return LWLOG_CRITICAL_STR;
+		case level::debug:		return LWLOG_DEBUG_STR;
 		}
 	}
 
@@ -56,11 +58,11 @@ namespace lwlog::level_details
 	{
 		switch (t_level)
 		{
-		case level::info:		return "\u001b[30;1m";
-		case level::warning:	return "\u001b[33;1m";
-		case level::error:		return "\u001b[31;1m";
-		case level::critical:	return "\u001b[41;1m";
-		case level::debug:		return "\u001b[37;1m";
+		case level::info:		return LWLOG_INFO_COLOR;
+		case level::warning:	return LWLOG_WARNING_COLOR;
+		case level::error:		return LWLOG_ERROR_COLOR;
+		case level::critical:	return LWLOG_CRITICAL_COLOR;
+		case level::debug:		return LWLOG_DEBUG_COLOR;
 		}
 	}
 }
