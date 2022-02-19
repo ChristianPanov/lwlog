@@ -36,11 +36,9 @@ namespace lwlog::details
 		template<typename T>
 		std::string operator()(T arg)
 		{
-			using type = typename T::type;
-			if constexpr (std::is_arithmetic_v<type>)
-				return std::to_string(std::forward<type>(arg));
-			else
-				return arg;
+			if constexpr (std::is_arithmetic_v<T::type>)
+				return std::to_string(std::forward<T::type>(arg));
+			else return arg;
 		}
 	};
 }
