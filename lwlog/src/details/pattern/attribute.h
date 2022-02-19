@@ -38,7 +38,8 @@ namespace lwlog::details
 		{
 			if constexpr (std::is_arithmetic_v<T::type>)
 				return std::to_string(std::forward<T::type>(arg));
-			else return arg;
+			else 
+				return arg;
 		}
 	};
 }
