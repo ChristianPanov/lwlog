@@ -576,7 +576,7 @@ Macro | Off(0) - Default | On(1)
 ```LWLOG_USE_THREAD_ID``` | Slightly increased performance. No overhead. ```{thread}``` or ```%t``` will result into nothing | Slightly decreased performance. Has overhead of retrieving the current thread id(tid) and saving it in memory
 ```LWLOG_USE_PROCESS_ID``` | Slightly increased performance. No overhead. ```{process}``` or  ```%P``` will result into nothing | Slightly decreased performance. Has overhead of retrieving the current process id(pid) and saving it in memory
 # Performance
-So how does lwlog achieve this performance? In the following section, I will break down all the performance-enhancing decisions that I've made.
+So how does ***lwlog*** achieve this performance? In the following section, I will break down all the performance-enhancing decisions that I've made.
 ### Formatting pattern
 Formatting is usually the bottleneck in logging solutions and for that reason, it's usually handled on a background thread so it doesn't impede performance.\
 However, because of ***lwlog***'s synchronous nature, we cannot take that route, and thus cannot take any liberties in how the compilation process of the pattern is done.\
