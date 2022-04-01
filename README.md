@@ -36,6 +36,7 @@ people who want simplicity without too much configuration. Most of the time you 
 - [Custom attributes](https://github.com/ChristianPanov/lwlog#custom-attributes)
 - Global logger registry
 # TODO (Temporary section)
+- Binary logging
 - Coloring based on log level
 - Proper CMake to replace the Premake which is currently used
 - Cross-platform colors
