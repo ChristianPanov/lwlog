@@ -37,10 +37,10 @@ namespace lwlog::details::datetime
         auto offset_epoch = std::localtime(new std::time_t(0));
         return offset_epoch->tm_hour;
     }
-    static std::uint16_t g_cached_timezone_offset = timezone_offset();
+    static const std::uint16_t g_cached_timezone_offset = timezone_offset();
 #else
     static std::uint16_t timezone_offset() { return 0; }
-    static std::uint16_t g_cached_timezone_offset = timezone_offset();
+    static const std::uint16_t g_cached_timezone_offset = timezone_offset();
 #endif
 #else
 #if LWLOG_USE_LOCALTIME == 1

@@ -13,11 +13,11 @@ namespace lwlog::details
 	class pattern
 	{
 	public:
-		std::string compile(const log_message& log_msg);
+		std::string compile(const log_message& log_msg) const;
 		void parse_alignment_specs();
 		void request_flag_formatters();
 		void set_pattern(std::string_view pattern);
-		void add_attribute(flag_pair flags, attrib_value value);
+		void add_attribute(const flag_pair& flags, attrib_value value);
 		std::string& data();
 
 	public:
@@ -25,8 +25,8 @@ namespace lwlog::details
 		static void drop_color_flags(std::string& pattern);
 
 	private:
-		std::vector<std::string> parse_verbose_flags();
-		std::vector<std::string> parse_short_flags();
+		std::vector<std::string> parse_verbose_flags() const;
+		std::vector<std::string> parse_short_flags() const;
 
 	private:
 		std::string m_pattern;

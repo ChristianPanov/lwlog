@@ -4,7 +4,7 @@
 
 namespace lwlog::details
 {
-	std::string pattern::compile(const log_message& log_msg)
+	std::string pattern::compile(const log_message& log_msg) const
 	{
 		std::string compiled = m_pattern;
 		for (const auto& formatter : m_formatters)
@@ -95,7 +95,7 @@ namespace lwlog::details
 		m_pattern = pattern;
 	}
 
-	void pattern::add_attribute(flag_pair flags, attrib_value value)
+	void pattern::add_attribute(const flag_pair& flags, attrib_value value)
 	{
 		m_custom_attributes.insert_or_assign(flags, value);
 	}
@@ -131,27 +131,27 @@ namespace lwlog::details
 		}
 	}
 
-	std::vector<std::string> pattern::parse_verbose_flags()
+	std::vector<std::string> pattern::parse_verbose_flags() const
 	{
-		std::vector<std::string> buff;
+		std::vector<std::string> temp;
 		std::size_t pos = m_pattern.find('{', 0);
 		while (pos != std::string::npos)
 		{
-			buff.emplace_back(m_pattern.substr(pos, m_pattern.find('}', pos) - pos + 1));
+			temp.emplace_back(m_pattern.substr(pos, m_pattern.find('}', pos) - pos + 1));
 			pos = m_pattern.find('{', pos + 1);
 		}
-		return buff;
+		return temp;
 	}
 
-	std::vector<std::string> pattern::parse_short_flags()
+	std::vector<std::string> pattern::parse_short_flags() const
 	{
-		std::vector<std::string> buff;
+		std::vector<std::string> temp;
 		std::size_t pos = m_pattern.find('%', 0);
 		while (pos != std::string::npos)
 		{
-			buff.emplace_back(m_pattern.substr(pos, 2));
+			temp.emplace_back(m_pattern.substr(pos, 2));
 			pos = m_pattern.find('%', pos + 1);
 		}
-		return buff;
+		return temp;
 	}
 }

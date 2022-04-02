@@ -42,7 +42,7 @@ namespace lwlog
 		m_loggers.clear();
 	}
 
-	void registry::apply_to_all(const std::function<void(logger_ptr)>& function)
+	void registry::apply_to_all(const std::function<void(logger_ptr)>& function) const
 	{
 		for (const auto& [name, logger] : m_loggers)
 		{

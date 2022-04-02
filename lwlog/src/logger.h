@@ -29,7 +29,7 @@ namespace lwlog
 		void sink_logs() override;
 
 		void set_pattern(std::string_view pattern) override;
-		void add_attribute(details::flag_pair flags, details::attrib_value value) override;
+		void add_attribute(const details::flag_pair& flags, details::attrib_value value) override;
 		void set_level_filter(level t_level) override;
 
 		void info(std::string_view message, details::source_meta meta = details::source_meta::current()) override;

@@ -8,7 +8,7 @@ namespace lwlog::details
 {
 	struct logger_name_formatter : public formatter
 	{
-		void format(std::string& pattern, const log_message& log_msg) override
+		void format(std::string& pattern, const log_message& log_msg) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -20,7 +20,7 @@ namespace lwlog::details
 
 	struct level_formatter : public formatter
 	{
-		void format(std::string& pattern, const log_message& log_msg) override
+		void format(std::string& pattern, const log_message& log_msg) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -32,7 +32,7 @@ namespace lwlog::details
 
 	struct message_formatter : public formatter
 	{
-		void format(std::string& pattern, const log_message& log_msg) override
+		void format(std::string& pattern, const log_message& log_msg) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -44,7 +44,7 @@ namespace lwlog::details
 
 	struct thread_id_formatter : public formatter
 	{
-		void format(std::string& pattern, const log_message& log_msg) override
+		void format(std::string& pattern, const log_message& log_msg) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -56,7 +56,7 @@ namespace lwlog::details
 
 	struct process_id_formatter : public formatter
 	{
-		void format(std::string& pattern, const log_message& log_msg) override
+		void format(std::string& pattern, const log_message& log_msg) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -68,7 +68,7 @@ namespace lwlog::details
 
 	struct line_formatter : public formatter
 	{
-		void format(std::string& pattern, const log_message& log_msg) override
+		void format(std::string& pattern, const log_message& log_msg) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -80,7 +80,7 @@ namespace lwlog::details
 
 	struct file_formatter : public formatter
 	{
-		void format(std::string& pattern, const log_message& log_msg) override
+		void format(std::string& pattern, const log_message& log_msg) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -92,7 +92,7 @@ namespace lwlog::details
 
 	struct function_formatter : public formatter
 	{
-		void format(std::string& pattern, const log_message& log_msg) override
+		void format(std::string& pattern, const log_message& log_msg) const override
 		{
 			formatter::format_attribute(
 				pattern,

@@ -5,10 +5,10 @@ namespace lwlog::details
 	struct formatter
 	{
 		virtual ~formatter() = default;
-		virtual void format(std::string&, const log_message&) = 0;
+		virtual void format(std::string&, const log_message&) const = 0;
 
 		template<typename T>
-		static void format_attribute(std::string& pattern, flag_pair flags, T value)
+		static void format_attribute(std::string& pattern, const flag_pair& flags, T value)
 		{
 			std::string_view str_value = [&]() {
 				if constexpr (std::is_arithmetic_v<T>)
@@ -28,6 +28,6 @@ namespace lwlog::details
 		}
 
 		template<>
-		static void format_attribute<void*>(std::string&, flag_pair, void*) {}
+		static void format_attribute<void*>(std::string&, const flag_pair&, void*) {}
 	};
 }
