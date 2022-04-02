@@ -16,7 +16,7 @@ namespace lwlog::details::os
 		#if defined(_WIN32)
 		return static_cast<std::size_t>(::GetCurrentThreadId());
 		#elif defined(__linux__)
-		return static_cast<std::size_t>(::syscall(__SYS_gettid));
+		return static_cast<std::size_t>(::syscall(SYS_gettid));
 		#elif defined(__APPLE__)
 		std::uint64_t tid;
 		::pthread_threadid_np(NULL, &tid);
