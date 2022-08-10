@@ -30,18 +30,18 @@ namespace lwlog::sinks
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
-	void sink<ColorPolicy, ThreadingPolicy>::set_level_filter(level level)
+	void sink<ColorPolicy, ThreadingPolicy>::set_level_filter(level level_filter)
 	{
 		Lock lock(m_mtx);
-		m_level = level;
+		m_level_filter = level_filter;
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
 	bool sink<ColorPolicy, ThreadingPolicy>::should_sink(level t_level) const
 	{
 		Lock lock(m_mtx);
-		if (level_details::has_level(m_level, t_level) || 
-			level_details::has_level(m_level, level::all))
+		if (level_details::has_level(m_level_filter, t_level) ||
+			level_details::has_level(m_level_filter, level::all))
 			return true;
 		return false;
 	}

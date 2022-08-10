@@ -22,14 +22,14 @@ namespace lwlog::sinks
 	public:
 		void set_pattern(std::string_view pattern) override;
 		void add_attribute(const details::flag_pair& flags, details::attrib_value value) override;
-		void set_level_filter(level level) override;
+		void set_level_filter(level level_filter) override;
 		bool should_sink(level t_level) const override;
 		details::pattern& pattern() override;
 
 	protected:
 		mutable Mutex m_mtx;
 		details::pattern m_pattern;
-		level m_level{ level::all };
+		level m_level_filter{ level::all };
 	};
 }
 
