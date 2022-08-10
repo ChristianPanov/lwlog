@@ -8,9 +8,11 @@ namespace lwlog::sinks
 	template<typename ThreadingPolicy>
 	class stderr_sink 
 		: public sink<colored_policy, ThreadingPolicy>
-		, public details::stream_writer
+		, private details::stream_writer
 	{
+	private:
 		using sink_t = sink<colored_policy, ThreadingPolicy>;
+
 	public:
 		stderr_sink();
 		void sink_it(const details::log_message& log_msg) override;

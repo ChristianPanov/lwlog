@@ -8,9 +8,11 @@ namespace lwlog::sinks
 	template<typename ThreadingPolicy>
 	class file_sink 
 		: public sink<uncolored_policy, ThreadingPolicy>
-		, public details::file_writer
+		, private details::file_writer
 	{
+	private:
 		using sink_t = sink<uncolored_policy, ThreadingPolicy>;
+
 	public:
 		file_sink() = default;
 		explicit file_sink(std::string_view path);
