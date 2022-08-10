@@ -13,8 +13,6 @@ int main()
 		>
 	>("CONSOLE");
 
-	auto c = std::make_shared<lwlog::sinks::stdout_sink<lwlog::single_threaded_policy>>();
-
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
 	console->set_pattern(".br_red([%T] [%n]) .green([%l]): .br_cyan(%v) TEXT");
 
