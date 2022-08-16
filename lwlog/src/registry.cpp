@@ -21,10 +21,7 @@ namespace lwlog
 
 	void registry::register_logger(logger_ptr logger)
 	{
-		if (m_is_registry_automatic && logger->name() != "DEFAULT")
-		{
-			m_loggers[logger->name()] = logger;
-		}
+		if (logger->name() != "DEFAULT") m_loggers[logger->name()] = logger;
 	}
 
 	void registry::set_automatic_registry(bool is_registry_automatic)
