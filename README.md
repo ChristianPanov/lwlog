@@ -127,7 +127,7 @@ Module | Description
 ```Writer``` | Abstraction which outputs the data to the destination. It is optional, because it is not actually needed, and there is no strict specification for what a writer should be
 ```Sink``` | An object which sends(sinks) data to an output destination. Usually, the data could be handled by a writer object, or you can directly handle the output in the ```sink_it()``` function, without using a writer. A sink uses two policy classes - ```lwlog::sink_color_policy``` and ```lwlog::threading_policy```
 ```Logger``` | An object, which manages a number of sinks. It provides the same functionality as a sink, with the difference being that it contains a storage of sinks, and every operation the logger performs is distributed to all the sinks it contains. Also, it can distribute data to each sink in different ways. You can log either with the forward logging mechanism, or the deferred logging mechanism. The logging mechanism is handled by the ```lwog::log_policy``` policy class, where the ```sink_it()``` function of each sink is called. **NOTE**: I highly encourage using a logger, even when you are going to be using a single sink
-```Registry``` | A global singleton class, which contains all the created loggers. It provides easy access to the created loggers from everywhere in your application. Each logger is registered in the registry on creation, unless ```lwlog::automatic_registry()``` is turned off
+```Registry``` | A global singleton class, which contains all the created loggers. It provides easy access to the created loggers from everywhere in your application. Each logger is registered in the registry on creation, unless automatic registry is turned off
 # Usage
 ## Basic Usage
 ```cpp
