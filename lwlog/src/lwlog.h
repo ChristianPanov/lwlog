@@ -31,7 +31,7 @@ namespace lwlog
 namespace lwlog
 {
 	void register_logger(logger_ptr logger);
-	void automatic_registry(bool automatic);
+	void set_automatic_registry(bool is_registry_automatic);
 	void drop(std::string_view logger_name);
 	void drop_all();
 	void apply_to_all(const std::function<void(logger_ptr)>& function);

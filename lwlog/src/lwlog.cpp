@@ -7,9 +7,9 @@ namespace lwlog
 		registry::instance().register_logger(logger);
 	}
 
-	void automatic_registry(bool automatic)
+	void set_automatic_registry(bool is_registry_automatic)
 	{
-		registry::instance().automatic_registry(automatic);
+		registry::instance().set_automatic_registry(is_registry_automatic);
 	}
 
 	void drop(std::string_view logger_name)

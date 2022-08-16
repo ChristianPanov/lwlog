@@ -12,7 +12,8 @@ namespace lwlog
 	logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name, SinkParams&&... params)
 		: m_name{ name }
 	{
-		registry::instance().register_logger(this);
+		if(registry::instance().is_registry_automatic())
+			registry::instance().register_logger(this);
 
 		m_sink_storage = { sinks::sink_factory<Sinks<ThreadingPolicy>>::request(
 			std::forward<SinkParams>(params)...

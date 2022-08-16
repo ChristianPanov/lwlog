@@ -21,15 +21,15 @@ namespace lwlog
 
 	void registry::register_logger(logger_ptr logger)
 	{
-		if (m_automatic_registry && !logger->name().empty())
+		if (m_is_registry_automatic && logger->name() != "GLOBAL")
 		{
 			m_loggers[logger->name()] = logger;
 		}
 	}
 
-	void registry::automatic_registry(bool automatic)
+	void registry::set_automatic_registry(bool is_registry_automatic)
 	{
-		m_automatic_registry = automatic;
+		m_is_registry_automatic = is_registry_automatic;
 	}
 
 	void registry::drop(std::string_view logger_name)
@@ -52,7 +52,7 @@ namespace lwlog
 
 	bool registry::is_registry_automatic() const
 	{
-		return m_automatic_registry;
+		return m_is_registry_automatic;
 	}
 
 	const std::unordered_map<std::string_view, logger_ptr>& registry::loggers() const
