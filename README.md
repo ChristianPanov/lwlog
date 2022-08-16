@@ -434,9 +434,11 @@ namespace lwlog::sinks
 	template<typename ThreadingPolicy>
 	class stdout_sink 
 		: public sink<colored_policy, ThreadingPolicy>
-		, public details::stream_writer
+		, private details::stream_writer
 	{
+	private:
 		using sink_t = sink<colored_policy, ThreadingPolicy>;
+		
 	public:
 		stdout_sink();
 		void sink_it(const details::log_message& log_msg) override;
