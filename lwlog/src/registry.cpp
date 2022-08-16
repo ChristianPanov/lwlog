@@ -11,7 +11,7 @@ namespace lwlog
 			threading_policy<null_mutex>,
 			sinks::stdout_sink
 			>
-	>("GLOBAL");
+	>("DEFAULT");
 
 	registry& registry::instance()
 	{
@@ -21,7 +21,7 @@ namespace lwlog
 
 	void registry::register_logger(logger_ptr logger)
 	{
-		if (m_is_registry_automatic && logger->name() != "GLOBAL")
+		if (m_is_registry_automatic && logger->name() != "DEFAULT")
 		{
 			m_loggers[logger->name()] = logger;
 		}
