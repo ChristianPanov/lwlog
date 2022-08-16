@@ -508,12 +508,12 @@ int main()
 ```
 ##### Output
 ```
-[22, 20:00:15] [info] [GLOBAL]: Info message
-[22, 20:00:15] [warning] [GLOBAL]: Warning message
-[22, 20:00:15] [error] [GLOBAL]: Error message
-[22, 20:00:15] [critical] [GLOBAL]: Critical message
-[22, 20:00:15] [debug] [GLOBAL]: Debug message
-[20:00:15] [GLOBAL] [debug]: Will be displayed according to the new pattern
+[22, 20:00:15] [info] [DEFAULT]: Info message
+[22, 20:00:15] [warning] [DEFAULT]: Warning message
+[22, 20:00:15] [error] [DEFAULT]: Error message
+[22, 20:00:15] [critical] [DEFAULT]: Critical message
+[22, 20:00:15] [debug] [DEFAULT]: Debug message
+[20:00:15] [DEFAULT] [debug]: Will be displayed according to the new pattern
 ```
 **WARNING:** _See [Issue #18](https://github.com/ChristianPanov/lwlog/issues/18); Do not use the default logger until the issue is resolved, use a manually created one._
 ## Global operations
