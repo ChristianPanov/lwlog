@@ -44,10 +44,7 @@ namespace lwlog
 
 	void registry::apply_to_all(const std::function<void(logger_ptr)>& function) const
 	{
-		for (const auto& [name, logger] : m_loggers)
-		{
-			if (name != "GLOBAL") function(logger);
-		}
+		for (const auto& [name, logger] : m_loggers) function(logger);
 	}
 
 	bool registry::is_registry_automatic() const
