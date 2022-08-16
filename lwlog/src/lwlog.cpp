@@ -4,22 +4,22 @@ namespace lwlog
 {
 	void register_logger(logger_ptr logger)
 	{
-		return registry::instance().register_logger(logger);
+		registry::instance().register_logger(logger);
 	}
 
 	void automatic_registry(bool automatic)
 	{
-		return registry::instance().automatic_registry(automatic);
+		registry::instance().automatic_registry(automatic);
 	}
 
 	void drop(std::string_view logger_name)
 	{
-		return registry::instance().drop(logger_name);
+		registry::instance().drop(logger_name);
 	}
 
 	void drop_all()
 	{
-		return registry::instance().drop_all();
+		registry::instance().drop_all();
 	}
 
 	void apply_to_all(const std::function<void(logger_ptr)>& function)
