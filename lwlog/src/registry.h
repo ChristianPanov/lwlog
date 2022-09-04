@@ -22,7 +22,7 @@ namespace lwlog
 		void set_automatic_registry(bool is_registry_automatic);
 		void drop(std::string_view logger_name);
 		void drop_all();
-		void apply_to_all(const std::function<void(logger_ptr)>& function) const;
+		void apply_to_all(const std::function<void(logger_ptr)>& fn) const;
 		bool is_registry_automatic() const;
 		const std::unordered_map<std::string_view, logger_ptr>& loggers() const;
 		logger_ptr get(std::string_view logger_name);

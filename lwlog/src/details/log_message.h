@@ -16,11 +16,11 @@ namespace lwlog::details
 			: message{ message }
 			, logger_name{ logger_name }
 			, level{ t_level }
-			, thread_id{ LWLOG_THREAD_ID_FUNC() }
-			, process_id{ LWLOG_PROCESS_ID_FUNC() }
+			, thread_id{ LWLOG_THREAD_ID_FN() }
+			, process_id{ LWLOG_PROCESS_ID_FN() }
 			, meta{ meta }
 		{
-			LWLOG_TIME_FUNC(time_point);
+			LWLOG_INIT_TIME_POINT_FN(time_point);
 		}
 
 		std::string_view message;

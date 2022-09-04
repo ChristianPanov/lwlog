@@ -86,7 +86,7 @@ namespace lwlog::details::datetime
         return (digit <= 9 ? "0" : "") + std::to_string(digit);
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_date,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_date,
         const time_point_t&, now)
     {
         return std::to_string(now.wYear) + "-" +
@@ -94,7 +94,7 @@ namespace lwlog::details::datetime
             pad_with_zero_if_needed(now.wDay);
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_date_short,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_date_short,
         const time_point_t&, now)
     {
         return pad_with_zero_if_needed(now.wMonth) + "/"
@@ -102,55 +102,55 @@ namespace lwlog::details::datetime
             + pad_with_zero_if_needed(now.wYear % 100);
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_year,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_year,
         const time_point_t&, now)
     {
         return std::to_string(now.wYear);
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_year_short,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_year_short,
         const time_point_t&, now)
     {
         return pad_with_zero_if_needed(now.wYear % 100);
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_month,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_month,
         const time_point_t&, now)
     {
         return pad_with_zero_if_needed(now.wMonth);
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_month_name,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_month_name,
         const time_point_t&, now)
     {
         return month[now.wMonth - 1];
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_month_name_short,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_month_name_short,
         const time_point_t&, now)
     {
         return month_abbreviated[now.wMonth - 1];
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_day,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_day,
         const time_point_t&, now)
     {
         return pad_with_zero_if_needed(now.wDay);
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_weekday_name,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_weekday_name,
         const time_point_t&, now)
     {
         return weekday[now.wDayOfWeek - 1];
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_weekday_name_short,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_weekday_name_short,
         const time_point_t&, now)
     {
         return weekday_abbreviated[now.wDayOfWeek - 1];
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_time,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_time,
         const time_point_t&, now)
     {
         return pad_with_zero_if_needed(to_local(now.wHour)) + ":" +
@@ -158,14 +158,14 @@ namespace lwlog::details::datetime
             pad_with_zero_if_needed(now.wSecond);
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_24_hour_clock,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_24_hour_clock,
         const time_point_t&, now)
     {
         return pad_with_zero_if_needed(to_local(now.wHour)) + ":" +
             pad_with_zero_if_needed(now.wMinute);
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_12_hour_clock,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_12_hour_clock,
         const time_point_t&, now)
     {
         return pad_with_zero_if_needed(to_12h(to_local(now.wHour))) + ":" +
@@ -173,31 +173,31 @@ namespace lwlog::details::datetime
             pad_with_zero_if_needed(now.wSecond) + ampm(now.wHour);
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_ampm,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_ampm,
         const time_point_t&, now)
     {
         return ampm(to_local(now.wHour));
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_hour_24,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_hour_24,
         const time_point_t&, now)
     {
         return pad_with_zero_if_needed(to_local(now.wHour));
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_hour_12,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_hour_12,
         const time_point_t&, now)
     {
         return pad_with_zero_if_needed(to_12h(to_local(now.wHour)));
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_minute,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_minute,
         const time_point_t&, now)
     {
         return pad_with_zero_if_needed(now.wMinute);
     }
 
-    LWLOG_TIME_FUNC_WITH_PLACEHOLDER(static std::string, get_second,
+    LWLOG_TIME_FN_WITH_PLACEHOLDER(static std::string, get_second,
         const time_point_t&, now)
     {
         return pad_with_zero_if_needed(now.wSecond);
