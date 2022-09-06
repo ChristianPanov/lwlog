@@ -120,7 +120,7 @@ Registry
     └── Sink
         └── Writer(optional)
 ```
-The architecture of lwlog is very simple, it's divided into three main modules - the **registry**, the **logger**, and the **sinks**.\
+The architecture of ***lwlog*** is very simple, it's divided into three main modules - the **registry**, the **logger**, and the **sinks**.\
 An optional fourth part is the ***writer***.
 Module | Description
 ------------ | -------------
