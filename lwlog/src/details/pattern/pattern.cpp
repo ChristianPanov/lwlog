@@ -74,20 +74,12 @@ namespace lwlog::details
 		const auto short_flags = this->parse_short_flags();
 
 		for (const auto& flag : verbose_flags)
-			if (verbose_logger_data[flag])
-				m_formatters.push_back(verbose_logger_data[flag]);
-
-		for (const auto& flag : verbose_flags)
-			if (verbose_datetime_data[flag])
-				m_formatters.push_back(verbose_datetime_data[flag]);
+			if (verbose_data[flag])
+				m_formatters.push_back(verbose_data[flag]);
 
 		for (const auto& flag : short_flags)
-			if (shortened_logger_data[flag])
-				m_formatters.push_back(shortened_logger_data[flag]);
-
-		for (const auto& flag : short_flags)
-			if (shortened_datetime_data[flag])
-				m_formatters.push_back(shortened_datetime_data[flag]);
+			if (shortened_data[flag])
+				m_formatters.push_back(shortened_data[flag]);
 	}
 
 	void pattern::set_pattern(std::string_view pattern)

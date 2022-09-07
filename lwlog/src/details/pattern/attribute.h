@@ -28,18 +28,17 @@ namespace lwlog::details
 		std::reference_wrapper<int>,
 		std::reference_wrapper<float>,
 		std::reference_wrapper<double>,
-		std::reference_wrapper<std::string>
+		std::reference_wrapper<std::string_view>
 	>;
 
 	struct attrib_value_visitor
 	{
 		template<typename T>
-		std::string operator()(T arg)
+		std::string_view operator()(T arg)
 		{
 			if constexpr (std::is_arithmetic_v<T::type>)
 				return std::to_string(std::forward<T::type>(arg));
-			else 
-				return arg;
+			else return arg;
 		}
 	};
 }

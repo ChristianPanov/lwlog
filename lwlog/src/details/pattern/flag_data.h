@@ -2,7 +2,6 @@
 
 namespace lwlog::details::flag
 {
-	static constexpr flag_pair logger_name	= { "{name}",			"%n" };
 	static constexpr flag_pair level		= { "{level}",			"%l" };
 	static constexpr flag_pair message		= { "{message}",		"%v" };
 	static constexpr flag_pair thread_id	= { "{thread}",			"%t" };

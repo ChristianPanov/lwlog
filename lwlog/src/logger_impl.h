@@ -18,6 +18,8 @@ namespace lwlog
 		m_sink_storage = { sinks::sink_factory<Sinks<ThreadingPolicy>>::request(
 			std::forward<SinkParams>(params)...
 		)... };
+
+		this->add_attribute({ "{name}", "%n" }, m_name);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
@@ -76,7 +78,7 @@ namespace lwlog
 		{
 			if (sink->should_sink(t_level))
 			{
-				LogPolicy::log(sink, { message, m_name, t_level, meta });
+				LogPolicy::log(sink, { message, t_level, meta });
 			}
 		}
 	}
