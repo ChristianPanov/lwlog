@@ -120,7 +120,7 @@ Registry
     └── Sink
         └── Writer(optional)
 ```
-The architecture of lwlog is very simple, it's divided into three main modules - the **registry**, the **logger**, and the **sinks**.\
+The architecture of ***lwlog*** is very simple, it's divided into three main modules - the **registry**, the **logger**, and the **sinks**.\
 An optional fourth part is the ***writer***.
 Module | Description
 ------------ | -------------
@@ -372,7 +372,7 @@ int main()
 ##### Output
 ```active --- [19:44:50] [CONSOLE] [info]: First critical message```
 #### Limitations
-Currently, an attribute can contain a reference to only a couple of types - ```int```, ```float```, ```double``` and ```std::string```.\
+Currently, an attribute can contain a reference to only a couple of types - ```int```, ```float```, ```double``` and ```std::string_view```.\
 The reason for this is because more possible types in ```std::variant``` create more overhead, so I've tried to select the most probable types a user can use for values.
 ## Multiple sinks (compile-time)
 ```cpp
