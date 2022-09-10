@@ -120,7 +120,7 @@ Registry
     └── Sink
         └── Record
 ```
-The architecture of ***lwlog*** is very simple, it's divided into three main modules - the **registry**, the **logger**, the **sinks**, and the **record**.\
+The architecture of ***lwlog*** is very simple, it's divided into three main modules - the **registry**, the **logger**, the **sinks**, and the **record**.
 Module | Description
 ------------ | -------------
 ```Record``` | An object which holds the data which will eventually be logged, consisting of the message, level, metadata(current line, file, and function), timepoint, current thread ID, and current process ID
