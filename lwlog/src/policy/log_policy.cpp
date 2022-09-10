@@ -4,21 +4,21 @@ namespace lwlog
 {
 	std::vector<deferred_log_policy::log_info> deferred_log_policy::m_storage;
 
-	void forward_log_policy::log(sink_ptr sink, const details::log_message& log_msg)
+	void forward_log_policy::log(sink_ptr sink, const details::record& record)
 	{
-		sink->sink_it(log_msg);
+		sink->sink_it(record);
 	}
 
-	void deferred_log_policy::log(sink_ptr sink, const details::log_message& log_msg)
+	void deferred_log_policy::log(sink_ptr sink, const details::record& record)
 	{
-		m_storage.push_back({ sink, log_msg });
+		m_storage.push_back({ sink, record });
 	}
 
 	void deferred_log_policy::sink_logs()
 	{
-		for (const auto& [sink, log_msg] : m_storage)
+		for (const auto& [sink, record] : m_storage)
 		{
-			sink->sink_it(log_msg);
+			sink->sink_it(record);
 		}
 	}
 }

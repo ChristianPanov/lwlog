@@ -5,7 +5,7 @@
 
 #include "fwd.h"
 #include "attribute.h"
-#include "details/log_message.h"
+#include "details/record.h"
 #include "alignment_formatter.h"
 
 namespace lwlog::details
@@ -13,7 +13,7 @@ namespace lwlog::details
 	class pattern
 	{
 	public:
-		std::string compile(const log_message& log_msg) const;
+		std::string compile(const record& record) const;
 		void parse_alignment_specs();
 		void request_flag_formatters();
 		void set_pattern(std::string_view pattern);

@@ -7,10 +7,10 @@
 
 namespace lwlog::details
 {
-	struct log_message
+	struct record
 	{
-		log_message() = default;
-		log_message(std::string_view message, level t_level,
+		record() = default;
+		record(std::string_view message, level t_level,
 			const source_meta& meta)
 			: message{ message }
 			, level{ t_level }

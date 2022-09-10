@@ -4,11 +4,11 @@
 
 namespace lwlog::details
 {
-	std::string pattern::compile(const log_message& log_msg) const
+	std::string pattern::compile(const record& record) const
 	{
 		std::string compiled = m_pattern;
 		for (const auto& formatter : m_formatters)
-			formatter->format(compiled, log_msg);
+			formatter->format(compiled, record);
 
 		for (const auto& [flags, value] : m_custom_attributes)
 			formatter::format_attribute(compiled, flags,

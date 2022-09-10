@@ -19,10 +19,10 @@ namespace lwlog::sinks
 		~file_sink() override;
 
 	public:
-		void sink_it(const details::log_message& log_msg) override;
+		void sink_it(const details::record& record) override;
 
 	private:
-		std::vector<details::log_message> m_messages;
+		std::vector<details::record> m_messages;
 	};
 
 	template<typename ThreadingPolicy>
@@ -33,13 +33,13 @@ namespace lwlog::sinks
 	template<typename ThreadingPolicy>
 	file_sink<ThreadingPolicy>::~file_sink()
 	{
-		for (const auto& log_msg : m_messages)
-			details::file_writer::write(sink_t::m_pattern.compile(log_msg));
+		for (const auto& record : m_messages)
+			details::file_writer::write(sink_t::m_pattern.compile(record));
 	}
 
 	template<typename ThreadingPolicy>
-	void file_sink<ThreadingPolicy>::sink_it(const details::log_message& log_msg)
+	void file_sink<ThreadingPolicy>::sink_it(const details::record& record)
 	{
-		m_messages.push_back(log_msg);
+		m_messages.push_back(record);
 	}
 }

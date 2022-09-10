@@ -5,7 +5,7 @@ namespace lwlog::details
 	struct formatter
 	{
 		virtual ~formatter() = default;
-		virtual void format(std::string&, const log_message&) const = 0;
+		virtual void format(std::string&, const record&) const = 0;
 
 		template<typename T>
 		static void format_attribute(std::string& pattern, const flag_pair& flags, T value)

@@ -15,7 +15,7 @@ namespace lwlog::sinks
 
 	public:
 		stdout_sink();
-		void sink_it(const details::log_message& log_msg) override;
+		void sink_it(const details::record& record) override;
 	};
 
 	template<typename ThreadingPolicy>
@@ -24,8 +24,8 @@ namespace lwlog::sinks
 	{}
 
 	template<typename ThreadingPolicy>
-	void stdout_sink<ThreadingPolicy>::sink_it(const details::log_message& log_msg)
+	void stdout_sink<ThreadingPolicy>::sink_it(const details::record& record)
 	{
-		details::stream_writer::write(sink_t::m_pattern.compile(log_msg));
+		details::stream_writer::write(sink_t::m_pattern.compile(record));
 	}
 }
