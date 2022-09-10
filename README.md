@@ -118,15 +118,14 @@ Benchmarked with picobench(https://github.com/iboB/picobench)
 Registry
 └── Logger
     └── Sink
-        └── Writer(optional)
+        └── Record
 ```
-The architecture of ***lwlog*** is very simple, it's divided into three main modules - the **registry**, the **logger**, and the **sinks**.\
-An optional fourth part is the ***writer***.
+The architecture of ***lwlog*** is very simple, it's divided into three main modules - the **registry**, the **logger**, the **sinks**, and the **record**.
 Module | Description
 ------------ | -------------
-```Writer``` | Abstraction which outputs the data to the destination. It is optional, because it is not actually needed, and there is no strict specification for what a writer should be
+```Record``` | An object which holds the data which will eventually be logged, consisting of the message, level, metadata(current line, file, and function), timepoint, current thread ID, and current process ID
 ```Sink``` | An object which sends(sinks) data to an output destination. Usually, the data could be handled by a writer object, or you can directly handle the output in the ```sink_it()``` function, without using a writer. A sink uses two policy classes - ```lwlog::sink_color_policy``` and ```lwlog::threading_policy```
-```Logger``` | An object, which manages a number of sinks. It provides the same functionality as a sink, with the difference being that it contains a storage of sinks, and every operation the logger performs is distributed to all the sinks it contains. Also, it can distribute data to each sink in different ways. You can log either with the forward logging mechanism, or the deferred logging mechanism. The logging mechanism is handled by the ```lwog::log_policy``` policy class, where the ```sink_it()``` function of each sink is called. **NOTE**: I highly encourage using a logger, even when you are going to be using a single sink
+```Logger``` | An object which manages a number of sinks. It provides the same functionality as a sink, with the difference being that it contains a storage of sinks, and every operation the logger performs is distributed to all the sinks it contains. Also, it can distribute data to each sink in different ways. You can log either with the forward logging mechanism, or the deferred logging mechanism. The logging mechanism is handled by the ```lwog::log_policy``` policy class, where the ```sink_it()``` function of each sink is called. **NOTE**: I highly encourage using a logger, even when you are going to be using a single sink
 ```Registry``` | A global singleton class, which contains all the created loggers. It provides easy access to the created loggers from everywhere in your application. Each logger is registered in the registry on creation, unless automatic registry is turned off
 # Usage
 ## Basic Usage
@@ -426,7 +425,7 @@ int main()
 ```
 ## Creating your own sink
 As already mentioned, ***lwlog*** is extremely easy to extend. Let's give an example with sinks.\
-To create your own sink, all you have to do is inherit from ```lwlog::sinks::sink``` and implement a ```sink_it()``` function, which takes a ```const details::log_message&```  as a parameter. That's it.
+To create your own sink, all you have to do is inherit from ```lwlog::sinks::sink``` and implement a ```sink_it()``` function, which takes a ```const details::record&```  as a parameter. That's it.
 #### Example with an existing sink implementation
 ```cpp
 namespace lwlog::sinks
@@ -441,7 +440,7 @@ namespace lwlog::sinks
 		
 	public:
 		stdout_sink();
-		void sink_it(const details::log_message& log_msg) override;
+		void sink_it(const details::record& record) override;
 	};
 
 	template<typename ThreadingPolicy>
@@ -450,9 +449,9 @@ namespace lwlog::sinks
 	{}
 
 	template<typename ThreadingPolicy>
-	void stdout_sink<ThreadingPolicy>::sink_it(const details::log_message& log_msg)
+	void stdout_sink<ThreadingPolicy>::sink_it(const details::record& record)
 	{
-		details::stream_writer::write(sink_t::m_pattern.compile(log_msg));
+		details::stream_writer::write(sink_t::m_pattern.compile(record));
 	}
 }
 ```
@@ -461,7 +460,7 @@ The color policy could be either colored(```lwlog::colored_policy```) or non-col
 The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them. Using ```lwlog::colored_policy``` is most suitable for console sinks, since it relies on console-specific color codes.\
 We only need the ```sink_it()``` function. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.\
 As mentioned in [Logical Architecture](https://github.com/ChristianPanov/lwlog#logical-architecture), you can either use some kind of a writer class, which handles the actual writing, or you can directly handle the writing in the function.\
-The compiled and formatted message is received with ```sink_t::m_pattern.compile(log_msg)```. We access the pattern member from the sink base class and then compile it with the log message.
+The compiled and formatted message is received with ```sink_t::m_pattern.compile(record)```. We access the pattern member from the sink base class and then compile it with the log message.
 #### Example
 ```cpp
 #include "sink.h"
@@ -475,7 +474,7 @@ namespace lwlog::sinks
 	{
 		using sink_t = sink<colored_policy, ThreadingPolicy>;
 	public:
-		void sink_it(const details::log_message& log_msg) override
+		void sink_it(const details::record& record) override
 		{
 			// sink message to somewhere
 		}
