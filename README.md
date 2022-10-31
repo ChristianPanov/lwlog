@@ -483,13 +483,15 @@ namespace lwlog::sinks
 ```
 ## Default logger
 The default logger is a logger object delivered to you by the library itself.\
-It's registered in the logger registry, it's global, it has default configuration and is NOT thread-safe, sinks to stdout.\
-It's convenient if you just need the logging functionality, but don't want to create loggers by yourself. You can access it from everywhere in your application.
+It's not registered in the logger registry, it's global, it has default configuration and is NOT thread-safe, sinks to stdout.\
+It's convenient if you just need the logging functionality, but don't want to create loggers by yourself. You can access it from everywhere in your application.\ Before using it, you need to call a function which initializes it.
 ```cpp
 #include "lwlog/lwlog.h"
 
 int main()
 {
+	lwlog::init_default_logger();
+	
 	lwlog::info("Info message");
 	lwlog::warning("Warning message");
 	lwlog::error("Error message");
@@ -514,7 +516,6 @@ int main()
 [22, 20:00:15] [debug] [DEFAULT]: Debug message
 [20:00:15] [DEFAULT] [debug]: Will be displayed according to the new pattern
 ```
-**WARNING:** _See [Issue #18](https://github.com/ChristianPanov/lwlog/issues/18); Do not use the default logger until the issue is resolved, use a manually created one._
 ## Global operations
 In order to apply a logger function to all loggers present in the registry, you can use the function ```lwlog::apply_to_all()``` in such manner
 ```cpp
@@ -561,13 +562,13 @@ If logging is disabled, the directives expand to nothing.
 
 int main()
 {
+	LWLOG_INIT_DEFAULT_LOGGER();
 	LWLOG_SET_PATTERN("[%T] [%n] [%l]: %v");
 	LWLOG_SET_LEVEL_FILTER(lwlog::level::error | lwlog::level::critical);
 	LWLOG_ERROR("First error message");
 	return 0;
 }
 ```
-**WARNING:** _See [Issue #18](https://github.com/ChristianPanov/lwlog/issues/18); Do not use the default logger until the issue is resolved, use a manually created one._
 # Tweakme
 The [***tweakme.h***](https://github.com/ChristianPanov/lwlog/blob/master/lwlog/src/tweakme.h) file contains macros which serve the purpose of configurations.\
 Depending on your needs, you can switch on and off certain features. Switching them off will completely remove them from the ***lwlog*** code which will increase performance and reduce overhead, because you shouldn't pay for what you don't need.
