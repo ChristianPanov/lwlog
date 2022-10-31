@@ -2,6 +2,11 @@
 
 namespace lwlog
 {
+	void init_default_logger()
+	{
+		registry::init_default_logger();
+	}
+
 	void register_logger(logger_ptr logger)
 	{
 		registry::instance().register_logger(logger);

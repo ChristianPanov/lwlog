@@ -4,19 +4,27 @@
 
 namespace lwlog
 {
-	std::unique_ptr<interface::logger> registry::s_default_logger = std::make_unique<
-		logger<
-			forward_log_policy,
-			static_storage_policy,
-			threading_policy<null_mutex>,
-			sinks::stdout_sink
-			>
-	>("DEFAULT");
-
 	registry& registry::instance()
 	{
 		static registry s_instance;
 		return s_instance;
+	}
+
+	void registry::init_default_logger()
+	{
+		s_default_logger = std::make_unique<
+			logger<
+				forward_log_policy,
+				static_storage_policy,
+				threading_policy<null_mutex>,
+				sinks::stdout_sink
+			>
+		>("DEFAULT");
+	}
+
+	const std::unique_ptr<interface::logger>& registry::default_logger()
+	{
+		return s_default_logger;
 	}
 
 	void registry::register_logger(logger_ptr logger)
@@ -57,10 +65,5 @@ namespace lwlog
 	logger_ptr registry::get(std::string_view logger_name)
 	{
 		return m_loggers[logger_name];
-	}
-
-	const std::unique_ptr<interface::logger>& registry::default_logger()
-	{
-		return s_default_logger;
 	}
 }

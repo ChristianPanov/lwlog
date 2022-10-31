@@ -30,6 +30,7 @@ namespace lwlog
 
 namespace lwlog
 {
+	void init_default_logger();
 	void register_logger(logger_ptr logger);
 	void set_automatic_registry(bool is_registry_automatic);
 	void drop(std::string_view logger_name);
@@ -50,50 +51,57 @@ namespace lwlog
 }
 
 #ifndef LWLOG_DISABLE
-#define LWLOG_SET_PATTERN(pattern) \
-lwlog::set_pattern(pattern)
+#define LWLOG_INIT_DEFAULT_LOGGER()\
+lwlog::init_default_logger()
 #else
-#define LWLOG_SET_PATTERN
+#define LWLOG_INIT_DEFAULT_LOGGER()
 #endif
 
 #ifndef LWLOG_DISABLE
-#define LWLOG_SET_LEVEL_FILTER(level) \
+#define LWLOG_SET_PATTERN(pattern)\
+lwlog::set_pattern(pattern)
+#else
+#define LWLOG_SET_PATTERN()
+#endif
+
+#ifndef LWLOG_DISABLE
+#define LWLOG_SET_LEVEL_FILTER(level)\
 lwlog::set_level_filter(level)
 #else
-#define LWLOG_SET_LEVEL_FILTER
+#define LWLOG_SET_LEVEL_FILTER()
 #endif
 
 #if !defined(LWLOG_DISABLE) && !defined(LWLOG_INFO_OFF)
-#define LWLOG_INFO(...)	\
+#define LWLOG_INFO(...)\
 lwlog::info(__VA_ARGS__)
 #else
-#define LWLOG_INFO
+#define LWLOG_INFO()
 #endif
 
 #if !defined(LWLOG_DISABLE) && !defined(LWLOG_WARNING_OFF)
-#define LWLOG_WARNING(...) \
+#define LWLOG_WARNING(...)\
 lwlog::warning(__VA_ARGS__)
 #else
-#define LWLOG_WARNING
+#define LWLOG_WARNING()
 #endif
 
 #if !defined(LWLOG_DISABLE) && !defined(LWLOG_ERROR_OFF)
-#define LWLOG_ERROR(...) \
+#define LWLOG_ERROR(...)\
 lwlog::error(__VA_ARGS__)
 #else
-#define LWLOG_ERROR
+#define LWLOG_ERROR()
 #endif
 
 #if !defined(LWLOG_DISABLE) && !defined(LWLOG_CRITICAL_OFF)
-#define LWLOG_CRITICAL(...) \
+#define LWLOG_CRITICAL(...)\
 lwlog::critical(__VA_ARGS__)
 #else
-#define LWLOG_CRITICAL
+#define LWLOG_CRITICAL()
 #endif
 
 #if !defined(LWLOG_DISABLE) && !defined(LWLOG_DEBUG_OFF)
-#define LWLOG_DEBUG(...) \
+#define LWLOG_DEBUG(...)\
 lwlog::debug(__VA_ARGS__)
 #else
-#define LWLOG_DEBUG
+#define LWLOG_DEBUG()
 #endif
