@@ -433,7 +433,7 @@ namespace lwlog::sinks
 	template<typename ThreadingPolicy>
 	class stdout_sink 
 		: public sink<colored_policy, ThreadingPolicy>
-		, private details::stream_writer
+		, private details::console_writer
 	{
 	private:
 		using sink_t = sink<colored_policy, ThreadingPolicy>;
@@ -445,13 +445,13 @@ namespace lwlog::sinks
 
 	template<typename ThreadingPolicy>
 	stdout_sink<ThreadingPolicy>::stdout_sink()
-		: details::stream_writer(stdout)
+		: details::console_writer(stdout)
 	{}
 
 	template<typename ThreadingPolicy>
 	void stdout_sink<ThreadingPolicy>::sink_it(const details::record& record)
 	{
-		details::stream_writer::write(sink_t::m_pattern.compile(record));
+		details::console_writer::write(sink_t::m_pattern.compile(record));
 	}
 }
 ```
@@ -459,7 +459,7 @@ Here we inherit from the sink base class and configure it to be colored. Whether
 The color policy could be either colored(```lwlog::colored_policy```) or non-colored (```lwlog::uncolored_policy```).\
 The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them. Using ```lwlog::colored_policy``` is most suitable for console sinks, since it relies on console-specific color codes.\
 We only need the ```sink_it()``` function. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.\
-As mentioned in [Logical Architecture](https://github.com/ChristianPanov/lwlog#logical-architecture), you can either use some kind of a writer class, which handles the actual writing, or you can directly handle the writing in the function.\
+Like in the example, you can either use some kind of a writer class, which handles the actual writing, or you can directly handle the writing in the function.\
 The compiled and formatted message is received with ```sink_t::m_pattern.compile(record)```. We access the pattern member from the sink base class and then compile it with the log message.
 #### Example
 ```cpp
