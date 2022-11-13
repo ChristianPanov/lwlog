@@ -600,8 +600,6 @@ std::setvbuf(stdout, NULL, _IOFBF, 4194304);
 std::fwrite("Hello, World!", 14, 1, stdout);
 ```
 This example here shows how this is achieved. This is as fast as console output can get.
-### File output
-The same technique goes for file output, but I take it further. I've taken the liberty of deferring all file writes. In other words, a file sink does not write to the file, it only pushes the message in a storage, which is finally outputted in the destructor of the file sink.
 ### Time
 Time is handled in a special way. First off, since ```std::chrono``` is not as performant on Windows as it is on Linux, a platform-dependent approach, which proves to be much faster than its standard portable counterpart, is taken for Windows.\
 It's taken even further. For some reason, getting the local time with ```std::chrono``` is faster than getting the UTC, and with the Windows API it's the opposite - getting the gmtime is faster than getting the UTC, so each implementation initially gets the faster of the two, and then arithmetically processes the time to the desired time format(either local time or UTC)
