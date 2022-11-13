@@ -2,23 +2,23 @@
 
 namespace lwlog::details
 {
-	class stream_writer
+	class console_writer
 	{
 	public:
-		explicit stream_writer(std::FILE* stream);
+		explicit console_writer(std::FILE* stream);
 		void write(std::string_view message) const;
 
 	private:
 		std::FILE* m_stream;
 	};
 
-	inline stream_writer::stream_writer(std::FILE* stream)
+	inline console_writer::console_writer(std::FILE* stream)
 		: m_stream{ stream }
 	{
 		std::setvbuf(m_stream, nullptr, _IOFBF, 4194304);
 	}
 
-	inline void stream_writer::write(std::string_view message) const
+	inline void console_writer::write(std::string_view message) const
 	{
 		std::fwrite(message.data(), message.size(), 1, m_stream);
 		std::fwrite("\n", 1, 1, m_stream);
