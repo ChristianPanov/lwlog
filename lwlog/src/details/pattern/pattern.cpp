@@ -89,7 +89,7 @@ namespace lwlog::details
 
 	void pattern::add_attribute(const flag_pair& flags, attrib_value value)
 	{
-		m_custom_attributes.insert_or_assign(flags, value);
+		m_custom_attributes.push_back({ flags, value });
 	}
 
 	std::string& pattern::data()

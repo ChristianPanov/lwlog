@@ -15,15 +15,6 @@ namespace lwlog::details
 		}
 	};
 
-	struct attrib_hasher
-	{
-		std::size_t operator()(const flag_pair& flags) const
-		{
-			return std::hash<std::string_view>{}(flags.verbose) ^
-				std::hash<std::string_view>{}(flags.shortened);
-		}
-	};
-
 	using attrib_value = std::variant<
 		std::reference_wrapper<int>,
 		std::reference_wrapper<float>,
@@ -40,5 +31,11 @@ namespace lwlog::details
 				return std::to_string(std::forward<T::type>(arg));
 			else return arg;
 		}
+	};
+
+	struct attribute
+	{
+		flag_pair flags;
+		attrib_value value;
 	};
 }

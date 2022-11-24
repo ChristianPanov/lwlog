@@ -32,6 +32,6 @@ namespace lwlog::details
 		std::string m_pattern;
 		std::vector<alignment_specification> m_alignment_specs;
 		std::vector<std::shared_ptr<formatter>> m_formatters;
-		std::unordered_map<flag_pair, attrib_value, attrib_hasher> m_custom_attributes;
+		std::vector<attribute> m_custom_attributes;
 	};
 }
