@@ -123,37 +123,39 @@ namespace lwlog::details
 		}
 	}
 
-	std::vector<std::string> pattern::parse_verbose_flags() const
+	std::vector<std::string_view> pattern::parse_verbose_flags() const
 	{
-		const std::string::difference_type num_flags{ std::count(m_pattern.begin(), m_pattern.end(), '{') };
+		const std::string_view pattern_view{ m_pattern };
+		const std::string::difference_type num_flags{ std::count(pattern_view.begin(), pattern_view.end(), '{') };
 
-		std::vector<std::string> flags;
+		std::vector<std::string_view> flags;
 		flags.reserve(num_flags);
 
-		std::size_t flag_start_pos{ m_pattern.find('{', 0) };
-		while (flag_start_pos != std::string::npos)
+		std::size_t flag_start_pos{ pattern_view.find('{', 0) };
+		while (flag_start_pos != std::string_view::npos)
 		{
-			const std::size_t flag_end_pos{ m_pattern.find('}', flag_start_pos + 1) };
+			const std::size_t flag_end_pos{ pattern_view.find('}', flag_start_pos + 1) };
 			const std::size_t flag_size{ flag_end_pos - flag_start_pos + 1 };
 
-			flags.emplace_back(m_pattern.substr(flag_start_pos, flag_size));
-			flag_start_pos = m_pattern.find('{', flag_start_pos + 1);
+			flags.emplace_back(pattern_view.substr(flag_start_pos, flag_size));
+			flag_start_pos = pattern_view.find('{', flag_start_pos + 1);
 		}
 		return flags;
 	}
 
-	std::vector<std::string> pattern::parse_short_flags() const
+	std::vector<std::string_view> pattern::parse_short_flags() const
 	{
+		const std::string_view pattern_view{ m_pattern };
 		constexpr std::uint8_t flag_size{ 2 };
 
-		std::vector<std::string> flags;
-		flags.reserve(m_pattern.size() / flag_size);
+		std::vector<std::string_view> flags;
+		flags.reserve(pattern_view.size() / flag_size);
 
-		std::size_t flag_start_pos{ m_pattern.find('%', 0) };
-		while (flag_start_pos != std::string::npos)
+		std::size_t flag_start_pos{ pattern_view.find('%', 0) };
+		while (flag_start_pos != std::string_view::npos)
 		{
-			flags.emplace_back(m_pattern.substr(flag_start_pos, flag_size));
-			flag_start_pos = m_pattern.find('%', flag_start_pos + 1);
+			flags.emplace_back(pattern_view.substr(flag_start_pos, flag_size));
+			flag_start_pos = pattern_view.find('%', flag_start_pos + 1);
 		}
 		return flags;
 	}

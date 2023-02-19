@@ -25,8 +25,8 @@ namespace lwlog::details
 		static void drop_color_flags(std::string& pattern);
 
 	private:
-		std::vector<std::string> parse_verbose_flags() const;
-		std::vector<std::string> parse_short_flags() const;
+		std::vector<std::string_view> parse_verbose_flags() const;
+		std::vector<std::string_view> parse_short_flags() const;
 
 	private:
 		std::string m_pattern;
