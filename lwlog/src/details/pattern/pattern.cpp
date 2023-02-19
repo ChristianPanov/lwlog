@@ -125,25 +125,36 @@ namespace lwlog::details
 
 	std::vector<std::string> pattern::parse_verbose_flags() const
 	{
-		std::vector<std::string> temp;
-		std::size_t pos = m_pattern.find('{', 0);
-		while (pos != std::string::npos)
+		const std::string::difference_type num_flags{ std::count(m_pattern.begin(), m_pattern.end(), '{') };
+
+		std::vector<std::string> flags;
+		flags.reserve(num_flags);
+
+		std::size_t flag_start_pos{ m_pattern.find('{', 0) };
+		while (flag_start_pos != std::string::npos)
 		{
-			temp.emplace_back(m_pattern.substr(pos, m_pattern.find('}', pos) - pos + 1));
-			pos = m_pattern.find('{', pos + 1);
+			const std::size_t flag_end_pos{ m_pattern.find('}', flag_start_pos + 1) };
+			const std::size_t flag_size{ flag_end_pos - flag_start_pos + 1 };
+
+			flags.emplace_back(m_pattern.substr(flag_start_pos, flag_size));
+			flag_start_pos = m_pattern.find('{', flag_start_pos + 1);
 		}
-		return temp;
+		return flags;
 	}
 
 	std::vector<std::string> pattern::parse_short_flags() const
 	{
-		std::vector<std::string> temp;
-		std::size_t pos = m_pattern.find('%', 0);
-		while (pos != std::string::npos)
+		constexpr std::uint8_t flag_size{ 2 };
+
+		std::vector<std::string> flags;
+		flags.reserve(m_pattern.size() / flag_size);
+
+		std::size_t flag_start_pos{ m_pattern.find('%', 0) };
+		while (flag_start_pos != std::string::npos)
 		{
-			temp.emplace_back(m_pattern.substr(pos, 2));
-			pos = m_pattern.find('%', pos + 1);
+			flags.emplace_back(m_pattern.substr(flag_start_pos, flag_size));
+			flag_start_pos = m_pattern.find('%', flag_start_pos + 1);
 		}
-		return temp;
+		return flags;
 	}
 }
