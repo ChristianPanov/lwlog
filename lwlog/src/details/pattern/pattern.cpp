@@ -10,9 +10,8 @@ namespace lwlog::details
 		for (const auto& formatter : m_formatters)
 			formatter->format(compiled, record);
 
-		for (const auto& [flags, value] : m_custom_attributes)
-			formatter::format_attribute(compiled, flags,
-				std::visit(attrib_value_visitor{}, value));
+		for (const auto& [flags, value, callback] : m_attributes)
+			formatter::format_attribute(compiled, flags, callback());
 
 		for (const auto& spec : m_alignment_specs)
 			alignment_formatter::format(compiled, spec);
@@ -87,9 +86,14 @@ namespace lwlog::details
 		m_pattern = pattern;
 	}
 
-	void pattern::add_attribute(const flag_pair& flags, attrib_value value)
+	void pattern::add_attribute(std::string_view flag, attrib_value value)
 	{
-		m_custom_attributes.push_back({ flags, value });
+		m_attributes.emplace_back(flag, value);
+	}
+
+	void pattern::add_attribute(std::string_view flag, attrib_value value, std::function<const char* ()> fn)
+	{
+		m_attributes.emplace_back(flag, value, fn);
 	}
 
 	std::string& pattern::data()

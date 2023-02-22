@@ -21,7 +21,8 @@ namespace lwlog::sinks
 
 	public:
 		void set_pattern(std::string_view pattern) override;
-		void add_attribute(const details::flag_pair& flags, details::attrib_value value) override;
+		void add_attribute(std::string_view flag, details::attrib_value value) override;
+		void add_attribute(std::string_view flag, details::attrib_value value, std::function<const char*()> fn) override;
 		void set_level_filter(level level_filter) override;
 		bool should_sink(level t_level) const override;
 		details::pattern& pattern() override;

@@ -22,11 +22,19 @@ namespace lwlog::sinks
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
-	void sink<ColorPolicy, ThreadingPolicy>::add_attribute(const details::flag_pair& flags, 
+	void sink<ColorPolicy, ThreadingPolicy>::add_attribute(std::string_view flag,
 		details::attrib_value value)
 	{
 		Lock lock(m_mtx);
-		m_pattern.add_attribute(flags, value);
+		m_pattern.add_attribute(flag, value);
+	}
+
+	template<typename ColorPolicy, typename ThreadingPolicy>
+	void sink<ColorPolicy, ThreadingPolicy>::add_attribute(std::string_view flag, details::attrib_value value,
+		std::function<const char*()> fn)
+	{
+		Lock lock(m_mtx);
+		m_pattern.add_attribute(flag, value, fn);
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>

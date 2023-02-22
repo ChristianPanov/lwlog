@@ -17,7 +17,8 @@ namespace lwlog::details
 		void parse_alignment_specs();
 		void request_flag_formatters();
 		void set_pattern(std::string_view pattern);
-		void add_attribute(const flag_pair& flags, attrib_value value);
+		void add_attribute(std::string_view flag, attrib_value value);
+		void add_attribute(std::string_view flag, attrib_value value, std::function<const char*()> fn);
 		std::string& data();
 
 	public:
@@ -32,6 +33,6 @@ namespace lwlog::details
 		std::string m_pattern;
 		std::vector<alignment_specification> m_alignment_specs;
 		std::vector<std::shared_ptr<formatter>> m_formatters;
-		std::vector<attribute> m_custom_attributes;
+		std::vector<attribute> m_attributes;
 	};
 }

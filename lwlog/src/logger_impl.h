@@ -19,7 +19,8 @@ namespace lwlog
 			std::forward<SinkParams>(params)...
 		)... };
 
-		this->add_attribute({ "{name}", "%n" }, m_name);
+		this->add_attribute("{name}", m_name);
+		this->add_attribute("%n", m_name);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
@@ -78,7 +79,7 @@ namespace lwlog
 		{
 			if (sink->should_sink(t_level))
 			{
-				LogPolicy::log(sink, { message, t_level, meta });
+				LogPolicy::log(sink, details::record{ message, t_level, meta });
 			}
 		}
 	}
@@ -95,12 +96,23 @@ namespace lwlog
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::add_attribute(const details::flag_pair& flags,
+		void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::add_attribute(std::string_view flag,
 			details::attrib_value value)
 	{
 		for (const auto& sink : m_sink_storage)
 		{
-			sink->add_attribute(flags, value);
+			sink->add_attribute(flag, value);
+		}
+	}
+
+	template<typename LogPolicy, template<typename...> typename StoragePolicy,
+		typename ThreadingPolicy, template<typename> typename... Sinks>
+		void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::add_attribute(std::string_view flag,
+			details::attrib_value value, std::function<const char*()> fn)
+	{
+		for (const auto& sink : m_sink_storage)
+		{
+			sink->add_attribute(flag, value, fn);
 		}
 	}
 
@@ -119,7 +131,7 @@ namespace lwlog
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::info(std::string_view message, 
 		details::source_meta meta)
 	{
-		log(message, level::info, meta);
+		this->log(message, level::info, meta);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
@@ -127,7 +139,7 @@ namespace lwlog
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::warning(std::string_view message, 
 		details::source_meta meta)
 	{
-		log(message, level::warning, meta);
+		this->log(message, level::warning, meta);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
@@ -135,7 +147,7 @@ namespace lwlog
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::error(std::string_view message, 
 		details::source_meta meta)
 	{
-		log(message, level::error, meta);
+		this->log(message, level::error, meta);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
@@ -143,7 +155,7 @@ namespace lwlog
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::critical(std::string_view message, 
 		details::source_meta meta)
 	{
-		log(message, level::critical, meta);
+		this->log(message, level::critical, meta);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
@@ -151,7 +163,7 @@ namespace lwlog
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::debug(std::string_view message, 
 		details::source_meta meta)
 	{
-		log(message, level::debug, meta);
+		this->log(message, level::debug, meta);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
