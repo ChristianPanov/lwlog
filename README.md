@@ -130,7 +130,7 @@ Module | Description
 # Usage
 ## Basic Usage
 ```cpp
-#include "lwlog/lwlog.h"
+#include "lwlog.h"
 
 int main()
 {
@@ -162,7 +162,7 @@ Alias | Description
 ```lwlog::null_logger``` | A null logger is simply a logger with default configuration but without any sinks. Use it if you don't want compile-time sinks and you are only interested in adding sinks later at runtime
 #### Example
 ```cpp
-#include "lwlog/lwlog.h"
+#include "lwlog.h"
 
 int main()
 {
@@ -194,7 +194,7 @@ Policy | Description
 ```lwlog::multi_threaded_policy``` | Configures the sinks with a mutex and locks for thread-safety
 #### Example
 ```cpp
-#include "lwlog/lwlog.h"
+#include "lwlog.h"
 
 int main()
 {
@@ -217,7 +217,7 @@ This data is sent to a sink and formatted at a later stage, only when needed.
 There is one problem with it - all log information will be lost if there is an application crash and you haven't sinked the deferred logs.
 #### Example
 ```cpp
-#include "lwlog/lwlog.h"
+#include "lwlog.h"
 
 int main()
 {
@@ -291,7 +291,7 @@ Syntax | Example | Result
 ```:^<fill_character><width><flag>``` | ```[:^-12%l]``` | "[----info----]"
 #### Example
 ```cpp
-#include "lwlog/lwlog.h"
+#include "lwlog.h"
 
 int main()
 {
@@ -334,7 +334,7 @@ Background Color Flag | Bright Background Color Flag
 ```.bg_white()``` | ```.br_bg_white()```
 #### Example
 ```cpp
-#include "lwlog/lwlog.h"
+#include "lwlog.h"
 
 int main()
 {
@@ -347,19 +347,20 @@ int main()
 }
 ```
 ## Custom attributes
-Attribute - an object, which contains a pair of flags(verbose and shortened) and a value - each flag is replaced with its corresponding value.\
-Custom attributes allow for flexible patterns - it represents a pair of flags and a reference to a value of a certain type.\
-The value is an ```std::variant``` which contains a couple of reference types, to allow for more freedom in terms of having attribute values of different data types.
+An attribute is an object, which contains a flag, a value(a reference to some variable) and a callback function.\
+The callback function plays the role of a string conversion function, therefore, it always needs to return a string.\
+If a callback function is not provided, the attribute will use the default one, which handles only arithmetic types and strings.\
+When the attribute needs to be formatted, the callback function is called on the value and it replaces the flag wherever it appears in the formatting pattern.
 #### Example
 ```cpp
-#include "lwlog/lwlog.h"
+#include "lwlog.h"
 
 int main()
 {
 	std::string current_status = "inactive";
 	
 	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
-	console->add_attribute({"{status}", "%s"}, current_status);
+	console->add_attribute("{status}", current_status);
 	console->set_pattern("{status} --- [%T] [%n] [%l]: %v");
 	
 	current_status = "active";
@@ -371,11 +372,11 @@ int main()
 ##### Output
 ```active --- [19:44:50] [CONSOLE] [info]: First critical message```
 #### Limitations
-Currently, an attribute can contain a reference to only a couple of types - ```int```, ```float```, ```double``` and ```std::string_view```.\
+Currently, an attribute can contain a reference to only a couple of types - ```int```, ```float```, ```double```, ```std::string``` and  ```std::string_view```.\
 The reason for this is because more possible types in ```std::variant``` create more overhead, so I've tried to select the most probable types a user can use for values.
 ## Multiple sinks (compile-time)
 ```cpp
-#include "lwlog/lwlog.h"
+#include "lwlog.h"
 
 int main()
 {
@@ -399,7 +400,7 @@ int main()
 ```
 ## Multiple sinks (runtime)
 ```cpp
-#include "lwlog/lwlog.h"
+#include "lwlog.h"
 
 int main()
 {
@@ -486,7 +487,7 @@ The default logger is a logger object delivered to you by the library itself.\
 It's not registered in the logger registry, it's global, it has default configuration and is NOT thread-safe, sinks to stdout.\
 It's convenient if you just need the logging functionality, but don't want to create loggers by yourself. You can access it from everywhere in your application.\ Before using it, you need to call a function which initializes it.
 ```cpp
-#include "lwlog/lwlog.h"
+#include "lwlog.h"
 
 int main()
 {
@@ -519,7 +520,7 @@ int main()
 ## Global operations
 In order to apply a logger function to all loggers present in the registry, you can use the function ```lwlog::apply_to_all()``` in such manner
 ```cpp
-#include "lwlog/lwlog.h"
+#include "lwlog.h"
 
 int main()
 {
@@ -537,7 +538,7 @@ int main()
 ```
 ## Accessing a logger from the global registry by name
 ```cpp
-#include "lwlog/lwlog.h"
+#include "lwlog.h"
 
 int main()
 {
@@ -558,7 +559,7 @@ If logging is disabled, the directives expand to nothing.
 ```cpp
 #define LWLOG_DISABLE
 #define LWLOG_ERROR_OFF
-#include "lwlog/lwlog.h"
+#include "lwlog.h"
 
 int main()
 {
