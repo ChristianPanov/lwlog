@@ -25,7 +25,7 @@ namespace lwlog::details
 	{
 		attribute() = default;
 
-		attribute(std::string_view flags, attrib_value value,
+		attribute(std::string_view flag, attrib_value value,
 			std::function<const char*()> callback)
 			: flag{ flag }
 			, value{ value }
