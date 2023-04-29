@@ -3,16 +3,13 @@
 namespace lwlog::details
 {
 	alignment_specification::alignment_specification(std::string str)
-		: fill_char{ ' ' }
-		, side{ align_side::left }
-		, width{ 0 }
 	{
 		const bool has_fill_char = !std::isdigit(str[2]) ? true : false;
 		const std::uint8_t flag_length = has_fill_char ? 3 : 2;
-		flag = str.substr(0, flag_length);
-		if (has_fill_char) fill_char = flag[2];
+		alignment_flag = str.substr(0, flag_length);
+		if (has_fill_char) fill_char = alignment_flag[2];
 
-		switch (flag[1])
+		switch (alignment_flag[1])
 		{
 		case '<': side = align_side::left;		break;
 		case '>': side = align_side::right;		break;
@@ -25,29 +22,29 @@ namespace lwlog::details
 			if (std::isdigit(c)) width_str += c;
 		}
 		width = static_cast<std::uint8_t>(std::stoi(width_str));
-		flag += width_str;
+		alignment_flag += width_str;
 
 		for (const auto& c : str)
 		{
 			if (c == '%')
 			{
-				to_align = { c, *(&c + 1) };
+				flag_to_align = { c, *(&c + 1) };
 			}
 			else if (c == '{')
 			{
 				const std::size_t found = str.find(c);
-				to_align = str.substr(found, str.find('}') - found + 1);
+				flag_to_align = str.substr(found, str.find('}') - found + 1);
 			}
 		}
 	}
 
 	void alignment_formatter::format(std::string& pattern, const alignment_specification& spec)
 	{
-		const std::size_t flag_pos = pattern.find(spec.flag);
-		const std::string to_align_formatted = pattern.substr(flag_pos + spec.flag.size(),
-			pattern.find(alignment_flag::end) - flag_pos - spec.flag.size());
+		const std::size_t flag_pos = pattern.find(spec.alignment_flag);
+		const std::string to_align_formatted = pattern.substr(flag_pos + spec.alignment_flag.size(),
+			pattern.find(alignment_flag::end) - flag_pos - spec.alignment_flag.size());
 
-		pattern.replace(pattern.find(spec.flag), spec.flag.size(), "");
+		pattern.replace(pattern.find(spec.alignment_flag), spec.alignment_flag.size(), "");
 		pattern.replace(pattern.find(alignment_flag::end), 2, "");
 		pattern.replace(pattern.find(to_align_formatted), to_align_formatted.size(),
 			align(to_align_formatted, spec.width, spec.fill_char, spec.side));
