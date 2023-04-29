@@ -104,13 +104,12 @@ namespace lwlog::details
 	std::vector<std::string_view> pattern::parse_verbose_flags() const
 	{
 		const std::string_view pattern_view{ m_pattern };
-		const std::string::difference_type num_flags{ std::count(pattern_view.begin(), pattern_view.end(), '{') };
 
 		std::vector<std::string_view> flags;
-		flags.reserve(num_flags);
+		flags.reserve(std::count(pattern_view.begin(), pattern_view.end(), '{'));
 
-		std::size_t flag_start_pos{ pattern_view.find('{', 0) };
-		while (flag_start_pos != std::string_view::npos)
+		std::size_t flag_start_pos{ 0 };
+		while ((flag_start_pos = pattern_view.find('{', flag_start_pos)) != std::string_view::npos)
 		{
 			const std::size_t flag_end_pos{ pattern_view.find('}', flag_start_pos + 1) };
 			const std::size_t flag_size{ flag_end_pos - flag_start_pos + 1 };
@@ -123,17 +122,17 @@ namespace lwlog::details
 
 	std::vector<std::string_view> pattern::parse_short_flags() const
 	{
-		const std::string_view pattern_view{ m_pattern };
 		constexpr std::uint8_t flag_size{ 2 };
+		const std::string_view pattern_view{ m_pattern };
 
 		std::vector<std::string_view> flags;
 		flags.reserve(pattern_view.size() / flag_size);
 
-		std::size_t flag_start_pos{ pattern_view.find('%', 0) };
-		while (flag_start_pos != std::string_view::npos)
+		std::size_t flag_start_pos{ 0 };
+		while ((flag_start_pos = pattern_view.find('%', flag_start_pos)) != std::string_view::npos)
 		{
 			flags.emplace_back(pattern_view.substr(flag_start_pos, flag_size));
-			flag_start_pos = pattern_view.find('%', flag_start_pos + 1);
+			flag_start_pos += flag_size;
 		}
 		return flags;
 	}
