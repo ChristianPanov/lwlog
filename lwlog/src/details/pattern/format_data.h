@@ -4,7 +4,7 @@
 
 namespace lwlog::details
 {
-	static std::unordered_map<std::string_view, std::shared_ptr<formatter>> verbose_data
+	inline std::unordered_map<std::string_view, std::shared_ptr<formatter>> verbose_data
 	{
 		{flag::level.verbose,				std::make_shared<level_formatter>()},
 		{flag::message.verbose,				std::make_shared<message_formatter>()},
@@ -33,7 +33,7 @@ namespace lwlog::details
 		{flag::second.verbose,				std::make_shared<second_formatter>()}
 	};
 
-	static std::unordered_map<std::string_view, std::shared_ptr<formatter>> shortened_data
+	inline std::unordered_map<std::string_view, std::shared_ptr<formatter>> shortened_data
 	{
 		{flag::level.shortened,				std::make_shared<level_formatter>()},
 		{flag::message.shortened,			std::make_shared<message_formatter>()},
