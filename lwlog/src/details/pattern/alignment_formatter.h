@@ -4,16 +4,10 @@
 
 namespace lwlog::details
 {
-	struct alignment_flag
-	{
-		static constexpr auto end		{ ":|" };
-		static constexpr auto left		{ ":<" };
-		static constexpr auto right		{ ":>" };
-		static constexpr auto center	{ ":^" };
-	};
-
 	struct alignment_specification
 	{
+		static constexpr auto end_flag{ ":|" };
+
 		enum class align_side { left, center, right };
 		explicit alignment_specification(std::string str);
 

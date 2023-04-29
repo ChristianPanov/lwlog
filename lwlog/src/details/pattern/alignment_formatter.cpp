@@ -42,12 +42,12 @@ namespace lwlog::details
 	{
 		const std::size_t flag_pos = pattern.find(spec.alignment_flag);
 		const std::string to_align_formatted = pattern.substr(flag_pos + spec.alignment_flag.size(),
-			pattern.find(alignment_flag::end) - flag_pos - spec.alignment_flag.size());
+			pattern.find(alignment_specification::end_flag) - flag_pos - spec.alignment_flag.size());
 
 		pattern.replace(pattern.find(spec.alignment_flag), spec.alignment_flag.size(), "");
-		pattern.replace(pattern.find(alignment_flag::end), 2, "");
+		pattern.replace(pattern.find(alignment_specification::end_flag), 2, "");
 		pattern.replace(pattern.find(to_align_formatted), to_align_formatted.size(),
-			align(to_align_formatted, spec.width, spec.fill_char, spec.side));
+			alignment_formatter::align(to_align_formatted, spec.width, spec.fill_char, spec.side));
 	}
 
 	std::string alignment_formatter::align(const std::string& to_align, std::uint8_t width, char fill_char, 

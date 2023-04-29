@@ -21,49 +21,23 @@ namespace lwlog::details
 
 	void pattern::parse_alignment_specs()
 	{
-		std::size_t start_pos{ 0 };
-		while ((start_pos = m_pattern.find(alignment_flag::left, start_pos)) != std::string::npos)
+		std::size_t flag_start_pos{ 0 };
+		while ((flag_start_pos = m_pattern.find_first_of("<>^", flag_start_pos)) != std::string::npos)
 		{
-			const std::size_t flag_pos = m_pattern.find(alignment_flag::left, start_pos);
-			m_alignment_specs.emplace_back(
-				m_pattern.substr(flag_pos, m_pattern.find(' ', flag_pos) - flag_pos)
-			);
-			m_pattern.replace(
-				m_pattern.find(m_alignment_specs.back().flag_to_align, flag_pos),
-				m_alignment_specs.back().flag_to_align.size(),
-				m_alignment_specs.back().flag_to_align + alignment_flag::end
-			);
-			start_pos += 2;
-		}
+			flag_start_pos -= 1;
 
-		start_pos = 0;
-		while ((start_pos = m_pattern.find(alignment_flag::right, start_pos)) != std::string::npos)
-		{
-			const std::size_t flag_pos = m_pattern.find(alignment_flag::right, start_pos);
-			m_alignment_specs.emplace_back(
-				m_pattern.substr(flag_pos, m_pattern.find(' ', flag_pos) - flag_pos)
-			);
-			m_pattern.replace(
-				m_pattern.find(m_alignment_specs.back().flag_to_align, flag_pos),
-				m_alignment_specs.back().flag_to_align.size(),
-				m_alignment_specs.back().flag_to_align + alignment_flag::end
-			);
-			start_pos += 2;
-		}
+			const std::size_t flag_end_pos{ m_pattern.find(' ', flag_start_pos) };
 
-		start_pos = 0;
-		while ((start_pos = m_pattern.find(alignment_flag::center, start_pos)) != std::string::npos)
-		{
-			const std::size_t flag_pos = m_pattern.find(alignment_flag::center, start_pos);
-			m_alignment_specs.emplace_back(
-				m_pattern.substr(flag_pos, m_pattern.find(' ', flag_pos) - flag_pos)
-			);
-			m_pattern.replace(
-				m_pattern.find(m_alignment_specs.back().flag_to_align, flag_pos),
-				m_alignment_specs.back().flag_to_align.size(),
-				m_alignment_specs.back().flag_to_align + alignment_flag::end
-			);
-			start_pos += 2;
+			m_alignment_specs.emplace_back(m_pattern.substr(flag_start_pos,
+				(flag_end_pos == std::string::npos ? m_pattern.size() : flag_end_pos) - flag_start_pos));
+
+			const std::string& flag_to_align{ m_alignment_specs.back().flag_to_align };
+			const std::size_t flag_to_align_pos{ m_pattern.find(flag_to_align, flag_start_pos) };
+
+			m_pattern.replace(flag_to_align_pos, flag_to_align.size(),
+				flag_to_align + alignment_specification::end_flag);
+
+			flag_start_pos += flag_to_align.size();
 		}
 	}
 
