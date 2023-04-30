@@ -43,8 +43,8 @@ namespace lwlog::details
 
 	void pattern::request_flag_formatters()
 	{
-		const auto verbose_flags = this->parse_verbose_flags();
-		const auto short_flags = this->parse_short_flags();
+		const auto verbose_flags{ this->parse_verbose_flags() };
+		const auto short_flags{ this->parse_short_flags() };
 
 		for (const auto& flag : verbose_flags)
 			if (verbose_data[flag])
@@ -53,6 +53,19 @@ namespace lwlog::details
 		for (const auto& flag : short_flags)
 			if (shortened_data[flag])
 				m_formatters.push_back(shortened_data[flag]);
+	}
+
+	void pattern::process_color_flags(bool use_color)
+	{
+		if (std::strchr(m_pattern.data(), '.'))
+		{
+			while (std::strchr(m_pattern.data(), ')'))
+				m_pattern.replace(m_pattern.find(')'), 1, use_color ? "\u001b[0m" : "");
+
+			for (const auto& [key, value] : color_data)
+				while (std::strstr(m_pattern.data(), key.data()))
+					m_pattern.replace(m_pattern.find(key), key.length(), use_color ? value : "");
+		}
 	}
 
 	void pattern::set_pattern(std::string_view pattern)
@@ -68,37 +81,6 @@ namespace lwlog::details
 	void pattern::add_attribute(std::string_view flag, attrib_value value, std::function<const char* ()> fn)
 	{
 		m_attributes.emplace_back(flag, value, fn);
-	}
-
-	std::string& pattern::data()
-	{
-		return m_pattern;
-	}
-
-	void pattern::compile_colors(std::string& pattern)
-	{
-		if (std::strchr(pattern.data(), '.'))
-		{
-			while (std::strchr(pattern.data(), ')'))
-				pattern.replace(pattern.find(')'), 1, "\u001b[0m");
-
-			for (const auto& [key, value] : color_data)
-				while (std::strstr(pattern.data(), key.data()))
-					pattern.replace(pattern.find(key), key.length(), value);
-		}
-	}
-
-	void pattern::drop_color_flags(std::string& pattern)
-	{
-		if (std::strchr(pattern.data(), '.'))
-		{
-			while (std::strchr(pattern.data(), ')'))
-				pattern.replace(pattern.find(')'), 1, "");
-
-			for (const auto& [key, value] : color_data)
-				while (std::strstr(pattern.data(), key.data()))
-					pattern.replace(pattern.find(key), key.length(), "");
-		}
 	}
 
 	std::vector<std::string_view> pattern::parse_verbose_flags() const

@@ -16,14 +16,10 @@ namespace lwlog::details
 		std::string compile(const record& record) const;
 		void parse_alignment_specs();
 		void request_flag_formatters();
+		void process_color_flags(bool use_color);
 		void set_pattern(std::string_view pattern);
 		void add_attribute(std::string_view flag, attrib_value value);
 		void add_attribute(std::string_view flag, attrib_value value, std::function<const char*()> fn);
-		std::string& data();
-
-	public:
-		static void compile_colors(std::string& pattern);
-		static void drop_color_flags(std::string& pattern);
 
 	private:
 		std::vector<std::string_view> parse_verbose_flags() const;

@@ -18,7 +18,7 @@ namespace lwlog::sinks
 		m_pattern.set_pattern(pattern);
 		m_pattern.parse_alignment_specs();
 		m_pattern.request_flag_formatters();
-		ColorPolicy::process_color(m_pattern.data());
+		m_pattern.process_color_flags(ColorPolicy::is_colored);
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
