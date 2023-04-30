@@ -2,7 +2,7 @@
 
 namespace lwlog::details
 {
-	static const std::unordered_map<std::string_view, std::string_view> color_data =
+	inline const std::unordered_map<std::string_view, std::string_view> color_data =
 	{
 		{".black(",			"\u001b[30m"},
 		{".red(",			"\u001b[31m"},
