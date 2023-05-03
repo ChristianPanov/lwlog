@@ -4,8 +4,9 @@ namespace lwlog::details
 {
 	alignment_specification::alignment_specification(std::string str)
 	{
-		const bool has_fill_char = !std::isdigit(str[2]) ? true : false;
+		const bool has_fill_char{ !std::isdigit(str[2]) };
 		const std::uint8_t flag_length = has_fill_char ? 3 : 2;
+
 		alignment_flag = str.substr(0, flag_length);
 		if (has_fill_char) fill_char = alignment_flag[2];
 
@@ -32,7 +33,7 @@ namespace lwlog::details
 			}
 			else if (c == '{')
 			{
-				const std::size_t found = str.find(c);
+				const std::size_t found{ str.find(c) };
 				flag_to_align = str.substr(found, str.find('}') - found + 1);
 			}
 		}
@@ -40,9 +41,9 @@ namespace lwlog::details
 
 	void alignment_formatter::format(std::string& pattern, const alignment_specification& spec)
 	{
-		const std::size_t flag_pos = pattern.find(spec.alignment_flag);
-		const std::string to_align_formatted = pattern.substr(flag_pos + spec.alignment_flag.size(),
-			pattern.find(alignment_specification::end_flag) - flag_pos - spec.alignment_flag.size());
+		const std::size_t flag_pos{ pattern.find(spec.alignment_flag) };
+		const std::string to_align_formatted{ pattern.substr(flag_pos + spec.alignment_flag.size(),
+			pattern.find(alignment_specification::end_flag) - flag_pos - spec.alignment_flag.size()) };
 
 		pattern.replace(pattern.find(spec.alignment_flag), spec.alignment_flag.size(), "");
 		pattern.replace(pattern.find(alignment_specification::end_flag), 2, "");
@@ -76,13 +77,11 @@ namespace lwlog::details
 	std::string alignment_formatter::align_center(const std::string& to_align, std::uint8_t width, char fill_char)
 	{
 		if (width <= to_align.size()) return to_align;
-		else
-		{
-			const auto alignment_width = width - to_align.size();
-			const auto left_width = alignment_width / 2;
-			const auto right_width = alignment_width % 2 ? left_width + 1 : left_width;
 
-			return std::string(left_width, fill_char) + to_align + std::string(right_width, fill_char);
-		}
+		const auto alignment_width{ width - to_align.size() };
+		const auto left_width{ alignment_width / 2 };
+		const auto right_width{ alignment_width % 2 ? left_width + 1 : left_width };
+
+		return std::string(left_width, fill_char) + to_align + std::string(right_width, fill_char);
 	}
 }
