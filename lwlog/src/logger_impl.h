@@ -108,7 +108,7 @@ namespace lwlog
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename ThreadingPolicy, template<typename> typename... Sinks>
 		void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::add_attribute(std::string_view flag,
-			details::attrib_value value, std::function<const char*()> fn)
+			details::attrib_value value, details::attrib_callback_t fn)
 	{
 		for (const auto& sink : m_sink_storage)
 		{

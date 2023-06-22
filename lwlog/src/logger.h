@@ -30,7 +30,7 @@ namespace lwlog
 
 		void set_pattern(std::string_view pattern) override;
 		void add_attribute(std::string_view flag, details::attrib_value value) override;
-		void add_attribute(std::string_view flag, details::attrib_value value, std::function<const char*()> fn) override;
+		void add_attribute(std::string_view flag, details::attrib_value value, details::attrib_callback_t fn) override;
 		void set_level_filter(level t_level) override;
 
 		void info(std::string_view message, details::source_meta meta = details::source_meta::current()) override;

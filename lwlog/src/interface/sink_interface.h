@@ -13,7 +13,7 @@ namespace lwlog::interface
 	public:
 		virtual void set_pattern(std::string_view) = 0;
 		virtual void add_attribute(std::string_view, details::attrib_value) = 0;
-		virtual void add_attribute(std::string_view, details::attrib_value, std::function<const char*()>) = 0;
+		virtual void add_attribute(std::string_view, details::attrib_value, details::attrib_callback_t) = 0;
 		virtual void set_level_filter(level) = 0;
 		virtual bool should_sink(level) const = 0;
 		virtual details::pattern& pattern() = 0;

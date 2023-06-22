@@ -31,7 +31,7 @@ namespace lwlog::sinks
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
 	void sink<ColorPolicy, ThreadingPolicy>::add_attribute(std::string_view flag, details::attrib_value value,
-		std::function<const char*()> fn)
+		details::attrib_callback_t fn)
 	{
 		Lock lock(m_mtx);
 		m_pattern.add_attribute(flag, value, fn);

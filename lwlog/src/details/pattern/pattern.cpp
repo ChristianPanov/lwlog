@@ -78,7 +78,7 @@ namespace lwlog::details
 		m_attributes.emplace_back(flag, value);
 	}
 
-	void pattern::add_attribute(std::string_view flag, attrib_value value, std::function<const char* ()> fn)
+	void pattern::add_attribute(std::string_view flag, attrib_value value, details::attrib_callback_t fn)
 	{
 		m_attributes.emplace_back(flag, value, fn);
 	}

@@ -19,7 +19,7 @@ namespace lwlog::details
 		void process_color_flags(bool use_color);
 		void set_pattern(std::string_view pattern);
 		void add_attribute(std::string_view flag, attrib_value value);
-		void add_attribute(std::string_view flag, attrib_value value, std::function<const char*()> fn);
+		void add_attribute(std::string_view flag, attrib_value value, attrib_callback_t fn);
 
 	private:
 		std::vector<std::string_view> parse_verbose_flags() const;

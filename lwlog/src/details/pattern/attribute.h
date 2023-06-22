@@ -16,12 +16,14 @@ namespace lwlog::details
 	using ref_variant = std::variant<std::reference_wrapper<Ts>...>;
 	using attrib_value = ref_variant<int, float, double, std::string, std::string_view, level>;
 
+	using attrib_callback_t = std::function<const char*()>;
+
 	struct attribute
 	{
 		attribute() = default;
 
 		attribute(std::string_view flag, attrib_value value,
-			std::function<const char*()> callback)
+			attrib_callback_t callback)
 			: flag{ flag }
 			, value{ value }
 			, callback{ std::move(callback) }
@@ -45,6 +47,6 @@ namespace lwlog::details
 
 		std::string_view flag;
 		attrib_value value;
-		std::function<const char*()> callback;
+		attrib_callback_t callback;
 	};
 }
