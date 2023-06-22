@@ -17,11 +17,7 @@ namespace lwlog
 		static void sink_logs();
 
 	private:
-		struct log_info
-		{
-			sink_ptr sink;
-			details::record record;
-		};
+		struct log_info;
 		static std::vector<log_info> m_storage;
 	};
 }
