@@ -10,11 +10,6 @@ namespace lwlog::details
 	{
 		std::string_view verbose;
 		std::string_view shortened;
-		bool operator==(const flag_pair& other) const
-		{
-			return (verbose == other.verbose) &&
-				(shortened == other.shortened);
-		}
 	};
 
 	template<typename... Ts>
