@@ -43,11 +43,11 @@ namespace lwlog
 	void set_pattern(std::string_view pattern);
 	void set_level_filter(level t_level);
 
-	void info(std::string_view message, details::source_meta meta = details::source_meta::current());
-	void warning(std::string_view message, details::source_meta meta = details::source_meta::current());
-	void error(std::string_view message, details::source_meta meta = details::source_meta::current());
-	void critical(std::string_view message, details::source_meta meta = details::source_meta::current());
-	void debug(std::string_view message, details::source_meta meta = details::source_meta::current());
+	template<typename... Args> void info(const details::log_message& log_msg, Args&&... args);
+	template<typename... Args> void warning(const details::log_message& log_msg, Args&&... args);
+	template<typename... Args> void error(const details::log_message& log_msg, Args&&... args);
+	template<typename... Args> void critical(const details::log_message& log_msg, Args&&... args);
+	template<typename... Args> void debug(const details::log_message& log_msg, Args&&... args);
 }
 
 #ifndef LWLOG_DISABLE
@@ -105,3 +105,5 @@ lwlog::debug(__VA_ARGS__)
 #else
 #define LWLOG_DEBUG()
 #endif
+
+#include "lwlog_impl.h"

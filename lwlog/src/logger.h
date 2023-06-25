@@ -33,17 +33,16 @@ namespace lwlog
 		void add_attribute(std::string_view flag, details::attrib_value value, details::attrib_callback_t fn) override;
 		void set_level_filter(level t_level) override;
 
-		void info(std::string_view message, details::source_meta meta = details::source_meta::current()) override;
-		void warning(std::string_view message, details::source_meta meta = details::source_meta::current()) override;
-		void error(std::string_view message, details::source_meta meta = details::source_meta::current()) override;
-		void critical(std::string_view message, details::source_meta meta = details::source_meta::current()) override;
-		void debug(std::string_view message, details::source_meta meta = details::source_meta::current()) override;
-
 		std::string_view name() const override;
 		Storage& sinks();
 
 	private:
-		void log(std::string_view message, level t_level, details::source_meta meta) override;
+		void log(const details::log_message& log_msg, const level t_level, details::format_args_list args) override;
+		void info_impl(const details::log_message& log_msg, details::format_args_list args) override;
+		void warning_impl(const details::log_message& log_msg, details::format_args_list args) override;
+		void error_impl(const details::log_message& log_msg, details::format_args_list args) override;
+		void critical_impl(const details::log_message& log_msg, details::format_args_list args) override;
+		void debug_impl(const details::log_message& log_msg, details::format_args_list args) override;
 
 	private:
 		std::string_view m_name;

@@ -1,4 +1,6 @@
-#include "lwlog.h"
+#pragma once
+
+#include "registry.h"
 
 namespace lwlog
 {
@@ -57,28 +59,33 @@ namespace lwlog
 		registry::default_logger()->set_level_filter(t_level);
 	}
 
-	void info(std::string_view message, details::source_meta meta)
+	template<typename... Args>
+	void info(const details::log_message& log_msg, Args&&... args)
 	{
-		registry::default_logger()->info(message, meta);
+		registry::default_logger()->info(log_msg, std::forward<Args>(args)...);
 	}
 
-	void warning(std::string_view message, details::source_meta meta)
+	template<typename... Args>
+	void warning(const details::log_message& log_msg, Args&&... args)
 	{
-		registry::default_logger()->warning(message, meta);
+		registry::default_logger()->warning(log_msg, std::forward<Args>(args)...);
 	}
 
-	void error(std::string_view message, details::source_meta meta)
+	template<typename... Args>
+	void error(const details::log_message& log_msg, Args&&... args)
 	{
-		registry::default_logger()->error(message, meta);
+		registry::default_logger()->error(log_msg, std::forward<Args>(args)...);
 	}
 
-	void critical(std::string_view message, details::source_meta meta)
+	template<typename... Args>
+	void critical(const details::log_message& log_msg, Args&&... args)
 	{
-		registry::default_logger()->critical(message, meta);
+		registry::default_logger()->critical(log_msg, std::forward<Args>(args)...);
 	}
 
-	void debug(std::string_view message, details::source_meta meta)
+	template<typename... Args>
+	void debug(const details::log_message& log_msg, Args&&... args)
 	{
-		registry::default_logger()->debug(message, meta);
+		registry::default_logger()->debug(log_msg, std::forward<Args>(args)...);
 	}
 }
