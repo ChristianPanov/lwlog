@@ -1,5 +1,6 @@
 #pragma once
 
+#include "topic.h"
 #include "logger.h"
 #include "sinks/file_sink.h"
 #include "sinks/stdout_sink.h"
@@ -43,6 +44,9 @@ namespace lwlog
 	void set_pattern(std::string_view pattern);
 	void set_level_filter(level t_level);
 
+	void start_topic(std::string_view name);
+	void end_topic();
+
 	template<typename... Args> void info(const details::log_message& log_msg, Args&&... args);
 	template<typename... Args> void warning(const details::log_message& log_msg, Args&&... args);
 	template<typename... Args> void error(const details::log_message& log_msg, Args&&... args);
@@ -69,6 +73,20 @@ lwlog::set_pattern(pattern)
 lwlog::set_level_filter(level)
 #else
 #define LWLOG_SET_LEVEL_FILTER()
+#endif
+
+#ifndef LWLOG_DISABLE
+#define LWLOG_START_TOPIC(topic)\
+lwlog::start_topic(topic)
+#else
+#define LWLOG_START_TOPIC()
+#endif
+
+#ifndef LWLOG_DISABLE
+#define LWLOG_END_TOPIC()\
+lwlog::end_topic()
+#else
+#define LWLOG_END_TOPIC()
 #endif
 
 #if !defined(LWLOG_DISABLE) && !defined(LWLOG_INFO_OFF)

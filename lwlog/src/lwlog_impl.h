@@ -59,6 +59,16 @@ namespace lwlog
 		registry::default_logger()->set_level_filter(t_level);
 	}
 
+	void start_topic(std::string_view name)
+	{
+		details::topic_registry::push(name);
+	}
+
+	void end_topic()
+	{
+		details::topic_registry::pop();
+	}
+
 	template<typename... Args>
 	void info(const details::log_message& log_msg, Args&&... args)
 	{
