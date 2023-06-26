@@ -369,7 +369,7 @@ int main()
 }
 ```
 ##### Output
-```active --- [19:44:50] [CONSOLE] [info]: First critical message```
+```active --- [19:44:50] [CONSOLE] [info]: First info message```
 #### Limitations
 Currently, an attribute can contain a reference to only a couple of types - ```int```, ```float```, ```double```, ```std::string``` and  ```std::string_view```.\
 The reason for this is because more possible types in ```std::variant``` create more overhead, so I've tried to select the most probable types a user can use for values.
