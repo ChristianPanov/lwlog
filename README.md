@@ -40,7 +40,6 @@ people who want simplicity without too much configuration. Most of the time you 
 - Coloring based on log level
 - Proper CMake to replace the Premake which is currently used
 - Cross-platform colors
-- Fmt-like formatting
 - Meta-logging (also known as structured logging)
 # Benchmarks
 The benchmarks are still limited since there still aren't benchmarks for thread-safe logging, async logging, and loggers which sink to a file (they will be done)\
@@ -370,7 +369,7 @@ int main()
 }
 ```
 ##### Output
-```active --- [19:44:50] [CONSOLE] [info]: First critical message```
+```active --- [19:44:50] [CONSOLE] [info]: First info message```
 #### Limitations
 Currently, an attribute can contain a reference to only a couple of types - ```int```, ```float```, ```double```, ```std::string``` and  ```std::string_view```.\
 The reason for this is because more possible types in ```std::variant``` create more overhead, so I've tried to select the most probable types a user can use for values.
