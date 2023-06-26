@@ -1,10 +1,10 @@
 #pragma once
 
-#include "topic.h"
 #include "logger.h"
 #include "sinks/file_sink.h"
 #include "sinks/stdout_sink.h"
 #include "sinks/stderr_sink.h"
+#include "details/topic.h"
 
 namespace lwlog
 {

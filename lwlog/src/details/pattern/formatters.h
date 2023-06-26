@@ -3,7 +3,7 @@
 #include "formatter.h"
 #include "flag_data.h"
 #include "level.h"
-#include "topic.h"
+#include "details/topic.h"
 
 namespace lwlog::details
 {
