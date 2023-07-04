@@ -255,6 +255,7 @@ Verbose flag | Short flag | Description | Example
 ```{line}``` | ```%#``` | Current line on which the log function is called | "84"
 ```{file}``` | ```%@``` | Path of the file in which the log function is called | "C:\Users\user\Desktop\lwlog\Sandbox\Sandbox.cpp"
 ```{func}``` | ```%!``` | Name of the function in which the log function is called | "main"
+```{topic}``` | ```%?``` | Name of the current topic | "topic name"
 ```{date}``` | ```%F``` | Current date YY-MM-DD | "2021-01-01"
 ```{date_short}``` | ```%D``` | Current short date MM/DD/YY | "01/01/21"
 ```{year}``` | ```%Y``` | Current year | "2021"
