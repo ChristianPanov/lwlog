@@ -130,7 +130,7 @@ namespace lwlog
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename ThreadingPolicy, template<typename> typename... Sinks>
 	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::log(const details::log_message& log_msg,
-		const level t_level, details::format_args_list args)
+		level t_level, details::format_args_list args)
 	{
 		for (const auto& sink : m_sink_storage)
 		{

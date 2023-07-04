@@ -37,7 +37,7 @@ namespace lwlog
 		Storage& sinks();
 
 	private:
-		void log(const details::log_message& log_msg, const level t_level, details::format_args_list args) override;
+		void log(const details::log_message& log_msg, level t_level, details::format_args_list args) override;
 		void info_impl(const details::log_message& log_msg, details::format_args_list args) override;
 		void warning_impl(const details::log_message& log_msg, details::format_args_list args) override;
 		void error_impl(const details::log_message& log_msg, details::format_args_list args) override;
