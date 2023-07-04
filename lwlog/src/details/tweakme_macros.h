@@ -45,6 +45,6 @@ fn_type fn_name(arg_type arg_name)
 			#define LWLOG_FORMAT_FN(x, ...) std::format(x, __VA_ARGS__)
 		#endif
 	#else
-		#define LWLOG_FORMAT_FN(x, ...) lwlog::details::format_arguments(x, { __VA_ARGS__ })
+		#define LWLOG_FORMAT_FN(x, ...) lwlog::details::format_arguments(x, __VA_ARGS__)
 	#endif
 #endif

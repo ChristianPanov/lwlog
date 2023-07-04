@@ -8,3 +8,8 @@
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
+
+# idea
+.idea/
+.cache/
+cmake-build-*/

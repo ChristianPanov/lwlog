@@ -27,7 +27,7 @@ namespace lwlog::details
 		return std::to_string(arg).data();
 	}
 
-	template<> static const char* to_raw_string<const char*>(const char* arg) { return arg; }
-	template<> static const char* to_raw_string<std::string>(std::string arg) { return arg.c_str(); }
-	template<> static const char* to_raw_string<std::string_view>(std::string_view arg) { return arg.data(); }
+	template<> const char* to_raw_string<const char*>(const char* arg) { return arg; }
+	template<> const char* to_raw_string<std::string>(std::string arg) { return arg.c_str(); }
+	template<> const char* to_raw_string<std::string_view>(std::string_view arg) { return arg.data(); }
 }

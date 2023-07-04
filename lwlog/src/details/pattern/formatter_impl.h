@@ -1,9 +1,11 @@
 #pragma once
 
+#include <cstring>
+
 namespace lwlog::details
 {
 	template<typename T>
-	static void formatter::format_attribute(std::string& pattern, const flag_pair& flags, T value)
+	void formatter::format_attribute(std::string& pattern, const flag_pair& flags, T value)
 	{
 		std::string_view str_value = [&]() {
 			if constexpr (std::is_arithmetic_v<T>)
@@ -23,7 +25,7 @@ namespace lwlog::details
 	}
 
 	template<typename T>
-	static void formatter::format_attribute(std::string& pattern, std::string_view flag, T value)
+	void formatter::format_attribute(std::string& pattern, std::string_view flag, T value)
 	{
 		std::string_view str_value = [&]() {
 			if constexpr (std::is_arithmetic_v<T>)
@@ -38,6 +40,6 @@ namespace lwlog::details
 			pattern.replace(pattern.find(flag), flag.length(), str_value);
 	}
 
-	template<> static void formatter::format_attribute<void*>(std::string&, const flag_pair&, void*) {}
-	template<> static void formatter::format_attribute<void*>(std::string&, std::string_view, void*) {}
+	template<> void formatter::format_attribute<void*>(std::string&, const flag_pair&, void*) {}
+	template<> void formatter::format_attribute<void*>(std::string&, std::string_view, void*) {}
 }
