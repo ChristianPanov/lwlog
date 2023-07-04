@@ -9,7 +9,7 @@ namespace lwlog::details
 		void write(std::string_view message) const;
 
 	private:
-		std::FILE* m_stream;
+		std::FILE* m_stream{ nullptr };
 	};
 
 	inline console_writer::console_writer(std::FILE* stream)
