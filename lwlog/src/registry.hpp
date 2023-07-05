@@ -3,8 +3,8 @@
 #include <functional>
 #include <memory>
 
-#include "fwd.h"
-#include "interface/logger_interface.h"
+#include "fwd.hpp"
+#include "interface/logger_interface.hpp"
 
 namespace lwlog
 {

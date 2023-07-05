@@ -1,8 +1,8 @@
 #pragma once
 
-#include "details/log_message.h"
-#include "details/pattern/attribute.h"
-#include "details/argument_format.h"
+#include "details/log_message.hpp"
+#include "details/pattern/attribute.hpp"
+#include "details/argument_format.hpp"
 
 namespace lwlog::interface
 {
@@ -42,4 +42,4 @@ namespace lwlog
 	using logger_ptr = interface::logger*;
 }
 
-#include "logger_interface_impl.h"
+#include "logger_interface_impl.hpp"

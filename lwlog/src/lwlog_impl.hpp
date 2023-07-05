@@ -1,6 +1,6 @@
 #pragma once
 
-#include "registry.h"
+#include "registry.hpp"
 
 namespace lwlog
 {

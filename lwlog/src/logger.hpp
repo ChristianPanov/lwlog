@@ -1,8 +1,8 @@
 #pragma once
 
-#include "policy/log_policy.h"
-#include "policy/sink_storage_policy.h"
-#include "interface/logger_interface.h"
+#include "policy/log_policy.hpp"
+#include "policy/sink_storage_policy.hpp"
+#include "interface/logger_interface.hpp"
 
 namespace lwlog
 {
@@ -50,4 +50,4 @@ namespace lwlog
 	};
 }
 
-#include "logger_impl.h"
+#include "logger_impl.hpp"

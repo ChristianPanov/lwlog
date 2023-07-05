@@ -1,9 +1,9 @@
 #pragma once
 
-#include "tweakme_macros.h"
-#include "source_meta.h"
-#include "datetime.h"
-#include "os.h"
+#include "tweakme_macros.hpp"
+#include "source_meta.hpp"
+#include "datetime.hpp"
+#include "os.hpp"
 
 namespace lwlog::details
 {

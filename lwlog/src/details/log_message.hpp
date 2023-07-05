@@ -1,6 +1,6 @@
 #pragma once
 
-#include "details/source_meta.h"
+#include "details/source_meta.hpp"
 
 namespace lwlog::details
 {

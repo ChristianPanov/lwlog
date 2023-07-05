@@ -1,6 +1,6 @@
-#include "registry.h"
-#include "logger.h"
-#include "sinks/stdout_sink.h"
+#include "registry.hpp"
+#include "logger.hpp"
+#include "sinks/stdout_sink.hpp"
 
 namespace lwlog
 {

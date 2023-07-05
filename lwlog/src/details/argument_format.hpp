@@ -11,4 +11,4 @@ namespace lwlog::details
 	template<typename T> static const char* to_raw_string(T arg);
 }
 
-#include "argument_format_impl.h"
+#include "argument_format_impl.hpp"

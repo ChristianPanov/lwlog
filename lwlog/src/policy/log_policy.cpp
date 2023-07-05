@@ -1,4 +1,4 @@
-#include "log_policy.h"
+#include "log_policy.hpp"
 
 namespace lwlog
 {
