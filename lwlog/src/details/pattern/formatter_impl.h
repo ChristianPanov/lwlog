@@ -7,7 +7,7 @@ namespace lwlog::details
 	template<typename T>
 	void formatter::format_attribute(std::string& pattern, const flag_pair& flags, T value)
 	{
-		std::string_view str_value = [&]() {
+		std::string_view str_value = [&value]() {
 			if constexpr (std::is_arithmetic_v<T>)
 				return std::to_string(std::forward<T>(value));
 			else if constexpr (std::is_same_v<T, std::string>)
@@ -27,7 +27,7 @@ namespace lwlog::details
 	template<typename T>
 	void formatter::format_attribute(std::string& pattern, std::string_view flag, T value)
 	{
-		std::string_view str_value = [&]() {
+		std::string_view str_value = [&value]() {
 			if constexpr (std::is_arithmetic_v<T>)
 				return std::to_string(std::forward<T>(value));
 			else if constexpr (std::is_same_v<T, std::string>)
