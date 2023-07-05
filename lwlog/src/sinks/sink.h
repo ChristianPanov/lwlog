@@ -1,10 +1,10 @@
 #pragma once
 
-#include "level.hpp"
+#include "level.h"
 #include "details/pattern/pattern.h"
-#include "policy/sink_color_policy.hpp"
-#include "policy/threading_policy.hpp"
-#include "interface/sink_interface.hpp"
+#include "policy/sink_color_policy.h"
+#include "policy/threading_policy.h"
+#include "interface/sink_interface.h"
 
 namespace lwlog::sinks
 {
@@ -34,4 +34,4 @@ namespace lwlog::sinks
 	};
 }
 
-#include "sink_impl.hpp"
+#include "sink_impl.h"

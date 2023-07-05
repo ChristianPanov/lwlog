@@ -31,4 +31,4 @@ namespace lwlog
 	};
 }
 
-#include "sink_storage_policy_impl.hpp"
+#include "sink_storage_policy_impl.h"

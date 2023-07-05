@@ -1,10 +1,10 @@
 #pragma once
 
-#include "logger.hpp"
-#include "sinks/file_sink.hpp"
-#include "sinks/stdout_sink.hpp"
-#include "sinks/stderr_sink.hpp"
-#include "details/topic.hpp"
+#include "logger.h"
+#include "sinks/file_sink.h"
+#include "sinks/stdout_sink.h"
+#include "sinks/stderr_sink.h"
+#include "details/topic.h"
 
 namespace lwlog
 {
@@ -124,4 +124,4 @@ lwlog::debug(__VA_ARGS__)
 #define LWLOG_DEBUG()
 #endif
 
-#include "lwlog_impl.hpp"
+#include "lwlog_impl.h"

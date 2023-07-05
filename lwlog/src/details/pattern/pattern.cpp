@@ -1,6 +1,6 @@
 #include "pattern.h"
-#include "format_data.hpp"
-#include "color_format_data.hpp"
+#include "format_data.h"
+#include "color_format_data.h"
 
 namespace lwlog::details
 {

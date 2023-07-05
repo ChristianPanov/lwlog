@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tweakme.hpp"
+#include "tweakme.h"
 
 #define LWLOG_TIME_FN_WITH_PLACEHOLDER(fn_type, fn_name, arg_type, arg_name)\
 fn_type fn_name(void*){ return {}; }\

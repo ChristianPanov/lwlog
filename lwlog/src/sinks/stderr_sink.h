@@ -1,12 +1,12 @@
 #pragma once
 
-#include "sink.hpp"
-#include "details/console_writer.hpp"
+#include "sink.h"
+#include "details/console_writer.h"
 
 namespace lwlog::sinks
 {
 	template<typename ThreadingPolicy>
-	class stdout_sink 
+	class stderr_sink 
 		: public sink<colored_policy, ThreadingPolicy>
 		, private details::console_writer
 	{
@@ -14,17 +14,17 @@ namespace lwlog::sinks
 		using sink_t = sink<colored_policy, ThreadingPolicy>;
 
 	public:
-		stdout_sink();
+		stderr_sink();
 		void sink_it(const details::record& record) override;
 	};
 
 	template<typename ThreadingPolicy>
-	stdout_sink<ThreadingPolicy>::stdout_sink()
-		: details::console_writer(stdout)
+	stderr_sink<ThreadingPolicy>::stderr_sink()
+		: details::console_writer(stderr)
 	{}
 
 	template<typename ThreadingPolicy>
-	void stdout_sink<ThreadingPolicy>::sink_it(const details::record& record)
+	void stderr_sink<ThreadingPolicy>::sink_it(const details::record& record)
 	{
 		details::console_writer::write(sink_t::m_pattern.compile(record));
 	}

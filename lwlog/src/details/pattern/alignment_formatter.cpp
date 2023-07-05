@@ -1,4 +1,4 @@
-#include "alignment_formatter.hpp"
+#include "alignment_formatter.h"
 
 namespace lwlog::details
 {

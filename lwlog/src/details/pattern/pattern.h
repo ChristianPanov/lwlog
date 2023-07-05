@@ -3,10 +3,10 @@
 #include <memory>
 #include <unordered_map>
 
-#include "fwd.hpp"
-#include "attribute.hpp"
-#include "details/record.hpp"
-#include "alignment_formatter.hpp"
+#include "fwd.h"
+#include "attribute.h"
+#include "details/record.h"
+#include "alignment_formatter.h"
 
 namespace lwlog::details
 {

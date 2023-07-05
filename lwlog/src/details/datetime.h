@@ -3,9 +3,9 @@
 #include <string>
 #include <ctime>
 
-#include "tweakme_macros.hpp"
+#include "tweakme_macros.h"
 #ifdef _WIN64
-#include "windows_lightweight.hpp"
+#include "windows_lightweight.h"
 #include <array>
 #else
 #include <chrono>

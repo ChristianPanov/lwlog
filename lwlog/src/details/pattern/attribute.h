@@ -4,7 +4,7 @@
 #include <variant>
 #include <functional>
 
-#include "fwd.hpp"
+#include "fwd.h"
 
 namespace lwlog::details
 {
