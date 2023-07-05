@@ -8,7 +8,7 @@ namespace lwlog::details
 	{
 	public:
 		file_writer() = default;
-		file_writer(std::string_view path);
+		explicit file_writer(std::string_view path);
 		virtual ~file_writer();
 
 	public:
