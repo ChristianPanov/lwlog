@@ -29,6 +29,7 @@ namespace lwlog::sinks
 	template<typename ThreadingPolicy>
 	void file_sink<ThreadingPolicy>::sink_it(const details::record& record)
 	{
+        sink_t::m_current_level = record.level;
 		details::file_writer::write(sink_t::m_pattern.compile(record));
 	}
 }
