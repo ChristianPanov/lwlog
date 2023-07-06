@@ -10,17 +10,17 @@ namespace lwlog::sinks
 		m_pattern.set_pattern("[%d, %T] [%l] [%n]: %v");
 		m_pattern.request_flag_formatters();
 
-        this->add_attribute(".level(", m_current_level, [&]() -> const char*
-        {
-            switch (m_current_level)
-            {
-                case level::info:		return "\u001b[37m";
-                case level::warning:	return "\u001b[33;1m";
-                case level::error:		return "\u001b[31;1m";
-                case level::critical:	return "\u001b[41;1m";
-                case level::debug:		return "\u001b[37;1m";
-            }
-        });
+		this->add_attribute(".level(", m_current_level, [&]() -> const char*
+		{
+			switch (m_current_level)
+			{
+				case level::info:		return "\u001b[37m";
+				case level::warning:	return "\u001b[33;1m";
+				case level::error:		return "\u001b[31;1m";
+				case level::critical:	return "\u001b[41;1m";
+				case level::debug:		return "\u001b[37;1m";
+			}
+		});
 	}
 
 	template<typename ColorPolicy, typename ThreadingPolicy>
