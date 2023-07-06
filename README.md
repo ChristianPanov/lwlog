@@ -346,6 +346,22 @@ int main()
 	return 0;
 }
 ```
+### Level-based colors
+You can also color your logs based on the severity level of the log with this flag - ```.level()```. Each severity level has a different color.
+#### Example
+```cpp
+#include "lwlog.h"
+
+int main()
+{
+	auto console = std::make_shared<console_logger>("CONSOLE");
+	console->set_pattern(".br_red([%T] [%n]) .level([%l]): .br_cyan(%v)");
+
+	console->critical("First critical message");
+	
+	return 0;
+}
+```
 ## Custom attributes
 An attribute is an object, which contains a flag, a value(a reference to some variable) and a callback function.\
 The callback function plays the role of a string conversion function, therefore, it always needs to return a string.\
@@ -452,6 +468,7 @@ namespace lwlog::sinks
 	template<typename ThreadingPolicy>
 	void stdout_sink<ThreadingPolicy>::sink_it(const details::record& record)
 	{
+        	sink_t::m_current_level = record.level;
 		details::console_writer::write(sink_t::m_pattern.compile(record));
 	}
 }
@@ -460,6 +477,7 @@ Here we inherit from the sink base class and configure it to be colored. Whether
 The color policy could be either colored(```lwlog::colored_policy```) or non-colored (```lwlog::uncolored_policy```).\
 The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them. Using ```lwlog::colored_policy``` is most suitable for console sinks, since it relies on console-specific color codes.\
 We only need the ```sink_it()``` function. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.\
+Before outputting the message, you would only need to set the current severity level. ***lwlog*** keeps track of it to allow level-based colors.\
 Like in the example, you can either use some kind of a writer class, which handles the actual writing, or you can directly handle the writing in the function.\
 The compiled and formatted message is received with ```sink_t::m_pattern.compile(record)```. We access the pattern member from the sink base class and then compile it with the log message.
 #### Example
@@ -477,6 +495,7 @@ namespace lwlog::sinks
 	public:
 		void sink_it(const details::record& record) override
 		{
+        		sink_t::m_current_level = record.level;
 			// sink message to somewhere
 		}
 	};
