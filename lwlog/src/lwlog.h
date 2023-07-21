@@ -11,13 +11,17 @@ namespace lwlog
 	template<typename... Args>
 	using default_storage_policy	= dynamic_storage_policy<Args...>;
 	using default_log_policy		= forward_log_policy;
+	using default_flush_policy		= immediate_flush_policy;
 	using single_threaded_policy	= threading_policy<null_mutex>;
 	using multi_threaded_policy		= threading_policy<std::mutex>;
 
-	template<template<typename> typename... Sinks>
-	using basic_logger = logger<default_log_policy, default_storage_policy, single_threaded_policy, Sinks...>;
-	template<template<typename> typename... Sinks>
-	using basic_logger_mt = logger<default_log_policy, default_storage_policy, multi_threaded_policy, Sinks...>;
+	template<template<typename, typename> typename... Sinks>
+	using basic_logger = logger<default_log_policy, default_storage_policy, 
+		default_flush_policy, single_threaded_policy, Sinks...>;
+
+	template<template<typename, typename> typename... Sinks>
+	using basic_logger_mt = logger<default_log_policy, default_storage_policy, 
+		default_flush_policy, multi_threaded_policy, Sinks...>;
 
 	using console_logger	= basic_logger<sinks::stdout_sink>;
 	using console_logger_mt	= basic_logger_mt<sinks::stdout_sink>;

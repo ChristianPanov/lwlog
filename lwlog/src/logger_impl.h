@@ -7,15 +7,16 @@
 namespace lwlog
 {
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
 	template<typename... SinkParams>
-	logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name, SinkParams&&... params)
+	logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name, 
+		SinkParams&&... params)
 		: m_name{ name }
 	{
 		if(registry::instance().is_registry_automatic())
 			registry::instance().register_logger(this);
 
-		m_sink_storage = { sinks::sink_factory<Sinks<ThreadingPolicy>>::request(
+		m_sink_storage = { sinks::sink_factory<Sinks<FlushPolicy, ThreadingPolicy>>::request(
 			std::forward<SinkParams>(params)...
 		)... };
 
@@ -24,55 +25,55 @@ namespace lwlog
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
 	template<typename Iterator, typename... SinkParams>
-	logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name,
+	logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name,
 		Iterator begin, Iterator end, SinkParams&&... params)
 		: logger{ name, params... }
 	{
-		StoragePolicy<Sinks<ThreadingPolicy>...>::insert_range(m_sink_storage, begin, end);
+		StoragePolicy<Sinks<FlushPolicy, ThreadingPolicy>...>::insert_range(m_sink_storage, begin, end);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
 	template<typename... SinkParams>
-	logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name,
+	logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name,
 		sink_list sink_list, SinkParams&&... params)
 		: logger{ name, sink_list.begin(), sink_list.end(), params... }
 	{}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
 	template<typename... SinkParams>
-	logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name,
+	logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name,
 		sink_ptr sink, SinkParams&&... params)
 		: logger{ name, { sink }, params... }
 	{}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::add_sink(sink_ptr sink)
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_sink(sink_ptr sink)
 	{
-		StoragePolicy<Sinks<ThreadingPolicy>...>::add_sink(m_sink_storage, sink);
+		StoragePolicy<Sinks<FlushPolicy, ThreadingPolicy>...>::add_sink(m_sink_storage, sink);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::remove_sink(sink_ptr sink)
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::remove_sink(sink_ptr sink)
 	{
-		StoragePolicy<Sinks<ThreadingPolicy>...>::remove_sink(m_sink_storage, sink);
+		StoragePolicy<Sinks<FlushPolicy, ThreadingPolicy>...>::remove_sink(m_sink_storage, sink);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::sink_logs()
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::sink_logs()
 	{
 		LogPolicy::sink_logs();
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::set_pattern(std::string_view pattern)
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::set_pattern(std::string_view pattern)
 	{
 		for (const auto& sink : m_sink_storage)
 		{ 
@@ -81,9 +82,9 @@ namespace lwlog
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-		void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::add_attribute(std::string_view flag,
-			details::attrib_value value)
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_attribute(std::string_view flag,
+		details::attrib_value value)
 	{
 		for (const auto& sink : m_sink_storage)
 		{
@@ -92,9 +93,9 @@ namespace lwlog
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-		void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::add_attribute(std::string_view flag,
-			details::attrib_value value, details::attrib_callback_t fn)
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_attribute(std::string_view flag,
+		details::attrib_value value, details::attrib_callback_t fn)
 	{
 		for (const auto& sink : m_sink_storage)
 		{
@@ -103,8 +104,8 @@ namespace lwlog
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::set_level_filter(level t_level)
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::set_level_filter(level t_level)
 	{
 		for (const auto& sink : m_sink_storage)
 		{
@@ -113,24 +114,24 @@ namespace lwlog
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-	std::string_view logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::name() const
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	std::string_view logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::name() const
 	{
 		return m_name;
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-	typename logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::Storage&
-		logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::sinks()
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	typename logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::Storage&
+		logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::sinks()
 	{
 		return m_sink_storage;
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::log(const details::log_message& log_msg,
-		level t_level, details::format_args_list args)
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::log(
+		const details::log_message& log_msg, level t_level, details::format_args_list args)
 	{
 		for (const auto& sink : m_sink_storage)
 		{
@@ -142,41 +143,41 @@ namespace lwlog
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::info_impl(const details::log_message& log_msg,
-		details::format_args_list args)
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::info_impl(
+		const details::log_message& log_msg, details::format_args_list args)
 	{
 		this->log(log_msg, level::info, args);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::warning_impl(const details::log_message& log_msg,
-		details::format_args_list args)
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::warning_impl(
+		const details::log_message& log_msg, details::format_args_list args)
 	{
 		log(log_msg, level::warning, args);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::error_impl(const details::log_message& log_msg,
-		details::format_args_list args)
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::error_impl(
+		const details::log_message& log_msg, details::format_args_list args)
 	{
 		this->log(log_msg, level::error, args);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::critical_impl(const details::log_message& log_msg,
-		details::format_args_list args)
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::critical_impl(
+		const details::log_message& log_msg, details::format_args_list args)
 	{
 		this->log(log_msg, level::critical, args);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename ThreadingPolicy, template<typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, ThreadingPolicy, Sinks...>::debug_impl(const details::log_message& log_msg,
-		details::format_args_list args)
+		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::debug_impl(
+		const details::log_message& log_msg, details::format_args_list args)
 	{
 		this->log(log_msg, level::debug, args);
 	}

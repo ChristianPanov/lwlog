@@ -8,6 +8,7 @@ int main()
 		lwlog::logger<
 			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
+			lwlog::buffered_flush_policy<>,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_sink
 		>

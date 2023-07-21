@@ -16,6 +16,7 @@ namespace lwlog
 			logger<
 				forward_log_policy,
 				static_storage_policy,
+				immediate_flush_policy,
 				threading_policy<null_mutex>,
 				sinks::stdout_sink
 			>

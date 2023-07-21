@@ -3,6 +3,7 @@
 #include "level.h"
 #include "details/pattern/pattern.h"
 #include "policy/sink_color_policy.h"
+#include "policy/flush_policy.h"
 #include "policy/threading_policy.h"
 #include "interface/sink_interface.h"
 

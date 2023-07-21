@@ -1,14 +1,14 @@
 #pragma once
 
 #include "sink.h"
-#include "details/console_writer.h"
+#include "details/stream_writer.h"
 
 namespace lwlog::sinks
 {
-	template<typename ThreadingPolicy>
-	class stderr_sink 
+	template<typename FlushPolicy, typename ThreadingPolicy>
+	class stderr_sink
 		: public sink<colored_policy, ThreadingPolicy>
-		, private details::console_writer
+		, private details::stream_writer<FlushPolicy>
 	{
 	private:
 		using sink_t = sink<colored_policy, ThreadingPolicy>;
@@ -18,15 +18,15 @@ namespace lwlog::sinks
 		void sink_it(const details::record& record) override;
 	};
 
-	template<typename ThreadingPolicy>
-	stderr_sink<ThreadingPolicy>::stderr_sink()
-		: details::console_writer(stderr)
+	template<typename FlushPolicy, typename ThreadingPolicy>
+	stderr_sink<FlushPolicy, ThreadingPolicy>::stderr_sink()
+		: details::stream_writer<FlushPolicy>(stderr)
 	{}
 
-	template<typename ThreadingPolicy>
-	void stderr_sink<ThreadingPolicy>::sink_it(const details::record& record)
+	template<typename FlushPolicy, typename ThreadingPolicy>
+	void stderr_sink<FlushPolicy, ThreadingPolicy>::sink_it(const details::record& record)
 	{
 		sink_t::m_current_level = record.level;
-		details::console_writer::write(sink_t::m_pattern.compile(record));
+		details::stream_writer<FlushPolicy>::write(sink_t::m_pattern.compile(record));
 	}
 }
