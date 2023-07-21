@@ -6,7 +6,7 @@ namespace lwlog
 	struct buffered_flush_policy
 	{
 		static constexpr auto buffer_size{ BufferSize };
-		static void flush(std::FILE* stream) {}
+		static void flush(std::FILE*) {}
 	};
 
 	struct immediate_flush_policy
