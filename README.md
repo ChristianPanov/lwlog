@@ -131,6 +131,7 @@ int main()
 		lwlog::logger<
 			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
+			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_sink
 			>
@@ -149,7 +150,7 @@ They are intended for ease of use, so I encourage you to use them instead of the
 They are predefined with default configurations, so unless you need more special functionality, stick to using them.
 Alias | Description
 ------------ | -------------
-```lwlog::basic_logger``` | Configured with a standard log mechanism(forward logging) and a standard sink storage(dynamic storage), not thread-safe
+```lwlog::basic_logger``` | Configured with a standard log mechanism(forward logging), a standard sink storage(dynamic storage) and a standard flush policy, not thread-safe
 ```lwlog::console_logger``` | basic_logger which sinks to stdout
 ```lwlog::file_logger``` | basic_logger which sinks to a file
 ```lwlog::null_logger``` | A null logger is simply a logger with default configuration but without any sinks. Use it if you don't want compile-time sinks and you are only interested in adding sinks later at runtime
@@ -183,6 +184,9 @@ Policy | Description
 ```lwlog::default_storage_policy``` | Convenience alias for ```lwlog::static_storage_policy```
 ```lwlog::static_storage_policy``` | Configures the sink storage as an ```std::array``` - use it if you only set sinks at compile time and you know for sure you won't add sinks at runtime, it is more lightweight than a dynamic sink storage
 ```lwlog::dynamic_storage_policy``` | Configures the sink storage as an ```std::vector``` - use it if you will add sinks at runtime, or if you simply aren't sure if you are only going to use the compile-time set sinks
+```lwlog::default_flush_policy``` | Convenience alias for ```lwlog::immediate_flush_policy```
+```lwlog::buffered_flush_policy``` | Is functional only with stream sinks(stdout, stderr, file). Configures the sink with a manually increased buffer. Provides significant performance improvement, but messages are not flushed from the stream until the buffer is full, which could potentially lead to a loss of data. It accepts a template parameter for the size of the buffer, by default it's ***2^22 bytes***, bigger than the default one provided by the C++ specification(***512 bytes***)
+```lwlog::immediate_flush_policy``` | Is functional only with stream sinks(stdout, stderr, file). Configures the sink with a flush function call after every log. Performance is not as good but is safer as all messages are flushed immediately on write, meaning no message could be potentially lost
 ```lwlog::single_threaded_policy``` | Configures the sinks with a placeholder mutex and locks - use it if you don't need thread-safety, it is more lightweight than a thread-safe logger
 ```lwlog::multi_threaded_policy``` | Configures the sinks with a mutex and locks for thread-safety
 #### Example
@@ -195,6 +199,7 @@ int main()
 		lwlog::logger<
 			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
+			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_sink
 			>
@@ -218,6 +223,7 @@ int main()
 		lwlog::logger<
 			lwlog::deferred_log_policy,
 			lwlog::default_storage_policy,
+			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_sink
 			>
@@ -394,6 +400,7 @@ int main()
 		lwlog::logger<
 			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
+			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_sink, 
       			lwlog::sinks::file_sink
@@ -426,6 +433,7 @@ int main()
 		lwlog::logger<
 			lwlog::default_log_policy,
 			lwlog::static_storage_policy,
+			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_sink
 			>
@@ -441,10 +449,10 @@ To create your own sink, all you have to do is inherit from ```lwlog::sinks::sin
 ```cpp
 namespace lwlog::sinks
 {
-	template<typename ThreadingPolicy>
+	template<typename FlushPolicy, typename ThreadingPolicy>
 	class stdout_sink 
 		: public sink<colored_policy, ThreadingPolicy>
-		, private details::console_writer
+		, private details::stream_writer<FlushPolicy>
 	{
 	private:
 		using sink_t = sink<colored_policy, ThreadingPolicy>;
@@ -454,22 +462,23 @@ namespace lwlog::sinks
 		void sink_it(const details::record& record) override;
 	};
 
-	template<typename ThreadingPolicy>
-	stdout_sink<ThreadingPolicy>::stdout_sink()
-		: details::console_writer(stdout)
+	template<typename FlushPolicy, typename ThreadingPolicy>
+	stdout_sink<FlushPolicy, ThreadingPolicy>::stdout_sink()
+		: details::stream_writer<FlushPolicy>(stdout)
 	{}
 
-	template<typename ThreadingPolicy>
-	void stdout_sink<ThreadingPolicy>::sink_it(const details::record& record)
+	template<typename FlushPolicy, typename ThreadingPolicy>
+	void stdout_sink<FlushPolicy, ThreadingPolicy>::sink_it(const details::record& record)
 	{
         	sink_t::m_current_level = record.level;
-		details::console_writer::write(sink_t::m_pattern.compile(record));
+		details::stream_writer<FlushPolicy>::write(sink_t::m_pattern.compile(record));
 	}
 }
 ```
 Here we inherit from the sink base class and configure it to be colored. Whether it's thread-safe or not is left up to the one using the sink.\
 The color policy could be either colored(```lwlog::colored_policy```) or non-colored (```lwlog::uncolored_policy```).\
 The non-colored policy will drop the color flags in the pattern instead of processing them, but will not ignore them. Using ```lwlog::colored_policy``` is most suitable for console sinks, since it relies on console-specific color codes.\
+A flush policy also needs to be provided. It's only meaningful for stream-based sinks(stdout, stderr, file). If your sink sends data in a different way, it should still be provided as part of the interface.\
 We only need the ```sink_it()``` function. It can do whatever you want it to do - write to console, write to file, write to file in some fancy way, write to another application, etc.\
 Before outputting the message, you would only need to set the current severity level. ***lwlog*** keeps track of it to allow level-based colors.\
 Like in the example, you can either use some kind of a writer class, which handles the actual writing, or you can directly handle the writing in the function.\
