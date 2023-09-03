@@ -75,7 +75,7 @@ namespace lwlog::details::datetime
         return local <= 23 ? local : local - 24;
     }
 
-    static std::string pad_with_zero_if_needed(std::uint16_t digit)
+    static std::string ensure_two_digit_format(std::uint16_t digit)
     {
         return (digit <= 9 ? "0" : "") + std::to_string(digit);
     }
@@ -85,8 +85,8 @@ namespace lwlog::details::datetime
         LWLOG_TIME_FN_BODY
         (
             return std::to_string(now.wYear) + "-" +
-            pad_with_zero_if_needed(now.wMonth) + "-" +
-            pad_with_zero_if_needed(now.wDay);
+                ensure_two_digit_format(now.wMonth) + "-" +
+                ensure_two_digit_format(now.wDay);
         )
     }
 
@@ -94,9 +94,9 @@ namespace lwlog::details::datetime
     {
         LWLOG_TIME_FN_BODY
         (
-            return pad_with_zero_if_needed(now.wMonth) + "/"
-            + pad_with_zero_if_needed(now.wDay) + "/"
-            + pad_with_zero_if_needed(now.wYear % 100);
+            return ensure_two_digit_format(now.wMonth) + "/"
+                + ensure_two_digit_format(now.wDay) + "/"
+                + ensure_two_digit_format(now.wYear % 100);
         )
     }
 
@@ -112,7 +112,7 @@ namespace lwlog::details::datetime
     {
         LWLOG_TIME_FN_BODY
         (
-            return pad_with_zero_if_needed(now.wYear % 100);
+            return ensure_two_digit_format(now.wYear % 100);
         )
     }
 
@@ -120,7 +120,7 @@ namespace lwlog::details::datetime
     {
         LWLOG_TIME_FN_BODY
         (
-            return pad_with_zero_if_needed(now.wMonth);
+            return ensure_two_digit_format(now.wMonth);
         )
     }
 
@@ -144,7 +144,7 @@ namespace lwlog::details::datetime
     {
         LWLOG_TIME_FN_BODY
         (
-            return pad_with_zero_if_needed(now.wDay);
+            return ensure_two_digit_format(now.wDay);
         )
     }
 
@@ -168,9 +168,9 @@ namespace lwlog::details::datetime
     {
         LWLOG_TIME_FN_BODY
         (
-            return pad_with_zero_if_needed(to_local(now.wHour)) + ":" +
-            pad_with_zero_if_needed(now.wMinute) + ":" +
-            pad_with_zero_if_needed(now.wSecond);
+            return ensure_two_digit_format(to_local(now.wHour)) + ":" +
+                ensure_two_digit_format(now.wMinute) + ":" +
+                ensure_two_digit_format(now.wSecond);
         )
     }
 
@@ -178,8 +178,8 @@ namespace lwlog::details::datetime
     {
         LWLOG_TIME_FN_BODY
         (
-            return pad_with_zero_if_needed(to_local(now.wHour)) + ":" +
-            pad_with_zero_if_needed(now.wMinute);
+            return ensure_two_digit_format(to_local(now.wHour)) + ":" +
+                ensure_two_digit_format(now.wMinute);
         )
     }
 
@@ -187,9 +187,9 @@ namespace lwlog::details::datetime
     {
         LWLOG_TIME_FN_BODY
         (
-            return pad_with_zero_if_needed(to_12h(to_local(now.wHour))) + ":" +
-            pad_with_zero_if_needed(now.wMinute) + ":" +
-            pad_with_zero_if_needed(now.wSecond) + ampm(now.wHour);
+            return ensure_two_digit_format(to_12h(to_local(now.wHour))) + ":" +
+                ensure_two_digit_format(now.wMinute) + ":" +
+                ensure_two_digit_format(now.wSecond) + ampm(now.wHour);
         )
     }
 
@@ -205,7 +205,7 @@ namespace lwlog::details::datetime
     {
         LWLOG_TIME_FN_BODY
         (
-            return pad_with_zero_if_needed(to_local(now.wHour));
+            return ensure_two_digit_format(to_local(now.wHour));
         )
     }
 
@@ -213,7 +213,7 @@ namespace lwlog::details::datetime
     {
         LWLOG_TIME_FN_BODY
         (
-            return pad_with_zero_if_needed(to_12h(to_local(now.wHour)));
+            return ensure_two_digit_format(to_12h(to_local(now.wHour)));
         )
     }
 
@@ -221,7 +221,7 @@ namespace lwlog::details::datetime
     {
         LWLOG_TIME_FN_BODY
         (
-            return pad_with_zero_if_needed(now.wMinute);
+            return ensure_two_digit_format(now.wMinute);
         )
     }
 
@@ -229,7 +229,7 @@ namespace lwlog::details::datetime
     {
         LWLOG_TIME_FN_BODY
         (
-            return pad_with_zero_if_needed(now.wSecond);
+            return ensure_two_digit_format(now.wSecond);
         )
     }
 #else
