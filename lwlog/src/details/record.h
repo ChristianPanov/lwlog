@@ -19,7 +19,7 @@ namespace lwlog::details
 		std::string_view		message;
 		level					level;
 		source_meta				meta;
-		datetime::time_point	time_point	{};
+		time_point				time_point	{};
 		LWLOG_THREAD_ID_TYPE	thread_id	{ LWLOG_THREAD_ID_FN() };
 		LWLOG_PROCESS_ID_TYPE	process_id	{ LWLOG_PROCESS_ID_FN() };
 	};

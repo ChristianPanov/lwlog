@@ -2,7 +2,7 @@
 
 namespace lwlog::details
 {
-	datetime::time_point::time_point()
+	time_point::time_point()
 	{
 		#if LWLOG_NO_TIME == 0
 			#ifdef _WIN32

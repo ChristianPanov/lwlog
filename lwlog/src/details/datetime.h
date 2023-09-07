@@ -13,25 +13,23 @@
 
 namespace lwlog::details
 {
+    struct time_point
+    {
+        time_point();
+
+        #if LWLOG_NO_TIME == 0
+            std::uint8_t year   {};
+            std::uint8_t month  {};
+            std::uint8_t weekday{};
+            std::uint8_t day    {};
+            std::uint8_t hour   {};
+            std::uint8_t minute {};
+            std::uint8_t second {};
+        #endif
+    };
+
     class datetime
     {
-    public:
-        #if LWLOG_NO_TIME == 0 
-            struct time_point
-            { 
-                time_point();
-                std::uint8_t year   {};
-                std::uint8_t month  {};
-                std::uint8_t weekday{};
-                std::uint8_t day    {};
-                std::uint8_t hour   {};
-                std::uint8_t minute {};
-                std::uint8_t second {};
-               };
-	    #else
-            struct time_point { time_point(); };
-	    #endif
-
     public:
         static std::string get_date                 (const time_point& now);
         static std::string get_date_short           (const time_point& now);
