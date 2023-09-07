@@ -2,19 +2,6 @@
 
 #include "tweakme.h"
 
-#if LWLOG_NO_TIME == 1
-	#define LWOG_TIME_FN_PARAM_TYPE void*
-	#define LWLOG_TIME_FN_BODY(...) return {};
-	#define LWLOG_TIME_TYPE void*
-	#define LWLOG_INIT_TIME_POINT_FN(...)
-#else
-	#define LWOG_TIME_FN_PARAM_TYPE const datetime::time_point_t&
-	#define LWLOG_TIME_FN_BODY(code) code
-	#define LWLOG_TIME_TYPE datetime::time_point_t
-	#define LWLOG_INIT_TIME_POINT_FN(time_point)\
-	datetime::init_time_point(time_point)
-#endif
-
 #if LWLOG_USE_THREAD_ID == 1
 	#define LWLOG_THREAD_ID_TYPE std::size_t
 	#define LWLOG_THREAD_ID_FN(...) os::thread_id()
