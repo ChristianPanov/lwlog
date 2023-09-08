@@ -274,6 +274,9 @@ Verbose flag | Short flag | Description | Example
 ```{hour_12}``` | ```%I``` | Current hour in 12-hour format | "05"
 ```{minute}``` | ```%m``` | Current minute 00-59 | "42"
 ```{second}``` | ```%s``` | Current second 00-59 | "10"
+```{millisec}``` | ```%e``` | Millisecond part of the current second 000-999 | "829"
+```{microsec}``` | ```%f``` | Microsecond part of the current second 000000-999999 | "830564"
+```{nanosec}``` | ```%E``` | Nanosecond part of the current second 000000000-999999999 | "830564200"
 ### Source metainformation (function name, file path, current line)
 ***lwlog*** gives you the ability to get source code metainformation in the form of attributes.\
 One can get the current line on which the log function is called, the file path in which it is called, or the function name in which it is called, and all of that without macros.\
@@ -597,8 +600,9 @@ The [***tweakme.h***](https://github.com/ChristianPanov/lwlog/blob/master/lwlog/
 Depending on your needs, you can switch on and off certain features. Switching them off will completely remove them from the ***lwlog*** code which will increase performance and reduce overhead, because you shouldn't pay for what you don't need.
 Macro | Off(0) - Default | On(1)
 ------------ | ------------- | -------------
-```LWLOG_NO_TIME``` | Decreased performance. Has overhead of retrieving the system time and saving it in memory | Heavily increased performance. No overhead. Time flags will result into nothing
+```LWLOG_NO_TIME``` | Decreased performance. Has overhead of retrieving the system time and saving it in memory | Increased performance. No overhead. Time flags will result into nothing
 ```LWLOG_USE_LOCALTIME``` | Time flags will result into local time | Time flags will result into UTC(GMT) time
+```LWLOG_USE_PRECISE_UNITS``` | Slightly increased performance. No overhead. Precise time unit(microsecond, millisecond, nanosecond) flags result into nothing | Slightly decreased performance. Has overhead of retrieving needed data to calculate precise time units
 ```LWLOG_USE_THREAD_ID``` | Slightly increased performance. No overhead. ```{thread}``` or ```%t``` will result into nothing | Slightly decreased performance. Has overhead of retrieving the current thread id(tid) and saving it in memory
 ```LWLOG_USE_PROCESS_ID``` | Slightly increased performance. No overhead. ```{process}``` or  ```%P``` will result into nothing | Slightly decreased performance. Has overhead of retrieving the current process id(pid) and saving it in memory
 # Performance
