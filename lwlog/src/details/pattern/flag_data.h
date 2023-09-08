@@ -29,4 +29,7 @@ namespace lwlog::details::flag
 	inline constexpr flag_pair hour_12			= { "{hour_12}",			"%I" };
 	inline constexpr flag_pair minute			= { "{minute}",				"%M" };
 	inline constexpr flag_pair second			= { "{second}",				"%S" };
+	inline constexpr flag_pair millisecond		= { "{millisec}",			"%e" };
+	inline constexpr flag_pair microsecond		= { "{microsec}",			"%f" };
+	inline constexpr flag_pair nanosecond		= { "{nanosec}",			"%E" };
 }

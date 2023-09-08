@@ -5,6 +5,7 @@
 #include <ctime>
 
 #include "tweakme.h"
+
 #ifdef _WIN32
     #include "details/windows_lightweight.h"
 #else
@@ -25,6 +26,12 @@ namespace lwlog::details
             std::uint8_t hour   {};
             std::uint8_t minute {};
             std::uint8_t second {};
+
+            #if LWLOG_USE_PRECISE_UNITS == 1
+                std::uint16_t millisecond{};
+                std::uint32_t microsecond{};
+                std::uint32_t nanosecond{};
+            #endif
         #endif
     };
 
@@ -49,6 +56,9 @@ namespace lwlog::details
         static std::string get_hour_12              (const time_point& now);
         static std::string get_minute               (const time_point& now);
         static std::string get_second               (const time_point& now);
+        static std::string get_millisecond          (const time_point& now);
+        static std::string get_microsecond          (const time_point& now);
+        static std::string get_nanosecond           (const time_point& now);
 
     private:
         static const char* ampm(std::uint16_t hour);

@@ -318,4 +318,40 @@ namespace lwlog::details
 			);
 		}
 	};
+
+	struct millisecond_formatter : public formatter
+	{
+		void format(std::string& pattern, const record& record) const override
+		{
+			formatter::format_attribute(
+				pattern,
+				flag::millisecond,
+				datetime::get_millisecond(record.time_point)
+			);
+		}
+	};
+
+	struct microsecond_formatter : public formatter
+	{
+		void format(std::string& pattern, const record& record) const override
+		{
+			formatter::format_attribute(
+				pattern,
+				flag::microsecond,
+				datetime::get_microsecond(record.time_point)
+			);
+		}
+	};
+
+	struct nanosecond_formatter : public formatter
+	{
+		void format(std::string& pattern, const record& record) const override
+		{
+			formatter::format_attribute(
+				pattern,
+				flag::nanosecond,
+				datetime::get_nanosecond(record.time_point)
+			);
+		}
+	};
 }

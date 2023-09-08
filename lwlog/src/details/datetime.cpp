@@ -8,27 +8,50 @@ namespace lwlog::details
 			#ifdef _WIN32
 				::SYSTEMTIME now;
 				::GetSystemTime(&now);
-
+				
 				year	= now.wYear;
 				month	= now.wMonth;
-				weekday = now.wDayOfWeek;
+				weekday	= now.wDayOfWeek;
 				day		= now.wDay;
 				hour	= now.wHour;
 				minute	= now.wMinute;
 				second	= now.wSecond;
-			#else
-				using namespace std::chrono;
 
-				std::time_t now_time_t{ system_clock::to_time_t(system_clock::now()) };
-				std::tm* details{ std::gmtime(&now_time_t) };
+				#if LWLOG_USE_PRECISE_UNITS == 1
+					::FILETIME now_ft;
+					::GetSystemTimePreciseAsFileTime(&now_ft);
+
+					::ULARGE_INTEGER ticks_since_windows_epoch;
+					ticks_since_windows_epoch.LowPart = now_ft.dwLowDateTime;
+					ticks_since_windows_epoch.HighPart = now_ft.dwHighDateTime;
+
+					const std::uint64_t ticks_since_last_second{ ticks_since_windows_epoch.QuadPart % 10'000'000 };
+
+					millisecond = now.wMilliseconds;
+					microsecond = (ticks_since_last_second / 10) % 1'000'000;
+					nanosecond = ticks_since_last_second * 100 % 1'000'000'000;
+				#endif
+			#else
+				const std::chrono::system_clock::time_point now{ std::chrono::system_clock::now() };
+				const std::time_t now_time_t{ std::chrono::system_clock::to_time_t(now) };
+				const std::tm* details{ std::gmtime(&now_time_t) };
 
 				year	= details->tm_year + 1900;
 				month	= details->tm_mon + 1;
-				weekday = details->tm_wday;
+				weekday	= details->tm_wday;
 				day		= details->tm_mday;
 				hour	= details->tm_hour;
 				minute	= details->tm_min;
 				second	= details->tm_sec;
+
+				#if LWLOG_USE_PRECISE_UNITS == 1
+					const auto nanoseconds_since_unix_epoch{ 
+						std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count() };
+
+					millisecond = (nanoseconds_since_unix_epoch / 1'000'000) % 1'000;
+					microsecond = (nanoseconds_since_unix_epoch / 1'000) % 1'000'000;
+					nanosecond = nanoseconds_since_unix_epoch % 1'000'000'000;
+				#endif
 			#endif
 		#endif
 	}
@@ -228,6 +251,33 @@ namespace lwlog::details
 	{
 		#if LWLOG_NO_TIME == 0
             return ensure_two_digit_format(now.second);
+		#else
+			return {};
+		#endif
+	}
+
+	std::string datetime::get_millisecond(const time_point& now)
+	{
+		#if LWLOG_NO_TIME == 0 && LWLOG_USE_PRECISE_UNITS == 1
+            return std::to_string(now.millisecond);
+		#else
+			return {};
+		#endif
+	}
+
+	std::string datetime::get_microsecond(const time_point& now)
+	{
+		#if LWLOG_NO_TIME == 0 && LWLOG_USE_PRECISE_UNITS == 1
+            return std::to_string(now.microsecond);
+		#else
+			return {};
+		#endif
+	}
+
+	std::string datetime::get_nanosecond(const time_point& now)
+	{
+		#if LWLOG_NO_TIME == 0 && LWLOG_USE_PRECISE_UNITS == 1
+            return std::to_string(now.nanosecond);
 		#else
 			return {};
 		#endif

@@ -31,7 +31,10 @@ namespace lwlog::details
 		{flag::hour_24.verbose,				std::make_shared<hour_24_formatter>()},
 		{flag::hour_12.verbose,				std::make_shared<hour_12_formatter>()},
 		{flag::minute.verbose,				std::make_shared<minute_formatter>()},
-		{flag::second.verbose,				std::make_shared<second_formatter>()}
+		{flag::second.verbose,				std::make_shared<second_formatter>()},
+		{flag::millisecond.verbose,			std::make_shared<millisecond_formatter>()},
+		{flag::microsecond.verbose,			std::make_shared<microsecond_formatter>()},
+		{flag::nanosecond.verbose,			std::make_shared<nanosecond_formatter>()}
 	};
 
 	inline std::unordered_map<std::string_view, std::shared_ptr<formatter>> shortened_data
@@ -61,6 +64,9 @@ namespace lwlog::details
 		{flag::hour_24.shortened,			std::make_shared<hour_24_formatter>()},
 		{flag::hour_12.shortened,			std::make_shared<hour_12_formatter>()},
 		{flag::minute.shortened,			std::make_shared<minute_formatter>()},
-		{flag::second.shortened,			std::make_shared<second_formatter>()}
+		{flag::second.shortened,			std::make_shared<second_formatter>()},
+		{flag::millisecond.shortened,		std::make_shared<millisecond_formatter>()},
+		{flag::microsecond.shortened,		std::make_shared<microsecond_formatter>()},
+		{flag::nanosecond.shortened,		std::make_shared<nanosecond_formatter>()}
 	};
 }
