@@ -12,7 +12,7 @@
     #include <chrono>
 #endif
 
-namespace lwlog::details
+namespace lwlog::details::os
 {
     struct time_point
     {

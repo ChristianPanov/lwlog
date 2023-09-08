@@ -1,9 +1,8 @@
 #pragma once
 
-#include "tweakme_macros.h"
 #include "source_meta.h"
-#include "datetime.h"
-#include "os.h"
+#include "os/datetime.h"
+#include "os/os.h"
 
 namespace lwlog::details
 {
@@ -19,8 +18,7 @@ namespace lwlog::details
 		std::string_view		message;
 		level					level;
 		source_meta				meta;
-		time_point				time_point	{};
-		LWLOG_THREAD_ID_TYPE	thread_id	{ LWLOG_THREAD_ID_FN() };
-		LWLOG_PROCESS_ID_TYPE	process_id	{ LWLOG_PROCESS_ID_FN() };
+		os::time_point			time_point{};
+		os::execution_context	execution_context{};
 	};
 }

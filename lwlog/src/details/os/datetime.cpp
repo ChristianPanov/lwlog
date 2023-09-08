@@ -1,6 +1,6 @@
 #include "datetime.h"
 
-namespace lwlog::details
+namespace lwlog::details::os
 {
 	time_point::time_point()
 	{
@@ -56,8 +56,7 @@ namespace lwlog::details
 		#endif
 	}
 
-	const std::int16_t datetime::m_cached_timezone_offset = []()
-		{
+	const std::int16_t datetime::m_cached_timezone_offset = []() {
 			#if LWLOG_USE_LOCALTIME == 1
 				#ifdef _WIN32
 					::TIME_ZONE_INFORMATION tz_info;

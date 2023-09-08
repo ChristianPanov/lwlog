@@ -8,12 +8,11 @@ namespace lwlog::details
 	void formatter::format_attribute(std::string& pattern, const flag_pair& flags, T value)
 	{
 		std::string_view str_value = [&value]() {
-			if constexpr (std::is_arithmetic_v<T>)
-				return std::to_string(std::forward<T>(value));
-			else if constexpr (std::is_same_v<T, std::string>)
-				return value.data();
-			else
-				return value;
+			if constexpr (std::is_arithmetic_v<T>)					return std::to_string(value);
+			else if constexpr (std::is_same_v<T, std::string>)		return value.data();
+			else if constexpr (std::is_same_v<T, const char*>)		return value;
+			else if constexpr (std::is_same_v<T, std::string_view>)	return value;
+			else													return "";
 		}();
 
 		const auto& [verbose, shortened] = flags;
@@ -28,18 +27,14 @@ namespace lwlog::details
 	void formatter::format_attribute(std::string& pattern, std::string_view flag, T value)
 	{
 		std::string_view str_value = [&value]() {
-			if constexpr (std::is_arithmetic_v<T>)
-				return std::to_string(std::forward<T>(value));
-			else if constexpr (std::is_same_v<T, std::string>)
-				return value.data();
-			else
-				return value;
+			if constexpr (std::is_arithmetic_v<T>)					return std::to_string(value);
+			else if constexpr (std::is_same_v<T, std::string>)		return value.data();
+			else if constexpr (std::is_same_v<T, const char*>)		return value;
+			else if constexpr (std::is_same_v<T, std::string_view>)	return value;
+			else													return "";
 		}();
 
 		while (std::strstr(pattern.data(), flag.data()))
 			pattern.replace(pattern.find(flag), flag.length(), str_value);
 	}
-
-	template<> void formatter::format_attribute<void*>(std::string&, const flag_pair&, void*) {}
-	template<> void formatter::format_attribute<void*>(std::string&, std::string_view, void*) {}
 }
