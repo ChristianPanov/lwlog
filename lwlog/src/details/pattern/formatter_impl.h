@@ -10,8 +10,8 @@ namespace lwlog::details
 		std::string_view str_value = [&value]() {
 			if constexpr (std::is_arithmetic_v<T>)					return std::to_string(value);
 			else if constexpr (std::is_same_v<T, std::string>)		return value.data();
-			else if constexpr (std::is_same_v<T, const char*>)		return value;
 			else if constexpr (std::is_same_v<T, std::string_view>)	return value;
+			else if constexpr (std::is_same_v<T, const char*>)		return value;
 			else													return "";
 		}();
 
@@ -29,8 +29,8 @@ namespace lwlog::details
 		std::string_view str_value = [&value]() {
 			if constexpr (std::is_arithmetic_v<T>)					return std::to_string(value);
 			else if constexpr (std::is_same_v<T, std::string>)		return value.data();
-			else if constexpr (std::is_same_v<T, const char*>)		return value;
 			else if constexpr (std::is_same_v<T, std::string_view>)	return value;
+			else if constexpr (std::is_same_v<T, const char*>)		return value;
 			else													return "";
 		}();
 
