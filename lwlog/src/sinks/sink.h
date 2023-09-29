@@ -26,7 +26,6 @@ namespace lwlog::sinks
 		void add_attribute(std::string_view flag, details::attrib_value value, details::attrib_callback_t fn) override;
 		void set_level_filter(level level_filter) override;
 		bool should_sink(level t_level) const override;
-		details::pattern& pattern() override;
 
 	protected:
 		mutable Mutex m_mtx;

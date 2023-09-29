@@ -68,11 +68,4 @@ namespace lwlog::sinks
 			return true;
 		return false;
 	}
-
-	template<typename ColorPolicy, typename ThreadingPolicy>
-	details::pattern& sink<ColorPolicy, ThreadingPolicy>::pattern()
-	{
-		Lock lock(m_mtx);
-		return m_pattern;
-	}
 }
