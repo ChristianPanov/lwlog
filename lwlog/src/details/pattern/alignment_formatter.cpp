@@ -45,9 +45,9 @@ namespace lwlog::details
 		const std::string to_align_formatted{ pattern.substr(flag_pos + spec.alignment_flag.size(),
 			pattern.find(alignment_specification::end_flag) - flag_pos - spec.alignment_flag.size()) };
 
-		pattern.replace(pattern.find(spec.alignment_flag), spec.alignment_flag.size(), "");
-		pattern.replace(pattern.find(alignment_specification::end_flag), 2, "");
-		pattern.replace(pattern.find(to_align_formatted), to_align_formatted.size(),
+		pattern.replace(flag_pos, spec.alignment_flag.size(), "");
+		pattern.replace(pattern.find(alignment_specification::end_flag, flag_pos), 2, "");
+		pattern.replace(pattern.find(to_align_formatted, flag_pos), to_align_formatted.size(),
 			alignment_formatter::align(to_align_formatted, spec.width, spec.fill_char, spec.side));
 	}
 
