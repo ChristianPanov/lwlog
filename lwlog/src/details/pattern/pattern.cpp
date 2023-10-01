@@ -26,16 +26,46 @@ namespace lwlog::details
 		{
 			flag_start_pos -= 1;
 
-			const std::size_t flag_end_pos{ m_pattern.find(' ', flag_start_pos) };
+			const std::string_view pattern_view{ m_pattern };
+			const std::size_t flag_end_pos{ pattern_view.find(' ', flag_start_pos) };
+			const std::string_view flag_view{ pattern_view.substr(flag_start_pos, flag_end_pos - flag_start_pos) };
 
-			m_alignment_specs.emplace_back(m_pattern.substr(flag_start_pos,
-				(flag_end_pos == std::string::npos ? m_pattern.size() : flag_end_pos) - flag_start_pos));
+			const bool has_fill_char{ !std::isdigit(flag_view[2]) };
+			const std::uint8_t flag_length = has_fill_char ? 3 : 2;
 
-			const std::string& flag_to_align{ m_alignment_specs.back().flag_to_align };
-			const std::size_t flag_to_align_pos{ m_pattern.find(flag_to_align, flag_start_pos) };
+			const std::string_view width_str{ flag_view.substr(flag_length,
+				std::isdigit(flag_view[flag_length + 1]) ? 2 : 1) };
 
-			m_pattern.replace(flag_to_align_pos, flag_to_align.size(),
-				flag_to_align + alignment_specification::end_flag);
+			alignment_specification alignment_spec;
+
+			alignment_spec.fill_char = has_fill_char ? flag_view[2] : ' ';
+			alignment_spec.width = static_cast<std::uint8_t>(std::stoi(width_str.data()));
+			alignment_spec.alignment_flag = flag_view.substr(0, flag_length + width_str.size());
+
+			switch (flag_view[1])
+			{
+			case '<': alignment_spec.side = alignment_specification::align_side::left;		break;
+			case '>': alignment_spec.side = alignment_specification::align_side::right;		break;
+			case '^': alignment_spec.side = alignment_specification::align_side::center;	break;
+			}
+
+			m_alignment_specs.push_back(alignment_spec);
+
+			std::string_view flag_to_align;
+			if (const std::size_t short_flag_pos{ flag_view.find('%') };
+				short_flag_pos != std::string_view::npos)
+			{
+				flag_to_align = flag_view.substr(short_flag_pos, 2);
+			}
+			else if (const std::size_t verbose_flag_pos{ flag_view.find('{') };
+				verbose_flag_pos != std::string_view::npos)
+			{
+				flag_to_align = flag_view.substr(verbose_flag_pos,
+					flag_view.find('}', verbose_flag_pos) - verbose_flag_pos + 1);
+			}
+
+			m_pattern.insert(pattern_view.find(flag_to_align, flag_start_pos) + flag_to_align.size(),
+				alignment_specification::flag_end_indicator);
 
 			flag_start_pos += flag_to_align.size();
 		}

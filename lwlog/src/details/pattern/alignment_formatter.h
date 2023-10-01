@@ -6,16 +6,18 @@ namespace lwlog::details
 {
 	struct alignment_specification
 	{
-		static constexpr auto end_flag{ ":|" };
+		static constexpr auto flag_end_indicator{ ":|" };
 
-		enum class align_side { left, center, right };
-		explicit alignment_specification(std::string str);
+		enum class align_side : std::uint8_t
+		{
+			left,
+			center,
+			right
+		};
 
-		char fill_char{ ' ' };
-		align_side side{ align_side::left };
+		char fill_char{};
+		align_side side{};
 		std::uint8_t width{};
-
-		std::string flag_to_align;
 		std::string alignment_flag;
 	};
 
