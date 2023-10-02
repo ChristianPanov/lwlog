@@ -13,8 +13,8 @@ namespace lwlog::details
 		for (const auto& [flags, value, callback] : m_attributes)
 			formatter::format_attribute(compiled, flags, callback());
 
-		for (const auto& spec : m_alignment_specs)
-			alignment_formatter::format(compiled, spec);
+		for (const auto& info : m_alignment_flags_info)
+			alignment_formatter::format(compiled, info);
 
 		return compiled;
 	}
@@ -36,20 +36,20 @@ namespace lwlog::details
 			const std::string_view width_str{ flag_view.substr(flag_length,
 				std::isdigit(flag_view[flag_length + 1]) ? 2 : 1) };
 
-			alignment_specification alignment_spec;
+			alignment_info info;
 
-			alignment_spec.fill_char = has_fill_char ? flag_view[2] : ' ';
-			alignment_spec.width = static_cast<std::uint8_t>(std::stoi(width_str.data()));
-			alignment_spec.alignment_flag = flag_view.substr(0, flag_length + width_str.size());
+			info.fill_char = has_fill_char ? flag_view[2] : ' ';
+			info.width = static_cast<std::uint8_t>(std::stoi(width_str.data()));
+			info.alignment_flag = flag_view.substr(0, flag_length + width_str.size());
 
 			switch (flag_view[1])
 			{
-			case '<': alignment_spec.side = alignment_specification::align_side::left;		break;
-			case '>': alignment_spec.side = alignment_specification::align_side::right;		break;
-			case '^': alignment_spec.side = alignment_specification::align_side::center;	break;
+			case '<': info.side = alignment_info::align_side::left;		break;
+			case '>': info.side = alignment_info::align_side::right;	break;
+			case '^': info.side = alignment_info::align_side::center;	break;
 			}
 
-			m_alignment_specs.push_back(alignment_spec);
+			m_alignment_flags_info.push_back(info);
 
 			std::string_view flag_to_align;
 			if (const std::size_t short_flag_pos{ flag_view.find('%') };
@@ -65,7 +65,7 @@ namespace lwlog::details
 			}
 
 			m_pattern.insert(pattern_view.find(flag_to_align, flag_start_pos) + flag_to_align.size(),
-				alignment_specification::flag_end_indicator);
+				alignment_info::flag_end);
 
 			flag_start_pos += flag_to_align.size();
 		}

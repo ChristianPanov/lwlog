@@ -2,26 +2,28 @@
 
 namespace lwlog::details
 {
-	void alignment_formatter::format(std::string& pattern, const alignment_specification& spec)
+	void alignment_formatter::format(std::string& pattern, const alignment_info& spec)
 	{
+		const std::size_t flag_end_indicator_size{ 2 };
+		const std::size_t flag_size{ spec.alignment_flag.size() };
 		const std::size_t flag_pos{ pattern.find(spec.alignment_flag) };
-		const std::string to_align_formatted{ pattern.substr(flag_pos + spec.alignment_flag.size(),
-			pattern.find(alignment_specification::flag_end_indicator) - flag_pos - spec.alignment_flag.size()) };
+		const std::size_t flag_end_pos{ pattern.find(alignment_info::flag_end, flag_pos + flag_size) };
+		const std::size_t to_align_size{ flag_end_pos - flag_pos - flag_size };
 
-		pattern.replace(flag_pos, spec.alignment_flag.size(), "");
-		pattern.replace(pattern.find(alignment_specification::flag_end_indicator, flag_pos), 2, "");
-		pattern.replace(pattern.find(to_align_formatted, flag_pos), to_align_formatted.size(),
-			alignment_formatter::align(to_align_formatted, spec.width, spec.fill_char, spec.side));
+		const std::string_view aligned{ alignment_formatter::align(
+			pattern.substr(flag_pos + flag_size, to_align_size), spec.width, spec.fill_char, spec.side) };
+
+		pattern.replace(flag_pos, to_align_size + flag_size + flag_end_indicator_size, aligned);
 	}
 
 	std::string alignment_formatter::align(const std::string& to_align, std::uint8_t width, char fill_char, 
-		alignment_specification::align_side side)
+		alignment_info::align_side side)
 	{
 		switch (side)
 		{
-		case alignment_specification::align_side::left:		return align_left(to_align, width, fill_char);
-		case alignment_specification::align_side::right:	return align_right(to_align, width, fill_char);
-		case alignment_specification::align_side::center:	return align_center(to_align, width, fill_char);
+		case alignment_info::align_side::left:		return align_left(to_align, width, fill_char);
+		case alignment_info::align_side::right:		return align_right(to_align, width, fill_char);
+		case alignment_info::align_side::center:	return align_center(to_align, width, fill_char);
 		}
 	}
 

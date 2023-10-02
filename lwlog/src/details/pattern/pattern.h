@@ -27,7 +27,7 @@ namespace lwlog::details
 
 	private:
 		std::string m_pattern;
-		std::vector<alignment_specification> m_alignment_specs;
+		std::vector<alignment_info> m_alignment_flags_info;
 		std::vector<std::shared_ptr<formatter>> m_formatters;
 		std::vector<attribute> m_attributes;
 	};
