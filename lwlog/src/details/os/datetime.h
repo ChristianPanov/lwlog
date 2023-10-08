@@ -19,18 +19,18 @@ namespace lwlog::details::os
 		time_point();
 
 		#if LWLOG_NO_TIME == 0
-			std::uint8_t year	{};
-			std::uint8_t month	{};
-			std::uint8_t weekday{};
-			std::uint8_t day	{};
-			std::uint8_t hour	{};
-			std::uint8_t minute	{};
-			std::uint8_t second	{};
+			std::uint16_t year;
+			std::uint8_t month;
+			std::uint8_t weekday;
+			std::uint8_t day;
+			std::uint8_t hour;
+			std::uint8_t minute;
+			std::uint8_t second;
 
 			#if LWLOG_USE_PRECISE_UNITS == 1
-				std::uint16_t millisecond{};
-				std::uint32_t microsecond{};
-				std::uint32_t nanosecond{};
+				std::uint16_t millisecond;
+				std::uint32_t microsecond;
+				std::uint32_t nanosecond;
 			#endif
 		#endif
 	};
