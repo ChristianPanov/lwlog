@@ -19,7 +19,7 @@ namespace lwlog::details
 		return compiled;
 	}
 
-	void pattern::parse_alignment_specs()
+	void pattern::parse_alignment_flags()
 	{
 		std::size_t flag_start_pos{ 0 };
 		while ((flag_start_pos = m_pattern.find_first_of("<>^", flag_start_pos)) != std::string::npos)

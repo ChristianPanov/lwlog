@@ -14,7 +14,7 @@ namespace lwlog::details
 	{
 	public:
 		std::string compile(const record& record) const;
-		void parse_alignment_specs();
+		void parse_alignment_flags();
 		void request_flag_formatters();
 		void process_color_flags(bool use_color);
 		void set_pattern(std::string_view pattern);
