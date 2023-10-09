@@ -155,7 +155,7 @@ namespace lwlog
 	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::warning_impl(
 		const details::log_message& log_msg, details::format_args_list args)
 	{
-		log(log_msg, level::warning, args);
+		this->log(log_msg, level::warning, args);
 	}
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
