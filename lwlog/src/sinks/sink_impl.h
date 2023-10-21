@@ -4,8 +4,8 @@
 
 namespace lwlog::sinks
 {
-	template<typename ColorPolicy, typename ThreadingPolicy>
-	sink<ColorPolicy, ThreadingPolicy>::sink()
+	template<bool EnableAnsiColors, typename ThreadingPolicy>
+	sink<EnableAnsiColors, ThreadingPolicy>::sink()
 	{
 		if (!details::os::are_ansi_colors_enabled()) 
 			details::os::enable_ansi_colors();
@@ -26,41 +26,41 @@ namespace lwlog::sinks
 		});
 	}
 
-	template<typename ColorPolicy, typename ThreadingPolicy>
-	void sink<ColorPolicy, ThreadingPolicy>::set_pattern(std::string_view pattern)
+	template<bool EnableAnsiColors, typename ThreadingPolicy>
+	void sink<EnableAnsiColors, ThreadingPolicy>::set_pattern(std::string_view pattern)
 	{
 		Lock lock(m_mtx);
 		m_pattern.set_pattern(pattern);
 		m_pattern.parse_alignment_flags();
 		m_pattern.request_flag_formatters();
-		m_pattern.process_color_flags(ColorPolicy::is_colored);
+		m_pattern.process_color_flags(EnableAnsiColors);
 	}
 
-	template<typename ColorPolicy, typename ThreadingPolicy>
-	void sink<ColorPolicy, ThreadingPolicy>::add_attribute(std::string_view flag,
+	template<bool EnableAnsiColors, typename ThreadingPolicy>
+	void sink<EnableAnsiColors, ThreadingPolicy>::add_attribute(std::string_view flag,
 		details::attrib_value value)
 	{
 		Lock lock(m_mtx);
 		m_pattern.add_attribute(flag, value);
 	}
 
-	template<typename ColorPolicy, typename ThreadingPolicy>
-	void sink<ColorPolicy, ThreadingPolicy>::add_attribute(std::string_view flag, details::attrib_value value,
+	template<bool EnableAnsiColors, typename ThreadingPolicy>
+	void sink<EnableAnsiColors, ThreadingPolicy>::add_attribute(std::string_view flag, details::attrib_value value,
 		details::attrib_callback_t fn)
 	{
 		Lock lock(m_mtx);
 		m_pattern.add_attribute(flag, value, fn);
 	}
 
-	template<typename ColorPolicy, typename ThreadingPolicy>
-	void sink<ColorPolicy, ThreadingPolicy>::set_level_filter(level level_filter)
+	template<bool EnableAnsiColors, typename ThreadingPolicy>
+	void sink<EnableAnsiColors, ThreadingPolicy>::set_level_filter(level level_filter)
 	{
 		Lock lock(m_mtx);
 		m_level_filter = level_filter;
 	}
 
-	template<typename ColorPolicy, typename ThreadingPolicy>
-	bool sink<ColorPolicy, ThreadingPolicy>::should_sink(level t_level) const
+	template<bool EnableAnsiColors, typename ThreadingPolicy>
+	bool sink<EnableAnsiColors, ThreadingPolicy>::should_sink(level t_level) const
 	{
 		Lock lock(m_mtx);
 		if (level_details::has_level(m_level_filter, t_level) ||

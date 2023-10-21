@@ -9,7 +9,7 @@ namespace lwlog
 
 namespace lwlog::sinks
 {
-	template<typename ColorPolicy, typename ThreadingPolicy>
+	template<bool EnableAnsiColors, typename ThreadingPolicy>
 	class sink;
 }
 

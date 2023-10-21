@@ -7,11 +7,11 @@ namespace lwlog::sinks
 {
 	template<typename FlushPolicy, typename ThreadingPolicy>
 	class stderr_sink
-		: public sink<colored_policy, ThreadingPolicy>
+		: public sink<true, ThreadingPolicy>
 		, private details::stream_writer<FlushPolicy>
 	{
 	private:
-		using sink_t = sink<colored_policy, ThreadingPolicy>;
+		using sink_t = sink<true, ThreadingPolicy>;
 
 	public:
 		stderr_sink();
