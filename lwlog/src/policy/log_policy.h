@@ -36,7 +36,7 @@ namespace lwlog
 
 			std::vector<sink_ptr> sink_storage;
 
-			std::atomic<bool> shutdown;
+			std::atomic_bool shutdown;
 			std::thread worker_thread;
 
 			details::bounded_queue<

@@ -29,6 +29,6 @@ namespace lwlog
         static bool should_discard()    { return m_is_full.load(std::memory_order_relaxed);     }
 
     private:
-        static inline std::atomic<bool> m_is_full{ false };
+        static inline std::atomic_bool m_is_full{ false };
     };
 }

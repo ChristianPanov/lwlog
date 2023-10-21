@@ -5,8 +5,8 @@
 
 namespace lwlog
 {
-	template<typename LogPolicy, typename FlushPolicy, typename ThreadingPolicy, 
-		template<typename, typename> typename... Sinks>
+	template<typename LogExecutionPolicy, typename FlushPolicy,
+		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
 	class logger : public interface::logger
 	{
 	public:
@@ -41,7 +41,7 @@ namespace lwlog
 
 	private:
 		std::string_view m_name;
-		typename LogPolicy::template backend<
+		typename LogExecutionPolicy::template backend<
 			typename ThreadingPolicy::concurrency_model_policy> m_backend;
 	};
 }
