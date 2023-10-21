@@ -15,9 +15,9 @@ namespace lwlog
         }
     }
 
-    template<std::size_t Capacity>
+    template<std::size_t Capacity, typename OverflowPolicy>
     template<typename SinkStorage>
-    void asynchronous_policy<Capacity>::init(backend<SinkStorage>& backend)
+    void asynchronous_policy<Capacity, OverflowPolicy>::init(backend<SinkStorage>& backend)
     {
         backend.shutdown.store(false);
         backend.worker_thread = std::thread([&backend]() 
@@ -41,16 +41,17 @@ namespace lwlog
             });
     }
 
-    template<std::size_t Capacity>
+    template<std::size_t Capacity, typename OverflowPolicy>
     template<typename SinkStorage>
-    void asynchronous_policy<Capacity>::log(backend<SinkStorage>& backend, const details::record& record)
+    void asynchronous_policy<Capacity, OverflowPolicy>::log(backend<SinkStorage>& backend, 
+        const details::record& record)
     {
         backend.queue.enqueue(record);
     }
 
-    template<std::size_t Capacity>
+    template<std::size_t Capacity, typename OverflowPolicy>
     template<typename SinkStorage>
-    asynchronous_policy<Capacity>::backend<SinkStorage>::~backend()
+    asynchronous_policy<Capacity, OverflowPolicy>::backend<SinkStorage>::~backend()
     {
         shutdown.store(true);
 

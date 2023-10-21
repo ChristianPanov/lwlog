@@ -21,7 +21,7 @@ namespace lwlog
 		static void log(backend<SinkStorage>& backend, const details::record& record);
 	};
 
-	template<std::size_t Capacity>
+	template<std::size_t Capacity, typename OverflowPolicy>
 	struct asynchronous_policy
 	{
 		template<typename SinkStorage>
@@ -32,7 +32,12 @@ namespace lwlog
 			std::atomic<bool> shutdown;
 			std::thread worker_thread;
 			SinkStorage sink_storage;
-			details::bounded_queue<Capacity, details::record> queue;
+
+			details::bounded_queue<
+				Capacity, 
+				details::record, 
+				OverflowPolicy
+			> queue;
 		};
 
 		template<typename SinkStorage>

@@ -5,7 +5,7 @@
 
 namespace lwlog::details
 {
-    template<std::size_t Capacity, typename T>
+    template<std::size_t Capacity, typename T, typename OverflowPolicy>
     struct bounded_queue
     {
     public:

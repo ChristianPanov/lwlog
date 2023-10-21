@@ -1,36 +1,41 @@
 #pragma once
 
-#include "bounded_queue.h"
+#include "policy/overflow_policy.h"
 
 namespace lwlog::details
 {
-    template<std::size_t Capacity, typename T>
-    void bounded_queue<Capacity, T>::enqueue(const T& item)
+    template<std::size_t Capacity, typename T, typename OverflowPolicy>
+    void bounded_queue<Capacity, T, OverflowPolicy>::enqueue(const T& item)
     {
         const std::size_t current_write_index{ m_write_index.load() };
         const std::size_t next_write_index{ (current_write_index + 1) % Capacity };
 
-        if (next_write_index == m_read_index.load()) {}
+        while (next_write_index == m_read_index.load()) 
+            OverflowPolicy::handle_overflow();
 
-        m_storage[current_write_index] = item;
-        m_write_index.store(next_write_index);
+        if (!OverflowPolicy::should_discard())
+        {
+            m_storage[current_write_index] = item;
+            m_write_index.store(next_write_index);
+        }
     }
 
-    template<std::size_t Capacity, typename T>
-    T bounded_queue<Capacity, T>::dequeue()
+    template<std::size_t Capacity, typename T, typename OverflowPolicy>
+    T bounded_queue<Capacity, T, OverflowPolicy>::dequeue()
     {
         const std::size_t current_read_index{ m_read_index.load() };
         const std::size_t next_write_index{ (current_read_index + 1) % Capacity };
 
-        if (current_read_index == m_write_index.load()) {}
+        while (current_read_index == m_write_index.load())
+            OverflowPolicy::handle_underflow();
 
         m_read_index.store(next_write_index);
 
         return m_storage[current_read_index];
     }
 
-    template<std::size_t Capacity, typename T>
-    bool bounded_queue<Capacity, T>::is_empty() const
+    template<std::size_t Capacity, typename T, typename OverflowPolicy>
+    bool bounded_queue<Capacity, T, OverflowPolicy>::is_empty() const
     {
         return m_read_index.load() == m_write_index.load();
     }
