@@ -19,7 +19,7 @@ namespace lwlog
     template<typename SinkStorage>
     void asynchronous_policy<Capacity, OverflowPolicy>::init(backend<SinkStorage>& backend)
     {
-        backend.shutdown.store(false);
+        backend.shutdown.store(false, std::memory_order_relaxed);
         backend.worker_thread = std::thread([&backend]() 
             {
                 while (true)
@@ -53,7 +53,7 @@ namespace lwlog
     template<typename SinkStorage>
     asynchronous_policy<Capacity, OverflowPolicy>::backend<SinkStorage>::~backend()
     {
-        shutdown.store(true);
+        shutdown.store(true, std::memory_order_relaxed);
 
         if(worker_thread.joinable())
             worker_thread.join();
