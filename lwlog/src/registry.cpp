@@ -14,7 +14,7 @@ namespace lwlog
 	{
 		s_default_logger = std::make_unique<
 			logger<
-				forward_log_policy,
+				synchronous_policy,
 				static_storage_policy,
 				immediate_flush_policy,
 				threading_policy<null_mutex>,

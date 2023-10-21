@@ -10,7 +10,7 @@ namespace lwlog::details
     {
     public:
         void enqueue(const T& item);
-        T dequeue() const;
+        T dequeue();
         bool is_empty() const;
 
     private:

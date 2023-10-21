@@ -6,7 +6,7 @@ int main()
 {
 	auto console = std::make_shared<
 		lwlog::logger<
-			lwlog::default_log_policy,
+			lwlog::asynchronous_policy<8300>,
 			lwlog::default_storage_policy,
 			lwlog::buffered_flush_policy<>,
 			lwlog::single_threaded_policy,

@@ -17,7 +17,7 @@ namespace lwlog::details
     }
 
     template<std::size_t Capacity, typename T>
-    T bounded_queue<Capacity, T>::dequeue() const
+    T bounded_queue<Capacity, T>::dequeue()
     {
         const std::size_t current_read_index{ m_read_index.load() };
         const std::size_t next_write_index{ (current_read_index + 1) % Capacity };

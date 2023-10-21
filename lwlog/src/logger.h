@@ -46,7 +46,7 @@ namespace lwlog
 
 	private:
 		std::string_view m_name;
-		Storage m_sink_storage;
+		typename LogPolicy::template backend<Storage> m_backend;
 	};
 }
 

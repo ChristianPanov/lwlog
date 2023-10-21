@@ -1,23 +1,46 @@
 #pragma once
 
 #include "sinks/sink.h"
+#include "details/record.h"
+#include "details/bounded_queue.h"
 
 namespace lwlog
 {
-	struct forward_log_policy
+	struct synchronous_policy
 	{
-		static void log(sink_ptr sink, const details::record& record);
-		[[deprecated("Forward(default) logging doesn't implement that function")]]
-		static void sink_logs() {}
+		template<typename SinkStorage>
+		struct backend
+		{
+			SinkStorage sink_storage;
+		};
+
+		template<typename SinkStorage>
+		static void init(backend<SinkStorage>&) {};
+
+		template<typename SinkStorage>
+		static void log(backend<SinkStorage>& backend, const details::record& record);
 	};
 
-	struct deferred_log_policy
+	template<std::size_t Capacity>
+	struct asynchronous_policy
 	{
-		static void log(sink_ptr sink, const details::record& record);
-		static void sink_logs();
+		template<typename SinkStorage>
+		struct backend
+		{
+			~backend();
 
-	private:
-		struct log_info;
-		static std::vector<log_info> m_storage;
+			std::atomic<bool> shutdown;
+			std::thread worker_thread;
+			SinkStorage sink_storage;
+			details::bounded_queue<Capacity, details::record> queue;
+		};
+
+		template<typename SinkStorage>
+		static void init(backend<SinkStorage>& backend);
+
+		template<typename SinkStorage>
+		static void log(backend<SinkStorage>& backend, const details::record& record);
 	};
 }
+
+#include "log_policy_impl.h"
