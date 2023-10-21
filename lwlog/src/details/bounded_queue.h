@@ -15,8 +15,8 @@ namespace lwlog::details
 
     private:
         std::vector<T> m_storage{ Capacity + 1, T{} };
-        std::atomic<std::size_t> m_write_index{};
-        std::atomic<std::size_t> m_read_index{};
+        alignas(64) std::atomic<std::size_t> m_write_index{};
+        alignas(64) std::atomic<std::size_t> m_read_index{};
     };
 }
 
