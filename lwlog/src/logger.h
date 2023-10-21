@@ -1,18 +1,14 @@
 #pragma once
 
 #include "policy/log_policy.h"
-#include "policy/sink_storage_policy.h"
 #include "interface/logger_interface.h"
 
 namespace lwlog
 {
-	template<typename LogPolicy, template<typename...> typename StoragePolicy, 
-		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	template<typename LogPolicy, typename FlushPolicy, typename ThreadingPolicy, 
+		template<typename, typename> typename... Sinks>
 	class logger : public interface::logger
 	{
-	private:
-		using Storage = typename StoragePolicy<Sinks<FlushPolicy, ThreadingPolicy>...>::storage_t;
-
 	public:
 		template<typename... SinkParams>
 		logger(std::string_view name, SinkParams&&... params);
@@ -33,7 +29,7 @@ namespace lwlog
 		void set_level_filter(level t_level) override;
 
 		std::string_view name() const override;
-		Storage& sinks();
+		std::vector<sink_ptr>& sinks();
 
 	private:
 		void log(const details::log_message& log_msg, level t_level, details::format_args_list args) override;
@@ -45,7 +41,8 @@ namespace lwlog
 
 	private:
 		std::string_view m_name;
-		typename LogPolicy::template backend<Storage> m_backend;
+		typename LogPolicy::template backend<
+			typename ThreadingPolicy::concurrency_model_policy> m_backend;
 	};
 }
 

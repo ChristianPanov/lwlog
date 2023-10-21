@@ -1,10 +1,9 @@
 #include "log_policy.h"
-#pragma once
 
 namespace lwlog
 {
-    template<typename SinkStorage>
-    void synchronous_policy::log(backend<SinkStorage>& backend, const details::record& record)
+    template<typename ConcurrencyModelPolicy>
+    void synchronous_policy::log(backend<ConcurrencyModelPolicy>& backend, const details::record& record)
     {
         for (const auto& sink : backend.sink_storage)
         {
@@ -15,9 +14,9 @@ namespace lwlog
         }
     }
 
-    template<std::size_t Capacity, typename OverflowPolicy, typename ConcurrencyModelPolicy>
-    template<typename SinkStorage>
-    void asynchronous_policy<Capacity, OverflowPolicy, ConcurrencyModelPolicy>::init(backend<SinkStorage>& backend)
+    template<std::size_t Capacity, typename OverflowPolicy>
+    template<typename ConcurrencyModelPolicy>
+    void asynchronous_policy<Capacity, OverflowPolicy>::init(backend<ConcurrencyModelPolicy>& backend)
     {
         backend.shutdown.store(false, std::memory_order_relaxed);
         backend.worker_thread = std::thread([&backend]() 
@@ -41,17 +40,17 @@ namespace lwlog
             });
     }
 
-    template<std::size_t Capacity, typename OverflowPolicy, typename ConcurrencyModelPolicy>
-    template<typename SinkStorage>
-    void asynchronous_policy<Capacity, OverflowPolicy, ConcurrencyModelPolicy>::log(backend<SinkStorage>& backend,
+    template<std::size_t Capacity, typename OverflowPolicy>
+    template<typename ConcurrencyModelPolicy>
+    void asynchronous_policy<Capacity, OverflowPolicy>::log(backend<ConcurrencyModelPolicy>& backend,
         const details::record& record)
     {
         backend.queue.enqueue(record);
     }
 
-    template<std::size_t Capacity, typename OverflowPolicy, typename ConcurrencyModelPolicy>
-    template<typename SinkStorage>
-    asynchronous_policy<Capacity, OverflowPolicy, ConcurrencyModelPolicy>::backend<SinkStorage>::~backend()
+    template<std::size_t Capacity, typename OverflowPolicy>
+    template<typename ConcurrencyModelPolicy>
+    asynchronous_policy<Capacity, OverflowPolicy>::backend<ConcurrencyModelPolicy>::~backend()
     {
         shutdown.store(true, std::memory_order_relaxed);
 

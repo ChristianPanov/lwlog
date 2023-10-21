@@ -8,10 +8,8 @@ int main()
 		lwlog::logger<
 			lwlog::asynchronous_policy<
 				lwlog::default_async_queue_size,
-				lwlog::default_overflow_policy,
-				lwlog::default_async_queue_model_policy
+				lwlog::default_overflow_policy
 			>,
-			lwlog::default_storage_policy,
 			lwlog::buffered_flush_policy<>,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_sink
