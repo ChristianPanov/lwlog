@@ -8,6 +8,11 @@
 
 namespace lwlog
 {
+	constexpr std::size_t default_async_queue_size{ 1024 };
+
+	using default_overflow_policy			= block_overflow_policy;
+	using default_async_queue_model_policy	= mpsc_model_policy;
+
 	template<typename... Args>
 	using default_storage_policy	= dynamic_storage_policy<Args...>;
 	using default_flush_policy		= immediate_flush_policy;
@@ -22,14 +27,27 @@ namespace lwlog
 	using basic_logger_mt = logger<synchronous_policy, default_storage_policy,
 		default_flush_policy, multi_threaded_policy, Sinks...>;
 
-	using console_logger	= basic_logger<sinks::stdout_sink>;
-	using console_logger_mt	= basic_logger_mt<sinks::stdout_sink>;
+	template<template<typename, typename> typename... Sinks>
+	using async_logger = logger<asynchronous_policy<>, default_storage_policy,
+		default_flush_policy, single_threaded_policy, Sinks...>;
 
-	using file_logger		= basic_logger<sinks::file_sink>;
-	using file_logger_mt	= basic_logger_mt<sinks::file_sink>;
+	template<template<typename, typename> typename... Sinks>
+	using async_logger_mt = logger<asynchronous_policy<>, default_storage_policy,
+		default_flush_policy, multi_threaded_policy, Sinks...>;
 
-	using null_logger		= basic_logger<>;
-	using null_logger_mt	= basic_logger_mt<>;
+	using console_logger			= basic_logger<sinks::stdout_sink>;
+	using console_logger_mt			= basic_logger_mt<sinks::stdout_sink>;
+	using file_logger				= basic_logger<sinks::file_sink>;
+	using file_logger_mt			= basic_logger_mt<sinks::file_sink>;
+	using null_logger				= basic_logger<>;
+	using null_logger_mt			= basic_logger_mt<>;
+
+	using async_console_logger		= async_logger<sinks::stdout_sink>;
+	using async_console_logger_mt	= async_logger_mt<sinks::stdout_sink>;
+	using async_file_logger			= async_logger<sinks::file_sink>;
+	using async_file_logger_mt		= async_logger_mt<sinks::file_sink>;
+	using async_null_logger			= async_logger<>;
+	using async_null_logger_mt		= async_logger_mt<>;
 }
 
 namespace lwlog

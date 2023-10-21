@@ -7,8 +7,9 @@ int main()
 	auto console = std::make_shared<
 		lwlog::logger<
 			lwlog::asynchronous_policy<
-				8300,
-				lwlog::block_overflow_policy
+				lwlog::default_async_queue_size,
+				lwlog::default_overflow_policy,
+				lwlog::default_async_queue_model_policy
 			>,
 			lwlog::default_storage_policy,
 			lwlog::buffered_flush_policy<>,

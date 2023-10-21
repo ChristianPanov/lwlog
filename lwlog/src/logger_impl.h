@@ -68,13 +68,6 @@ namespace lwlog
 
 	template<typename LogPolicy, template<typename...> typename StoragePolicy,
 		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
-	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::sink_logs()
-	{
-		//LogPolicy::sink_logs();
-	}
-
-	template<typename LogPolicy, template<typename...> typename StoragePolicy,
-		typename FlushPolicy, typename ThreadingPolicy, template<typename, typename> typename... Sinks>
 	void logger<LogPolicy, StoragePolicy, FlushPolicy, ThreadingPolicy, Sinks...>::set_pattern(std::string_view pattern)
 	{
 		for (const auto& sink : m_backend.sink_storage)

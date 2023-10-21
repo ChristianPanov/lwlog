@@ -12,8 +12,6 @@ namespace lwlog::interface
 		virtual ~logger() = default;
 
 	public:
-		virtual void sink_logs() = 0;
-
 		virtual void set_pattern(std::string_view) = 0;
 		virtual void add_attribute(std::string_view, details::attrib_value) = 0;
 		virtual void add_attribute(std::string_view, details::attrib_value, details::attrib_callback_t) = 0;

@@ -26,7 +26,6 @@ namespace lwlog
 	public:
 		void add_sink(sink_ptr sink);
 		void remove_sink(sink_ptr sink);
-		void sink_logs() override;
 
 		void set_pattern(std::string_view pattern) override;
 		void add_attribute(std::string_view flag, details::attrib_value value) override;
