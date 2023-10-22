@@ -8,7 +8,7 @@
 
 namespace lwlog
 {
-	constexpr std::size_t default_async_queue_size{ 1024 };
+	inline constexpr std::size_t default_async_queue_size{ 1024 };
 
 	struct synchronous_policy
 	{

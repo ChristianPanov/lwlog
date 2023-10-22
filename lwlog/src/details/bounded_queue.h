@@ -11,6 +11,9 @@ namespace lwlog::details
         typename OverflowPolicy, typename ConcurrencyModelPolicy>
     struct bounded_queue
     {
+        static constexpr auto cache_line_size{ 
+            std::hardware_destructive_interference_size };
+
     public:
         void enqueue(const T& item);
         T dequeue();
@@ -22,8 +25,8 @@ namespace lwlog::details
 
     private:
         std::vector<T> m_storage{ Capacity + 1, T{} };
-        alignas(64) std::atomic_size_t m_write_index{};
-        alignas(64) std::atomic_size_t m_read_index{};
+        alignas(cache_line_size) std::atomic_size_t m_write_index{};
+        alignas(cache_line_size) std::atomic_size_t m_read_index{};
     };
 }
 
