@@ -23,7 +23,8 @@ namespace lwlog
             {
                 while (true)
                 {
-                    if (backend.shutdown.load() && backend.queue.is_empty()) break;
+                    if (backend.shutdown.load(std::memory_order_relaxed) 
+                        && backend.queue.is_empty()) break;
 
                     if (!backend.queue.is_empty())
                     {
