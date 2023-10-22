@@ -131,8 +131,7 @@ namespace lwlog
 	void logger<LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::log(
 		const details::log_message& log_msg, level t_level, details::format_args_list args)
 	{
-		LogExecutionPolicy::log(m_backend, 
-			{ LWLOG_FORMAT_FN(log_msg.message, args), t_level, log_msg.meta });
+		LogExecutionPolicy::log(m_backend, log_msg.message, t_level, log_msg.meta, args );
 	}
 
 	template<typename LogExecutionPolicy, typename FlushPolicy,

@@ -1,8 +1,10 @@
 #pragma once
 
+#include "level.h"
 #include "sinks/sink.h"
-#include "details/record.h"
 #include "details/bounded_queue.h"
+#include "details/argument_format.h"
+#include "details/source_meta.h"
 
 namespace lwlog
 {
@@ -20,7 +22,8 @@ namespace lwlog
 		static void init(backend<ConcurrencyModelPolicy>&) {};
 
 		template<typename ConcurrencyModelPolicy>
-		static void log(backend<ConcurrencyModelPolicy>& backend, const details::record& record);
+		static void log(backend<ConcurrencyModelPolicy>& backend, std::string_view message, 
+			level t_level, const details::source_meta& meta, details::format_args_list args);
 	};
 
 	template<
@@ -39,9 +42,10 @@ namespace lwlog
 			std::atomic_bool shutdown;
 			std::thread worker_thread;
 
+			struct queue_item;
 			details::bounded_queue<
 				Capacity, 
-				details::record, 
+				queue_item,
 				OverflowPolicy,
 				ConcurrencyModelPolicy
 			> queue;
@@ -51,7 +55,8 @@ namespace lwlog
 		static void init(backend<ConcurrencyModelPolicy>& backend);
 
 		template<typename ConcurrencyModelPolicy>
-		static void log(backend<ConcurrencyModelPolicy>& backend, const details::record& record);
+		static void log(backend<ConcurrencyModelPolicy>& backend, std::string_view message,
+			level t_level, const details::source_meta& meta, details::format_args_list args);
 	};
 }
 

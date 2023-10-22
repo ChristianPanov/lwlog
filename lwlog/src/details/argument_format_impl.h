@@ -2,7 +2,7 @@
 
 namespace lwlog::details
 {
-	static std::string format_arguments(std::string_view format, format_args_list args)
+	static std::string format_args_impl(std::string_view format, format_args_list args)
 	{
 		std::string result;
 		std::size_t pos{ 0 };
@@ -19,6 +19,21 @@ namespace lwlog::details
 
 		result.append(format.substr(pos));
 		return result;
+	}
+
+	static std::string format_args(std::string_view format, format_args_list args)
+	{
+		#if LWLOG_NO_FORMATTING == 0
+			#if LWLOG_USE_FMT == 1
+				return fmt::format(format, args)
+			#elif LWLOG_USE_STD_FORMAT == 1
+				return std::format(format, args)
+			#else
+				return format_args_impl(format, args);
+			#endif
+		#else
+			return format;
+		#endif
 	}
 
 	template<typename T>

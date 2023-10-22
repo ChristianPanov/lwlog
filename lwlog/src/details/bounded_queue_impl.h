@@ -46,8 +46,7 @@ namespace lwlog::details
                 OverflowPolicy::handle_overflow();
 
         } while (!m_write_index.compare_exchange_weak(current_write_index, next_write_index, 
-            std::memory_order_release, 
-            std::memory_order_relaxed));
+            std::memory_order_release, std::memory_order_relaxed));
 
         if (!OverflowPolicy::should_discard())
             m_storage[current_write_index] = item;
