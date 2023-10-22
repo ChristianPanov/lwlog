@@ -22,15 +22,11 @@ namespace lwlog
 	using console_logger_mt			= basic_logger_mt<sinks::stdout_sink>;
 	using file_logger				= basic_logger<sinks::file_sink>;
 	using file_logger_mt			= basic_logger_mt<sinks::file_sink>;
-	using null_logger				= basic_logger<>;
-	using null_logger_mt			= basic_logger_mt<>;
 
 	using async_console_logger		= async_logger<sinks::stdout_sink>;
 	using async_console_logger_mt	= async_logger_mt<sinks::stdout_sink>;
 	using async_file_logger			= async_logger<sinks::file_sink>;
 	using async_file_logger_mt		= async_logger_mt<sinks::file_sink>;
-	using async_null_logger			= async_logger<>;
-	using async_null_logger_mt		= async_logger_mt<>;
 
 	using default_overflow_policy	= block_overflow_policy;
 	using default_flush_policy		= immediate_flush_policy;
