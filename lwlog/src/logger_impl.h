@@ -65,7 +65,8 @@ namespace lwlog
 	{
 		for (std::size_t i = 0; i < m_backend.sink_storage.size(); ++i)
 		{
-			if (m_backend.sink_storage[i] == sink) storage.erase(m_backend.sink_storage.begin() + i);
+			if (m_backend.sink_storage[i] == sink) 
+				m_backend.sink_storage.erase(m_backend.sink_storage.begin() + i);
 		}
 	}
 
