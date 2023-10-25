@@ -36,74 +36,74 @@ _No matter what you do or say, there will always be people who hold a different 
 - [Custom Attributes](https://github.com/ChristianPanov/lwlog#custom-attributes)
 - Global logger registry
 # Benchmarks
-The benchmarks are still limited since there still aren't benchmarks for thread-safe logging, async logging, and loggers which sink to a file (they will be done)\
 Benchmarked with picobench(https://github.com/iboB/picobench)
-#### lwlog (stdout log, formatted, synchronous) vs spdlog (stdout log, formatted, synchronous)
+
+**lwlog(*synchronous*)** *vs* **spdlog(*synchronous*)**
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
 ===============================================================================
-            lwlog_bench * |       8 |     0.008 |     950 |      - |  1052631.6
-             spdlog_bench |       8 |     0.403 |   50325 | 52.974 |    19870.8
-            lwlog_bench * |      64 |     0.071 |    1107 |      - |   902679.8
-             spdlog_bench |      64 |     3.232 |   50506 | 45.591 |    19799.5
-            lwlog_bench * |     512 |     0.866 |    1691 |      - |   591019.3
-             spdlog_bench |     512 |    34.119 |   66638 | 39.385 |    15006.3
-            lwlog_bench * |    4096 |     5.150 |    1257 |      - |   795386.1
-             spdlog_bench |    4096 |   311.846 |   76134 | 60.556 |    13134.7
-            lwlog_bench * |    8192 |     7.365 |     898 |      - |  1112348.3
-             spdlog_bench |    8192 |   610.478 |   74521 | 82.894 |    13419.0
+            lwlog_bench * |       8 |     0.652 |   81512 |      - |    12268.1
+             spdlog_bench |       8 |     4.844 |  605500 |  7.428 |     1651.5
+            lwlog_bench * |      64 |     5.347 |   83540 |      - |    11970.2
+             spdlog_bench |      64 |    46.576 |  727746 |  8.711 |     1374.1
+            lwlog_bench * |     512 |    53.725 |  104931 |      - |     9530.1
+             spdlog_bench |     512 |   135.479 |  264606 |  2.522 |     3779.2
+            lwlog_bench * |    4096 |   451.722 |  110283 |      - |     9067.5
+             spdlog_bench |    4096 |  1205.387 |  294283 |  2.668 |     3398.1
+            lwlog_bench * |    8192 |   923.731 |  112760 |      - |     8868.4
+             spdlog_bench |    8192 |  2334.964 |  285029 |  2.528 |     3508.4
 ===============================================================================
 ```
-#### lwlog (stdout log, colored and formatted, synchronous) vs spdlog (stdout log, colored and formatted, synchronous)
-```
-===============================================================================
-   Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
-===============================================================================
-            lwlog_bench * |       8 |     0.010 |    1262 |      - |   792079.2
-             spdlog_bench |       8 |     1.875 |  234337 |185.614 |     4267.3
-            lwlog_bench * |      64 |     0.078 |    1225 |      - |   816326.5
-             spdlog_bench |      64 |    20.370 |  318275 |259.816 |     3141.9
-            lwlog_bench * |     512 |     0.691 |    1348 |      - |   741384.3
-             spdlog_bench |     512 |   592.973 | 1158149 |858.634 |      863.4
-            lwlog_bench * |    4096 |     8.363 |    2041 |      - |   489788.1
-             spdlog_bench |    4096 |  3186.113 |  777859 |380.986 |     1285.6
-            lwlog_bench * |    8192 |     9.786 |    1194 |      - |   837148.5
-             spdlog_bench |    8192 |  2384.691 |  291100 |243.694 |     3435.2
-===============================================================================
-```
-#### lwlog (file log, formatted, synchronous) vs spdlog (file log, formatted, synchronous)
+**lwlog(*synchronous, buffered*)** *vs* **spdlog(*synchronous*)**
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
 ===============================================================================
-            lwlog_bench * |       8 |     0.001 |      75 |      - | 13333333.3
-             spdlog_bench |       8 |     0.002 |     200 |  2.667 |  5000000.0
-            lwlog_bench * |      64 |     0.004 |      68 |      - | 14545454.5
-             spdlog_bench |      64 |     0.024 |     368 |  5.364 |  2711864.4
-            lwlog_bench * |     512 |     0.034 |      67 |      - | 14883720.9
-             spdlog_bench |     512 |     0.117 |     228 |  3.395 |  4383561.6
-            lwlog_bench * |    4096 |     0.411 |     100 |      - |  9975645.4
-             spdlog_bench |    4096 |     1.345 |     328 |  3.277 |  3044447.7
-            lwlog_bench * |    8192 |     1.341 |     163 |      - |  6108874.0
-             spdlog_bench |    8192 |     2.273 |     277 |  1.695 |  3604206.1
+            lwlog_bench * |       8 |     0.016 |    2012 |      - |   496894.4
+             spdlog_bench |       8 |     5.144 |  642950 |319.478 |     1555.3
+            lwlog_bench * |      64 |     0.078 |    1218 |      - |   820512.8
+             spdlog_bench |      64 |    19.179 |  299673 |245.886 |     3337.0
+            lwlog_bench * |     512 |     0.629 |    1228 |      - |   813731.7
+             spdlog_bench |     512 |   180.569 |  352673 |286.982 |     2835.5
+            lwlog_bench * |    4096 |     4.961 |    1211 |      - |   825640.0
+             spdlog_bench |    4096 |  1230.367 |  300382 |248.008 |     3329.1
+            lwlog_bench * |    8192 |    11.767 |    1436 |      - |   696160.6
+             spdlog_bench |    8192 |  2793.686 |  341026 |237.409 |     2932.3
 ===============================================================================
 ```
-#### lwlog (stdout log, forward(default) logging) vs lwlog (stdout log, deferred logging)
+**lwlog(*asynchronous, blocking*)** *vs* **spdlog(*asynchronous, blocking*)**
 ```
 ===============================================================================
    Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
 ===============================================================================
-   lwlog_deferred_bench * |       8 |     0.001 |     100 |      - | 10000000.0
-      lwlog_forward_bench |       8 |     0.010 |    1212 | 12.125 |   824742.3
-   lwlog_deferred_bench * |      64 |     0.005 |      79 |      - | 12549019.6
-      lwlog_forward_bench |      64 |     0.125 |    1956 | 24.549 |   511182.1
-   lwlog_deferred_bench * |     512 |     0.050 |      97 |      - | 10240000.0
-      lwlog_forward_bench |     512 |     0.662 |    1292 | 13.238 |   773530.7
-   lwlog_deferred_bench * |    4096 |     0.423 |     103 |      - |  9674067.1
-      lwlog_forward_bench |    4096 |     6.427 |    1569 | 15.179 |   637331.2
-   lwlog_deferred_bench * |    8192 |     2.221 |     271 |      - |  3688262.6
-      lwlog_forward_bench |    8192 |     9.877 |    1205 |  4.447 |   829443.6
+            lwlog_bench * |       8 |     0.000 |      50 |      - | 20000000.0
+             spdlog_bench |       8 |     0.006 |     812 | 16.250 |  1230769.2
+            lwlog_bench * |      64 |     0.002 |      34 |      - | 29090909.1
+             spdlog_bench |      64 |     0.016 |     243 |  7.091 |  4102564.1
+            lwlog_bench * |     512 |     0.017 |      33 |      - | 30295858.0
+             spdlog_bench |     512 |     0.069 |     133 |  4.059 |  7463556.9
+            lwlog_bench * |    4096 |     4.290 |    1047 |      - |   954756.3
+             spdlog_bench |    4096 |  2316.282 |  565498 |539.913 |     1768.4
+            lwlog_bench * |    8192 |     9.852 |    1202 |      - |   831481.0
+             spdlog_bench |    8192 |  2050.576 |  250314 |208.132 |     3995.0
+===============================================================================
+```
+**lwlog(*asynchronous, nonblocking*)** *vs* **spdlog(*asynchronous, nonblocking*)**
+```
+===============================================================================
+   Name (baseline is *)   |   Dim   |  Total ms |  ns/op  |Baseline| Ops/second
+===============================================================================
+            lwlog_bench * |       8 |     0.000 |      37 |      - | 26666666.7
+             spdlog_bench |       8 |     0.006 |     775 | 20.667 |  1290322.6
+            lwlog_bench * |      64 |     0.002 |      32 |      - | 30476190.5
+             spdlog_bench |      64 |     0.028 |     434 | 13.238 |  2302158.3
+            lwlog_bench * |     512 |     0.016 |      31 |      - | 32000000.0
+             spdlog_bench |     512 |     0.103 |     201 |  6.438 |  4970873.8
+            lwlog_bench * |    4096 |     0.180 |      43 |      - | 22730299.7
+             spdlog_bench |    4096 |     0.673 |     164 |  3.737 |  6082566.1
+            lwlog_bench * |    8192 |     0.426 |      52 |      - | 19230046.9
+             spdlog_bench |    8192 |     1.036 |     126 |  2.431 |  7911154.0
 ===============================================================================
 ```
 # Logical Architecture
