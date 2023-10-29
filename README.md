@@ -664,7 +664,7 @@ Here is a step-by-step breakdown of the pattern compilation process, all that ha
 When a log function is called, the stored formatters are invoked, applying the predetermined pattern and alignment specifications - simple string replacement which is optimized to invoke as few replaces as possible, to generate the final formatted log message. And that's the only thing that happens on the log call site.
 ### Console output(stdout, stderr)
 I/O in logging solutions is the second biggest, if not the biggest, performance bottleneck. Spewing data in the form of a human-readable medium(text) is heavy-duty.\
-A simple solution would be to increase the stream buffer size manually to avoid unnecessary flushes and provide a higher throughput.
+A simple solution would be to increase the stream buffer size manually to avoid unnecessary flushes and provide a higher throughput. However, that solution does not come without its drawbacks. In memory-constrained environments, the increase in memory usage due to the enlarged buffer might be problematic, and sometimes portions of data might come out truncated or displayed incorrectly, so keep that in mind, and give additional attention to the size of the buffer for your specific case and constraints.
 ```cpp
 std::setvbuf(stdout, NULL, _IOFBF, 4194304);
 std::fwrite("Hello, World!", 14, 1, stdout);
