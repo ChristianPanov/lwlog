@@ -17,7 +17,7 @@ _No matter what you do or say, there will always be people who hold a different 
 # Design Highlights
 - **Code Base:** The code is crafted with clarity, elegance, and readability in mind, hoping it is structured enough to prove relatively easy for developers to understand, modify, extend, and learn from.
 - **Performance:** ***lwlog*** offers very fast logging capabilities, both in synchronous and asynchronous modes, ensuring minimal impact on your application’s performance.
-- **Extensibility:** Adding new types of sinks and loggers is straightforward, providing flexibility to adapt the library to your specific needs. [Check out how to create your own sink for a practical example,](https://github.com/ChristianPanov/lwlog#creating-your-own-sink)
+- **Extensibility:** Adding new types of sinks and loggers is straightforward, providing flexibility to adapt the library to your specific needs. [Check out how to create your own sink for a practical example](https://github.com/ChristianPanov/lwlog#creating-your-own-sink)
 - **Configurability:** ***lwlog*** uses [policy classes](https://github.com/ChristianPanov/lwlog#logger-configuration) which you can just plug in based on your needs.
 - **Ease of Use:** ***lwlog*** tries to follow a philosophy of intuitiveness. As the author, I am biased, so I can only hope the API is as intuitive as I see it in my eyes. Convenient easy-to-use predefined types([convenience aliases](https://github.com/ChristianPanov/lwlog#convenience-logger-aliases)) are made for simplicity without too much configuration. Most of the time, you will be just fine with using the predefined types.
 # Features
