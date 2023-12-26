@@ -2,6 +2,7 @@
 
 #include <atomic>
 #include <vector>
+#include <thread>
 
 #include "policy/concurrency_policy.h"
 
