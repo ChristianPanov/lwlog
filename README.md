@@ -6,13 +6,13 @@ Very fast C++17 logging library
 git clone --recursive https://github.com/ChristianPanov/lwlog
 ```
 # The Most Important Question - Why Yet Another Logging Library?
-_I will cut short on the speed or code simplicity that every other logging library boasts about and will leave them for later.\
+_I will cut short on the speed or code simplicity that every other logging library boasts about.\
 The actual importance of the library lies within its meaning to me. This library has served as an amazing journey.\
 I started it when I knew very little about C++, let alone software engineering, and when I still made no distinction between writing reusable pieces of code and crafting libraries.\
-I can say that I am proud of what I've made, for it has been a long journey comprised of not giving up and constantly daring to do the currently-impossible for me, according to my knowledge back then.\
-As you will see later in the documentation, I do claim this library to be very fast and to have very clean code. I do claim to have designed it in a good way. However, even if that weren't objectively true, that would make no difference in the importance of this work to me, I would still be just as proud of it._
+I can say that I am proud of what I've made, for it has been a long journey comprised of not giving up and constantly daring to do what was currently impossible for me, which forced me to gain a lot more knowledge.\
+As you will see later in the documentation, I do claim this library to be very fast and to have very clean code. I do claim to have designed it in a good way. However, even if that weren't objectively true, that would make no difference in the importance of this work to me, as I would still be just as proud of it._
 
-_No matter what you do or say, there will always be people who hold a different view. It might always happen that you were in the wrong or that you could have done better. Anyone could take away the joy of your creation. However, no one can take away the hours you've spent crafting it, no one can take away the hours you've spent studying and learning in the process, no one can take away the times when you've felt like a god among men when you've faced the impossible, were stubborn enough not to give up, and actually did it. No one can take away any of that, any of the things that should make you proud. That's what real craftsmanship is - taking pride in what you do with all your heart and being too stubborn to give up on the currently-impossible._
+_No matter what you do or say, there will always be people who hold a different view. It might always happen that you were in the wrong or that you could have done better. Anyone could take away the joy of your creation. However, no one can take away the hours you've spent crafting it, no one can take away the hours you've spent studying and learning in the process, no one can take away the times when you've felt the pride-inducing adrenaline rush when you faced a challenge that was out of your league, were stubborn enough not to give up, and actually did it. No one can take away any of that, any of the things that should make you proud. That's what real craftsmanship is - taking pride in what you do with all your heart and being too stubborn to give up on the currently impossible._
 
 # Design Highlights
 - **Code Base:** The code is crafted with clarity, elegance, and readability in mind, hoping it is structured enough to prove relatively easy for developers to understand, modify, extend, and learn from.
