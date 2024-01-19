@@ -26,13 +26,13 @@ namespace lwlog
 		void set_pattern(std::string_view pattern) override;
 		void add_attribute(std::string_view flag, details::attrib_value value) override;
 		void add_attribute(std::string_view flag, details::attrib_value value, details::attrib_callback_t fn) override;
-		void set_level_filter(level t_level) override;
+		void set_level_filter(level log_level) override;
 
 		std::string_view name() const override;
 		std::vector<sink_ptr>& sinks();
 
 	private:
-		void log(const details::log_message& log_msg, level t_level, details::format_args_list args) override;
+		void log(const details::log_message& log_msg, level log_level, details::format_args_list args) override;
 		void info_impl(const details::log_message& log_msg, details::format_args_list args) override;
 		void warning_impl(const details::log_message& log_msg, details::format_args_list args) override;
 		void error_impl(const details::log_message& log_msg, details::format_args_list args) override;

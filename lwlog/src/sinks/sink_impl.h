@@ -60,10 +60,10 @@ namespace lwlog::sinks
 	}
 
 	template<bool EnableAnsiColors, typename ThreadingPolicy>
-	bool sink<EnableAnsiColors, ThreadingPolicy>::should_sink(level t_level) const
+	bool sink<EnableAnsiColors, ThreadingPolicy>::should_sink(level log_level) const
 	{
 		Lock lock(m_mtx);
-		if (level_details::has_level(m_level_filter, t_level) ||
+		if (level_details::has_level(m_level_filter, log_level) ||
 			level_details::has_level(m_level_filter, level::all))
 			return true;
 		return false;

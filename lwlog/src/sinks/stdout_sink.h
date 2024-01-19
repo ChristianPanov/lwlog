@@ -26,7 +26,7 @@ namespace lwlog::sinks
 	template<typename FlushPolicy, typename ThreadingPolicy>
 	void stdout_sink<FlushPolicy, ThreadingPolicy>::sink_it(const details::record& record)
 	{
-		sink_t::m_current_level = record.level;
+		sink_t::m_current_level = record.log_level;
 		details::stream_writer<FlushPolicy>::write(sink_t::m_pattern.compile(record));
 	}
 }

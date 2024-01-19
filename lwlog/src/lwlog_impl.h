@@ -54,9 +54,9 @@ namespace lwlog
 		registry::default_logger()->set_pattern(pattern);
 	}
 
-	void set_level_filter(level t_level)
+	void set_level_filter(level log_level)
 	{
-		registry::default_logger()->set_level_filter(t_level);
+		registry::default_logger()->set_level_filter(log_level);
 	}
 
 	void start_topic(std::string_view name)

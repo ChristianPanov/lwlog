@@ -14,7 +14,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::level,
-				level_details::to_string(record.level)
+				level_details::to_string(record.log_level)
 			);
 		}
 	};

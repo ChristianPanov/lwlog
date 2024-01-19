@@ -105,11 +105,11 @@ namespace lwlog
 
 	template<typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
-	void logger<LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::set_level_filter(level t_level)
+	void logger<LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::set_level_filter(level log_level)
 	{
 		for (const auto& sink : m_backend.sink_storage)
 		{
-			sink->set_level_filter(t_level);
+			sink->set_level_filter(log_level);
 		}
 	}
 
@@ -130,9 +130,9 @@ namespace lwlog
 	template<typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
 	void logger<LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::log(
-		const details::log_message& log_msg, level t_level, details::format_args_list args)
+		const details::log_message& log_msg, level log_level, details::format_args_list args)
 	{
-		LogExecutionPolicy::log(m_backend, log_msg.message, t_level, log_msg.meta, args );
+		LogExecutionPolicy::log(m_backend, log_msg.message, log_level, log_msg.meta, args );
 	}
 
 	template<typename LogExecutionPolicy, typename FlushPolicy,

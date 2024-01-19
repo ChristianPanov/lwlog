@@ -12,8 +12,7 @@ namespace lwlog::sinks
 
 	template<typename Sink>
 	template<typename... SinkParams>
-	[[nodiscard("This method is supposed to be initialized to a sink object")]]
-	constexpr sink_ptr sink_factory<Sink>::request(SinkParams&&... params)
+	[[nodiscard]] constexpr sink_ptr sink_factory<Sink>::request(SinkParams&&... params)
 	{
 		if constexpr (std::is_constructible_v<Sink, SinkParams...>)
 		{

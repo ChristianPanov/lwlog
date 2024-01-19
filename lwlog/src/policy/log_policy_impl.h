@@ -4,14 +4,14 @@ namespace lwlog
 {
     template<typename ConcurrencyModelPolicy>
     void synchronous_policy::log(backend<ConcurrencyModelPolicy>& backend, std::string_view message, 
-        level t_level, const details::source_meta& meta, details::format_args_list args)
+        level log_level, const details::source_meta& meta, details::format_args_list args)
     {
         const auto formatted_message{ details::format_args(message, args) };
-        const details::record record{ formatted_message, t_level, meta };
+        const details::record record{ formatted_message, log_level, meta };
 
         for (const auto& sink : backend.sink_storage)
         {
-            if (sink->should_sink(record.level))
+            if (sink->should_sink(record.log_level))
             {
                 sink->sink_it(record);
             }
@@ -23,7 +23,7 @@ namespace lwlog
     struct asynchronous_policy<QueueCapacity, OverflowPolicy>::backend<ConcurrencyModelPolicy>::queue_item
     {
         std::string_view			message;
-        level						level;
+        level						log_level;
         details::source_meta		meta;
         details::format_args_list	args;
     };
@@ -44,11 +44,11 @@ namespace lwlog
                     {
                         const auto item             { backend.queue.dequeue()                       };
                         const auto formatted_message{ details::format_args(item.message, item.args) };
-                        const details::record record{ formatted_message, item.level, item.meta      };
+                        const details::record record{ formatted_message, item.log_level, item.meta  };
 
                         for (const auto& sink : backend.sink_storage)
                         {
-                            if (sink->should_sink(record.level))
+                            if (sink->should_sink(record.log_level))
                             {
                                 sink->sink_it(record);
                             }
@@ -61,9 +61,9 @@ namespace lwlog
     template<std::size_t Capacity, typename OverflowPolicy>
     template<typename ConcurrencyModelPolicy>
     void asynchronous_policy<Capacity, OverflowPolicy>::log(backend<ConcurrencyModelPolicy>& backend, 
-        std::string_view message, level t_level, const details::source_meta& meta, details::format_args_list args)
+        std::string_view message, level log_level, const details::source_meta& meta, details::format_args_list args)
     {
-        backend.queue.enqueue({ message, t_level, meta, args });
+        backend.queue.enqueue({ message, log_level, meta, args });
     }
 
     template<std::size_t Capacity, typename OverflowPolicy>

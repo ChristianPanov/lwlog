@@ -23,7 +23,7 @@ namespace lwlog
 
 		template<typename ConcurrencyModelPolicy>
 		static void log(backend<ConcurrencyModelPolicy>& backend, std::string_view message, 
-			level t_level, const details::source_meta& meta, details::format_args_list args);
+			level log_level, const details::source_meta& meta, details::format_args_list args);
 	};
 
 	template<
@@ -56,7 +56,7 @@ namespace lwlog
 
 		template<typename ConcurrencyModelPolicy>
 		static void log(backend<ConcurrencyModelPolicy>& backend, std::string_view message,
-			level t_level, const details::source_meta& meta, details::format_args_list args);
+			level log_level, const details::source_meta& meta, details::format_args_list args);
 	};
 }
 

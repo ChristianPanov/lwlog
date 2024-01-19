@@ -45,7 +45,7 @@ namespace lwlog
 	logger_ptr get(std::string_view logger_name);
 
 	void set_pattern(std::string_view pattern);
-	void set_level_filter(level t_level);
+	void set_level_filter(level log_level);
 
 	void start_topic(std::string_view name);
 	void end_topic();
