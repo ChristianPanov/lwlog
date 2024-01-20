@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.20)
 project(LWLOG)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -O3")
+set(CMAKE_CXX_FLAGS "-O3")
 set(CMAKE_GENERATOR_PLATFORM x64)
 message("Compiler Version: ${CMAKE_CXX_COMPILER_VERSION}")
 
