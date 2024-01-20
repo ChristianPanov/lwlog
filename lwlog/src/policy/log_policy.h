@@ -18,10 +18,10 @@ namespace lwlog
 			std::vector<sink_ptr> sink_storage;
 		};
 
-		template<typename ConcurrencyModelPolicy>
+		template<typename Config, typename ConcurrencyModelPolicy>
 		static void init(backend<ConcurrencyModelPolicy>&) {};
 
-		template<typename ConcurrencyModelPolicy>
+		template<typename Config, typename ConcurrencyModelPolicy>
 		static void log(backend<ConcurrencyModelPolicy>& backend, std::string_view message, 
 			level log_level, const details::source_meta& meta, details::format_args_list args);
 	};
@@ -51,10 +51,10 @@ namespace lwlog
 			> queue;
 		};
 
-		template<typename ConcurrencyModelPolicy>
+		template<typename Config, typename ConcurrencyModelPolicy>
 		static void init(backend<ConcurrencyModelPolicy>& backend);
 
-		template<typename ConcurrencyModelPolicy>
+		template<typename Config, typename ConcurrencyModelPolicy>
 		static void log(backend<ConcurrencyModelPolicy>& backend, std::string_view message,
 			level log_level, const details::source_meta& meta, details::format_args_list args);
 	};

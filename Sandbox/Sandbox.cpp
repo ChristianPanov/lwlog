@@ -4,8 +4,14 @@
 
 int main()
 {
+	using logger_config = lwlog::configuration<
+		lwlog::disable_thread_id, 
+		lwlog::disable_process_id
+	>;
+
 	auto console = std::make_shared<
 		lwlog::logger<
+			logger_config,
 			lwlog::asynchronous_policy<
 				lwlog::default_async_queue_size,
 				lwlog::default_overflow_policy
@@ -17,7 +23,7 @@ int main()
 	>("CONSOLE");
 
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
-	console->set_pattern(".br_red([%T] [%n]) .green([%l]): .br_cyan(%v) TEXT");
+	console->set_pattern("{thread} - {process} .br_red([%T] [%n]) .green([%l]): .br_cyan(%v) TEXT");
 
 	{
 		Timer timer("timer");

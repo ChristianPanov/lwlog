@@ -13,7 +13,7 @@ namespace lwlog::details
 	class pattern
 	{
 	public:
-		std::string compile(const record& record) const;
+		std::string compile(const details::record_base& record) const;
 		void parse_alignment_flags();
 		void request_flag_formatters();
 		void process_color_flags(bool use_color);

@@ -11,45 +11,71 @@
 
 namespace lwlog::details::os
 {
-	#if LWLOG_USE_THREAD_ID == 1
-		using thread_id_t = std::size_t;
-	#else
-		struct thread_id_t {};
-	#endif
-
-	#if LWLOG_USE_THREAD_ID == 1
-		using process_id_t = std::size_t;
-	#else
-		struct process_id_t {};
-	#endif
-
-	struct execution_context
+	static std::size_t get_thread_id()
 	{
-		execution_context()
-		{
-			#if LWLOG_USE_THREAD_ID == 1
-				#if defined(_WIN32)
-					thread_id = static_cast<std::size_t>(::GetCurrentThreadId());
-				#elif defined(__linux__)
-					thread_id = static_cast<std::size_t>(::syscall(SYS_gettid));
-				#elif defined(__APPLE__)
-					::pthread_threadid_np(NULL, &thread_id);
-				#else
-					thread_id = std::hash<std::thread::id>{}(std::this_thread::get_id());
-				#endif
-			#endif
+		std::size_t thread_id{};
 
-			#if LWLOG_USE_PROCESS_ID == 1
-				#if defined(_WIN32)
-					process_id = static_cast<std::size_t>(::GetCurrentProcessId());
-				#elif defined(__linux__) || defined(__APPLE__)
-					process_id = static_cast<std::size_t>(::getpid());
-				#endif
-			#endif
-		}
-		
-		thread_id_t thread_id{};
-		process_id_t process_id{};
+		#if defined(_WIN32)
+			thread_id = static_cast<std::size_t>(::GetCurrentThreadId());
+		#elif defined(__linux__)
+			thread_id = static_cast<std::size_t>(::syscall(SYS_gettid));
+		#elif defined(__APPLE__)
+			::pthread_threadid_np(NULL, &thread_id);
+		#else
+			thread_id = std::hash<std::thread::id>{}(std::this_thread::get_id());
+		#endif
+
+		return thread_id;
+	}
+
+	static std::size_t get_process_id()
+	{
+		#if defined(_WIN32)
+			return static_cast<std::size_t>(::GetCurrentProcessId());
+		#elif defined(__linux__) || defined(__APPLE__)
+			return static_cast<std::size_t>(::getpid());
+		#endif
+	}
+
+	struct execution_context_base
+	{
+		virtual std::size_t thread_id() const = 0;
+		virtual std::size_t process_id() const = 0;
+	};
+
+	template<typename ThreadIdPolicy, typename ProcessIdPolicy>
+	struct execution_context : public execution_context_base {};
+
+	template<>
+	struct execution_context<disable_thread_id, disable_process_id>
+		: public execution_context_base
+	{
+		std::size_t thread_id()		const override { return 0; }
+		std::size_t process_id()	const override { return 0; }
+	};
+
+	template<>
+	struct execution_context<enable_thread_id, disable_process_id>
+		: public execution_context_base
+	{
+		std::size_t thread_id()		const override { return get_thread_id(); }
+		std::size_t process_id()	const override { return 0; }
+	};
+
+	template<>
+	struct execution_context<disable_thread_id, enable_process_id>
+		: public execution_context_base
+	{
+		std::size_t thread_id()		const override { return 0; }
+		std::size_t process_id()	const override { return get_process_id(); }
+	};
+
+	template<>
+	struct execution_context<enable_thread_id, enable_process_id>
+		: public execution_context_base
+	{
+		std::size_t thread_id()		const override { return get_thread_id(); }
+		std::size_t process_id()	const override { return get_process_id(); }
 	};
 
     static bool are_ansi_colors_enabled()

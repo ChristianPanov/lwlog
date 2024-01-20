@@ -4,7 +4,7 @@
 
 namespace lwlog::details
 {
-	std::string pattern::compile(const record& record) const
+	std::string pattern::compile(const record_base& record) const
 	{
 		std::string compiled = m_pattern;
 		for (const auto& formatter : m_formatters)

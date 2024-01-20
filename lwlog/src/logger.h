@@ -5,7 +5,7 @@
 
 namespace lwlog
 {
-	template<typename LogExecutionPolicy, typename FlushPolicy,
+	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
 	class logger : public interface::logger
 	{

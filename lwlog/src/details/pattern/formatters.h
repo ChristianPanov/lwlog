@@ -9,7 +9,7 @@ namespace lwlog::details
 {
 	struct level_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -21,7 +21,7 @@ namespace lwlog::details
 
 	struct message_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -33,31 +33,31 @@ namespace lwlog::details
 
 	struct thread_id_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
 				flag::thread_id,
-				record.execution_context.thread_id
+				record.exec_context().thread_id()
 			);
 		}
 	};
 
 	struct process_id_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
 				flag::process_id,
-				record.execution_context.process_id
+				record.exec_context().process_id()
 			);
 		}
 	};
 
 	struct line_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -69,7 +69,7 @@ namespace lwlog::details
 
 	struct file_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -81,7 +81,7 @@ namespace lwlog::details
 
 	struct function_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -93,7 +93,7 @@ namespace lwlog::details
 
 	struct topic_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -105,7 +105,7 @@ namespace lwlog::details
 
 	struct date_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -117,7 +117,7 @@ namespace lwlog::details
 
 	struct date_short_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -129,7 +129,7 @@ namespace lwlog::details
 
 	struct year_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -141,7 +141,7 @@ namespace lwlog::details
 
 	struct year_short_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -153,7 +153,7 @@ namespace lwlog::details
 
 	struct month_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -165,7 +165,7 @@ namespace lwlog::details
 
 	struct month_name_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -177,7 +177,7 @@ namespace lwlog::details
 
 	struct month_name_short_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -189,7 +189,7 @@ namespace lwlog::details
 
 	struct day_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -201,7 +201,7 @@ namespace lwlog::details
 
 	struct weekday_name_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -213,7 +213,7 @@ namespace lwlog::details
 
 	struct weekday_name_short_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -225,7 +225,7 @@ namespace lwlog::details
 
 	struct time_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -237,7 +237,7 @@ namespace lwlog::details
 
 	struct hour_clock_24_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -249,7 +249,7 @@ namespace lwlog::details
 
 	struct hour_clock_12_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -261,7 +261,7 @@ namespace lwlog::details
 
 	struct ampm_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -273,7 +273,7 @@ namespace lwlog::details
 
 	struct hour_24_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -285,7 +285,7 @@ namespace lwlog::details
 
 	struct hour_12_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -297,7 +297,7 @@ namespace lwlog::details
 
 	struct minute_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -309,7 +309,7 @@ namespace lwlog::details
 
 	struct second_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -321,7 +321,7 @@ namespace lwlog::details
 
 	struct millisecond_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -333,7 +333,7 @@ namespace lwlog::details
 
 	struct microsecond_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
@@ -345,7 +345,7 @@ namespace lwlog::details
 
 	struct nanosecond_formatter : public formatter
 	{
-		void format(std::string& pattern, const record& record) const override
+		void format(std::string& pattern, const record_base& record) const override
 		{
 			formatter::format_attribute(
 				pattern,
