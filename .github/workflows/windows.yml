@@ -33,23 +33,29 @@ jobs:
 
   mingw_build:
     runs-on: windows-latest
-    name: MinGW x64 Build
+    strategy:
+      matrix:
+        msys2_env:
+          - { msystem: 'MINGW64', toolchain: 'mingw-w64-x86_64-toolchain' }
+          - { msystem: 'UCRT64', toolchain: 'mingw-w64-ucrt-x86_64-toolchain' }
+    name: MinGW x64 ${{ matrix.msys2_env.msystem }} Build
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install MinGW
-      run: choco install mingw
-
-    - name: Create Build Environment
-      run: cmake -E make_directory ${{runner.workspace}}/build
+    - name: Setup MSYS2
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ matrix.msys2_env.msystem }}
+        update: true
+        install: ${{ matrix.msys2_env.toolchain }}
 
     - name: Configure MinGW Build
-      shell: bash
-      working-directory: ${{runner.workspace}}/build
-      run: cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_SH="CMAKE_SH-NOTFOUND" $GITHUB_WORKSPACE
+      shell: msys2 {0}
+      run: |
+        cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
 
     - name: Build with MinGW
-      working-directory: ${{runner.workspace}}/build
+      shell: msys2 {0}
       run: |
         cmake --build . --config ${{env.BUILD_TYPE}}
