@@ -51,8 +51,14 @@ jobs:
         update: true
         install: mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake ninja lld
         
+    - name: Set MinGW Environment Variables
+      run: |
+        echo 'export PATH="/usr/bin/mingw64/bin:$PATH"' >> $GITHUB_ENV
+        echo 'export CC="/usr/bin/mingw64/bin/gcc"' >> $GITHUB_ENV
+        echo 'export CXX="/usr/bin/mingw64/bin/g++"' >> $GITHUB_ENV
+
     - name: Configure MinGW Build
-      run: /mingw64/bin/cmake -B build -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
+      run: cmake -B build -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
         
     - name: Build with MinGW
       run: cmake --build build
