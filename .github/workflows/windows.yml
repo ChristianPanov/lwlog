@@ -33,28 +33,23 @@ jobs:
 
   mingw_build:
     runs-on: windows-latest
-    name: MinGW Build
-    strategy:
-      matrix:
-        sys: [mingw64, ucrt64]
-    defaults:
-      run:
-        shell: msys2 {0}
+    name: MinGW x64 Build
 
     steps:
     - uses: actions/checkout@v3
 
-    - uses: msys2/setup-msys2@v2
-      with:
-        release: false
-        msystem: ${{ matrix.sys }}
-        update: true
+    - name: Install MinGW
+      run: choco install mingw
 
-    - name: Install MinGW Tools
-      run: pacman -Sy --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake make ninja lld
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build
 
     - name: Configure MinGW Build
-      run: cmake -B build -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
-        
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_SH="CMAKE_SH-NOTFOUND" $GITHUB_WORKSPACE
+
     - name: Build with MinGW
-      run: cmake --build build
+      working-directory: ${{runner.workspace}}/build
+      run: |
+        cmake --build . --config ${{env.BUILD_TYPE}}
