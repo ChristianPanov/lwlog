@@ -6,7 +6,9 @@ int main()
 {
 	using logger_config = lwlog::configuration<
 		lwlog::disable_thread_id, 
-		lwlog::disable_process_id
+		lwlog::disable_process_id,
+		lwlog::enable_local_time,
+		lwlog::enable_precise_units
 	>;
 
 	auto console = std::make_shared<
@@ -23,7 +25,7 @@ int main()
 	>("CONSOLE");
 
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
-	console->set_pattern("{thread} - {process} .br_red([%T] [%n]) .green([%l]): .br_cyan(%v) TEXT");
+	console->set_pattern("{nanosec}us - .br_red([%T] [%n]) .green([%l]): .br_cyan(%v) TEXT");
 
 	{
 		Timer timer("timer");

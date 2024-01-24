@@ -16,12 +16,12 @@ namespace lwlog::details
 			, meta{ meta }
 		{}
 
+		virtual const os::time_point_base& time_point() const = 0;
 		virtual const os::execution_context_base& exec_context() const = 0;
 
-		std::string_view		message;
-		level					log_level;
-		source_meta				meta;
-		os::time_point			time_point{};
+		std::string_view message;
+		level log_level;
+		source_meta meta;
 	};
 
 	template<typename Config>
@@ -32,14 +32,25 @@ namespace lwlog::details
 			: record_base{ message, log_level, meta }
 		{}
 
+		const os::time_point_base& time_point() const override
+		{
+			return dynamic_cast<const os::time_point_base&>(m_time_point);
+		}
+
 		const os::execution_context_base& exec_context() const override
 		{
-			return dynamic_cast<const os::execution_context_base&>(execution_context);
+			return dynamic_cast<const os::execution_context_base&>(m_execution_context);
 		}
+
+	private:
+		os::time_point<
+			typename Config::local_time_t,
+			typename Config::precise_units_t
+		> m_time_point{};
 
 		os::execution_context<
 			typename Config::thread_id_t,
 			typename Config::process_id_t
-		> execution_context{};
+		> m_execution_context{};
 	};
 }

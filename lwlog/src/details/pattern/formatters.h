@@ -110,7 +110,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::date,
-				os::datetime::get_date(record.time_point)
+				os::datetime::get_date(record.time_point())
 			);
 		}
 	};
@@ -122,7 +122,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::date_short,
-				os::datetime::get_date_short(record.time_point)
+				os::datetime::get_date_short(record.time_point())
 			);
 		}
 	};
@@ -134,7 +134,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::year,
-				os::datetime::get_year(record.time_point)
+				os::datetime::get_year(record.time_point())
 			);
 		}
 	};
@@ -146,7 +146,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::year_short,
-				os::datetime::get_year_short(record.time_point)
+				os::datetime::get_year_short(record.time_point())
 			);
 		}
 	};
@@ -158,7 +158,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::month,
-				os::datetime::get_month(record.time_point)
+				os::datetime::get_month(record.time_point())
 			);
 		}
 	};
@@ -170,7 +170,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::month_name,
-				os::datetime::get_month_name(record.time_point)
+				os::datetime::get_month_name(record.time_point())
 			);
 		}
 	};
@@ -182,7 +182,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::month_name_short,
-				os::datetime::get_month_name_short(record.time_point)
+				os::datetime::get_month_name_short(record.time_point())
 			);
 		}
 	};
@@ -194,7 +194,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::day,
-				os::datetime::get_day(record.time_point)
+				os::datetime::get_day(record.time_point())
 			);
 		}
 	};
@@ -206,7 +206,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::weekday,
-				os::datetime::get_weekday_name(record.time_point)
+				os::datetime::get_weekday_name(record.time_point())
 			);
 		}
 	};
@@ -218,7 +218,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::weekday_short,
-				os::datetime::get_weekday_name_short(record.time_point)
+				os::datetime::get_weekday_name_short(record.time_point())
 			);
 		}
 	};
@@ -230,7 +230,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::time,
-				os::datetime::get_time(record.time_point)
+				os::datetime::get_time(record.time_point())
 			);
 		}
 	};
@@ -242,7 +242,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::hour_clock_24,
-				os::datetime::get_24_hour_clock(record.time_point)
+				os::datetime::get_24_hour_clock(record.time_point())
 			);
 		}
 	};
@@ -254,7 +254,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::hour_clock_12,
-				os::datetime::get_12_hour_clock(record.time_point)
+				os::datetime::get_12_hour_clock(record.time_point())
 			);
 		}
 	};
@@ -266,7 +266,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::ampm,
-				os::datetime::get_ampm(record.time_point)
+				os::datetime::get_ampm(record.time_point())
 			);
 		}
 	};
@@ -278,7 +278,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::hour_24,
-				os::datetime::get_hour_24(record.time_point)
+				os::datetime::get_hour_24(record.time_point())
 			);
 		}
 	};
@@ -290,7 +290,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::hour_12,
-				os::datetime::get_hour_12(record.time_point)
+				os::datetime::get_hour_12(record.time_point())
 			);
 		}
 	};
@@ -302,7 +302,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::minute,
-				os::datetime::get_minute(record.time_point)
+				os::datetime::get_minute(record.time_point())
 			);
 		}
 	};
@@ -314,7 +314,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::second,
-				os::datetime::get_second(record.time_point)
+				os::datetime::get_second(record.time_point())
 			);
 		}
 	};
@@ -326,7 +326,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::millisecond,
-				os::datetime::get_millisecond(record.time_point)
+				os::datetime::get_millisecond(record.time_point())
 			);
 		}
 	};
@@ -338,7 +338,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::microsecond,
-				os::datetime::get_microsecond(record.time_point)
+				os::datetime::get_microsecond(record.time_point())
 			);
 		}
 	};
@@ -350,7 +350,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::nanosecond,
-				os::datetime::get_nanosecond(record.time_point)
+				os::datetime::get_nanosecond(record.time_point())
 			);
 		}
 	};
