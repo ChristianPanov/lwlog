@@ -51,6 +51,9 @@ jobs:
         update: true
         install: mingw-w64-x86_64-toolchain
 
+    - name: Install CMake
+      run: pacman -S --noconfirm mingw-w64-x86_64-cmake
+
     - name: Configure MinGW Build
       run: cmake -B build -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
 
