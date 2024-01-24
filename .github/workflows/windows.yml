@@ -36,8 +36,8 @@ jobs:
     strategy:
       matrix:
         msys2_env:
-          - { msystem: 'MINGW64', toolchain: 'mingw-w64-x86_64-toolchain' }
-          - { msystem: 'UCRT64', toolchain: 'mingw-w64-ucrt-x86_64-toolchain' }
+          - { msystem: 'MINGW64', toolchain: 'mingw-w64-x86_64-toolchain', cmake: 'mingw-w64-x86_64-cmake' }
+          - { msystem: 'UCRT64', toolchain: 'mingw-w64-ucrt-x86_64-toolchain', cmake: 'mingw-w64-ucrt-x86_64-cmake' }
     name: MinGW x64 ${{ matrix.msys2_env.msystem }} Build
 
     steps:
@@ -48,7 +48,7 @@ jobs:
       with:
         msystem: ${{ matrix.msys2_env.msystem }}
         update: true
-        install: ${{ matrix.msys2_env.toolchain }}
+        install: ${{ matrix.msys2_env.toolchain }} ${{ matrix.msys2_env.cmake }}
 
     - name: Configure MinGW Build
       shell: msys2 {0}
