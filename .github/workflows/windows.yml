@@ -33,28 +33,29 @@ jobs:
 
   mingw_build:
     runs-on: windows-latest
-    name: MinGW Build
     strategy:
       matrix:
-        sys: [mingw64, ucrt64]
-    defaults:
-      run:
-        shell: msys2 {0}
+        msys2_env:
+          - { msystem: 'MINGW64', toolchain: 'mingw-w64-x86_64-toolchain', cmake: 'mingw-w64-x86_64-cmake' }
+          - { msystem: 'UCRT64', toolchain: 'mingw-w64-ucrt-x86_64-toolchain', cmake: 'mingw-w64-ucrt-x86_64-cmake' }
+    name: MinGW x64 ${{ matrix.msys2_env.msystem }} Build
 
     steps:
     - uses: actions/checkout@v3
 
-    - uses: msys2/setup-msys2@v2
+    - name: Setup MSYS2
+      uses: msys2/setup-msys2@v2
       with:
-        release: false
-        msystem: ${{ matrix.sys }}
+        msystem: ${{ matrix.msys2_env.msystem }}
         update: true
-
-    - name: Install MinGW Tools
-      run: pacman -Sy --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake make ninja lld
+        install: ${{ matrix.msys2_env.toolchain }} ${{ matrix.msys2_env.cmake }}
 
     - name: Configure MinGW Build
-      run: cmake -B build -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
-        
+      shell: msys2 {0}
+      run: |
+        cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
+
     - name: Build with MinGW
-      run: cmake --build build
+      shell: msys2 {0}
+      run: |
+        cmake --build . --config ${{env.BUILD_TYPE}}
