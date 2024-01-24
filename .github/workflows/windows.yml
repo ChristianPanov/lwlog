@@ -53,9 +53,11 @@ jobs:
 
     - name: Install CMake
       run: pacman -S --noconfirm mingw-w64-x86_64-cmake
-
+      
     - name: Configure MinGW Build
-      run: cmake -B build -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
+      run: |
+        cmake -B build -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+        -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_AR=ar $GITHUB_WORKSPACE
 
     - name: Build with MinGW
       run: cmake --build build
