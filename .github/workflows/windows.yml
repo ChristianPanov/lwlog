@@ -50,11 +50,9 @@ jobs:
         msystem: ${{ matrix.sys }}
         update: true
         install: mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake ninja lld
-
+        
     - name: Configure MinGW Build
-      run: |
-        cmake -B build -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-        -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_AR=ar $GITHUB_WORKSPACE
+      run: cmake -B build -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
         
     - name: Build with MinGW
       run: cmake --build build
