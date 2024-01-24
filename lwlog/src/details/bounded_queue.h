@@ -12,8 +12,7 @@ namespace lwlog::details
         typename OverflowPolicy, typename ConcurrencyModelPolicy>
     struct bounded_queue
     {
-        static constexpr auto cache_line_size{ 
-            std::hardware_destructive_interference_size };
+        static constexpr auto cache_line_size{ 64 };
 
     public:
         void enqueue(const T& item);

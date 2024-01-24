@@ -7,8 +7,6 @@ set(CMAKE_CXX_FLAGS "-O3")
 set(CMAKE_GENERATOR_PLATFORM x64)
 message("Compiler Version: ${CMAKE_CXX_COMPILER_VERSION}")
 
-add_compile_definitions(__cpp_lib_hardware_interference_size)
-
 message("Adding source files")
 file(GLOB_RECURSE LWLOG_SOURCE_FILES ${CMAKE_SOURCE_DIR}/lwlog/src/*.cpp)
 file(GLOB_RECURSE LWLOG_HEADER_FILES ${CMAKE_SOURCE_DIR}/lwlog/src/*.h)
