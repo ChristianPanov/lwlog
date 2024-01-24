@@ -52,7 +52,7 @@ jobs:
         install: mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake ninja lld
         
     - name: Configure MinGW Build
-      run: cmake -B build -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
+      run: /mingw64/bin/cmake -B build -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
         
     - name: Build with MinGW
       run: cmake --build build
