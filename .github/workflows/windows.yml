@@ -49,13 +49,9 @@ jobs:
         release: false
         msystem: ${{ matrix.sys }}
         update: true
-        install: mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake ninja lld
-        
-    - name: Set MinGW Environment Variables
-      run: |
-        echo 'export PATH="/usr/bin/mingw64/bin:$PATH"' >> $GITHUB_ENV
-        echo 'export CC="/usr/bin/mingw64/bin/gcc"' >> $GITHUB_ENV
-        echo 'export CXX="/usr/bin/mingw64/bin/g++"' >> $GITHUB_ENV
+
+    - name: Install MinGW Tools
+      run: pacman -Sy --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake make ninja lld
 
     - name: Configure MinGW Build
       run: cmake -B build -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
