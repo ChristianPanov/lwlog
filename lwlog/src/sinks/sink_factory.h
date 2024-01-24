@@ -7,7 +7,7 @@ namespace lwlog::sinks
 	{
 	public:
 		template<typename... SinkParams>
-		static constexpr sink_ptr request(SinkParams&&... params);
+		static sink_ptr request(SinkParams&&... params);
 	};
 
 	template<typename Sink>
