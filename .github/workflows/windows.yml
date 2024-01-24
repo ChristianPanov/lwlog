@@ -53,6 +53,9 @@ jobs:
 
     - name: Install CMake
       run: pacman -S --noconfirm mingw-w64-x86_64-cmake
+
+    - name: Add CMake to PATH
+      run: echo "::add-path::$MSYS2_PATH/mingw64/bin"
       
     - name: Configure MinGW Build
       run: |
