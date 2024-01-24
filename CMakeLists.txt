@@ -7,9 +7,7 @@ set(CMAKE_CXX_FLAGS "-O3")
 set(CMAKE_GENERATOR_PLATFORM x64)
 message("Compiler Version: ${CMAKE_CXX_COMPILER_VERSION}")
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    add_compile_definitions(__cpp_lib_hardware_interference_size)
-endif()
+add_compile_definitions(__cpp_lib_hardware_interference_size)
 
 message("Adding source files")
 file(GLOB_RECURSE LWLOG_SOURCE_FILES ${CMAKE_SOURCE_DIR}/lwlog/src/*.cpp)
