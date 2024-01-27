@@ -44,6 +44,7 @@ namespace lwlog::details
 
 	private:
 		os::time_point<
+			typename Config::time_t,
 			typename Config::local_time_t,
 			typename Config::precise_units_t
 		> m_time_point{};

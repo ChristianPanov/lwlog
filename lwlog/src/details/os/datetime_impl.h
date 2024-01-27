@@ -3,6 +3,40 @@
 
 namespace lwlog::details::os
 {
+	template<typename LocalTimePolicy, typename PreciseUnitsPolicy>
+	std::string time_point<disable_time, LocalTimePolicy, PreciseUnitsPolicy>::to_string(std::string_view unit) const
+	{
+		return {};
+	}
+
+	template<typename LocalTimePolicy, typename PreciseUnitsPolicy>
+	std::string time_point<disable_time, LocalTimePolicy, PreciseUnitsPolicy>::to_string(std::uint32_t unit) const
+	{
+		return {};
+	}
+
+	template<typename LocalTimePolicy, typename PreciseUnitsPolicy>
+	std::string time_point<disable_time, LocalTimePolicy, PreciseUnitsPolicy>::build_timestamp(
+		std::uint32_t first_unit, std::uint32_t second_unit, char delimeter) const
+	{
+		return {};
+	}
+
+	template<typename LocalTimePolicy, typename PreciseUnitsPolicy>
+	std::string time_point<disable_time, LocalTimePolicy, PreciseUnitsPolicy>::build_timestamp(
+		std::uint32_t first_unit, std::uint32_t second_unit, std::uint32_t third_unit, char delimeter) const
+	{
+		return {};
+	}
+
+	template<typename LocalTimePolicy, typename PreciseUnitsPolicy>
+	std::string time_point<disable_time, LocalTimePolicy, PreciseUnitsPolicy>::build_timestamp(
+		std::uint32_t first_unit, std::uint32_t second_unit, std::uint32_t third_unit,
+		char delimeter, std::string_view end) const
+	{
+		return {};
+	}
+
 	template<typename LocalTimePolicy>
 	inline std::uint8_t handle_timezone(std::uint8_t hour)
 	{
@@ -12,20 +46,20 @@ namespace lwlog::details::os
 	template<>
 	inline std::uint8_t handle_timezone<enable_local_time>(std::uint8_t hour)
 	{
-		hour += m_cached_timezone_offset;
+		hour += cached_timezone_offset;
 		hour = (hour <= 23) ? hour : hour - 24;
 
 		return hour;
 	}
 
-	template<typename LocalTimePolicy, typename PreciseUnitsPolicy>
-	time_point<LocalTimePolicy, PreciseUnitsPolicy>::time_point()
+	template<typename TimePolicy, typename LocalTimePolicy, typename PreciseUnitsPolicy>
+	time_point<TimePolicy, LocalTimePolicy, PreciseUnitsPolicy>::time_point()
 	{
 		time_point_base::hour = handle_timezone<LocalTimePolicy>(time_point_base::hour);
 	}
 
 	template<typename LocalTimePolicy>
-	time_point<LocalTimePolicy, enable_precise_units>::time_point()
+	time_point<enable_time, LocalTimePolicy, enable_precise_units>::time_point()
 	{
 		#if LWLOG_NO_TIME == 0
 			#ifdef _WIN32
@@ -55,19 +89,19 @@ namespace lwlog::details::os
 	}
 
 	template<typename LocalTimePolicy>
-	std::uint16_t time_point<LocalTimePolicy, enable_precise_units>::millisecond() const
+	std::uint16_t time_point<enable_time, LocalTimePolicy, enable_precise_units>::millisecond() const
 	{
 		return m_millisecond;
 	}
 
 	template<typename LocalTimePolicy>
-	std::uint32_t time_point<LocalTimePolicy, enable_precise_units>::microsecond() const
+	std::uint32_t time_point<enable_time, LocalTimePolicy, enable_precise_units>::microsecond() const
 	{
 		return m_microsecond;
 	}
 
 	template<typename LocalTimePolicy>
-	std::uint32_t time_point<LocalTimePolicy, enable_precise_units>::nanosecond() const
+	std::uint32_t time_point<enable_time, LocalTimePolicy, enable_precise_units>::nanosecond() const
 	{
 		return m_nanosecond;
 	}
