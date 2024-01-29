@@ -190,7 +190,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::month_name,
-				time_point.to_string(os::month_name[time_point.month])
+				time_point.to_string(os::datetime::month_name[time_point.month])
 			);
 		}
 	};
@@ -204,7 +204,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::month_name_short,
-				time_point.to_string(os::month_name_short[time_point.month])
+				time_point.to_string(os::datetime::month_name_short[time_point.month])
 			);
 		}
 	};
@@ -232,7 +232,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::weekday,
-				time_point.to_string(os::weekday_name[time_point.weekday])
+				time_point.to_string(os::datetime::weekday_name[time_point.weekday])
 			);
 		}
 	};
@@ -246,7 +246,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::weekday_short,
-				time_point.to_string(os::weekday_name_short[time_point.weekday])
+				time_point.to_string(os::datetime::weekday_name_short[time_point.weekday])
 			);
 		}
 	};
@@ -299,7 +299,7 @@ namespace lwlog::details
 					time_point.hour,
 					time_point.minute,
 					time_point.second,
-					'-', (time_point.hour >= 12 ? "pm" : "am"))
+					'-') + time_point.ampm()
 			);
 		}
 	};
@@ -313,7 +313,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::ampm,
-				time_point.to_string(time_point.hour >= 12 ? "pm" : "am")
+				time_point.to_string(time_point.ampm())
 			);
 		}
 	};
@@ -341,8 +341,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::hour_12,
-				time_point.to_string(time_point.hour > 12 ? 
-					time_point.hour - 12 : time_point.hour)
+				time_point.to_string(os::datetime::to_12h(time_point.hour))
 			);
 		}
 	};

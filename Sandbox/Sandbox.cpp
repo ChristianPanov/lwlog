@@ -7,7 +7,7 @@ int main()
 	using logger_config = lwlog::configuration<
 		lwlog::enable_time,
 		lwlog::enable_local_time,
-		lwlog::disable_precise_units,
+		lwlog::enable_precise_units,
 		lwlog::disable_thread_id, 
 		lwlog::disable_process_id
 	>;

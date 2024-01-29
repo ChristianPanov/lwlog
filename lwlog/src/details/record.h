@@ -2,7 +2,7 @@
 
 #include "configuration.h"
 #include "source_meta.h"
-#include "os/datetime.h"
+#include "os/time_point.h"
 #include "os/os.h"
 
 namespace lwlog::details
