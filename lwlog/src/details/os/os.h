@@ -11,13 +11,13 @@
 
 namespace lwlog::details::os
 {
-	#if LWLOG_USE_THREAD_ID == 1
+	#ifdef LWLOG_USE_THREAD_ID
 		using thread_id_t = std::size_t;
 	#else
 		struct thread_id_t {};
 	#endif
 
-	#if LWLOG_USE_THREAD_ID == 1
+	#ifdef LWLOG_USE_PROCESS_ID
 		using process_id_t = std::size_t;
 	#else
 		struct process_id_t {};
@@ -27,7 +27,7 @@ namespace lwlog::details::os
 	{
 		execution_context()
 		{
-			#if LWLOG_USE_THREAD_ID == 1
+			#ifdef LWLOG_USE_THREAD_ID
 				#if defined(_WIN32)
 					thread_id = static_cast<std::size_t>(::GetCurrentThreadId());
 				#elif defined(__linux__)
@@ -39,7 +39,7 @@ namespace lwlog::details::os
 				#endif
 			#endif
 
-			#if LWLOG_USE_PROCESS_ID == 1
+			#ifdef LWLOG_USE_PROCESS_ID
 				#if defined(_WIN32)
 					process_id = static_cast<std::size_t>(::GetCurrentProcessId());
 				#elif defined(__linux__) || defined(__APPLE__)

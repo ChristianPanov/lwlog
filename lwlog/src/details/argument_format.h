@@ -2,15 +2,13 @@
 
 #include <string>
 
-#if LWLOG_NO_FORMATTING == 0
-	#if LWLOG_USE_FMT == 1
-	    #include <fmt/format.h>
-	#elif LWLOG_USE_STD_FORMAT == 1
-		#if __cplusplus < 202002L
-			#error "std::format is not supported in current cpp standard"
-		#else
-			#include <format>
+#ifdef LWLOG_NO_FORMATTING
+	#if __cplusplus < 202002L
+		#ifdef FMT_VERSION
+			#include <fmt/format.h>
 		#endif
+	#else
+		#include <format>
 	#endif
 #endif
 

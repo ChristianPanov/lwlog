@@ -23,16 +23,14 @@ namespace lwlog::details
 
 	static std::string format_args(std::string_view format, format_args_list args)
 	{
-		#if LWLOG_NO_FORMATTING == 0
-			#if LWLOG_USE_FMT == 1
-				return fmt::format(format, args)
-			#elif LWLOG_USE_STD_FORMAT == 1
-				return std::format(format, args)
+		#if __cplusplus < 202002L
+			#ifdef FMT_VERSION
+				return fmt::format(format, args);
 			#else
 				return format_args_impl(format, args);
 			#endif
 		#else
-			return format;
+			return std::format(format, args);
 		#endif
 	}
 

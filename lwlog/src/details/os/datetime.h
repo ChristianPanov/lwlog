@@ -5,8 +5,6 @@
 #include <array>
 #include <ctime>
 
-#include "tweakme.h"
-
 #ifdef _WIN32
 	#include "details/windows_lightweight.h"
 #else
@@ -19,7 +17,7 @@ namespace lwlog::details::os
 	{
 		time_point();
 
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			std::uint16_t year;
 			std::uint8_t month;
 			std::uint8_t weekday;
@@ -28,7 +26,7 @@ namespace lwlog::details::os
 			std::uint8_t minute;
 			std::uint8_t second;
 
-			#if LWLOG_USE_PRECISE_UNITS == 1
+			#ifdef LWLOG_USE_PRECISE_UNITS
 				std::uint16_t millisecond;
 				std::uint32_t microsecond;
 				std::uint32_t nanosecond;

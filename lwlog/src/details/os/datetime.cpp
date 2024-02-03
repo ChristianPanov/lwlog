@@ -4,7 +4,7 @@ namespace lwlog::details::os
 {
 	time_point::time_point()
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			#ifdef _WIN32
 				::SYSTEMTIME now;
 				::GetSystemTime(&now);
@@ -17,7 +17,7 @@ namespace lwlog::details::os
 				minute	= now.wMinute;
 				second	= now.wSecond;
 
-				#if LWLOG_USE_PRECISE_UNITS == 1
+				#ifdef LWLOG_USE_PRECISE_UNITS
 					::FILETIME now_ft;
 					::GetSystemTimePreciseAsFileTime(&now_ft);
 
@@ -44,7 +44,7 @@ namespace lwlog::details::os
 				minute	= details->tm_min;
 				second	= details->tm_sec;
 
-				#if LWLOG_USE_PRECISE_UNITS == 1
+				#ifdef LWLOG_USE_PRECISE_UNITS
 					const auto nanoseconds_since_unix_epoch{ 
 						std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count() };
 
@@ -57,7 +57,7 @@ namespace lwlog::details::os
 	}
 
 	const std::int16_t datetime::m_cached_timezone_offset = []() {
-			#if LWLOG_USE_LOCALTIME == 1
+			#ifdef LWLOG_USE_LOCALTIME
 				#ifdef _WIN32
 					::TIME_ZONE_INFORMATION tz_info;
 					::DWORD result{ ::GetTimeZoneInformation(&tz_info) };
@@ -86,7 +86,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_date(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			return std::to_string(now.year) + "-"
 				+ ensure_two_digit_format(now.month) + "-"
 				+ ensure_two_digit_format(now.day);
@@ -97,7 +97,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_date_short(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			return ensure_two_digit_format(now.month) + "/"
 				+ ensure_two_digit_format(now.day) + "/"
 				+ ensure_two_digit_format(now.year % 100);
@@ -108,7 +108,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_year(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			return std::to_string(now.year);
 		#else
 			return {};
@@ -117,7 +117,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_year_short(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			return ensure_two_digit_format(now.year % 100);
 		#else
 			return {};
@@ -126,7 +126,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_month(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			return ensure_two_digit_format(now.month);
 		#else
 			return {};
@@ -135,7 +135,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_month_name(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			return m_month_name[now.month - 1];
 		#else
 			return {};
@@ -144,7 +144,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_month_name_short(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			return m_month_name_short[now.month - 1];
 		#else
 			return {};
@@ -153,7 +153,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_day(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			return ensure_two_digit_format(now.day);
 		#else
 			return {};
@@ -162,7 +162,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_weekday_name(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			return m_weekday_name[now.weekday - 1];
 		#else
 			return {};
@@ -171,7 +171,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_weekday_name_short(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			return m_weekday_name_short[now.weekday - 1];
 		#else
 			return {};
@@ -180,7 +180,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_time(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
             return ensure_two_digit_format(to_local(now.hour)) + ":"
 				+ ensure_two_digit_format(now.minute) + ":"
 				+ ensure_two_digit_format(now.second);
@@ -191,7 +191,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_24_hour_clock(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			return ensure_two_digit_format(to_local(now.hour)) + ":"
 				+ ensure_two_digit_format(now.minute);
 		#else
@@ -201,7 +201,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_12_hour_clock(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			return ensure_two_digit_format(to_12h(to_local(now.hour))) + ":"
 				+ ensure_two_digit_format(now.minute) + ":"
 				+ ensure_two_digit_format(now.second) + ampm(now.hour);
@@ -212,7 +212,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_ampm(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
 			return ampm(to_local(now.hour));
 		#else
 			return {};
@@ -221,7 +221,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_hour_24(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
             return ensure_two_digit_format(to_local(now.hour));
 		#else
 			return {};
@@ -230,7 +230,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_hour_12(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
             return ensure_two_digit_format(to_12h(to_local(now.hour)));
 		#else
 			return {};
@@ -239,7 +239,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_minute(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
             return ensure_two_digit_format(now.minute);
 		#else
 			return {};
@@ -248,7 +248,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_second(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0
+		#ifndef LWLOG_NO_TIME
             return ensure_two_digit_format(now.second);
 		#else
 			return {};
@@ -257,7 +257,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_millisecond(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0 && LWLOG_USE_PRECISE_UNITS == 1
+		#if !defined(LWLOG_NO_TIME) && defined(LWLOG_USE_PRECISE_UNITS)
             return std::to_string(now.millisecond);
 		#else
 			return {};
@@ -266,7 +266,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_microsecond(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0 && LWLOG_USE_PRECISE_UNITS == 1
+		#if !defined(LWLOG_NO_TIME) && defined(LWLOG_USE_PRECISE_UNITS)
             return std::to_string(now.microsecond);
 		#else
 			return {};
@@ -275,7 +275,7 @@ namespace lwlog::details::os
 
 	std::string datetime::get_nanosecond(const time_point& now)
 	{
-		#if LWLOG_NO_TIME == 0 && LWLOG_USE_PRECISE_UNITS == 1
+		#if !defined(LWLOG_NO_TIME) && defined(LWLOG_USE_PRECISE_UNITS)
             return std::to_string(now.nanosecond);
 		#else
 			return {};
