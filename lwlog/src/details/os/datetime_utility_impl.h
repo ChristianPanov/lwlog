@@ -7,7 +7,7 @@ namespace lwlog::details::os::datetime
 	template<typename LocalTimePolicy>
 	std::uint8_t handle_timezone(std::uint8_t hour)
 	{
-		return {};
+		return hour;
 	}
 
 	template<>
