@@ -13,7 +13,7 @@ namespace lwlog
 		SinkParams&&... params)
 		: m_name{ name }
 	{
-		LogExecutionPolicy::init<Config>(m_backend);
+		LogExecutionPolicy::template init<Config>(m_backend);
 
 		if(registry::instance().is_registry_automatic()) 
 			registry::instance().register_logger(this);
@@ -132,7 +132,7 @@ namespace lwlog
 	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::log(
 		const details::log_message& log_msg, level log_level, details::format_args_list args)
 	{
-		LogExecutionPolicy::log<Config>(m_backend, log_msg.message, log_level, log_msg.meta, args);
+		LogExecutionPolicy::template log<Config>(m_backend, log_msg.message, log_level, log_msg.meta, args);
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
