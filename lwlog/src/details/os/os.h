@@ -24,7 +24,7 @@ namespace lwlog::details::os
 	};
 
 	template<typename ThreadIdPolicy, typename ProcessIdPolicy>
-	struct execution_context : public execution_context_base 
+	struct execution_context : public execution_context_base
 	{
 		std::size_t thread_id() const override;
 		std::size_t process_id() const override;

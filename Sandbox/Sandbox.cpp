@@ -6,8 +6,8 @@ int main()
 {
 	using logger_config = lwlog::configuration<
 		lwlog::enable_time,
-		lwlog::enable_local_time,
-		lwlog::enable_precise_units,
+		lwlog::disable_local_time,
+		lwlog::disable_precise_units,
 		lwlog::disable_thread_id, 
 		lwlog::disable_process_id
 	>;
@@ -26,7 +26,7 @@ int main()
 	>("CONSOLE");
 
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
-	console->set_pattern("{nanosec}us - .br_red([%T] [%n]) .green([%l]): .br_cyan(%v) TEXT");
+	console->set_pattern(".br_red([%T] [%n]) .green([%l]): .br_cyan(%v) TEXT");
 
 	{
 		Timer timer("timer");

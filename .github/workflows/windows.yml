@@ -1,0 +1,61 @@
+name: Windows
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  msvc_build:
+    runs-on: windows-latest
+    name: MSVC x64 Build
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build
+
+    - name: Configure MSVC Build
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: cmake -A x64 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
+
+    - name: Build with MSVC
+      working-directory: ${{runner.workspace}}/build
+      run: |
+        $threads = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
+        cmake --build . --config ${{env.BUILD_TYPE}} --parallel $threads
+
+  mingw_build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        msys2_env:
+          - { msystem: 'MINGW64', toolchain: 'mingw-w64-x86_64-toolchain', cmake: 'mingw-w64-x86_64-cmake' }
+          - { msystem: 'UCRT64', toolchain: 'mingw-w64-ucrt-x86_64-toolchain', cmake: 'mingw-w64-ucrt-x86_64-cmake' }
+    name: MinGW x64 ${{ matrix.msys2_env.msystem }} Build
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup MSYS2
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ matrix.msys2_env.msystem }}
+        update: true
+        install: ${{ matrix.msys2_env.toolchain }} ${{ matrix.msys2_env.cmake }}
+
+    - name: Configure MinGW Build
+      shell: msys2 {0}
+      run: |
+        cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
+
+    - name: Build with MinGW
+      shell: msys2 {0}
+      run: |
+        cmake --build . --config ${{env.BUILD_TYPE}}

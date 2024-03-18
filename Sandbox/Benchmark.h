@@ -145,8 +145,8 @@ public:
 private:
     void stop() {
         auto end_timepoint = std::chrono::high_resolution_clock::now();
-        long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_start_timepoint).time_since_epoch().count();
-        long long end = std::chrono::time_point_cast<std::chrono::microseconds>(end_timepoint).time_since_epoch().count();
+        long long start = std::chrono::time_point_cast<std::chrono::nanoseconds>(m_start_timepoint).time_since_epoch().count();
+        long long end = std::chrono::time_point_cast<std::chrono::nanoseconds>(end_timepoint).time_since_epoch().count();
 
         //std::string res = m_name + ": " + std::to_string(end - start) + "ms\n";
         std::cout << m_name << ": " << (end - start) << "us\n";
