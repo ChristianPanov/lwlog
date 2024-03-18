@@ -17,7 +17,7 @@ namespace lwlog::details::os::datetime
 	static const std::int16_t cached_timezone_offset = []() {
 		#ifdef _WIN32
 			::TIME_ZONE_INFORMATION tz_info;
-			::DWORD result{ ::GetTimeZoneInformation(&tz_info) };
+			::GetTimeZoneInformation(&tz_info);
 
 			return -tz_info.Bias / 60;
 		#else
