@@ -19,7 +19,7 @@ namespace lwlog
 		};
 
 		template<typename Config, typename ConcurrencyModelPolicy>
-		static void init(backend<ConcurrencyModelPolicy>&) {};
+		static void init(backend<ConcurrencyModelPolicy>&) {}
 
 		template<typename Config, typename ConcurrencyModelPolicy>
 		static void log(backend<ConcurrencyModelPolicy>& backend, std::string_view message, 

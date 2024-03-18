@@ -7,18 +7,18 @@ namespace lwlog::details::os
 	inline time_point_base::time_point_base()
 	{
 		#ifdef _WIN32
-			::GetSystemTime(&now);
+			::GetSystemTime(&m_now);
 			
-			year	= now.wYear;
-			month	= now.wMonth;
-			weekday	= now.wDayOfWeek;
-			day		= now.wDay;
-			hour	= now.wHour;
-			minute	= now.wMinute;
-			second	= now.wSecond;
+			year	= m_now.wYear;
+			month	= m_now.wMonth;
+			weekday	= m_now.wDayOfWeek;
+			day		= m_now.wDay;
+			hour	= m_now.wHour;
+			minute	= m_now.wMinute;
+			second	= m_now.wSecond;
 		#else
-			now = std::chrono::system_clock::now();
-			const std::time_t now_time_t{ std::chrono::system_clock::to_time_t(now) };
+		    m_now = std::chrono::system_clock::now();
+			const std::time_t now_time_t{ std::chrono::system_clock::to_time_t(m_now) };
 			const std::tm* details{ std::gmtime(&now_time_t) };
 
 			year	= details->tm_year + 1900;

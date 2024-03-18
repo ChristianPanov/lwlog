@@ -50,7 +50,7 @@ namespace lwlog::details::os
 		std::uint8_t second;
 
 	protected:
-		time_point_t now;
+		time_point_t m_now;
 	};
 
 	template<typename TimePolicy, typename LocalTimePolicy, typename PreciseUnitsPolicy>

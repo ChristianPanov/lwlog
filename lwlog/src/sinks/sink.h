@@ -17,7 +17,6 @@ namespace lwlog::sinks
 
 	public:
 		sink();
-		virtual ~sink() = default;
 
 	public:
 		void set_pattern(std::string_view pattern) override;

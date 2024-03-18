@@ -1,3 +1,5 @@
+#pragma once
+
 #include "log_policy.h"
 
 namespace lwlog

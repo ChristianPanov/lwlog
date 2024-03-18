@@ -57,7 +57,7 @@ namespace lwlog::details::os
 	bool are_ansi_colors_enabled()
 	{
 		#ifdef _WIN32
-			::HANDLE handle{ ::GetStdHandle(STD_OUTPUT_HANDLE) };
+			const ::HANDLE handle{ ::GetStdHandle(STD_OUTPUT_HANDLE) };
 			::DWORD mode{};
 
 			return ::GetConsoleMode(handle, &mode) &&
@@ -70,7 +70,7 @@ namespace lwlog::details::os
 	void enable_ansi_colors()
 	{
 		#ifdef _WIN32
-			::HANDLE handle{ ::GetStdHandle(STD_OUTPUT_HANDLE) };
+			const ::HANDLE handle{ ::GetStdHandle(STD_OUTPUT_HANDLE) };
 			::DWORD mode{};
 
 			if (handle == INVALID_HANDLE_VALUE) return;

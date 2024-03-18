@@ -4,7 +4,7 @@ namespace lwlog::details
 {
 	void alignment_formatter::format(std::string& pattern, const alignment_info& spec)
 	{
-		const std::size_t flag_end_indicator_size{ 2 };
+		constexpr std::size_t flag_end_indicator_size{ 2 };
 		const std::size_t flag_size{ spec.alignment_flag.size() };
 		const std::size_t flag_pos{ pattern.find(spec.alignment_flag) };
 		const std::size_t flag_end_pos{ pattern.find(alignment_info::flag_end, flag_pos + flag_size) };
