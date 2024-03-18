@@ -10,11 +10,7 @@ namespace lwlog::details
 	struct record_base
 	{
 		record_base() = default;
-		record_base(std::string_view message, level log_level, const source_meta& meta)
-			: message{ message }
-			, log_level{ log_level }
-			, meta{ meta }
-		{}
+		record_base(std::string_view message, level log_level, const source_meta& meta);
 
 		virtual const os::time_point_base& time_point() const = 0;
 		virtual const os::execution_context_base& exec_context() const = 0;
@@ -28,19 +24,10 @@ namespace lwlog::details
 	struct record : public record_base
 	{
 		record() = default;
-		record(std::string_view message, level log_level, const source_meta& meta)
-			: record_base{ message, log_level, meta }
-		{}
+		record(std::string_view message, level log_level, const source_meta& meta);
 
-		const os::time_point_base& time_point() const override
-		{
-			return dynamic_cast<const os::time_point_base&>(m_time_point);
-		}
-
-		const os::execution_context_base& exec_context() const override
-		{
-			return dynamic_cast<const os::execution_context_base&>(m_execution_context);
-		}
+		const os::time_point_base& time_point() const override;
+		const os::execution_context_base& exec_context() const override;
 
 	private:
 		os::time_point<
@@ -55,3 +42,5 @@ namespace lwlog::details
 		> m_execution_context{};
 	};
 }
+
+#include "record_impl.h"

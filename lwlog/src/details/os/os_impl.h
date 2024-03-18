@@ -1,0 +1,84 @@
+#pragma once
+
+namespace lwlog::details::os
+{
+	template<typename ThreadIdPolicy>
+	std::size_t get_thread_id()
+    {
+		std::size_t thread_id{};
+
+		#if defined(_WIN32)
+			thread_id = static_cast<std::size_t>(::GetCurrentThreadId());
+		#elif defined(__linux__)
+			thread_id = static_cast<std::size_t>(::syscall(SYS_gettid));
+		#elif defined(__APPLE__)
+			::pthread_threadid_np(NULL, &thread_id);
+		#else
+			thread_id = std::hash<std::thread::id>{}(std::this_thread::get_id());
+		#endif
+
+		return thread_id;
+	}
+
+	template<typename ProcessIdPolicy>
+	std::size_t get_process_id()
+	{
+		#if defined(_WIN32)
+			return static_cast<std::size_t>(::GetCurrentProcessId());
+		#elif defined(__linux__) || defined(__APPLE__)
+			return static_cast<std::size_t>(::getpid());
+		#endif
+	}
+
+	template<> 
+	std::size_t get_thread_id<disable_thread_id>() 
+	{ 
+		return {}; 
+	}
+
+	template<> 
+	std::size_t get_process_id<disable_process_id>() 
+	{ 
+		return {}; 
+	}
+
+	template<typename ThreadIdPolicy, typename ProcessIdPolicy>
+	std::size_t execution_context<ThreadIdPolicy, ProcessIdPolicy>::thread_id() const
+	{ 
+		return get_thread_id<ThreadIdPolicy>();
+	}
+
+	template<typename ThreadIdPolicy, typename ProcessIdPolicy>
+	std::size_t execution_context<ThreadIdPolicy, ProcessIdPolicy>::process_id() const
+	{ 
+		return get_process_id<ProcessIdPolicy>();
+	}
+
+	bool are_ansi_colors_enabled()
+	{
+		#ifdef _WIN32
+			::HANDLE handle{ ::GetStdHandle(STD_OUTPUT_HANDLE) };
+			::DWORD mode{};
+
+			return ::GetConsoleMode(handle, &mode) &&
+				(mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+		#else
+			return true;
+		#endif
+	}
+
+	void enable_ansi_colors()
+	{
+		#ifdef _WIN32
+			::HANDLE handle{ ::GetStdHandle(STD_OUTPUT_HANDLE) };
+			::DWORD mode{};
+
+			if (handle == INVALID_HANDLE_VALUE) return;
+			if (!::GetConsoleMode(handle, &mode)) return;
+
+			mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+
+			if (!::SetConsoleMode(handle, mode)) return;
+		#endif
+	}
+}

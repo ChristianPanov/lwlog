@@ -34,6 +34,7 @@ namespace lwlog::details::os
 	public:
 		virtual std::string to_string(std::string_view unit) const;
 		virtual std::string to_string(std::uint32_t unit) const;
+
 		virtual std::string build_timestamp(std::uint32_t first_unit, 
 			std::uint32_t second_unit, char delimeter) const;
 		virtual std::string build_timestamp(std::uint32_t first_unit, 
@@ -52,8 +53,7 @@ namespace lwlog::details::os
 		time_point_t now;
 	};
 
-	template<typename TimePolicy, 
-		typename LocalTimePolicy, typename PreciseUnitsPolicy>
+	template<typename TimePolicy, typename LocalTimePolicy, typename PreciseUnitsPolicy>
 	class time_point : public time_point_base
 	{
 	public:
@@ -61,7 +61,8 @@ namespace lwlog::details::os
 	};
 
 	template<typename LocalTimePolicy, typename PreciseUnitsPolicy>
-	class time_point<disable_time, LocalTimePolicy, PreciseUnitsPolicy> : public time_point_base
+	class time_point<disable_time, LocalTimePolicy, PreciseUnitsPolicy> 
+		: public time_point_base
 	{
 	public:
 		time_point() = default;
@@ -70,6 +71,7 @@ namespace lwlog::details::os
 		std::string ampm() const override;
 		std::string to_string(std::string_view unit) const override;
 		std::string to_string(std::uint32_t unit) const override;
+
 		std::string build_timestamp(std::uint32_t first_unit, 
 			std::uint32_t second_unit, char delimeter) const override;
 		std::string build_timestamp(std::uint32_t first_unit, 
@@ -77,7 +79,8 @@ namespace lwlog::details::os
 	};
 
 	template<typename LocalTimePolicy>
-	class time_point<enable_time, LocalTimePolicy, enable_precise_units> : public time_point_base
+	class time_point<enable_time, LocalTimePolicy, enable_precise_units> 
+		: public time_point_base
 	{
 	public:
 		time_point();
