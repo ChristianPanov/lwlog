@@ -19,6 +19,8 @@ namespace lwlog::details::os
 
 	struct execution_context_base
 	{
+		virtual ~execution_context_base() = default;
+
 		virtual std::size_t thread_id() const = 0;
 		virtual std::size_t process_id() const = 0;
 	};

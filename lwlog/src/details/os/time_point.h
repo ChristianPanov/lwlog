@@ -24,6 +24,7 @@ namespace lwlog::details::os
 	{
 	public:
 		time_point_base();
+		virtual ~time_point_base() = default;
 
 	public:
 		virtual std::uint16_t millisecond()	const;
