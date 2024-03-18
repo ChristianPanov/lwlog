@@ -19,12 +19,12 @@ namespace lwlog::details::os::datetime
 		return hour;
 	}
 
-	std::uint16_t to_12h(std::uint16_t hour)
+	std::uint16_t to_12h(std::uint8_t hour)
 	{
 		return hour > 12 ? hour - 12 : hour;
 	}
 
-	std::string ensure_two_digit_format(std::uint16_t digit)
+	std::string ensure_two_digit_format(std::uint32_t digit)
 	{
 		return (digit <= 9 ? "0" : "") + std::to_string(digit);
 	}
