@@ -127,12 +127,12 @@ namespace lwlog::details::os
 
 			const std::uint64_t ticks_since_last_second{ ticks_since_windows_epoch.QuadPart % 10'000'000 };
 
-			m_millisecond = now.wMilliseconds;
+			m_millisecond = m_now.wMilliseconds;
 			m_microsecond = (ticks_since_last_second / 10) % 1'000'000;
 			m_nanosecond = ticks_since_last_second * 100 % 1'000'000'000;
 		#else
 			const auto nanoseconds_since_unix_epoch{
-				std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count() };
+				std::chrono::duration_cast<std::chrono::nanoseconds>(m_now.time_since_epoch()).count() };
 
 			m_millisecond = (nanoseconds_since_unix_epoch / 1'000'000) % 1'000;
 			m_microsecond = (nanoseconds_since_unix_epoch / 1'000) % 1'000'000;

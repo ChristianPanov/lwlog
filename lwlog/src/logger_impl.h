@@ -83,8 +83,8 @@ namespace lwlog
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
-	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_attribute(std::string_view flag,
-		details::attrib_value value)
+	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_attribute(
+		std::string_view flag, details::attrib_value value)
 	{
 		for (const auto& sink : m_backend.sink_storage)
 		{
@@ -94,8 +94,8 @@ namespace lwlog
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
-	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_attribute(std::string_view flag,
-		details::attrib_value value, details::attrib_callback_t fn)
+	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_attribute(
+		std::string_view flag, details::attrib_value value, details::attrib_callback_t fn)
 	{
 		for (const auto& sink : m_backend.sink_storage)
 		{

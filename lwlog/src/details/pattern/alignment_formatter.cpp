@@ -1,5 +1,7 @@
 #include "alignment_formatter.h"
 
+#include <iostream>
+
 namespace lwlog::details
 {
 	void alignment_formatter::format(std::string& pattern, const alignment_info& spec)
@@ -43,10 +45,10 @@ namespace lwlog::details
 	{
 		if (width <= to_align.size()) return to_align;
 
-		const auto alignment_width{ width - to_align.size() };
-		const auto left_width{ alignment_width / 2 };
-		const auto right_width{ alignment_width % 2 ? left_width + 1 : left_width };
+		const auto total_padding{ width - to_align.size()		};
+		const auto padding_left	{ total_padding / 2				};
+		const auto padding_right{ total_padding - padding_left	};
 
-		return std::string(left_width, fill_char) + to_align + std::string(right_width, fill_char);
+		return std::string(padding_left, fill_char) + to_align + std::string(padding_right, fill_char);
 	}
 }
