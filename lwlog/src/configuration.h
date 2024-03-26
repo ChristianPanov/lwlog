@@ -21,6 +21,6 @@ namespace lwlog
         using process_id_t      = ProcessIdPolicy;
     };
 
-    using default_config = configuration<enable_time, disable_local_time, disable_precise_units, 
-        disable_thread_id, disable_process_id>;
+    using default_config = configuration<enable_time, disable_local_time, 
+        enable_precise_units,  enable_thread_id, enable_process_id>;
 }
