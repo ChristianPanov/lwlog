@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <ctime>
 
 #ifdef _WIN32
 	#include "details/windows_lightweight.h"

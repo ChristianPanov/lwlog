@@ -4,7 +4,6 @@
 #include <memory>
 #include <unordered_map>
 
-#include "fwd.h"
 #include "interface/logger_interface.h"
 
 namespace lwlog

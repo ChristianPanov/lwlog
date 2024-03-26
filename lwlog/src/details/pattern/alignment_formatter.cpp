@@ -1,7 +1,5 @@
 #include "alignment_formatter.h"
 
-#include <iostream>
-
 namespace lwlog::details
 {
 	void alignment_formatter::format(std::string& pattern, const alignment_info& spec)

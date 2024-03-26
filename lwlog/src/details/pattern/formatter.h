@@ -1,5 +1,7 @@
 #pragma once
 
+#include "details/record.h"
+
 namespace lwlog::details
 {
 	struct formatter
