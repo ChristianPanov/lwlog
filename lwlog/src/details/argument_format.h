@@ -2,14 +2,12 @@
 
 #include <string>
 
-#ifdef LWLOG_NO_FORMATTING
-	#if __cplusplus < 202002L
-		#ifdef FMT_VERSION
-			#include <fmt/format.h>
-		#endif
-	#else
-		#include <format>
+#if __cplusplus < 202002L
+	#ifdef FMT_VERSION
+		#include <fmt/format.h>
 	#endif
+#else
+	#include <format>
 #endif
 
 namespace lwlog::details
