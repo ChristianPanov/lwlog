@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: macos-latest
-    name: Build with Apple Clang
+    name: Apple Clang Build
 
     steps:
     - uses: actions/checkout@v2
@@ -17,17 +17,12 @@ jobs:
     - name: Set up Xcode (optional)
       run: sudo xcode-select -s /Applications/Xcode.app
 
-    - name: Install dependencies (if any)
-      run: |
-        # Add commands to install any dependencies, e.g.,
-        # brew install some-dependency
-
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build
 
     - name: Configure CMake
       working-directory: ${{runner.workspace}}/build
-      run: cmake -DCMAKE_BUILD_TYPE=Release $GITHUB_WORKSPACE
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=x86_64 $GITHUB_WORKSPACE
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
