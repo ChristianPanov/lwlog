@@ -178,7 +178,7 @@ int main()
 ## Thread-safety
 Both the sinks and the logger classes expect a threading policy as a template parameter, which will determine whether they will be thread-safe or not.
 However, if you want to use the convenience aliases mentioned above, you need to keep in mind they are not thread-safe.\
-To facilitate ease of use while ensuring thread safety, ***lwlog.h*** offers thread-safe variants for all of its convenience aliases. These variants are distinguished by an ```_mt``` suffix in their names, indicating “multi-threaded” capability.\
+To facilitate ease of use while ensuring thread safety, ***lwlog*** offers thread-safe variants for all of its convenience aliases. These variants are distinguished by an ```_mt``` suffix in their names, indicating “multi-threaded” capability.
 ## Logger configuration
 Policy | Description
 ------------ | -------------
