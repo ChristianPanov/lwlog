@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <string_view>
 
 #if defined(_MSC_VER) && (_MSC_VER < 1929)
