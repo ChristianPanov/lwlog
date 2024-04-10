@@ -22,7 +22,7 @@ jobs:
 
     - name: Configure CMake
       working-directory: ${{runner.workspace}}/build
-      run: cmake -DCMAKE_BUILD_TYPE=Release $GITHUB_WORKSPACE
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=x86_64 $GITHUB_WORKSPACE
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
