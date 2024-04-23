@@ -76,13 +76,23 @@ namespace lwlog::details
 		const auto verbose_flags{ this->parse_verbose_flags() };
 		const auto short_flags{ this->parse_short_flags() };
 
-		for (const auto& flag : verbose_flags)
-			if (verbose_data[flag])
-				m_formatters.push_back(verbose_data[flag]);
+		for (const auto flag : verbose_flags)
+		{
+			if (const auto it{ verbose_data.find(flag) }; 
+				it != verbose_data.end())
+			{
+				m_formatters.push_back(it->second);
+			}
+		}
 
-		for (const auto& flag : short_flags)
-			if (shortened_data[flag])
-				m_formatters.push_back(shortened_data[flag]);
+		for (const auto flag : short_flags)
+		{
+			if (const auto it{ shortened_data.find(flag) }; 
+				it != shortened_data.end())
+			{
+				m_formatters.push_back(it->second);
+			}
+		}
 	}
 
 	void pattern::process_color_flags(bool use_color)
