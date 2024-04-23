@@ -1,6 +1,7 @@
 # Directories
 **/bin
 **/bin-int
+build/
 
 # Visual Studio
 .vs/
@@ -8,6 +9,9 @@
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
+
+# Visual Studio Code
+.vscode/
 
 # idea
 .idea/
