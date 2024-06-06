@@ -20,7 +20,9 @@ namespace lwlog::details
         const std::size_t next_write_index{ (current_write_index + 1) % Capacity };
 
         while (next_write_index == m_read_index.load(std::memory_order_acquire))
+        {
             OverflowPolicy::handle_overflow();
+        }
 
         if (!OverflowPolicy::should_discard())
         {
@@ -43,13 +45,17 @@ namespace lwlog::details
             next_write_index = (current_write_index + 1) % Capacity;
 
             while (next_write_index == m_read_index.load(std::memory_order_acquire))
+            {
                 OverflowPolicy::handle_overflow();
+            }
 
         } while (!m_write_index.compare_exchange_weak(current_write_index, next_write_index, 
             std::memory_order_release, std::memory_order_relaxed));
 
         if (!OverflowPolicy::should_discard())
+        {
             m_storage[current_write_index] = item;
+        }
     }
 
     template<std::size_t Capacity, typename T,
@@ -60,7 +66,9 @@ namespace lwlog::details
         const std::size_t next_write_index{ (current_read_index + 1) % Capacity };
 
         while (current_read_index == m_write_index.load(std::memory_order_acquire))
+        {
             OverflowPolicy::handle_underflow();
+        }
 
         m_read_index.store(next_write_index, std::memory_order_release);
 
