@@ -100,11 +100,17 @@ namespace lwlog::details
 		if (std::strchr(m_pattern.data(), '.'))
 		{
 			while (std::strchr(m_pattern.data(), ')'))
+			{
 				m_pattern.replace(m_pattern.find(')'), 1, use_color ? "\u001b[0m" : "");
+			}
 
 			for (const auto& [key, value] : color_data)
+			{
 				while (std::strstr(m_pattern.data(), key.data()))
+				{
 					m_pattern.replace(m_pattern.find(key), key.length(), use_color ? value : "");
+				}
+			}
 		}
 	}
 

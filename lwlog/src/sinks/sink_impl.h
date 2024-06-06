@@ -7,8 +7,10 @@ namespace lwlog::sinks
 	template<bool EnableAnsiColors, typename ThreadingPolicy>
 	sink<EnableAnsiColors, ThreadingPolicy>::sink()
 	{
-		if (!details::os::are_ansi_colors_enabled()) 
+		if (!details::os::are_ansi_colors_enabled())
+		{
 			details::os::enable_ansi_colors();
+		}
 
 		m_pattern.set_pattern("[%d, %T] [%l] [%n]: %v");
 		m_pattern.request_flag_formatters();
