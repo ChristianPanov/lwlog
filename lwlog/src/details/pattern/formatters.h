@@ -3,7 +3,6 @@
 #include "formatter.h"
 #include "flag_data.h"
 #include "level.h"
-#include "details/topic.h"
 
 namespace lwlog::details
 {
@@ -87,18 +86,6 @@ namespace lwlog::details
 				pattern,
 				flag::function,
 				record.meta.function_name()
-			);
-		}
-	};
-
-	struct topic_formatter : public formatter
-	{
-		void format(std::string& pattern, const record_base& record) const override
-		{
-			formatter::format_attribute(
-				pattern,
-				flag::topic,
-				details::topic_registry::current_topic()
 			);
 		}
 	};

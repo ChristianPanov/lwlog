@@ -9,7 +9,8 @@ int main()
 		lwlog::disable_local_time,
 		lwlog::disable_precise_units,
 		lwlog::disable_thread_id, 
-		lwlog::disable_process_id
+		lwlog::disable_process_id,
+		lwlog::enable_topics
 	>;
 
 	auto console = std::make_shared<
@@ -27,6 +28,8 @@ int main()
 
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
 	console->set_pattern(".red([%T] [%n]) .dark_green([%l]): .cyan(%v) TEXT");
+
+	console->start_topic("TOPIC");
 
 	{
 		Timer timer("timer");

@@ -24,6 +24,8 @@ namespace lwlog
 
 		this->add_attribute("{name}", m_name);
 		this->add_attribute("%n", m_name);
+
+		this->add_attribute("{topic}", topic_registry<typename Config::topic_t>::current_topic(m_topics));
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,

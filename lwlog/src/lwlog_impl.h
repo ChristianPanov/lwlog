@@ -61,12 +61,12 @@ namespace lwlog
 
 	void start_topic(std::string_view name)
 	{
-		details::topic_registry::push(name);
+		//details::topic_registry::push(name);
 	}
 
 	void end_topic()
 	{
-		details::topic_registry::pop();
+		//details::topic_registry::pop();
 	}
 
 	template<typename... Args>

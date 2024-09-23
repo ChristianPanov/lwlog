@@ -3,6 +3,8 @@
 #include "policy/log_policy.h"
 #include "interface/logger_interface.h"
 
+#include "policy/topic_policy.h"
+
 namespace lwlog
 {
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
@@ -31,6 +33,9 @@ namespace lwlog
 		std::string_view name() const override;
 		std::vector<sink_ptr>& sinks();
 
+		void start_topic(std::string_view topic) { topic_registry<typename Config::topic_t>::start_topic(topic, m_topics); }
+		void end_topic() { topic_registry<typename Config::topic_t>::end_topic(m_topics); }
+
 	private:
 		void log(const details::log_message& log_msg, level log_level, details::format_args_list args) override;
 		void info_impl(const details::log_message& log_msg, details::format_args_list args) override;
@@ -41,6 +46,7 @@ namespace lwlog
 
 	private:
 		std::string_view m_name;
+		typename topic_registry<typename Config::topic_t>::container m_topics;
 		typename LogExecutionPolicy::template backend<
 			typename ThreadingPolicy::concurrency_model_policy> m_backend;
 	};
