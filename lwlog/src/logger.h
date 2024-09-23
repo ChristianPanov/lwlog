@@ -3,6 +3,8 @@
 #include "policy/log_policy.h"
 #include "interface/logger_interface.h"
 
+#include "policy/topic_policy.h"
+
 namespace lwlog
 {
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
