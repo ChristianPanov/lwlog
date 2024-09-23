@@ -4,7 +4,6 @@
 #include "sinks/file_sink.h"
 #include "sinks/stdout_sink.h"
 #include "sinks/stderr_sink.h"
-#include "details/topic.h"
 
 namespace lwlog
 {
