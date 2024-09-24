@@ -1,7 +1,8 @@
 # Directories
 **/bin
 **/bin-int
-build/
+/build/
+/install/
 
 # Visual Studio
 .vs/
