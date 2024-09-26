@@ -27,7 +27,9 @@ int main()
 	>("CONSOLE");
 
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
-	console->set_pattern(".red([%T] [%n]) .dark_green([%l]): .cyan(%v) TEXT");
+	console->set_pattern("{topic} .red([%T] [%n]) .dark_green([%l]): .cyan(%v) TEXT");
+
+	console->critical("First critical message");
 
 	console->start_topic("TOPIC");
 

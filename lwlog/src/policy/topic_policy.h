@@ -17,10 +17,7 @@ namespace lwlog
 
 		static void start_topic(std::string_view topic, container& registry);
 		static void end_topic(container& registry);
-		static std::string_view current_topic(container& registry)
-		{
-			return registry.top();
-		}
+		static std::string_view& current_topic(container& registry);
 	};
 
 	template<>
@@ -30,10 +27,7 @@ namespace lwlog
 
 		static void start_topic(std::string_view, container&);
 		static void end_topic(container&);
-		static std::string_view current_topic(container&)
-		{
-			return {};
-		}
+		static std::string_view current_topic(container&);
 	};
 }
 
