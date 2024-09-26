@@ -14,11 +14,21 @@ namespace lwlog
         registry.pop();
     }
 
+    inline std::string_view& topic_registry<enable_topics>::current_topic(container& registry)
+    {
+        return registry.top();
+    }
+
     inline void topic_registry<disable_topics>::start_topic(std::string_view, container&)
     {
     }
 
     inline void topic_registry<disable_topics>::end_topic(container&)
     {
+    }
+
+    inline std::string_view topic_registry<disable_topics>::current_topic(container&)
+    {
+        return {};
     }
 }

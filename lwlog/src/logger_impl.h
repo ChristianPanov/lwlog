@@ -4,6 +4,8 @@
 #include "sinks/sink_factory.h"
 #include "registry.h"
 
+#include <iostream>
+
 namespace lwlog
 {
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
@@ -22,10 +24,15 @@ namespace lwlog
 			std::forward<SinkParams>(params)...
 		)... };
 
+		this->start_topic("GLOBAL");
+
 		this->add_attribute("{name}", m_name);
 		this->add_attribute("%n", m_name);
 
-		this->add_attribute("{topic}", topic_registry<typename Config::topic_t>::current_topic(m_topics));
+		if constexpr (std::is_same_v<typename Config::topic_t, enable_topics>)
+		{
+			this->add_attribute("{topic}", topic_registry<typename Config::topic_t>::current_topic(m_topics));
+		}
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
@@ -113,6 +120,20 @@ namespace lwlog
 		{
 			sink->set_level_filter(log_level);
 		}
+	}
+
+	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
+		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::start_topic(std::string_view topic)
+	{
+		topic_registry<typename Config::topic_t>::start_topic(topic, m_topics);
+	}
+
+	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
+		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::end_topic()
+	{
+		topic_registry<typename Config::topic_t>::end_topic(m_topics);
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,

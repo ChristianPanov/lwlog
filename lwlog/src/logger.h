@@ -30,11 +30,11 @@ namespace lwlog
 		void add_attribute(std::string_view flag, details::attrib_value value, details::attrib_callback_t fn) override;
 		void set_level_filter(level log_level) override;
 
+		void start_topic(std::string_view topic);
+		void end_topic();
+
 		std::string_view name() const override;
 		std::vector<sink_ptr>& sinks();
-
-		void start_topic(std::string_view topic) { topic_registry<typename Config::topic_t>::start_topic(topic, m_topics); }
-		void end_topic() { topic_registry<typename Config::topic_t>::end_topic(m_topics); }
 
 	private:
 		void log(const details::log_message& log_msg, level log_level, details::format_args_list args) override;
