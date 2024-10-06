@@ -17,7 +17,7 @@ cmake --build <Build Directory> --target install --config <Debug/Release>
 
 ## Linking lwlog to your project with CMake
 ```
-find_package(lwlog HINTS <Installation Directory>/lib/cmake)
+find_package(lwlog_lib HINTS <Installation Directory>/lib/cmake)
 
 target_link_libraries(MyExe PRIVATE lwlog::lwlog_lib)
 ```
@@ -51,7 +51,6 @@ _No matter what you do or say, there will always be people who hold a different 
 # TODO
 - Memory-mapped file sink
 - Package managers support
-- Continuous Integration
 # Benchmarks
 Benchmarked with picobench(https://github.com/iboB/picobench)
 
