@@ -2,10 +2,10 @@
 
 namespace lwlog::details
 {
-	attribute::attribute(std::string_view flag, attrib_value value, attrib_callback_t callback)
+	attribute::attribute(std::string_view flag, attrib_value value, const attrib_callback_t& callback)
 		: flag{ flag }
 		, value{ value }
-		, callback{ std::move(callback) }
+		, callback{ callback }
 	{}
 
 	attribute::attribute(std::string_view flag, attrib_value value)

@@ -3,7 +3,6 @@
 #include "formatter.h"
 #include "flag_data.h"
 #include "level.h"
-#include "details/topic.h"
 
 namespace lwlog::details
 {
@@ -98,7 +97,19 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::topic,
-				details::topic_registry::current_topic()
+				record.get_topic_registry().current_topic()
+			);
+		}
+	};
+
+	struct full_topic_formatter : public formatter
+	{
+		void format(std::string& pattern, const record_base& record) const override
+		{
+			formatter::format_attribute(
+				pattern,
+				flag::full_topic,
+				record.get_topic_registry().full_topic()
 			);
 		}
 	};

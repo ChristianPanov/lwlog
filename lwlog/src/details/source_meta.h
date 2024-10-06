@@ -22,22 +22,13 @@ namespace lwlog::details
 
 	public:
 		static constexpr source_meta current(
-			std::uint32_t line = BUILTIN_LINE,
-			std::string_view file = BUILTIN_FILE,
-			std::string_view function = BUILTIN_FUNCTION)
-		{
-			source_meta meta;
+			std::uint32_t line			= BUILTIN_LINE, 
+			std::string_view file		= BUILTIN_FILE, 
+			std::string_view function	= BUILTIN_FUNCTION);
 
-			meta.m_line = line;
-			meta.m_file = file;
-			meta.m_function = function;
-
-			return meta;
-		}
-
-		constexpr std::uint32_t		line()			const { return m_line; }
-		constexpr std::string_view	file_name()		const { return m_file; }
-		constexpr std::string_view	function_name()	const { return m_function; }
+		constexpr std::uint32_t	line() const;
+		constexpr std::string_view file_name() const;
+		constexpr std::string_view function_name() const;
 
 	private:
 		std::uint32_t m_line{};
@@ -45,3 +36,5 @@ namespace lwlog::details
 		std::string_view m_function;
 	};
 }
+
+#include "source_meta_impl.h"

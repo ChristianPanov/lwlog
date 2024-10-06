@@ -9,7 +9,8 @@ namespace lwlog::details::flag
 	inline constexpr flag_pair line			{ "{line}",			"%#" };
 	inline constexpr flag_pair file			{ "{file}",			"%@" };
 	inline constexpr flag_pair function		{ "{func}",			"%!" };
-	inline constexpr flag_pair topic		{ "{topic}",		"%?" };
+	inline constexpr flag_pair topic		{ "{topic}",		"%." };
+	inline constexpr flag_pair full_topic	{ "{full_topic}",	"%," };
 
 	inline constexpr flag_pair date				{ "{date}",				"%F" };
 	inline constexpr flag_pair date_short		{ "{date_short}",		"%D" };

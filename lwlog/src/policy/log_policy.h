@@ -5,6 +5,7 @@
 #include "details/bounded_queue.h"
 #include "details/argument_format.h"
 #include "details/source_meta.h"
+#include "details/topic_registry.h"
 
 namespace lwlog
 {
@@ -12,17 +13,18 @@ namespace lwlog
 
 	struct synchronous_policy
 	{
-		template<typename ConcurrencyModelPolicy>
+		template<typename Config, typename ConcurrencyModelPolicy>
 		struct backend
 		{
 			std::vector<sink_ptr> sink_storage;
 		};
 
 		template<typename Config, typename ConcurrencyModelPolicy>
-		static void init(backend<ConcurrencyModelPolicy>&) {}
+		static void init(backend<Config, ConcurrencyModelPolicy>&) {}
 
 		template<typename Config, typename ConcurrencyModelPolicy>
-		static void log(backend<ConcurrencyModelPolicy>& backend, std::string_view message, 
+		static void log(backend<Config, ConcurrencyModelPolicy>& backend, 
+			const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
 			level log_level, const details::source_meta& meta, details::format_args_list args);
 	};
 
@@ -32,7 +34,7 @@ namespace lwlog
 	> 
 	struct asynchronous_policy
 	{
-		template<typename ConcurrencyModelPolicy>
+		template<typename Config, typename ConcurrencyModelPolicy>
 		struct backend
 		{
 			~backend();
@@ -52,10 +54,11 @@ namespace lwlog
 		};
 
 		template<typename Config, typename ConcurrencyModelPolicy>
-		static void init(backend<ConcurrencyModelPolicy>& backend);
+		static void init(backend<Config, ConcurrencyModelPolicy>& backend);
 
 		template<typename Config, typename ConcurrencyModelPolicy>
-		static void log(backend<ConcurrencyModelPolicy>& backend, std::string_view message,
+		static void log(backend<Config, ConcurrencyModelPolicy>& backend, 
+			const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
 			level log_level, const details::source_meta& meta, details::format_args_list args);
 	};
 }

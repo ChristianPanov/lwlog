@@ -23,10 +23,15 @@ namespace lwlog
 		void add_sink(sink_ptr sink);
 		void remove_sink(sink_ptr sink);
 
+		void set_level_filter(level log_level) override;
 		void set_pattern(std::string_view pattern) override;
 		void add_attribute(std::string_view flag, details::attrib_value value) override;
-		void add_attribute(std::string_view flag, details::attrib_value value, details::attrib_callback_t fn) override;
-		void set_level_filter(level log_level) override;
+		void add_attribute(std::string_view flag, details::attrib_value value, 
+			const details::attrib_callback_t& fn) override;
+
+		void set_topic_separator(std::string_view separator) override;
+		void start_topic(std::string_view topic) override;
+		void end_topic() override;
 
 		std::string_view name() const override;
 		std::vector<sink_ptr>& sinks();
@@ -41,8 +46,9 @@ namespace lwlog
 
 	private:
 		std::string_view m_name;
-		typename LogExecutionPolicy::template backend<
+		typename LogExecutionPolicy::template backend<Config,
 			typename ThreadingPolicy::concurrency_model_policy> m_backend;
+		details::topic_registry<typename Config::topic_t> m_topics;
 	};
 }
 

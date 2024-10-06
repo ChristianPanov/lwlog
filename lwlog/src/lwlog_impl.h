@@ -1,6 +1,7 @@
 #pragma once
 
 #include "registry.h"
+#include "lwlog.h"
 
 namespace lwlog
 {
@@ -49,24 +50,29 @@ namespace lwlog
 		return registry::instance().get(logger_name);
 	}
 
-	void set_pattern(std::string_view pattern)
-	{
-		registry::default_logger()->set_pattern(pattern);
-	}
-
 	void set_level_filter(level log_level)
 	{
 		registry::default_logger()->set_level_filter(log_level);
 	}
 
+	void set_pattern(std::string_view pattern)
+	{
+		registry::default_logger()->set_pattern(pattern);
+	}
+
+	void set_topic_separator(std::string_view separator)
+	{
+		registry::default_logger()->set_topic_separator(separator);
+	}
+
 	void start_topic(std::string_view name)
 	{
-		details::topic_registry::push(name);
+		registry::default_logger()->start_topic(name);
 	}
 
 	void end_topic()
 	{
-		details::topic_registry::pop();
+		registry::default_logger()->end_topic();
 	}
 
 	template<typename... Args>
