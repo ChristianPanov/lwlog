@@ -15,13 +15,13 @@ namespace lwlog::details
         static constexpr auto cache_line_size{ 64 };
 
     public:
-        void enqueue(const T& item);
-        T dequeue();
+        void enqueue(T&& item);
+        const T& dequeue();
         bool is_empty() const;
 
     private:
-        void enqueue(const T& item, [[maybe_unused]] spsc_model_policy);
-        void enqueue(const T& item, [[maybe_unused]] mpsc_model_policy);
+        void enqueue(T&& item, [[maybe_unused]] spsc_model_policy);
+        void enqueue(T&& item, [[maybe_unused]] mpsc_model_policy);
 
     private:
         std::vector<T> m_storage{ Capacity + 1, T{} };

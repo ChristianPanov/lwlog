@@ -22,7 +22,7 @@ namespace lwlog::details
 
 	struct attribute
 	{
-		attribute(std::string_view flag, attrib_value value, attrib_callback_t callback);
+		attribute(std::string_view flag, attrib_value value, const attrib_callback_t& callback);
 		attribute(std::string_view flag, attrib_value value);
 
 		std::string_view flag;

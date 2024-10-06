@@ -1,7 +1,5 @@
 #pragma once
 
-#include "datetime_utility.h"
-
 namespace lwlog::details::os::datetime
 {
 	template<typename LocalTimePolicy>

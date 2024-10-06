@@ -49,9 +49,10 @@ namespace lwlog
 	const std::unique_ptr<interface::logger>& default_logger();
 	logger_ptr get(std::string_view logger_name);
 
-	void set_pattern(std::string_view pattern);
 	void set_level_filter(level log_level);
+	void set_pattern(std::string_view pattern);
 
+	void set_topic_separator(std::string_view separator);
 	void start_topic(std::string_view name);
 	void end_topic();
 
@@ -69,15 +70,21 @@ namespace lwlog
 #endif
 
 #ifndef LWLOG_DISABLE
+#define LWLOG_SET_LEVEL_FILTER(level) lwlog::set_level_filter(level)
+#else
+#define LWLOG_SET_LEVEL_FILTER()
+#endif
+
+#ifndef LWLOG_DISABLE
 #define LWLOG_SET_PATTERN(pattern) lwlog::set_pattern(pattern)
 #else
 #define LWLOG_SET_PATTERN()
 #endif
 
 #ifndef LWLOG_DISABLE
-#define LWLOG_SET_LEVEL_FILTER(level) lwlog::set_level_filter(level)
+#define LWLOG_SET_TOPIC_SEPARATOR(separator) lwlog::set_topic_separator(separator)
 #else
-#define LWLOG_SET_LEVEL_FILTER()
+#define LWLOG_SET_TOPIC_SEPARATOR()
 #endif
 
 #ifndef LWLOG_DISABLE

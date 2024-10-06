@@ -1,7 +1,5 @@
 #pragma once
 
-#include "time_point.h"
-
 namespace lwlog::details::os
 {
 	inline time_point_base::time_point_base()

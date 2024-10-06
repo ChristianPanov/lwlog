@@ -1,10 +1,7 @@
 #pragma once
 
-#include "logger.h"
 #include "sinks/sink_factory.h"
 #include "registry.h"
-
-#include <iostream>
 
 namespace lwlog
 {
@@ -24,15 +21,10 @@ namespace lwlog
 			std::forward<SinkParams>(params)...
 		)... };
 
-		this->start_topic("GLOBAL");
-
 		this->add_attribute("{name}", m_name);
 		this->add_attribute("%n", m_name);
 
-		if constexpr (std::is_same_v<typename Config::topic_t, enable_topics>)
-		{
-			this->add_attribute("{topic}", topic_registry<typename Config::topic_t>::current_topic(m_topics));
-		}
+		this->set_topic_separator("/");
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
@@ -83,6 +75,16 @@ namespace lwlog
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::set_level_filter(level log_level)
+	{
+		for (const auto& sink : m_backend.sink_storage)
+		{
+			sink->set_level_filter(log_level);
+		}
+	}
+
+	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
+		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
 	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::set_pattern(
 		std::string_view pattern)
 	{
@@ -106,7 +108,7 @@ namespace lwlog
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
 	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_attribute(
-		std::string_view flag, details::attrib_value value, details::attrib_callback_t fn)
+		std::string_view flag, details::attrib_value value, const details::attrib_callback_t& fn)
 	{
 		for (const auto& sink : m_backend.sink_storage)
 		{
@@ -116,26 +118,24 @@ namespace lwlog
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
-	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::set_level_filter(level log_level)
+	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::set_topic_separator(
+		std::string_view separator)
 	{
-		for (const auto& sink : m_backend.sink_storage)
-		{
-			sink->set_level_filter(log_level);
-		}
+		m_topics.set_separator(separator);
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
 	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::start_topic(std::string_view topic)
 	{
-		topic_registry<typename Config::topic_t>::start_topic(topic, m_topics);
+		m_topics.start_topic(topic);
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
 	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::end_topic()
 	{
-		topic_registry<typename Config::topic_t>::end_topic(m_topics);
+		m_topics.end_topic();
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
@@ -157,7 +157,7 @@ namespace lwlog
 	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::log(
 		const details::log_message& log_msg, level log_level, details::format_args_list args)
 	{
-		LogExecutionPolicy::template log<Config>(m_backend, log_msg.message, log_level, log_msg.meta, args);
+		LogExecutionPolicy::template log<Config>(m_backend, m_topics, log_msg.message, log_level, log_msg.meta, args);
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,

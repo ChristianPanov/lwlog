@@ -2,6 +2,8 @@
 #include "format_data.h"
 #include "color_format_data.h"
 
+#include <iostream>
+
 namespace lwlog::details
 {
 	std::string pattern::compile(const record_base& record) const
@@ -31,50 +33,42 @@ namespace lwlog::details
 			const std::string_view flag_view{ pattern_view.substr(flag_start_pos, flag_end_pos - flag_start_pos) };
 
 			const bool has_fill_char{ !std::isdigit(flag_view[2]) };
-			const std::uint8_t flag_length = has_fill_char ? 3 : 2;
+			const std::uint8_t flag_length{ has_fill_char ? 3U : 2U };
 
 			const std::string_view width_str{ flag_view.substr(flag_length,
 				std::isdigit(flag_view[flag_length + 1]) ? 2 : 1) };
 
-			alignment_info info;
+			const char fill_char{ has_fill_char ? flag_view[2] : ' ' };
+			const std::uint8_t width{ static_cast<std::uint8_t>(std::stoi(width_str.data())) };
+			const alignment_info::align_side align_side{ static_cast<std::uint8_t>(flag_view[1]) };
+			const std::string_view flag{ flag_view.substr(0, flag_length + width_str.size()) };
 
-			info.fill_char = has_fill_char ? flag_view[2] : ' ';
-			info.width = static_cast<std::uint8_t>(std::stoi(width_str.data()));
-			info.alignment_flag = flag_view.substr(0, flag_length + width_str.size());
+			m_alignment_flags_info.emplace_back(fill_char, align_side, width, flag);
 
-			switch (flag_view[1])
-			{
-			case '<': info.side = alignment_info::align_side::left;		break;
-			case '>': info.side = alignment_info::align_side::right;	break;
-			case '^': info.side = alignment_info::align_side::center;	break;
-			}
-
-			m_alignment_flags_info.push_back(info);
-
-			std::string_view flag_to_align;
+			std::string_view to_align;
 			if (const std::size_t short_flag_pos{ flag_view.find('%') };
 				short_flag_pos != std::string_view::npos)
 			{
-				flag_to_align = flag_view.substr(short_flag_pos, 2);
+				to_align = flag_view.substr(short_flag_pos, 2);
 			}
 			else if (const std::size_t verbose_flag_pos{ flag_view.find('{') };
 				verbose_flag_pos != std::string_view::npos)
 			{
-				flag_to_align = flag_view.substr(verbose_flag_pos,
+				to_align = flag_view.substr(verbose_flag_pos,
 					flag_view.find('}', verbose_flag_pos) - verbose_flag_pos + 1);
 			}
 
-			m_pattern.insert(pattern_view.find(flag_to_align, flag_start_pos) + flag_to_align.size(),
+			m_pattern.insert(pattern_view.find(to_align, flag_start_pos) + to_align.size(),
 				alignment_info::flag_end);
 
-			flag_start_pos += flag_to_align.size();
+			flag_start_pos += to_align.size();
 		}
 	}
 
 	void pattern::request_flag_formatters()
 	{
-		const auto verbose_flags{ this->parse_verbose_flags() };
-		const auto short_flags{ this->parse_short_flags() };
+		const auto& verbose_flags{ this->parse_verbose_flags() };
+		const auto& short_flags{ this->parse_short_flags() };
 
 		for (const auto flag : verbose_flags)
 		{
@@ -124,7 +118,7 @@ namespace lwlog::details
 		m_attributes.emplace_back(flag, value);
 	}
 
-	void pattern::add_attribute(std::string_view flag, attrib_value value, attrib_callback_t fn)
+	void pattern::add_attribute(std::string_view flag, attrib_value value, const attrib_callback_t& fn)
 	{
 		m_attributes.emplace_back(flag, value, fn);
 	}

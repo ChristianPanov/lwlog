@@ -19,11 +19,12 @@ namespace lwlog::sinks
 		sink();
 
 	public:
+		bool should_sink(level log_level) const override;
+		void set_level_filter(level level_filter) override;
 		void set_pattern(std::string_view pattern) override;
 		void add_attribute(std::string_view flag, details::attrib_value value) override;
-		void add_attribute(std::string_view flag, details::attrib_value value, details::attrib_callback_t fn) override;
-		void set_level_filter(level level_filter) override;
-		bool should_sink(level log_level) const override;
+		void add_attribute(std::string_view flag, details::attrib_value value, 
+			const details::attrib_callback_t& fn) override;
 
 	protected:
 		mutable Mutex m_mtx;
