@@ -8,6 +8,20 @@ Very fast C++17 logging library
 ```
 git clone --recursive https://github.com/ChristianPanov/lwlog
 ```
+
+## Installing the CMake Package
+```
+cmake -B <Build Directory> -S <Directory of CMakeLists.txt> -DCMAKE_INSTALL_PREFIX=<Installation Directory>
+cmake --build <Build Directory> --target install --config <Debug/Release>
+```
+
+## Linking lwlog to your project with CMake
+```
+find_package(lwlog HINTS <Installation Directory>/lib/cmake)
+
+target_link_libraries(MyExe PRIVATE lwlog::lwlog_lib)
+```
+
 # The Most Important Question - Why Yet Another Logging Library?
 _Another logging library, how boring, right, as If we don't see a new one each week. So why do I keep shoving it down your throats for a drop of recognition? I will cut short on the speed or code simplicity that every other logging library boasts about. The actual importance of the library lies within its meaning to me. This library has served as a pivotal factor in my journey to becoming a software craftsman. I started it when I knew very little about C++, let alone software engineering, and when I still made no distinction between writing reusable pieces of code and crafting libraries. I can say that I am proud of what I've made, for it has been a long journey comprised of not giving up and constantly daring to do what was currently impossible for me, which forced me to broaden my knowledge very quickly and apply that knowledge in practice. As you will see later in the documentation, I do claim this library to be very fast and to have very clean code. I do claim to have designed it in a good way. However, even if that weren't objectively true, that would make no difference in the importance of this work to me, as I would still be just as proud of it, for it's an extension of my essence, a reflection of my discipline, perseverance, my desire for perfection and improvement, and if it were a half-baked product of any of those attributes, I would rest assured that it's only a matter of time before it sheds its ugly skin and something better emerges from within._
 
