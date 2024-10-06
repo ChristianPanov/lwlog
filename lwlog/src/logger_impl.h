@@ -3,8 +3,6 @@
 #include "sinks/sink_factory.h"
 #include "registry.h"
 
-#include <iostream>
-
 namespace lwlog
 {
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
@@ -22,8 +20,6 @@ namespace lwlog
 		m_backend.sink_storage = { sinks::sink_factory<Sinks<FlushPolicy, ThreadingPolicy>>::request(
 			std::forward<SinkParams>(params)...
 		)... };
-
-		this->start_topic("GLOBAL");
 
 		this->add_attribute("{name}", m_name);
 		this->add_attribute("%n", m_name);

@@ -3,8 +3,6 @@
 #include "policy/log_policy.h"
 #include "interface/logger_interface.h"
 
-#include "policy/topic_policy.h"
-
 namespace lwlog
 {
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
@@ -34,9 +32,6 @@ namespace lwlog
 		void set_topic_separator(std::string_view separator) override;
 		void start_topic(std::string_view topic) override;
 		void end_topic() override;
-
-		void start_topic(std::string_view topic);
-		void end_topic();
 
 		std::string_view name() const override;
 		std::vector<sink_ptr>& sinks();

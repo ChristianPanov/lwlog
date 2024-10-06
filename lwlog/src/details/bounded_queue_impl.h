@@ -54,7 +54,6 @@ namespace lwlog::details
         {
             m_storage[current_write_index] = std::forward<T>(item);
         }
-        }
     }
 
     template<std::size_t Capacity, typename T,
