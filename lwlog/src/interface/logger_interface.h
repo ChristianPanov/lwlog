@@ -12,10 +12,14 @@ namespace lwlog::interface
 		virtual ~logger() = default;
 
 	public:
+		virtual void set_level_filter(level) = 0;
 		virtual void set_pattern(std::string_view) = 0;
 		virtual void add_attribute(std::string_view, details::attrib_value) = 0;
-		virtual void add_attribute(std::string_view, details::attrib_value, details::attrib_callback_t) = 0;
-		virtual void set_level_filter(level) = 0;
+		virtual void add_attribute(std::string_view, details::attrib_value, const details::attrib_callback_t&) = 0;
+
+		virtual void set_topic_separator(std::string_view) = 0;
+		virtual void start_topic(std::string_view) = 0;
+		virtual void end_topic() = 0;
 
 		template<typename... Args> void info(const details::log_message& log_msg, Args&&... args);
 		template<typename... Args> void warning(const details::log_message& log_msg, Args&&... args);

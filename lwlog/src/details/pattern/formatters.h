@@ -90,6 +90,30 @@ namespace lwlog::details
 		}
 	};
 
+	struct topic_formatter : public formatter
+	{
+		void format(std::string& pattern, const record_base& record) const override
+		{
+			formatter::format_attribute(
+				pattern,
+				flag::topic,
+				record.get_topic_registry().current_topic()
+			);
+		}
+	};
+
+	struct full_topic_formatter : public formatter
+	{
+		void format(std::string& pattern, const record_base& record) const override
+		{
+			formatter::format_attribute(
+				pattern,
+				flag::full_topic,
+				record.get_topic_registry().full_topic()
+			);
+		}
+	};
+
 	struct date_formatter : public formatter
 	{
 		void format(std::string& pattern, const record_base& record) const override

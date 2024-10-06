@@ -18,7 +18,7 @@ int main()
 			logger_config,
 			lwlog::asynchronous_policy<
 				lwlog::default_async_queue_size,
-				lwlog::default_overflow_policy
+				lwlog::overwrite_last_overflow_policy
 			>,
 			lwlog::buffered_flush_policy<>,
 			lwlog::single_threaded_policy,
@@ -27,11 +27,14 @@ int main()
 	>("CONSOLE");
 
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
-	console->set_pattern("{topic} .red([%T] [%n]) .dark_green([%l]): .cyan(%v) TEXT");
+	console->set_pattern("{full_topic} .red([%T] [%n]) .dark_green([%l]): .cyan(%v) TEXT");
 
-	console->critical("First critical message");
+	console->set_topic_separator("|");
 
-	console->start_topic("TOPIC");
+	console->start_topic("Topic 1");
+	console->start_topic("Topic 2");
+	console->start_topic("Topic 3");
+	console->start_topic("Topic 4");
 
 	{
 		Timer timer("timer");
