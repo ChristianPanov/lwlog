@@ -1,7 +1,16 @@
 #pragma once
 
 #include <atomic>
-#include <xmmintrin.h>
+
+#if defined(__x86_64__) || defined(_M_X64)
+    #include <xmmintrin.h>
+    #define CPU_PAUSE() _mm_pause
+#elif defined(__aarch64_)
+    #include <arm_acle.h>
+    #define CPU_PAUSE() __yield
+#else
+    #define CPU_PAUSE()
+#endif
 
 namespace lwlog
 {
@@ -10,8 +19,8 @@ namespace lwlog
 
     struct block_overflow_policy 
     {
-        static void handle_overflow()   { _mm_pause();  }
-        static void handle_underflow()  { _mm_pause();  }
+        static void handle_overflow()   { CPU_PAUSE();  }
+        static void handle_underflow()  { CPU_PAUSE();  }
         static bool should_discard()    { return false; }
     };
     

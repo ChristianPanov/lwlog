@@ -2,8 +2,6 @@
 #include "format_data.h"
 #include "color_format_data.h"
 
-#include <iostream>
-
 namespace lwlog::details
 {
 	std::string pattern::compile(const record_base& record) const
@@ -33,7 +31,7 @@ namespace lwlog::details
 			const std::string_view flag_view{ pattern_view.substr(flag_start_pos, flag_end_pos - flag_start_pos) };
 
 			const bool has_fill_char{ !std::isdigit(flag_view[2]) };
-			const std::uint8_t flag_length{ has_fill_char ? 3U : 2U };
+			const std::uint8_t flag_length{ static_cast<std::uint8_t>(has_fill_char ? 3U : 2U) };
 
 			const std::string_view width_str{ flag_view.substr(flag_length,
 				std::isdigit(flag_view[flag_length + 1]) ? 2 : 1) };
