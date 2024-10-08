@@ -1,4 +1,4 @@
-name: Static Analysys(Cppcheck, Clang-Tidy)
+name: Static Analysis
 
 on:
   workflow_dispatch:
