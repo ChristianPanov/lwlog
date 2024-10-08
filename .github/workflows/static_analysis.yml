@@ -50,17 +50,9 @@ jobs:
         cd build
         cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=1
 
-    - name: Add LLVM's official GPG key and repository
-      run: |
-        sudo apt-get install -y wget gnupg
-        wget https://apt.llvm.org/llvm-snapshot.gpg.key
-        sudo apt-key add llvm-snapshot.gpg.key
-        sudo apt-add-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main"
-        sudo apt-get update
-
     - name: Run Clang-Tidy
       run: |
-        sudo apt-get install -y clang-tidy-16
+        sudo apt-get install -y clang-tidy
         find lwlog/src/ -name "*.cpp" -o -name "*.h" | xargs clang-tidy -p=build/compile_commands.json &> static_analysis/clang-tidy.txt
       continue-on-error: true
 
