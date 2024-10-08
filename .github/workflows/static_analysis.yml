@@ -17,6 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Create static_analysis directory
+      run: mkdir -p static_analysis
+
     - name: Run Cppcheck
       run: |
         sudo apt-get install -y cppcheck
@@ -35,11 +38,17 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Download GCC build artifacts
-      uses: actions/download-artifact@v3
-      with: 
-        name: compile_commands_json
-        path: ./build
+    - name: Create static_analysis directory
+      run: mkdir -p static_analysis
+
+    - name: Install Dependencies
+      run: sudo apt-get install -y build-essential cmake
+
+    - name: Generate compile_commands.json
+      run: |
+        mkdir -p build
+        cd build
+        cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=1
 
     - name: Run Clang-Tidy
       run: |
