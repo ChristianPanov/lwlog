@@ -1,6 +1,7 @@
 name: macOS
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "master" ]
   pull_request:
@@ -18,12 +19,12 @@ jobs:
       run: sudo xcode-select -s /Applications/Xcode.app
 
     - name: Create Build Environment
-      run: cmake -E make_directory ${{runner.workspace}}/build
+      run: cmake -E make_directory ${{ runner.workspace }}/build
 
     - name: Configure CMake
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{ runner.workspace }}/build
       run: cmake -DCMAKE_BUILD_TYPE=Release $GITHUB_WORKSPACE
 
     - name: Build
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{ runner.workspace }}/build
       run: cmake --build .
