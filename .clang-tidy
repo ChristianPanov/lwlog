@@ -1,0 +1,16 @@
+Checks: '
+  clang-diagnostic-*,
+  clang-analyzer-*,
+  cppcoreguidelines-*,
+  modernize-*,
+    -modernize-use-trailing-return-type,
+  performance-*,
+  readability-*,
+    -readability-redundant-access-specifiers,
+  bugprone-*,
+  misc-*,
+  concurrency-*,
+  cert-*,
+  hicpp-*'
+
+WarningsAsErrors: true
