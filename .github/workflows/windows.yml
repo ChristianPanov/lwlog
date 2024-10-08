@@ -1,6 +1,7 @@
 name: Windows
 
-on:
+on: 
+  workflow_dispatch:
   push:
     branches: [ "master" ]
   pull_request:
@@ -18,18 +19,18 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Create Build Environment
-      run: cmake -E make_directory ${{runner.workspace}}/build
+      run: cmake -E make_directory ${{ runner.workspace }}/build
 
     - name: Configure MSVC Build
       shell: bash
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{ runner.workspace }}/build
       run: cmake -A x64 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
 
     - name: Build with MSVC
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{ runner.workspace }}/build
       run: |
         $threads = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
-        cmake --build . --config ${{env.BUILD_TYPE}} --parallel $threads
+        cmake --build . --config ${{ env.BUILD_TYPE }} --parallel $threads
 
   mingw_build:
     runs-on: windows-latest
@@ -58,4 +59,4 @@ jobs:
     - name: Build with MinGW
       shell: msys2 {0}
       run: |
-        cmake --build . --config ${{env.BUILD_TYPE}}
+        cmake --build . --config ${{ env.BUILD_TYPE }}
