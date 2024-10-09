@@ -45,7 +45,7 @@ namespace lwlog::details::os::datetime
 	inline const std::array<const char*, 7> weekday_name_short = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
 
 	template<typename LocalTimePolicy>
-	std::uint8_t handle_timezone(std::uint8_t hour);
+	static std::uint8_t handle_timezone(std::uint8_t hour);
 
 	static std::uint16_t to_12h(std::uint8_t hour);
 

@@ -12,10 +12,10 @@
 namespace lwlog::details::os
 {
 	template<typename ThreadIdPolicy>
-	std::uint64_t get_thread_id();
+	static std::uint64_t get_thread_id();
 
 	template<typename ProcessIdPolicy>
-	std::uint64_t get_process_id();
+	static std::uint64_t get_process_id();
 
 	struct execution_context_base
 	{
