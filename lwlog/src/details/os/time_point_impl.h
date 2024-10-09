@@ -17,15 +17,15 @@ namespace lwlog::details::os
 		#else
 		    m_now = std::chrono::system_clock::now();
 			const std::time_t now_time_t{ std::chrono::system_clock::to_time_t(m_now) };
-			const std::tm* details{ std::gmtime(&now_time_t) };
+			const std::tm* details{ std::gmtime_r(&now_time_t) };
 
-			year	= details->tm_year + 1900;
-			month	= details->tm_mon + 1;
-			weekday	= details->tm_wday;
-			day		= details->tm_mday;
-			hour	= details->tm_hour;
-			minute	= details->tm_min;
-			second	= details->tm_sec;
+			year	= static_cast<std::uint16_t>(details->tm_year) + 1900;
+			month	= static_cast<std::uint8_t>(details->tm_mon) + 1;
+			weekday	= static_cast<std::uint8_t>(details->tm_wday);
+			day		= static_cast<std::uint8_t>(details->tm_mday);
+			hour	= static_cast<std::uint8_t>(details->tm_hour);
+			minute	= static_cast<std::uint8_t>(details->tm_min);
+			second	= static_cast<std::uint8_t>(details->tm_sec);
 		#endif
 	}
 

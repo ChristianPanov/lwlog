@@ -13,7 +13,7 @@ namespace lwlog::sinks
 		m_pattern.set_pattern("[%d, %T] [%l] [%n]: %v");
 		m_pattern.request_flag_formatters();
 
-		this->add_attribute(".level(", m_current_level, [&]() -> const char*
+		this->add_attribute(".level(", m_current_level, [&m_current_level]()
 		{
 			switch (m_current_level)
 			{

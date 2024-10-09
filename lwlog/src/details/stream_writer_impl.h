@@ -31,13 +31,10 @@ namespace lwlog::details
 	template<typename FlushPolicy>
 	stream_writer<FlushPolicy>::~stream_writer()
 	{
-		if (!m_path.empty())
+		if (!m_path.empty() && m_stream != nullptr)
 		{
-			if (m_stream != nullptr)
-			{
-				std::fclose(m_stream);
-				m_stream = nullptr;
-			}
+			std::fclose(m_stream);
+			m_stream = nullptr;
 		}
 	}
 

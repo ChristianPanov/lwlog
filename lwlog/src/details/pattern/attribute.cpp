@@ -20,6 +20,7 @@ namespace lwlog::details
 			case 2:	return std::to_string(std::get<2>(value).get()).data();
 			case 3:	return std::get<3>(value).get().data();
 			case 4:	return std::get<4>(value).get().data();
+			default: return {};
 			}
 		};
 	}

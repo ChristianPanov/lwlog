@@ -23,12 +23,12 @@ namespace lwlog::details::os::datetime
 		#else
 			std::time_t now{ std::time(nullptr) };
 			std::tm gm_time{ *std::gmtime(&now) };
-			std::tm local_time{ *std::localtime(&now) };
+			std::tm local_time{ *std::localtime_r(&now) };
 
 			const std::time_t local_epoch{ std::mktime(&local_time) };
 			const std::time_t gm_epoch{ std::mktime(&gm_time) };
 
-			std::int16_t difference = std::difftime(local_epoch, gm_epoch) / 3600;
+			const std::int16_t difference = std::difftime(local_epoch, gm_epoch) / 3600;
 			return difference;
 		#endif
 	}();

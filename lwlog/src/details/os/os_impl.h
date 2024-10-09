@@ -3,7 +3,7 @@
 namespace lwlog::details::os
 {
 	template<typename ThreadIdPolicy>
-	std::uint64_t get_thread_id()
+	static std::uint64_t get_thread_id()
     {
 		std::uint64_t thread_id{};
 
@@ -21,7 +21,7 @@ namespace lwlog::details::os
 	}
 
 	template<typename ProcessIdPolicy>
-	std::uint64_t get_process_id()
+	static std::uint64_t get_process_id()
 	{
 		#if defined(_WIN32)
 			return static_cast<std::uint64_t>(::GetCurrentProcessId());
@@ -30,31 +30,31 @@ namespace lwlog::details::os
 		#endif
 	}
 
-	template<> 
-	std::uint64_t get_thread_id<disable_thread_id>()
+	template<>
+	static std::uint64_t get_thread_id<disable_thread_id>()
 	{ 
 		return {}; 
 	}
 
-	template<> 
-	std::uint64_t get_process_id<disable_process_id>()
+	template<>
+	static std::uint64_t get_process_id<disable_process_id>()
 	{ 
 		return {}; 
 	}
 
 	template<typename ThreadIdPolicy, typename ProcessIdPolicy>
-	std::uint64_t execution_context<ThreadIdPolicy, ProcessIdPolicy>::thread_id() const
+	static std::uint64_t execution_context<ThreadIdPolicy, ProcessIdPolicy>::thread_id() const
 	{ 
 		return get_thread_id<ThreadIdPolicy>();
 	}
 
 	template<typename ThreadIdPolicy, typename ProcessIdPolicy>
-	std::uint64_t execution_context<ThreadIdPolicy, ProcessIdPolicy>::process_id() const
+	static std::uint64_t execution_context<ThreadIdPolicy, ProcessIdPolicy>::process_id() const
 	{ 
 		return get_process_id<ProcessIdPolicy>();
 	}
 
-	bool are_ansi_colors_enabled()
+	static bool are_ansi_colors_enabled()
 	{
 		#ifdef _WIN32
 			const ::HANDLE handle{ ::GetStdHandle(STD_OUTPUT_HANDLE) };
@@ -67,7 +67,7 @@ namespace lwlog::details::os
 		#endif
 	}
 
-	void enable_ansi_colors()
+	static void enable_ansi_colors()
 	{
 		#ifdef _WIN32
 			const ::HANDLE handle{ ::GetStdHandle(STD_OUTPUT_HANDLE) };

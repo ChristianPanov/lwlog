@@ -43,15 +43,15 @@ namespace lwlog::details
         return full_topic;
     }
 
-    inline void topic_registry<disable_topics>::set_separator(std::string_view separator)
+    inline void topic_registry<disable_topics>::set_separator(std::string_view) const
     {
     }
 
-    inline void topic_registry<disable_topics>::start_topic(std::string_view)
+    inline void topic_registry<disable_topics>::start_topic(std::string_view) const
     {
     }
 
-    inline void topic_registry<disable_topics>::end_topic()
+    inline void topic_registry<disable_topics>::end_topic() const
     {
     }
 

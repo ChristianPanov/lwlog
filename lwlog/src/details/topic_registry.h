@@ -9,6 +9,8 @@ namespace lwlog::details
 {
 	struct topic_registry_base
 	{
+		virtual ~topic_registry_base() = default;
+
 		virtual std::string_view current_topic() const = 0;
 		virtual std::string full_topic() const = 0;
 	};
@@ -24,9 +26,9 @@ namespace lwlog::details
 		void start_topic(std::string_view topic);
 		void end_topic();
 
-		std::string_view current_topic() const;
-		std::string full_topic() const;
-		
+		std::string_view current_topic() const override;
+		std::string full_topic() const override;
+
 	private:
 		std::string_view m_current_topic;
 		std::string_view m_separator;
@@ -36,12 +38,12 @@ namespace lwlog::details
 	template<>
 	struct topic_registry<disable_topics> : public topic_registry_base
 	{
-		void set_separator(std::string_view);
-		void start_topic(std::string_view);
-		void end_topic();
+		void set_separator(std::string_view) const;
+		void start_topic(std::string_view) const;
+		void end_topic() const;
 
-		std::string_view current_topic() const;
-		std::string full_topic() const;
+		std::string_view current_topic() const override;
+		std::string full_topic() const override;
 	};
 }
 

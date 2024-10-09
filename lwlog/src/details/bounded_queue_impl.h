@@ -6,7 +6,7 @@ namespace lwlog::details
         typename OverflowPolicy, typename ConcurrencyModelPolicy>
     void bounded_queue<Capacity, T, OverflowPolicy, ConcurrencyModelPolicy>::enqueue(T&& item)
     {
-        this->enqueue(std::forward<T>(item), ConcurrencyModelPolicy{});
+        this->enqueue(std::move(item), ConcurrencyModelPolicy{});
     }
 
     template<std::size_t Capacity, typename T,
@@ -24,7 +24,7 @@ namespace lwlog::details
 
         if (!OverflowPolicy::should_discard())
         {
-            m_storage[current_write_index] = std::forward<T>(item);
+            m_storage[current_write_index] = std::move(item);
             m_write_index.store(next_write_index, std::memory_order_release);
         }
     }
@@ -52,7 +52,7 @@ namespace lwlog::details
 
         if (!OverflowPolicy::should_discard())
         {
-            m_storage[current_write_index] = std::forward<T>(item);
+            m_storage[current_write_index] = std::move(item);
         }
     }
 

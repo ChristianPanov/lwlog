@@ -12,6 +12,7 @@ namespace lwlog::details
 	{
 		record_base() = default;
 		record_base(std::string_view message, level log_level, const source_meta& meta);
+		virtual ~record_base() = default;
 
 		virtual const os::time_point_base& time_point() const = 0;
 		virtual const os::execution_context_base& exec_context() const = 0;
