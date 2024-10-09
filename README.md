@@ -3,6 +3,14 @@
 [![macOS](https://github.com/ChristianPanov/lwlog/actions/workflows/macOS.yml/badge.svg)](https://github.com/ChristianPanov/lwlog/actions/workflows/macOS.yml)\
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/05f2384593ed49bbaa51fa2516793d99)](https://app.codacy.com/gh/ChristianPanov/lwlog?utm_source=github.com&utm_medium=referral&utm_content=ChristianPanov/lwlog&utm_campaign=Badge_Grade)
 [![CodeFactor](https://www.codefactor.io/repository/github/christianpanov/lwlog/badge)](https://www.codefactor.io/repository/github/christianpanov/lwlog)\
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-black.svg)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=bugs)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)\
+
 Very fast C++17 logging library
 # Install
 ```
