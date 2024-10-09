@@ -24,7 +24,7 @@ jobs:
     - name: Configure MSVC Build
       shell: bash
       working-directory: ${{ runner.workspace }}/build
-      run: cmake -A x64 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
+      run: cmake -A x64 -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} $GITHUB_WORKSPACE
 
     - name: Build with MSVC
       working-directory: ${{ runner.workspace }}/build

@@ -44,11 +44,12 @@ jobs:
     - name: Install Dependencies
       run: sudo apt-get install -y build-essential cmake
 
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build
+
     - name: Generate compile_commands.json
-      run: |
-        mkdir -p build
-        cd build
-        cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+      working-directory: ${{runner.workspace}}/build
+      run: cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=1
 
     - name: Run Clang-Tidy
       run: |
@@ -61,3 +62,36 @@ jobs:
       with:
         name: clangtidy_results
         path: static_analysis/clang-tidy.txt
+
+  sonar-scanner:
+    runs-on: ubuntu-latest
+
+    env:
+      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Install GCC
+      run: sudo apt-get install -y gcc g++
+
+    - name: Install sonar-scanner and build-wrapper
+      uses: SonarSource/sonarcloud-github-c-cpp@v3
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{ runner.workspace }}/build
+
+    - name: Configure GCC Build with build-wrapper
+      working-directory: ${{ runner.workspace }}/build
+      run: | 
+        build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+        -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_EXPORT_COMPILE_COMMANDS=1 $GITHUB_WORKSPACE
+          
+    - name: Run sonar-scanner
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        sonar-scanner --define sonar.cfamily.compile-commands="${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
