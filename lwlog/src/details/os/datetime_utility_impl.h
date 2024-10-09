@@ -3,13 +3,13 @@
 namespace lwlog::details::os::datetime
 {
 	template<typename LocalTimePolicy>
-	static std::uint8_t handle_timezone(std::uint8_t hour)
+	std::uint8_t handle_timezone(std::uint8_t hour)
 	{
 		return hour;
 	}
 
 	template<>
-	static std::uint8_t handle_timezone<enable_local_time>(std::uint8_t hour)
+	std::uint8_t handle_timezone<enable_local_time>(std::uint8_t hour)
 	{
 		hour += cached_timezone_offset;
 		hour = (hour <= 23) ? hour : hour - 24;

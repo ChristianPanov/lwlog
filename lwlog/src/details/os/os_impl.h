@@ -3,7 +3,7 @@
 namespace lwlog::details::os
 {
 	template<typename ThreadIdPolicy>
-	static std::uint64_t get_thread_id()
+	std::uint64_t get_thread_id()
     {
 		std::uint64_t thread_id{};
 
@@ -21,7 +21,7 @@ namespace lwlog::details::os
 	}
 
 	template<typename ProcessIdPolicy>
-	static std::uint64_t get_process_id()
+	std::uint64_t get_process_id()
 	{
 		#if defined(_WIN32)
 			return static_cast<std::uint64_t>(::GetCurrentProcessId());
@@ -31,13 +31,13 @@ namespace lwlog::details::os
 	}
 
 	template<>
-	static std::uint64_t get_thread_id<disable_thread_id>()
+	std::uint64_t get_thread_id<disable_thread_id>()
 	{ 
 		return {}; 
 	}
 
 	template<>
-	static std::uint64_t get_process_id<disable_process_id>()
+	std::uint64_t get_process_id<disable_process_id>()
 	{ 
 		return {}; 
 	}
