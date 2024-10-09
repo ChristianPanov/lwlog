@@ -17,7 +17,7 @@ namespace lwlog::details::os
 		#else
 		    m_now = std::chrono::system_clock::now();
 			const std::time_t now_time_t{ std::chrono::system_clock::to_time_t(m_now) };
-			const std::tm* details{ std::gmtime_r(&now_time_t) };
+			const std::tm* details{ std::gmtime(&now_time_t) };
 
 			year	= static_cast<std::uint16_t>(details->tm_year) + 1900;
 			month	= static_cast<std::uint8_t>(details->tm_mon) + 1;

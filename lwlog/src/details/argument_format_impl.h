@@ -41,6 +41,6 @@ namespace lwlog::details
 	}
 
 	template<> const char* to_raw_string<const char*>(const char* arg) { return arg; }
-	template<> const char* to_raw_string<std::string>(const std::string& arg) { return arg.c_str(); }
+	template<> const char* to_raw_string<const std::string&>(const std::string& arg) { return arg.c_str(); }
 	template<> const char* to_raw_string<std::string_view>(std::string_view arg) { return arg.data(); }
 }

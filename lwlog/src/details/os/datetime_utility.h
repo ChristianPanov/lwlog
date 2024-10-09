@@ -23,7 +23,7 @@ namespace lwlog::details::os::datetime
 		#else
 			std::time_t now{ std::time(nullptr) };
 			std::tm gm_time{ *std::gmtime(&now) };
-			std::tm local_time{ *std::localtime_r(&now) };
+			std::tm local_time{ *std::localtime(&now) };
 
 			const std::time_t local_epoch{ std::mktime(&local_time) };
 			const std::time_t gm_epoch{ std::mktime(&gm_time) };

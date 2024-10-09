@@ -43,13 +43,13 @@ namespace lwlog::details::os
 	}
 
 	template<typename ThreadIdPolicy, typename ProcessIdPolicy>
-	static std::uint64_t execution_context<ThreadIdPolicy, ProcessIdPolicy>::thread_id() const
+	std::uint64_t execution_context<ThreadIdPolicy, ProcessIdPolicy>::thread_id() const
 	{ 
 		return get_thread_id<ThreadIdPolicy>();
 	}
 
 	template<typename ThreadIdPolicy, typename ProcessIdPolicy>
-	static std::uint64_t execution_context<ThreadIdPolicy, ProcessIdPolicy>::process_id() const
+	std::uint64_t execution_context<ThreadIdPolicy, ProcessIdPolicy>::process_id() const
 	{ 
 		return get_process_id<ProcessIdPolicy>();
 	}
