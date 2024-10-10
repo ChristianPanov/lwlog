@@ -114,3 +114,5 @@ jobs:
           coverity_url: ${{ vars.COVERITY_URL }}
           coverity_user: ${{ vars.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+          coverity_project_name: "ChristianPanov/lwlog"
+          coverity_stream_name: "master"
