@@ -101,21 +101,3 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         sonar-scanner --define sonar.cfamily.compile-commands="${{ runner.workspace }}/build/compile_commands.json"
-  
-  coverity-scan:
-    runs-on: ubuntu-latest
-  
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up dependencies
-      run: sudo apt-get install -y build-essential cmake
-
-    - name: Coverity Scan
-      uses: synopsys-sig/synopsys-action@v1.13.0
-      with:
-          coverity_url: ${{ vars.COVERITY_URL }}
-          coverity_user: ${{ vars.COVERITY_USER }}
-          coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
-          coverity_project_name: "ChristianPanov/lwlog"
-          coverity_stream_name: "master"
