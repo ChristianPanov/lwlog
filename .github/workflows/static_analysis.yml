@@ -108,6 +108,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Set up dependencies
+      run: sudo apt-get install -y build-essential cmake
+
     - name: Coverity Scan
       uses: synopsys-sig/synopsys-action@v1.13.0
       with:
@@ -116,5 +119,3 @@ jobs:
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
           coverity_project_name: "ChristianPanov/lwlog"
           coverity_stream_name: "master"
-      env:
-        SYNOPSYS_LOG_LEVEL: "DEBUG"  # Add debug logging for more details
