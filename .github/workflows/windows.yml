@@ -16,7 +16,7 @@ jobs:
     name: MSVC x64 Build
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Create Build Environment
       run: cmake -E make_directory ${{ runner.workspace }}/build
@@ -36,13 +36,13 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        msys2_env:
+        msys2_env: 
           - { msystem: 'MINGW64', toolchain: 'mingw-w64-x86_64-toolchain', cmake: 'mingw-w64-x86_64-cmake' }
           - { msystem: 'UCRT64', toolchain: 'mingw-w64-ucrt-x86_64-toolchain', cmake: 'mingw-w64-ucrt-x86_64-cmake' }
     name: MinGW x64 ${{ matrix.msys2_env.msystem }} Build
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Setup MSYS2
       uses: msys2/setup-msys2@v2

@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Create static_analysis directory
       run: mkdir -p static_analysis
@@ -27,7 +27,7 @@ jobs:
       continue-on-error: true
 
     - name: Upload Cppcheck Results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: cppcheck_results
         path: static_analysis/cppcheck.txt
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Create static_analysis directory
       run: mkdir -p static_analysis
@@ -60,7 +60,7 @@ jobs:
       continue-on-error: true
 
     - name: Upload Clang-Tidy Results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: clangtidy_results
         path: static_analysis/clang-tidy.txt
