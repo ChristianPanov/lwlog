@@ -22,6 +22,8 @@ namespace lwlog::sinks
 				case level::error:		return "\u001b[31;1m";
 				case level::critical:	return "\u001b[41;1m";
 				case level::debug:		return "\u001b[37;1m";
+				case level::all: 		return {};
+				case level::none: 		return {};
 			}
 		});
 	}
@@ -30,9 +32,13 @@ namespace lwlog::sinks
 	bool sink<EnableAnsiColors, ThreadingPolicy>::should_sink(level log_level) const
 	{
 		Lock lock(m_mtx);
+		
 		if (level_details::has_level(m_level_filter, log_level) ||
 			level_details::has_level(m_level_filter, level::all))
+		{
 			return true;
+		}
+
 		return false;
 	}
 

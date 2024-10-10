@@ -50,6 +50,8 @@ namespace lwlog::level_details
 		case level::error:		return "error";
 		case level::critical:	return "critical";
 		case level::debug:		return "debug";
+		case level::all: 		return {};
+		case level::none:		return {};
 		}
 	}
 }
