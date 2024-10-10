@@ -17,10 +17,14 @@ namespace lwlog::details
 
 		const auto& [verbose, shortened] = flags;
 		while (std::strstr(pattern.data(), verbose.data()))
+		{
 			pattern.replace(pattern.find(verbose), verbose.length(), str_value);
+		}
 
 		while (std::strstr(pattern.data(), shortened.data()))
+		{
 			pattern.replace(pattern.find(shortened), shortened.length(), str_value);
+		}
 	}
 
 	template<typename T>
@@ -35,6 +39,8 @@ namespace lwlog::details
 		}();
 
 		while (std::strstr(pattern.data(), flag.data()))
+		{
 			pattern.replace(pattern.find(flag), flag.length(), str_value);
+		}
 	}
 }
