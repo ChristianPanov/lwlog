@@ -7,7 +7,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=bugs)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)\
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=ChristianPanov_lwlog&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=ChristianPanov_lwlog)
