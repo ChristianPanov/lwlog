@@ -14,25 +14,6 @@
 
 namespace lwlog::details::os::datetime
 {
-	inline const std::int16_t cached_timezone_offset = []() {
-		#ifdef _WIN32
-			::TIME_ZONE_INFORMATION tz_info;
-			::GetTimeZoneInformation(&tz_info);
-
-			return -tz_info.Bias / 60;
-		#else
-			std::time_t now{ std::time(nullptr) };
-			std::tm gm_time{ *std::gmtime(&now) };
-			std::tm local_time{ *std::localtime(&now) };
-
-			const std::time_t local_epoch{ std::mktime(&local_time) };
-			const std::time_t gm_epoch{ std::mktime(&gm_time) };
-
-			const std::int16_t difference = std::difftime(local_epoch, gm_epoch) / 3600;
-			return difference;
-		#endif
-	}();
-
 	inline const std::array<const char*, 12> month_name = { "January", "February", "March", "April", "May",
 		"June", "July", "August", "September", "October", "November", "December" };
 
@@ -43,6 +24,31 @@ namespace lwlog::details::os::datetime
 		"Thursday","Friday", "Saturday", "Sunday" };
 
 	inline const std::array<const char*, 7> weekday_name_short = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+
+	template<typename LocalTimePolicy>
+	inline const std::int16_t cached_timezone_offset = 0;
+
+	template<>
+	inline const std::int16_t cached_timezone_offset<enable_local_time> = []() {
+		#ifdef _WIN32
+			::TIME_ZONE_INFORMATION tz_info;
+			::GetTimeZoneInformation(&tz_info);
+
+			return -tz_info.Bias / 60;
+		#else
+			const std::time_t now{ std::time(nullptr) };
+
+			std::tm gm_time, local_time;
+			gmtime_r(&now, &gm_time);
+			localtime_r(&now, &local_time);
+
+			const std::time_t local_epoch{ std::mktime(&local_time) };
+			const std::time_t gm_epoch{ std::mktime(&gm_time) };
+
+			const std::int16_t difference = std::difftime(local_epoch, gm_epoch) / 3600;
+			return difference;
+		#endif
+	}();
 
 	template<typename LocalTimePolicy>
 	static std::uint8_t handle_timezone(std::uint8_t hour);

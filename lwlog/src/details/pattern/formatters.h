@@ -123,11 +123,9 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::date,
-				time_point.build_timestamp(
-					time_point.year,
-					time_point.month,
-					time_point.day,
-					'-')
+				os::datetime::ensure_two_digit_format(time_point.year)
+					+ '-' + os::datetime::ensure_two_digit_format(time_point.month)
+					+ '-' + os::datetime::ensure_two_digit_format(time_point.day)
 			);
 		}
 	};
@@ -141,11 +139,9 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::date_short,
-				time_point.build_timestamp(
-					time_point.month,
-					time_point.day,
-					time_point.year % 100,
-					'/')
+				os::datetime::ensure_two_digit_format(time_point.month) 
+					+ '/' + os::datetime::ensure_two_digit_format(time_point.day) 
+					+ '/'+ os::datetime::ensure_two_digit_format(time_point.year % 100)
 			);
 		}
 	};
@@ -159,7 +155,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::year,
-				time_point.to_string(time_point.year)
+				os::datetime::ensure_two_digit_format(time_point.year)
 			);
 		}
 	};
@@ -173,7 +169,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::year_short,
-				time_point.to_string(time_point.year % 100)
+				os::datetime::ensure_two_digit_format(time_point.year % 100)
 			);
 		}
 	};
@@ -187,7 +183,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::month,
-				time_point.to_string(time_point.month)
+				os::datetime::ensure_two_digit_format(time_point.month)
 			);
 		}
 	};
@@ -201,7 +197,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::month_name,
-				time_point.to_string(os::datetime::month_name[time_point.month])
+				os::datetime::month_name[time_point.month]
 			);
 		}
 	};
@@ -215,7 +211,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::month_name_short,
-				time_point.to_string(os::datetime::month_name_short[time_point.month])
+				os::datetime::month_name_short[time_point.month]
 			);
 		}
 	};
@@ -229,7 +225,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::day,
-				time_point.to_string(time_point.day)
+				os::datetime::ensure_two_digit_format(time_point.day)
 			);
 		}
 	};
@@ -243,7 +239,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::weekday,
-				time_point.to_string(os::datetime::weekday_name[time_point.weekday])
+				os::datetime::weekday_name[time_point.weekday]
 			);
 		}
 	};
@@ -257,7 +253,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::weekday_short,
-				time_point.to_string(os::datetime::weekday_name_short[time_point.weekday])
+				os::datetime::weekday_name_short[time_point.weekday]
 			);
 		}
 	};
@@ -271,11 +267,9 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::time,
-				time_point.build_timestamp(
-					time_point.hour,
-					time_point.minute,
-					time_point.second,
-					':')
+				os::datetime::ensure_two_digit_format(time_point.hour)
+					+ ':' + os::datetime::ensure_two_digit_format(time_point.minute)
+					+ ':' + os::datetime::ensure_two_digit_format(time_point.second)
 			);
 		}
 	};
@@ -289,10 +283,8 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::hour_clock_24,
-				time_point.build_timestamp(
-					time_point.hour,
-					time_point.minute,
-					'-')
+				os::datetime::ensure_two_digit_format(time_point.hour) 
+					+ '-'  + os::datetime::ensure_two_digit_format(time_point.minute)
 			);
 		}
 	};
@@ -306,11 +298,10 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::hour_clock_12,
-				time_point.build_timestamp(
-					time_point.hour,
-					time_point.minute,
-					time_point.second,
-					'-') + time_point.ampm()
+				os::datetime::ensure_two_digit_format(time_point.hour)
+					+ '-' + os::datetime::ensure_two_digit_format(time_point.minute)
+					+ '-' + os::datetime::ensure_two_digit_format(time_point.second) 
+					+ (time_point.hour >= 12 ? "pm" : "am")
 			);
 		}
 	};
@@ -324,7 +315,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::ampm,
-				time_point.to_string(time_point.ampm())
+				time_point.hour >= 12 ? "pm" : "am"
 			);
 		}
 	};
@@ -338,7 +329,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::hour_24,
-				time_point.to_string(time_point.hour)
+				os::datetime::ensure_two_digit_format(time_point.hour)
 			);
 		}
 	};
@@ -352,7 +343,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::hour_12,
-				time_point.to_string(os::datetime::to_12h(time_point.hour))
+				os::datetime::ensure_two_digit_format(os::datetime::to_12h(time_point.hour))
 			);
 		}
 	};
@@ -366,7 +357,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::minute,
-				time_point.to_string(time_point.minute)
+				os::datetime::ensure_two_digit_format(time_point.minute)
 			);
 		}
 	};
@@ -380,7 +371,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::second,
-				time_point.to_string(time_point.second)
+				os::datetime::ensure_two_digit_format(time_point.second)
 			);
 		}
 	};
@@ -394,7 +385,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::millisecond,
-				time_point.to_string(time_point.millisecond())
+				os::datetime::ensure_two_digit_format(time_point.millisecond)
 			);
 		}
 	};
@@ -408,7 +399,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::microsecond,
-				time_point.to_string(time_point.microsecond())
+				os::datetime::ensure_two_digit_format(time_point.microsecond)
 			);
 		}
 	};
@@ -422,7 +413,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				pattern,
 				flag::nanosecond,
-				time_point.to_string(time_point.nanosecond())
+				os::datetime::ensure_two_digit_format(time_point.nanosecond)
 			);
 		}
 	};

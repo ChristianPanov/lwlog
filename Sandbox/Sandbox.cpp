@@ -5,9 +5,7 @@
 int main()
 {
 	using logger_config = lwlog::configuration<
-		lwlog::enable_time,
 		lwlog::disable_local_time,
-		lwlog::disable_precise_units,
 		lwlog::disable_thread_id, 
 		lwlog::disable_process_id,
 		lwlog::disable_topics
@@ -18,9 +16,9 @@ int main()
 			logger_config,
 			lwlog::asynchronous_policy<
 				lwlog::default_async_queue_size,
-				lwlog::overwrite_last_overflow_policy
+				lwlog::default_overflow_policy
 			>,
-			lwlog::buffered_flush_policy<>,
+			lwlog::immediate_flush_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_sink
 		>

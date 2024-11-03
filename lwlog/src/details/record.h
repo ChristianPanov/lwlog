@@ -36,9 +36,7 @@ namespace lwlog::details
 
 	private:
 		const os::time_point<
-			typename Config::time_t,
-			typename Config::local_time_t,
-			typename Config::precise_units_t
+			typename Config::local_time_t
 		> m_time_point{};
 
 		const os::execution_context<
@@ -46,7 +44,9 @@ namespace lwlog::details
 			typename Config::process_id_t
 		> m_execution_context{};
 
-		const topic_registry<typename Config::topic_t>& m_topic_registry;
+		const topic_registry<
+			typename Config::topic_t
+		>& m_topic_registry;
 	};
 }
 

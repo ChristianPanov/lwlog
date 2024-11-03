@@ -1,3 +1,4 @@
+#include "datetime_utility.h"
 #pragma once
 
 namespace lwlog::details::os::datetime
@@ -8,10 +9,10 @@ namespace lwlog::details::os::datetime
 		return hour;
 	}
 
-	template<>
-	std::uint8_t handle_timezone<enable_local_time>(std::uint8_t hour)
-	{
-		hour += cached_timezone_offset;
+    template <>
+    std::uint8_t handle_timezone<enable_local_time>(std::uint8_t hour)
+    {
+		hour += cached_timezone_offset<enable_local_time>;
 		hour = (hour <= 23) ? hour : hour - 24;
 
 		return hour;
