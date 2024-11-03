@@ -18,7 +18,7 @@ namespace lwlog::details::os::datetime
 		return hour;
 	}
 
-	static std::uint16_t to_12h(std::uint8_t hour)
+	static std::uint8_t to_12h(std::uint8_t hour)
 	{
 		return hour > 12 ? hour - 12 : hour;
 	}

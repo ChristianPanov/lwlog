@@ -21,10 +21,10 @@ namespace lwlog
 			std::forward<SinkParams>(params)...
 		)... };
 
-		this->add_attribute("{name}", m_name);
-		this->add_attribute("%n", m_name);
+		logger::add_attribute("{name}", m_name);
+		logger::add_attribute("%n", m_name);
 
-		this->set_topic_separator("/");
+		logger::set_topic_separator("/");
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,

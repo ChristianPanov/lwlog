@@ -45,11 +45,11 @@ namespace lwlog::details::os
 			gmtime_r(&now_time_t, &details);
 
 			year 	= static_cast<std::uint16_t>(details.tm_year) + 1900;
-			month 	= static_cast<std::uint16_t>(details.tm_mon) + 1;
-			weekday = static_cast<std::uint16_t>(details.tm_wday);
-			day 	= static_cast<std::uint16_t>(details.tm_mday);
-			minute 	= static_cast<std::uint16_t>(details.tm_min);
-			second 	= static_cast<std::uint16_t>(details.tm_sec);
+			month 	= static_cast<std::uint8_t>(details.tm_mon) + 1;
+			weekday = static_cast<std::uint8_t>(details.tm_wday);
+			day 	= static_cast<std::uint8_t>(details.tm_mday);
+			minute 	= static_cast<std::uint8_t>(details.tm_min);
+			second 	= static_cast<std::uint8_t>(details.tm_sec);
 
 			hour = datetime::handle_timezone<LocalTimePolicy>(details.tm_hour);
 
