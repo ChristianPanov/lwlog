@@ -21,7 +21,7 @@ namespace lwlog::details::os
 			minute 	= m_now.wMinute;
 			second 	= m_now.wSecond;
 
-			hour = datetime::handle_timezone<LocalTimePolicy>(m_now.wHour);
+			hour = datetime::handle_timezone<LocalTimePolicy>(static_cast<std::uint8_t>(m_now.wHour));
 
 			::FILETIME now_ft;
 			::GetSystemTimePreciseAsFileTime(&now_ft);
@@ -51,7 +51,7 @@ namespace lwlog::details::os
 			minute 	= static_cast<std::uint8_t>(details.tm_min);
 			second 	= static_cast<std::uint8_t>(details.tm_sec);
 
-			hour = datetime::handle_timezone<LocalTimePolicy>(details.tm_hour);
+			hour = datetime::handle_timezone<LocalTimePolicy>(static_cast<std::uint8_t>(details.tm_hour));
 
 			const auto nanoseconds_since_unix_epoch{ 
 				std::chrono::duration_cast<std::chrono::nanoseconds>(m_now.time_since_epoch()).count() };

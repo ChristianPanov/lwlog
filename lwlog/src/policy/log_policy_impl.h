@@ -37,11 +37,8 @@ namespace lwlog
         backend.shutdown.store(false, std::memory_order_relaxed);
         backend.worker_thread = std::thread([&backend]() 
             {
-                while (true)
+                while (!backend.shutdown.load(std::memory_order_relaxed) || !backend.queue.is_empty())
                 {
-                    if (backend.shutdown.load(std::memory_order_relaxed) 
-                        && backend.queue.is_empty()) break;
-
                     if (!backend.queue.is_empty())
                     {
                         const auto& item{ backend.queue.dequeue() };
