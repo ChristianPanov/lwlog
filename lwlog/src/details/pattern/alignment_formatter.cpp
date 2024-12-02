@@ -18,7 +18,7 @@ namespace lwlog::details
 		const std::size_t flag_end_pos	{ pattern.find(alignment_info::flag_end, flag_pos + flag_size)	};
 		const std::size_t to_align_size	{ flag_end_pos - flag_pos - flag_size							};
 
-		const std::string_view aligned{ alignment_formatter::align(
+		const auto aligned{ alignment_formatter::align(
 			pattern.substr(flag_pos + flag_size, to_align_size), 
 			alignment_flag_info.width, 
 			alignment_flag_info.fill_char, 
