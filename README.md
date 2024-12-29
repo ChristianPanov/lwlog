@@ -32,9 +32,9 @@ target_link_libraries(MyExe PRIVATE lwlog::lwlog_lib)
 ```
 
 # The Most Important Question - Why Yet Another Logging Library?
-_Another logging library, how boring, right, as If we don't see a new one each week. So why do I keep shoving it down your throats for a drop of recognition? I will cut short on the speed or code simplicity that every other logging library boasts about. The actual importance of the library lies within its meaning to me. This library has served as a pivotal factor in my journey to becoming a software craftsman. I started it when I knew very little about C++, let alone software engineering, and when I still made no distinction between writing reusable pieces of code and crafting libraries. I can say that I am proud of what I've made, for it has been a long journey comprised of not giving up and constantly daring to do what was currently impossible for me, which forced me to broaden my knowledge very quickly and apply that knowledge in practice. As you will see later in the documentation, I do claim this library to be very fast and to have very clean code. I do claim to have designed it in a good way. However, even if that weren't objectively true, that would make no difference in the importance of this work to me, as I would still be just as proud of it, for it's an extension of my essence, a reflection of my discipline, perseverance, my desire for perfection and improvement, and if it were a half-baked product of any of those attributes, I would rest assured that it's only a matter of time before it sheds its ugly skin and something better emerges from within._
+_Another logging library, how boring, right, as If we don't see a new one each week. So why do I keep shoving it down your throats for a drop of recognition? I will cut short on the speed or code simplicity that every other logging library boasts about. The actual importance of the library lies within its meaning to me. This library has served as a pivotal factor in my journey to becoming a software craftsman. I started it when I knew very little, and when I still made no distinction between writing reusable pieces of code and crafting libraries. I can say that I am proud of what I've made, for it has been a long journey comprised of not giving up and constantly daring to do what was currently impossible for me, which forced me to broaden my knowledge very quickly and apply that knowledge in practice. As you will see later in the documentation, I do claim this library to be very fast and to have very clean code. I do claim to have designed it in a good way. However, even if that weren't objectively true, that would make no difference in the importance of this work to me, as I would still be just as proud of it, for it's an extension of my essence, a reflection of my discipline, perseverance, my desire for perfection and improvement, most importantly, of my love of the process, love of the craft. And if it were a half-baked product of any of those attributes, I would rest assured that it's only a matter of time before it sheds its ugly skin and something better emerges from within, a natural consequence of loving the journey more than the destination itself - inevitable metamorphosis to something greater._
 
-_No matter what you do or say, there will always be people who hold a different view. It might always happen that you were in the wrong or that you could have done better. Anyone could take away the joy of your creation. However, no one can take away the hours you've spent crafting it, no one can take away the hours you've spent studying and learning in the process, no one can take away the times when you've felt the pride-inducing adrenaline rush when you faced a challenge that was out of your league, were stubborn enough not to give up, and actually did it. No one can take away any of that, any of the things that should make you proud. That's what real craftsmanship is - taking pride in what you do with all your heart and being too stubborn to give up on the currently impossible._
+_No matter what you do or say, there will always be people who hold a different view. It might always happen that you were in the wrong or that you could have done better. Anyone could take away the joy of your creation. However, no one can take away the hours you've spent crafting it, no one can take away the hours you've spent studying and learning in the process, no one can take away the times when you've felt the pride-inducing adrenaline rush when you faced a challenge that was out of your league, were stubborn enough not to give up, and actually did it. No one can take away any of that, any of the things that should make you proud. That's what real craftsmanship is - taking pride in what you do with all your heart and being too stubborn to give up on the currently impossible, it is an act of self expression that transcends simple interest and mindless action._
 
 # Design Highlights
 - **Code Base:** The code is crafted with clarity, elegance, and readability in mind, hoping it is structured enough to prove relatively easy for developers to understand, modify, extend, and learn from.
@@ -154,6 +154,7 @@ int main()
 {
 	auto console = std::make_shared<
 		lwlog::logger<
+			lwlog::default_config,
 			lwlog::default_log_policy,
 			lwlog::default_storage_policy,
 			lwlog::default_flush_policy,
@@ -202,6 +203,47 @@ Both the sinks and the logger classes expect a threading policy as a template pa
 However, if you want to use the convenience aliases mentioned above, you need to keep in mind they are not thread-safe.\
 To facilitate ease of use while ensuring thread safety, ***lwlog*** offers thread-safe variants for all of its convenience aliases. These variants are distinguished by an ```_mt``` suffix in their names, indicating “multi-threaded” capability.
 ## Logger configuration
+The first template parameter that ```lwlog::logger``` takes is a template structure called ```lwlog::configuration```. It allows the user to enable or disable certain features in order to cater the logger to their specific use case.
+Configuration | Description
+------------ | -------------
+```lwlog::enable_thread_id``` | Enables the inclusion of the thread ID in log messages. This can be useful for debugging multi-threaded applications by identifying which thread generated a particular log message
+```lwlog::disable_thread_id``` | Disables the inclusion of the thread ID in log messages. Use this option if thread ID information is not needed, to reduce the size of log messages
+```lwlog::enable_process_id``` | Enables the inclusion of the process ID in log messages. This can be useful for debugging applications that spawn multiple processes, by identifying which process generated a particular log message
+```lwlog::disable_process_id``` | Disables the inclusion of the process ID in log messages. Use this option if process ID information is not needed, to reduce the size of log messages
+```lwlog::enable_local_time``` | Enables the inclusion of the local time in log messages. This can be useful for timestamping log messages with the local time zone to track when events occurred
+```lwlog::disable_local_time``` | Uses UTC time instead of local time in log messages. This can be useful for timestamping log messages in a consistent time zone, regardless of the local time zone
+```lwlog::enable_topics``` | Enables the use of topics in log messages. Topics can be used to categorize log messages, making it easier to filter and search for specific types of messages
+```lwlog::disable_topics``` | Disables the use of topics in log messages. Use this option if categorization by topics is not needed, to simplify log messages
+
+The ```lwlog::default_config``` alias is configured with enabled thread id, process id, and topics, and disabled local time.
+#### Example
+```cpp
+#include "lwlog.h"
+
+int main()
+{
+	using logger_config = lwlog::configuration<
+		lwlog::enable_local_time,
+		lwlog::disable_thread_id, 
+		lwlog::enable_process_id,
+		lwlog::enable_topics
+	>;
+
+	auto console = std::make_shared<
+		lwlog::logger<
+			logger_config,
+			lwlog::synchronous_policy,
+			lwlog::default_flush_policy,
+			lwlog::single_threaded_policy,
+			lwlog::sinks::stdout_sink
+			>
+		>("CONSOLE");
+	
+	return 0;
+}
+```
+## Logger policies
+The rest of the ```lwlog::logger``` template parameters are special policy structures. Unlike the configuration structure from the previous section, which enables and disables features(similar to macros, with the idea of almost completely removing them from the binary within the limitations of template generation), policy structures describe how the logger operates. These policies define the behavior of the logger, such as whether it logs synchronously or asynchronously, how it handles flushing, and whether it is single-threaded or multi-threaded.
 Policy | Description
 ------------ | -------------
 ```lwlog::synchronous_policy``` | Your standard linear logging mechanism. You call a log function, and it's immediately processed and outputted to the specified sink. Works on a single thread, no background threads doing any processing
@@ -223,6 +265,7 @@ int main()
 {
 	auto console = std::make_shared<
 		lwlog::logger<
+			lwlog::default_config,
 			lwlog::synchronous_policy,
 			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
@@ -251,6 +294,7 @@ int main()
 {
 	auto console = std::make_shared<
 		lwlog::logger<
+			lwlog::default_config,
 			lwlog::asynchronous_policy<
 				lwlog::default_async_queue_size,
 				lwlog::default_overflow_policy
@@ -282,6 +326,7 @@ Verbose flag | Short flag | Description | Example
 ```{file}``` | ```%@``` | Path of the file in which the log function is called | "C:\Users\user\Desktop\lwlog\Sandbox\Sandbox.cpp"
 ```{func}``` | ```%!``` | Name of the function in which the log function is called | "main"
 ```{topic}``` | ```%?``` | Name of the current topic | "topic name"
+```{full_topic}``` | ```%?``` | All topics and subtopics | "topic1/topic2/topic3"
 ```{date}``` | ```%F``` | Current date YY-MM-DD | "2021-01-01"
 ```{date_short}``` | ```%D``` | Current short date MM/DD/YY | "01/01/21"
 ```{year}``` | ```%Y``` | Current year | "2021"
@@ -367,8 +412,8 @@ Background Color Flag | Bright Background Color Flag
 
 int main()
 {
-	auto console = std::make_shared<console_logger>("CONSOLE");
-	console->set_pattern(".br_red([%T] [%n]) .green([%l]): .br_cyan(%v)");
+	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
+	console->set_pattern(".red([%T] [%n]) .green([%l]): .cyan(%v)");
 
 	console->critical("First critical message");
 	
@@ -382,13 +427,44 @@ You can also color your logs based on the severity level of the log with this fl
 
 int main()
 {
-	auto console = std::make_shared<console_logger>("CONSOLE");
-	console->set_pattern(".br_red([%T] [%n]) .level([%l]): .br_cyan(%v)");
+	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
+	console->set_pattern(".red([%T] [%n]) .level([%l]): .cyan(%v)");
 
 	console->critical("First critical message");
 	
 	return 0;
 }
+```
+## Topics
+***lwlog*** allows you to categorize log messages into different topics. This can be useful for filtering and organizing log messages, making it easier to manage and analyze logs in complex applications. Topics are straightforward to use, you create a topic and give it a name, and when needed, you end the topic. Topics can contain subtopics, which are simply topics created after a topic that hasn't been ended.
+```cpp
+#include "lwlog.h"
+
+int main()
+{
+	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
+
+	console->set_pattern("{full_topic} .red([%T] [%n]) .level([%l]): .cyan(%v)");
+
+	console->start_topic("Main Topic");
+	{
+		console->start_topic("Sub Topic");
+		{
+			console->critical("Message in both topics");
+		}
+		console->end_topic();
+
+		console->critical("Message in main topic");
+	}
+	console->end_topic();
+	
+	return 0;
+}
+```
+##### Output
+```
+Main Topic/Sub Topic [19:44:50] [CONSOLE] [critical]: Message in both topics
+Main Topic [19:44:50] [CONSOLE] [critical]: Message in main topic
 ```
 ## Custom attributes
 Attributes serve as dynamic placeholders within log messages, providing a flexible way to include additional context or data. Each attribute consists of three main components:
@@ -646,16 +722,6 @@ int main()
 	return 0;
 }
 ```
-# Tweakme
-The [***tweakme.h***](https://github.com/ChristianPanov/lwlog/blob/master/lwlog/src/tweakme.h) file contains macros which serve the purpose of configurations.\
-Depending on your needs, you can switch on and off certain features. Switching them off will completely remove them from the ***lwlog*** code which will increase performance and reduce overhead, because you shouldn't pay for what you don't need.
-Macro | Off(0) - Default | On(1)
------------- | ------------- | -------------
-```LWLOG_NO_TIME``` | Decreased performance. Has overhead of retrieving the system time and saving it in memory | Increased performance. No overhead. Time flags will result into nothing
-```LWLOG_USE_LOCALTIME``` | Time flags will result into local time | Time flags will result into UTC(GMT) time
-```LWLOG_USE_PRECISE_UNITS``` | Slightly increased performance. No overhead. Precise time unit(microsecond, millisecond, nanosecond) flags result into nothing | Slightly decreased performance. Has overhead of retrieving needed data to calculate precise time units
-```LWLOG_USE_THREAD_ID``` | Slightly increased performance. No overhead. ```{thread}``` or ```%t``` will result into nothing | Slightly decreased performance. Has overhead of retrieving the current thread id(tid) and saving it in memory
-```LWLOG_USE_PROCESS_ID``` | Slightly increased performance. No overhead. ```{process}``` or  ```%P``` will result into nothing | Slightly decreased performance. Has overhead of retrieving the current process id(pid) and saving it in memory
 # Performance
 So how does ***lwlog*** achieve this performance? In the following section, I will break down all the performance-enhancing decisions that I've made.
 ### Asynchronous logging

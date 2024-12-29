@@ -22,7 +22,4 @@ namespace lwlog
         using process_id_t = ProcessIdPolicy;
         using topic_t = TopicPolicy;
     };
-
-    using default_config = configuration<disable_local_time, enable_thread_id, 
-        enable_process_id, enable_topics>;
 }

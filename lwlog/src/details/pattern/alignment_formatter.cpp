@@ -42,13 +42,27 @@ namespace lwlog::details
 	std::string alignment_formatter::align_left(const std::string& to_align, std::uint8_t width, char fill_char)
 	{
 		if (width <= to_align.size()) return to_align;
-		return to_align + std::string(width - to_align.size(), fill_char);
+
+		std::string result;
+		result.reserve(width);
+
+		result.append(to_align);
+		result.append(width - to_align.size(), fill_char);
+
+		return result;
 	}
 
 	std::string alignment_formatter::align_right(const std::string& to_align, std::uint8_t width, char fill_char)
 	{
 		if (width <= to_align.size()) return to_align;
-		return std::string(width - to_align.size(), fill_char) + to_align;
+
+		std::string result;
+		result.reserve(width);
+
+		result.append(width - to_align.size(), fill_char);
+		result.append(to_align);
+
+		return result;
 	}
 
 	std::string alignment_formatter::align_center(const std::string& to_align, std::uint8_t width, char fill_char)
@@ -59,6 +73,13 @@ namespace lwlog::details
 		const auto padding_left	{ total_padding / 2				};
 		const auto padding_right{ total_padding - padding_left	};
 
-		return std::string(padding_left, fill_char) + to_align + std::string(padding_right, fill_char);
+		std::string result;
+		result.reserve(width);
+
+		result.append(padding_left, fill_char);
+		result.append(to_align);
+		result.append(padding_right, fill_char);
+
+		return result;
 	}
 }

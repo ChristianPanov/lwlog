@@ -7,6 +7,12 @@
 
 namespace lwlog
 {
+	using default_config = configuration<disable_local_time, enable_thread_id,
+		enable_process_id, enable_topics>;
+
+	using default_overflow_policy = block_overflow_policy;
+	using default_flush_policy = immediate_flush_policy;
+
 	template<template<typename, typename> typename... Sinks>
 	using basic_logger = logger<default_config, synchronous_policy, immediate_flush_policy, 
 		single_threaded_policy, Sinks...>;
@@ -32,9 +38,6 @@ namespace lwlog
 	using async_console_logger_mt	= async_logger_mt<sinks::stdout_sink>;
 	using async_file_logger			= async_logger<sinks::file_sink>;
 	using async_file_logger_mt		= async_logger_mt<sinks::file_sink>;
-
-	using default_overflow_policy	= block_overflow_policy;
-	using default_flush_policy		= immediate_flush_policy;
 }
 
 namespace lwlog

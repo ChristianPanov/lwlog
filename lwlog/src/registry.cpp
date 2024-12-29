@@ -14,7 +14,12 @@ namespace lwlog
 	{
 		s_default_logger = std::make_unique<
 			logger<
-				default_config,
+				configuration<
+					disable_local_time, 
+					enable_thread_id,
+					enable_process_id, 
+					enable_topics
+				>,
 				synchronous_policy,
 				immediate_flush_policy,
 				single_threaded_policy,
