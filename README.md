@@ -435,6 +435,22 @@ int main()
 	return 0;
 }
 ```
+### FMT Formatting
+Besides setting a formatting pattern that is shared between all log messages, there is also FMT-style formatting, which is message-specific and allows you to dynamically format log messages with placeholders, providing greater flexibility compared to static pattern formatting. Depending on your project's dependencies, ***lwlog*** can use fmt, std::format, or its own formatting mechanism to achieve this.
+```cpp
+#include "lwlog.h"
+
+int main()
+{
+	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
+	console->set_pattern(".red([%T] [%n]) .level([%l]): .cyan(%v)");
+
+	console->critical("First critical message {} {} {}", "foo", 5, "bar");
+	
+	return 0;
+}
+```
+
 ## Topics
 ***lwlog*** allows you to categorize log messages into different topics. This can be useful for filtering and organizing log messages, making it easier to manage and analyze logs in complex applications. Topics are straightforward to use, you create a topic and give it a name, and when needed, you end the topic. Topics can contain subtopics, which are simply topics created after a topic that hasn't been ended.
 ```cpp
