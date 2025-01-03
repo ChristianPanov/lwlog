@@ -20,7 +20,7 @@ set(LWLOG_SOURCE_FILES
 )
 
 message("Creating lwlog library")
-add_library(lwlog_lib STATIC ${LWLOG_SOURCE_FILES})
+add_library(lwlog_lib ${LWLOG_SOURCE_FILES})
 target_include_directories(lwlog_lib PRIVATE ${CMAKE_SOURCE_DIR}/lwlog/src/)
 add_library(lwlog::lwlog_lib ALIAS lwlog_lib)
 
