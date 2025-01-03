@@ -4,8 +4,6 @@ project(lwlog)
 
 find_package(Threads REQUIRED)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-O3")
 message("Compiler Version: ${CMAKE_CXX_COMPILER_VERSION}")
 
@@ -21,6 +19,7 @@ set(LWLOG_SOURCE_FILES
 
 message("Creating lwlog library")
 add_library(lwlog_lib STATIC ${LWLOG_SOURCE_FILES})
+target_compile_features(lwlog_lib PUBLIC cxx_std_17)
 target_include_directories(lwlog_lib PRIVATE ${CMAKE_SOURCE_DIR}/lwlog/src/)
 add_library(lwlog::lwlog_lib ALIAS lwlog_lib)
 
