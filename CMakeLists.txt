@@ -4,7 +4,6 @@ project(lwlog)
 
 find_package(Threads REQUIRED)
 
-set(CMAKE_CXX_FLAGS "-O3")
 message("Compiler Version: ${CMAKE_CXX_COMPILER_VERSION}")
 
 set(version 1.2.0)
