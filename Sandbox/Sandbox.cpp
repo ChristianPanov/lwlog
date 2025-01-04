@@ -15,8 +15,9 @@ int main()
 		lwlog::logger<
 			logger_config,
 			lwlog::asynchronous_policy<
+				lwlog::default_overflow_policy,
 				lwlog::default_async_queue_size,
-				lwlog::default_overflow_policy
+				lwlog::default_thread_affinity
 			>,
 			lwlog::immediate_flush_policy,
 			lwlog::single_threaded_policy,

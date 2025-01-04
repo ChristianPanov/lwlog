@@ -19,9 +19,10 @@ namespace lwlog
         }
     }
 
-    template<std::size_t QueueCapacity, typename OverflowPolicy>
+    template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
     template<typename Config, typename ConcurrencyModelPolicy>
-    struct asynchronous_policy<QueueCapacity, OverflowPolicy>::backend<Config, ConcurrencyModelPolicy>::queue_item
+    struct asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::backend<
+        Config, ConcurrencyModelPolicy>::queue_item
     {
         std::string_view			                        message;
         level						                        log_level;
@@ -30,13 +31,19 @@ namespace lwlog
         details::topic_registry<typename Config::topic_t>   topic_registry;
     };
 
-    template<std::size_t Capacity, typename OverflowPolicy>
+    template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
     template<typename Config, typename ConcurrencyModelPolicy>
-    void asynchronous_policy<Capacity, OverflowPolicy>::init(backend<Config, ConcurrencyModelPolicy>& backend)
+    void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::init(
+        backend<Config, ConcurrencyModelPolicy>& backend)
     {
         backend.shutdown.store(false, std::memory_order_relaxed);
         backend.worker_thread = std::thread([&backend]() 
             {
+                if (ThreadAffinity != default_thread_affinity)
+                {
+                    details::os::set_thread_affinity(ThreadAffinity);
+                }
+
                 while (!backend.shutdown.load(std::memory_order_relaxed) || !backend.queue.is_empty())
                 {
                     if (!backend.queue.is_empty())
@@ -63,18 +70,19 @@ namespace lwlog
             });
     }
 
-    template<std::size_t Capacity, typename OverflowPolicy>
+    template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
     template<typename Config, typename ConcurrencyModelPolicy>
-    void asynchronous_policy<Capacity, OverflowPolicy>::log(backend<Config, ConcurrencyModelPolicy>& backend, 
+    void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::log(
+        backend<Config, ConcurrencyModelPolicy>& backend,
         const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
         level log_level, const details::source_meta& meta, details::format_args_list args)
     {
         backend.queue.enqueue({ message, log_level, meta, args, topic_registry });
     }
 
-    template<std::size_t Capacity, typename OverflowPolicy>
+    template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
     template<typename Config, typename ConcurrencyModelPolicy>
-    asynchronous_policy<Capacity, OverflowPolicy>::backend<Config, ConcurrencyModelPolicy>::~backend()
+    asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::backend<Config, ConcurrencyModelPolicy>::~backend()
     {
         shutdown.store(true, std::memory_order_relaxed);
 
