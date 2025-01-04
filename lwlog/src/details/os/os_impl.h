@@ -57,13 +57,13 @@ namespace lwlog::details::os
 	static void set_thread_affinity(std::uint64_t affinity_mask)
 	{
 		#ifdef _WIN32
-			DWORD_PTR mask = static_cast<DWORD_PTR>(affinity_mask);
+			const DWORD_PTR mask = static_cast<DWORD_PTR>(affinity_mask);
 			if (::SetThreadAffinityMask(::GetCurrentThread(), mask) == 0) return;
 		#elif defined(__linux__)
 			::cpu_set_t cpuset;
 			CPU_ZERO(&cpuset);
 
-			std::uint64_t num_cores{ ::sysconf(_SC_NPROCESSORS_ONLN) };
+			const std::uint64_t num_cores{ ::sysconf(_SC_NPROCESSORS_ONLN) };
 			for (std::uint8_t i = 0; i < num_cores; ++i)
 			{
 				if (affinity_mask & (1ULL << i)) 
@@ -75,8 +75,9 @@ namespace lwlog::details::os
 			if (::pthread_setaffinity_np(::pthread_self(),
 				sizeof(::cpu_set_t), &cpuset) != 0) return;
 		#elif defined(__APPLE__)
-			::thread_affinity_policy_data_t policy;
-			policy.affinity_tag = static_cast<::integer_t>(affinity_mask);
+			const ::thread_affinity_policy_data_t policy{ 
+				static_cast<::integer_t>(affinity_mask) 
+			};
 
 			::thread_port_t mach_thread = ::pthread_mach_thread_np(::pthread_self());
 
