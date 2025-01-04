@@ -318,8 +318,9 @@ The core of the asynchronous logger is it's queue, which can operate based on tw
 2. **Non Thread-Safe(SPSC Model):** Conversely, when the logger is configured as non-thread-safe, indicating that log messages will only be produced by a single thread, the queue operates on the faster and lighter SPSC model.
 ### Configuration
 The ```lwlog::asynchronous_policy``` structure expects two template parameters for configuration:
-1. **Queue Capacity:** The maximum number of log messages the queue can hold. The default value is set to **1024**, which can also be accessed by the ```lwlog::default_async_queue_size``` global variable.
-2. **Queue Overflow Policy:** Defines the behavior when the queue is full. The default policy is ```lwlog::block_overflow_policy```, which blocks the producing thread until space is available in the queue.
+1. **Queue Overflow Policy:** Defines the behavior when the queue is full. The default policy is ```lwlog::block_overflow_policy```, which blocks the producing thread until space is available in the queue.
+2. **Queue Capacity:** The maximum number of log messages the queue can hold. The default value is set to **1024**, which can also be accessed by the ```lwlog::default_async_queue_size``` global variable.
+3. **Thread Affinity Mask** Describes to which specific CPU cores the producing thread will be bound. The default value is ```lwlog::default_thread_affinity```, which does not bind the thread to specific cores and lets the operating system manage thread placement. For custom affinity, provide a 64-bit mask where each bit corresponds to a CPU core (1 to allow, 0 to disallow).
 #### Example
 ```cpp
 #include "lwlog.h"
@@ -330,8 +331,9 @@ int main()
 		lwlog::logger<
 			lwlog::default_config,
 			lwlog::asynchronous_policy<
+				lwlog::default_overflow_policy,
 				lwlog::default_async_queue_size,
-				lwlog::default_overflow_policy
+				lwlog::default_thread_affinity
 			>,
 			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
@@ -788,6 +790,9 @@ alignas(cache_line_size) std::atomic_size_t m_read_index{};
 Due to the multithreaded nature of asynchronous logging, atomicity of operations needs to be ensured, meaning operations to be executed without any interference from concurrent operations. That's commonly handled with mutexes and locks, however, they introduce overhead due to frequent context switches and cache coherency protocols. ***lwlog*** solves this problem by making the queue lock-free. Lock-free data structures use atomic operations to ensure atomicity instead of mutexes and locking mechanisms. This significantly reduces contention between threads, which reduces cache line invalidations that lead to stalled CPU cycles, increased memory traffic, and delayed execution.
 #### Memory Order
 Atomic operations on the other hand are trickier to get right due to memory ordering. Memory ordering refers to the order in which atomic operations are executed with respect to other atomic operations. Atomic loads and stores have a default ordering, which provides the strongest guarantee of sequential consistency. However, most of the time weaker ordering, which introduces much less overhead, would suffice. So, choosing the right ordering instead of over-specifying by relying on the default one will lead to performance benefits. Under-specifying, however, is also dangerous because it can lead to very subtle bugs. ***lwlog*** chooses the least strict memory ordering needed for the given operation, eliminating unnecessary overhead while still providing the correct sequential consistency.
+#### Thread Affinity
+Thread affinity is another key performance optimization employed by ***lwlog***. By allowing the logging thread to be bound to specific CPU cores, ***lwlog*** ensures better cache locality and reduces the overhead of context switching. This is particularly beneficial in systems with multiple cores or NUMA(Non-Uniform Memory Access) architectures.
+By default, ***lwlog*** does not bind the thread to any specific core, leaving the operating system free to manage thread placement. However, advanced users can configure the thread affinity mask to restrict logging operations to specific cores, enhancing performance for scenarios that demand predictable execution or reduced latency.
 ### Pattern Formatting
 Formatting tends to be a bottleneck in logging since parsing and formatting imply a lot of consecutive searches and replaces in strings. Most of the time, that cost is mitigated by simply handing it off to a background thread to do the processing. However, a smarter approach could be taken by analyzing what operations actually have to happen every time a log function is called and what operations could happen only once for the lifetime of the given pattern.\
 Having that in mind, the formatting pattern is parsed only once, completely off the log call site. Log call functions are solely responsible for replacing the flags with their respective values, significantly reducing the workload on each log call. This design choice ensures that we are not parsing the pattern repetitively, a task that would otherwise impose additional performance overhead on every log action.\

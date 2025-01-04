@@ -9,6 +9,7 @@
 
 namespace lwlog
 {
+	inline constexpr std::uint64_t default_thread_affinity{ 0xFFFFFFFFFFFFFFFF };
 	inline constexpr std::size_t default_async_queue_size{ 1024 };
 
 	struct synchronous_policy
@@ -29,8 +30,9 @@ namespace lwlog
 	};
 
 	template<
-		std::size_t Capacity	= default_async_queue_size,
-		typename OverflowPolicy = block_overflow_policy
+		typename OverflowPolicy	= block_overflow_policy,
+		std::size_t Capacity = default_async_queue_size,
+		std::uint64_t ThreadAffinity = default_thread_affinity
 	> 
 	struct asynchronous_policy
 	{

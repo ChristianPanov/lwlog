@@ -54,6 +54,38 @@ namespace lwlog::details::os
 		return get_process_id<ProcessIdPolicy>();
 	}
 
+	static void set_thread_affinity(std::uint64_t affinity_mask)
+	{
+		#ifdef _WIN32
+			DWORD_PTR mask = static_cast<DWORD_PTR>(affinity_mask);
+			if (::SetThreadAffinityMask(::GetCurrentThread(), mask) == 0) return;
+		#elif defined(__linux__)
+			::cpu_set_t cpuset;
+			CPU_ZERO(&cpuset);
+
+			std::uint32_t num_cores{ std::thread::hardware_concurrency() };
+			for (std::uint8_t i = 0; i < num_cores; ++i)
+			{
+				if (affinity_mask & (1ULL << i)) 
+				{
+					CPU_SET(i, &cpuset);
+				}
+			}
+
+			if (::pthread_setaffinity_np(::pthread_self(),
+				sizeof(::cpu_set_t), &cpuset) != 0) return;
+		#elif defined(__APPLE__)
+			::thread_affinity_policy_data_t policy;
+			policy.affinity_tag = static_cast<::integer_t>(affinity_mask);
+
+			::thread_port_t mach_thread = ::pthread_mach_thread_np(::pthread_self());
+
+			if(::thread_policy_set(mach_thread, 
+				THREAD_AFFINITY_POLICY, reinterpret_cast<thread_policy_t>(&policy),
+				THREAD_AFFINITY_POLICY_COUNT) != KERN_SUCCESS) return;
+		#endif
+	}
+
 	static bool are_ansi_colors_enabled()
 	{
 		#ifdef _WIN32

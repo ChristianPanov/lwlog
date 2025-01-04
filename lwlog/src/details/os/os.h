@@ -2,11 +2,16 @@
 
 #ifdef _WIN32
 	#include "details/windows_lightweight.h"
-#elif defined(__linux__) || defined(__APPLE__)
+#elif defined(__linux__)
 	#include <unistd.h>
+	#include <pthread.h>
 	#include <sys/syscall.h>
-#else
-	#include <thread>
+	#include <sched.h>
+#elif defined(__APPLE__)
+	#include <unistd.h>
+	#include <pthread.h>
+	#include <mach/mach.h>
+	#include <mach/thread_policy.h>
 #endif
 
 namespace lwlog::details::os
@@ -31,6 +36,8 @@ namespace lwlog::details::os
 		std::uint64_t thread_id() const override;
 		std::uint64_t process_id() const override;
 	};
+
+	static void set_thread_affinity(std::uint64_t affinity_mask);
 
 	static bool are_ansi_colors_enabled();
 	static void enable_ansi_colors();
