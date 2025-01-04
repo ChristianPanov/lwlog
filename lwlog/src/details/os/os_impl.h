@@ -63,7 +63,7 @@ namespace lwlog::details::os
 			::cpu_set_t cpuset;
 			CPU_ZERO(&cpuset);
 
-			std::uint32_t num_cores{ ::sysconf(_SC_NPROCESSORS_ONLN) };
+			std::uint64_t num_cores{ ::sysconf(_SC_NPROCESSORS_ONLN) };
 			for (std::uint8_t i = 0; i < num_cores; ++i)
 			{
 				if (affinity_mask & (1ULL << i)) 
