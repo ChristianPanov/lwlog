@@ -2,8 +2,6 @@
 
 #include "time_point.h"
 
-#include <iostream>
-
 namespace lwlog::details::os
 {
 	template<typename LocalTimePolicy>
