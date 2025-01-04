@@ -18,7 +18,7 @@ namespace lwlog::details
 	using ref_variant = std::variant<std::reference_wrapper<Ts>...>;
 
 	using attrib_value = ref_variant<int, float, double, std::string, std::string_view, level>;
-	using attrib_callback_t = std::function<const char*()>;
+	using attrib_callback_t = std::function<std::string()>;
 
 	struct attribute
 	{
