@@ -57,7 +57,7 @@ The upcoming release of 1.4 brings a significant focus on performance optimizati
 **Why It Matters:**
 - Faster string replacements lead to reduced latency in log generation, improving overall logging performance.
 - Handles larger log patterns and more complex formatting with ease.
-### CPU Affinity for Asynchronous Logger ### 
+### ~~Thread Affinity for Asynchronous Logger~~ (Done) ### 
 **What’s New:**
 - The asynchronous logger can now be configured to bind its background threads to specific CPU cores.
   
@@ -320,7 +320,7 @@ The core of the asynchronous logger is it's queue, which can operate based on tw
 The ```lwlog::asynchronous_policy``` structure expects two template parameters for configuration:
 1. **Queue Overflow Policy:** Defines the behavior when the queue is full. The default policy is ```lwlog::block_overflow_policy```, which blocks the producing thread until space is available in the queue.
 2. **Queue Capacity:** The maximum number of log messages the queue can hold. The default value is set to **1024**, which can also be accessed by the ```lwlog::default_async_queue_size``` global variable.
-3. **Thread Affinity Mask** Describes to which specific CPU cores the producing thread will be bound. The default value is ```lwlog::default_thread_affinity```, which does not bind the thread to specific cores and lets the operating system manage thread placement. For custom affinity, provide a 64-bit mask where each bit corresponds to a CPU core (1 to allow, 0 to disallow).
+3. **Thread Affinity Mask:** Describes to which specific CPU cores the producing thread will be bound. The default value is ```lwlog::default_thread_affinity```, which does not bind the thread to specific cores and lets the operating system manage thread placement. For custom affinity, provide a 64-bit mask where each bit corresponds to a CPU core (1 to allow, 0 to disallow).
 #### Example
 ```cpp
 #include "lwlog.h"
