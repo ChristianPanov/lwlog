@@ -6,7 +6,7 @@ find_package(Threads REQUIRED)
 
 message("Compiler Version: ${CMAKE_CXX_COMPILER_VERSION}")
 
-set(version 1.2.0)
+set(version 1.3.0)
 
 message("Adding source files")
 set(LWLOG_SOURCE_FILES
@@ -34,8 +34,8 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 install(
-  DIRECTORY ${CMAKE_SOURCE_DIR}/lwlog/src
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  DIRECTORY ${CMAKE_SOURCE_DIR}/lwlog/src/
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lwlog
   FILES_MATCHING PATTERN "*.h"
 )
 
