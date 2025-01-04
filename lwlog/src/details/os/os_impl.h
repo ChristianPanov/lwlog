@@ -63,7 +63,7 @@ namespace lwlog::details::os
 			::cpu_set_t cpuset;
 			CPU_ZERO(&cpuset);
 
-			const std::uint64_t num_cores{ ::sysconf(_SC_NPROCESSORS_ONLN) };
+			const std::uint8_t num_cores{ static_cast<std::uint8_t>(::sysconf(_SC_NPROCESSORS_ONLN)) };
 			for (std::uint8_t i = 0; i < num_cores; ++i)
 			{
 				if (affinity_mask & (1ULL << i)) 
@@ -75,7 +75,7 @@ namespace lwlog::details::os
 			if (::pthread_setaffinity_np(::pthread_self(),
 				sizeof(::cpu_set_t), &cpuset) != 0) return;
 		#elif defined(__APPLE__)
-			const ::thread_affinity_policy_data_t policy{ 
+			::thread_affinity_policy_data_t policy{ 
 				static_cast<::integer_t>(affinity_mask) 
 			};
 
