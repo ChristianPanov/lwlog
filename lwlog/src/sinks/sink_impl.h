@@ -13,17 +13,17 @@ namespace lwlog::sinks
 		m_pattern.set_pattern("[%d, %T] [%l] [%n]: %v");
 		m_pattern.request_flag_formatters();
 
-		sink::add_attribute(".level(", m_current_level, [&]()
+		sink::add_attribute(".level(", m_current_level, [&](char* buffer, std::size_t size)
 		{
 			switch (m_current_level)
 			{
-				case level::info:		return "\u001b[37m";
-				case level::warning:	return "\u001b[33;1m";
-				case level::error:		return "\u001b[31;1m";
-				case level::critical:	return "\u001b[41;1m";
-				case level::debug:		return "\u001b[37;1m";
-				case level::all: 		return "";
-				case level::none: 		return "";
+			case level::info:		buffer = "\u001b[37m"; break;
+			case level::warning:	buffer = "\u001b[33;1m"; break;
+			case level::error:		buffer = "\u001b[31;1m"; break;
+			case level::critical:	buffer = "\u001b[41;1m"; break;
+			case level::debug:		buffer = "\u001b[37;1m"; break;
+			case level::all: 		buffer = ""; break;
+			case level::none: 		buffer = ""; break;
 			}
 		});
 	}
@@ -57,6 +57,7 @@ namespace lwlog::sinks
 		m_pattern.parse_alignment_flags();
 		m_pattern.request_flag_formatters();
 		m_pattern.process_color_flags(EnableAnsiColors);
+		m_pattern.save_pattern_state();
 	}
 
 	template<bool EnableAnsiColors, typename ThreadingPolicy>

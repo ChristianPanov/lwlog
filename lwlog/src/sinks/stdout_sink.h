@@ -28,5 +28,6 @@ namespace lwlog::sinks
 	{
 		sink_t::m_current_level = record.log_level;
 		details::stream_writer<FlushPolicy>::write(sink_t::m_pattern.compile(record));
+		sink_t::m_pattern.reset_pattern();
 	}
 }

@@ -8,10 +8,10 @@ namespace lwlog::details
 {
 	struct level_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::level,
 				level_details::to_string(record.log_level)
 			);
@@ -20,10 +20,10 @@ namespace lwlog::details
 
 	struct message_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::message,
 				record.message
 			);
@@ -32,10 +32,10 @@ namespace lwlog::details
 
 	struct thread_id_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::thread_id,
 				record.exec_context().thread_id()
 			);
@@ -44,10 +44,10 @@ namespace lwlog::details
 
 	struct process_id_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::process_id,
 				record.exec_context().process_id()
 			);
@@ -56,10 +56,10 @@ namespace lwlog::details
 
 	struct line_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::line,
 				record.meta.line()
 			);
@@ -68,10 +68,10 @@ namespace lwlog::details
 
 	struct file_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::file,
 				record.meta.file_name()
 			);
@@ -80,10 +80,10 @@ namespace lwlog::details
 
 	struct function_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::function,
 				record.meta.function_name()
 			);
@@ -92,10 +92,10 @@ namespace lwlog::details
 
 	struct topic_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::topic,
 				record.get_topic_registry().current_topic()
 			);
@@ -104,10 +104,10 @@ namespace lwlog::details
 
 	struct full_topic_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::full_topic,
 				record.get_topic_registry().full_topic()
 			);
@@ -116,12 +116,12 @@ namespace lwlog::details
 
 	struct date_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::date,
 				os::datetime::ensure_two_digit_format(time_point.year)
 					+ '-' + os::datetime::ensure_two_digit_format(time_point.month)
@@ -132,12 +132,12 @@ namespace lwlog::details
 
 	struct date_short_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::date_short,
 				os::datetime::ensure_two_digit_format(time_point.month) 
 					+ '/' + os::datetime::ensure_two_digit_format(time_point.day) 
@@ -148,12 +148,12 @@ namespace lwlog::details
 
 	struct year_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::year,
 				os::datetime::ensure_two_digit_format(time_point.year)
 			);
@@ -162,12 +162,12 @@ namespace lwlog::details
 
 	struct year_short_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::year_short,
 				os::datetime::ensure_two_digit_format(time_point.year % 100)
 			);
@@ -176,12 +176,12 @@ namespace lwlog::details
 
 	struct month_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::month,
 				os::datetime::ensure_two_digit_format(time_point.month)
 			);
@@ -190,12 +190,12 @@ namespace lwlog::details
 
 	struct month_name_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::month_name,
 				os::datetime::month_name[time_point.month]
 			);
@@ -204,12 +204,12 @@ namespace lwlog::details
 
 	struct month_name_short_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::month_name_short,
 				os::datetime::month_name_short[time_point.month]
 			);
@@ -218,12 +218,12 @@ namespace lwlog::details
 
 	struct day_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::day,
 				os::datetime::ensure_two_digit_format(time_point.day)
 			);
@@ -232,12 +232,12 @@ namespace lwlog::details
 
 	struct weekday_name_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::weekday,
 				os::datetime::weekday_name[time_point.weekday]
 			);
@@ -246,12 +246,12 @@ namespace lwlog::details
 
 	struct weekday_name_short_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::weekday_short,
 				os::datetime::weekday_name_short[time_point.weekday]
 			);
@@ -260,12 +260,12 @@ namespace lwlog::details
 
 	struct time_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::time,
 				os::datetime::ensure_two_digit_format(time_point.hour)
 					+ ':' + os::datetime::ensure_two_digit_format(time_point.minute)
@@ -276,12 +276,12 @@ namespace lwlog::details
 
 	struct hour_clock_24_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::hour_clock_24,
 				os::datetime::ensure_two_digit_format(time_point.hour) 
 					+ '-'  + os::datetime::ensure_two_digit_format(time_point.minute)
@@ -291,12 +291,12 @@ namespace lwlog::details
 
 	struct hour_clock_12_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::hour_clock_12,
 				os::datetime::ensure_two_digit_format(time_point.hour)
 					+ '-' + os::datetime::ensure_two_digit_format(time_point.minute)
@@ -308,12 +308,12 @@ namespace lwlog::details
 
 	struct ampm_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::ampm,
 				time_point.hour >= 12 ? "pm" : "am"
 			);
@@ -322,12 +322,12 @@ namespace lwlog::details
 
 	struct hour_24_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::hour_24,
 				os::datetime::ensure_two_digit_format(time_point.hour)
 			);
@@ -336,12 +336,12 @@ namespace lwlog::details
 
 	struct hour_12_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::hour_12,
 				os::datetime::ensure_two_digit_format(os::datetime::to_12h(time_point.hour))
 			);
@@ -350,12 +350,12 @@ namespace lwlog::details
 
 	struct minute_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::minute,
 				os::datetime::ensure_two_digit_format(time_point.minute)
 			);
@@ -364,12 +364,12 @@ namespace lwlog::details
 
 	struct second_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::second,
 				os::datetime::ensure_two_digit_format(time_point.second)
 			);
@@ -378,12 +378,12 @@ namespace lwlog::details
 
 	struct millisecond_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::millisecond,
 				os::datetime::ensure_two_digit_format(time_point.millisecond)
 			);
@@ -392,12 +392,12 @@ namespace lwlog::details
 
 	struct microsecond_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::microsecond,
 				os::datetime::ensure_two_digit_format(time_point.microsecond)
 			);
@@ -406,12 +406,12 @@ namespace lwlog::details
 
 	struct nanosecond_formatter : public formatter
 	{
-		void format(std::string& pattern, const record_base& record) const override
+		void format(memory_buffer<>& dst, const record_base& record) const override
 		{
 			const auto& time_point{ record.time_point() };
 
 			formatter::format_attribute(
-				pattern,
+				dst,
 				flag::nanosecond,
 				os::datetime::ensure_two_digit_format(time_point.nanosecond)
 			);

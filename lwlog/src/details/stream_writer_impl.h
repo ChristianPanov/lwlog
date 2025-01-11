@@ -44,7 +44,6 @@ namespace lwlog::details
 		if (m_stream != nullptr)
 		{
 			std::fwrite(message.data(), message.size(), 1, m_stream);
-			std::fwrite("\n", 1, 1, m_stream);
 			FlushPolicy::flush(m_stream);
 		}
 	}

@@ -1,46 +1,37 @@
 #pragma once
 
-#include <cstring>
-
 namespace lwlog::details
 {
 	template<typename T>
-	void formatter::format_attribute(std::string& pattern, const flag_pair& flags, T value)
+	void formatter::format_attribute(memory_buffer<>& buffer, const flag_pair& flags, T value)
 	{
-		const std::string str_value = [&value]() {
-			if constexpr (std::is_arithmetic_v<T>)					return std::to_string(value);
-			else if constexpr (std::is_same_v<T, std::string>)		return value;
-			else if constexpr (std::is_same_v<T, std::string_view>)	return value.data();
-			else if constexpr (std::is_same_v<T, const char*>)		return value;
-			else													return "";
-		}();
-
 		const auto& [verbose, shortened] = flags;
-		while (std::strstr(pattern.data(), verbose.data()))
+
+		char conv_buffer[formatter::attribute_buffer_size]{};
+		std::size_t value_size{ convert_to_chars(conv_buffer,
+			formatter::attribute_buffer_size, value) };
+
+		std::size_t flag_pos{};
+		while ((flag_pos = buffer.data().find(verbose.data())) != std::string_view::npos)
 		{
-			pattern.replace(pattern.find(verbose), verbose.length(), str_value);
+			buffer.replace(flag_pos, verbose.length(), conv_buffer, value_size);
 		}
 
-		while (std::strstr(pattern.data(), shortened.data()))
+		while ((flag_pos = buffer.data().find(shortened.data())) != std::string_view::npos)
 		{
-			pattern.replace(pattern.find(shortened), shortened.length(), str_value);
+			buffer.replace(flag_pos, shortened.length(), conv_buffer, value_size);
 		}
 	}
 
-	template<typename T>
-	void formatter::format_attribute(std::string& pattern, std::string_view flag, T value)
+	inline void formatter::format_custom_attribute(memory_buffer<>& buffer, const attribute& attrib)
 	{
-		const std::string str_value = [&value]() {
-			if constexpr (std::is_arithmetic_v<T>)					return std::to_string(value);
-			else if constexpr (std::is_same_v<T, std::string>)		return value;
-			else if constexpr (std::is_same_v<T, std::string_view>)	return value.data();
-			else if constexpr (std::is_same_v<T, const char*>)		return value;
-			else													return "";
-		}();
+		char conv_buffer[formatter::attribute_buffer_size]{};
+		attrib.value_conv_callback(conv_buffer, formatter::attribute_buffer_size);
 
-		while (std::strstr(pattern.data(), flag.data()))
+		std::size_t flag_pos{};
+		while ((flag_pos = buffer.data().find(attrib.flag.data())) != std::string_view::npos)
 		{
-			pattern.replace(pattern.find(flag), flag.length(), str_value);
+			buffer.replace(flag_pos, attrib.flag.length(), conv_buffer, std::strlen(conv_buffer));
 		}
 	}
 }

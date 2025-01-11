@@ -1,16 +1,20 @@
 #pragma once
 
 #include "details/record.h"
+#include "details/memory_buffer.h"
 
 namespace lwlog::details
 {
 	struct formatter
 	{
-		virtual ~formatter() = default;
-		virtual void format(std::string&, const record_base&) const = 0;
+		static constexpr std::uint8_t attribute_buffer_size{ 32 };
 
-		template<typename T> static void format_attribute(std::string& pattern, const flag_pair& flags, T value);
-		template<typename T> static void format_attribute(std::string& pattern, std::string_view flag, T value);
+		virtual ~formatter() = default;
+		virtual void format(memory_buffer<>&, const record_base&) const = 0;
+
+		template<typename T> 
+		static void format_attribute(memory_buffer<>& buffer, const flag_pair& flags, T value);
+		static void format_custom_attribute(memory_buffer<>& buffer, const attribute& attrib);
 	};
 }
 

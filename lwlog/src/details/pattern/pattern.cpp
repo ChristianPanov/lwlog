@@ -4,29 +4,28 @@
 
 namespace lwlog::details
 {
-	std::string pattern::compile(const record_base& record) const
+	std::string pattern::compile(const record_base& record)
 	{
-		std::string compiled = m_pattern;
 		for (const auto& formatter : m_formatters)
-			formatter->format(compiled, record);
+			formatter->format(m_pattern_buffer, record);
 
-		for (const auto& [flags, value, callback] : m_attributes)
-			formatter::format_attribute(compiled, flags, callback());
+		for (const auto& attribute : m_attributes)
+			formatter::format_custom_attribute(m_pattern_buffer, attribute);
 
 		for (const auto& info : m_alignment_flags_info)
-			alignment_formatter::format(compiled, info);
+			alignment_formatter::format(m_pattern_buffer, info);
 
-		return compiled;
+		return m_pattern_buffer.c_str();
 	}
 
 	void pattern::parse_alignment_flags()
 	{
 		std::size_t flag_start_pos{ 0 };
-		while ((flag_start_pos = m_pattern.find_first_of("<>^", flag_start_pos)) != std::string::npos)
+		while ((flag_start_pos = m_pattern_buffer.data().find_first_of("<>^", flag_start_pos)) != std::string::npos)
 		{
 			flag_start_pos -= 1;
 
-			const std::string_view pattern_view{ m_pattern };
+			const std::string_view pattern_view{ m_pattern_buffer.data() };
 			const std::size_t flag_end_pos{ pattern_view.find(' ', flag_start_pos) };
 			const std::string_view flag_view{ pattern_view.substr(flag_start_pos, flag_end_pos - flag_start_pos) };
 
@@ -56,8 +55,8 @@ namespace lwlog::details
 					flag_view.find('}', verbose_flag_pos) - verbose_flag_pos + 1);
 			}
 
-			m_pattern.insert(pattern_view.find(to_align, flag_start_pos) + to_align.size(),
-				alignment_info::flag_end);
+			m_pattern_buffer.insert(pattern_view.find(to_align, flag_start_pos) + to_align.size(),
+                2, alignment_info::flag_end);
 
 			flag_start_pos += to_align.size();
 		}
@@ -89,26 +88,61 @@ namespace lwlog::details
 
 	void pattern::process_color_flags(bool use_color)
 	{
-		if (std::strchr(m_pattern.data(), '.'))
-		{
-			while (std::strchr(m_pattern.data(), ')'))
-			{
-				m_pattern.replace(m_pattern.find(')'), 1, use_color ? "\u001b[0m" : "");
-			}
+		const char* const reset_seq{ use_color ? "\u001b[0m" : "" };
+		const std::uint8_t reset_seq_len{ use_color ? 
+			static_cast<std::uint8_t>(4) : 
+			static_cast<std::uint8_t>(0) 
+		};
 
-			for (const auto& [key, value] : color_data)
+		std::size_t pos{ 0 };
+		while (pos < m_pattern_buffer.size())
+		{
+			if (m_pattern_buffer[pos] == '.')
 			{
-				while (std::strstr(m_pattern.data(), key.data()))
+				const std::size_t color_seq_end_pos{ m_pattern_buffer.data().find("(", pos) };
+				const std::string_view color_flag{ m_pattern_buffer.c_str() + pos, color_seq_end_pos - pos + 1 };
+
+				if (const auto it = color_data.find(color_flag); it != color_data.end())
 				{
-					m_pattern.replace(m_pattern.find(key), key.length(), use_color ? value : "");
+					const char* const color_seq{ use_color ? it->second.data() : "" };
+					const std::size_t color_seq_len{ use_color ? it->second.size() : 0 };
+
+					m_pattern_buffer.replace(pos, color_seq_end_pos - pos + 1, color_seq, color_seq_len);
+					pos += color_seq_len;
 				}
+				else
+				{
+					++pos;
+				}
+			}
+			else if (m_pattern_buffer[pos] == ')')
+			{
+				m_pattern_buffer.replace(pos, 1, reset_seq, reset_seq_len);
+				pos += reset_seq_len;
+			}
+			else
+			{
+				++pos;
 			}
 		}
 	}
 
+	void pattern::save_pattern_state()
+	{
+		std::memcpy(m_chached_pattern, m_pattern_buffer.c_str(), m_pattern_buffer.size());
+	}
+
+	void pattern::reset_pattern()
+	{
+		m_pattern_buffer.reset();
+		m_pattern_buffer.append(m_chached_pattern);
+	}
+
 	void pattern::set_pattern(std::string_view pattern)
 	{
-		m_pattern = pattern;
+		m_pattern_buffer.reset();
+		m_pattern_buffer.append(pattern);
+		m_pattern_buffer.append('\n');
 	}
 
 	void pattern::add_attribute(std::string_view flag, attrib_value value)
@@ -123,7 +157,7 @@ namespace lwlog::details
 
 	std::vector<std::string_view> pattern::parse_verbose_flags() const
 	{
-		const std::string_view pattern_view{ m_pattern };
+		const std::string_view pattern_view{ m_pattern_buffer.data() };
 
 		std::vector<std::string_view> flags;
 		flags.reserve(std::count(pattern_view.begin(), pattern_view.end(), '{'));
@@ -143,7 +177,7 @@ namespace lwlog::details
 	std::vector<std::string_view> pattern::parse_short_flags() const
 	{
 		constexpr std::uint8_t flag_size{ 2 };
-		const std::string_view pattern_view{ m_pattern };
+		const std::string_view pattern_view{ m_pattern_buffer.data() };
 
 		std::vector<std::string_view> flags;
 		flags.reserve(pattern_view.size() / flag_size);

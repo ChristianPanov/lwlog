@@ -3,6 +3,8 @@
 #include <string>
 #include <cstdint>
 
+#include "details/memory_buffer.h"
+
 namespace lwlog::details
 {
 	struct alignment_info
@@ -26,12 +28,15 @@ namespace lwlog::details
 
 	struct alignment_formatter
 	{
-		static void format(std::string& pattern, const alignment_info& alignment_flag_info);
-		static std::string align(const std::string& to_align, std::uint8_t width,
-			char fill_char, alignment_info::align_side side);
+		static void format(memory_buffer<>& buffer, const alignment_info& alignment_flag_info);
+		static void apply_padding(memory_buffer<>& buffer, std::size_t to_align_pos, std::size_t to_align_size, 
+			std::uint8_t width, char fill_char, alignment_info::align_side side);
 
-		static std::string align_left(const std::string& to_align, std::uint8_t width, char fill_char);
-		static std::string align_right(const std::string& to_align, std::uint8_t width, char fill_char);
-		static std::string align_center(const std::string& to_align, std::uint8_t width, char fill_char);
+		static void pad_left(memory_buffer<>& buffer, std::size_t to_align_pos, std::size_t to_align_size, 
+			std::uint8_t width, char fill_char);
+		static void pad_right(memory_buffer<>& buffer, std::size_t to_align_pos, std::size_t to_align_size,
+			std::uint8_t width, char fill_char);
+		static void pad_center(memory_buffer<>& buffer, std::size_t to_align_pos, std::size_t to_align_size,
+			std::uint8_t width, char fill_char);
 	};
 }

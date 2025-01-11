@@ -1,4 +1,5 @@
 #include "alignment_formatter.h"
+#include <iostream>
 
 namespace lwlog::details
 {
@@ -9,77 +10,76 @@ namespace lwlog::details
 		, flag		{ flag		}
 	{}
 
-	void alignment_formatter::format(std::string& pattern, const alignment_info& alignment_flag_info)
+	void alignment_formatter::format(memory_buffer<>& buffer, const alignment_info& alignment_flag_info)
 	{
 		constexpr std::size_t flag_end_indicator_size{ 2 };
 
-		const std::size_t flag_size		{ alignment_flag_info.flag.size()								};
-		const std::size_t flag_pos		{ pattern.find(alignment_flag_info.flag)						};
-		const std::size_t flag_end_pos	{ pattern.find(alignment_info::flag_end, flag_pos + flag_size)	};
-		const std::size_t to_align_size	{ flag_end_pos - flag_pos - flag_size							};
+		const std::size_t flag_size		{ alignment_flag_info.flag.size() };
+		const std::size_t flag_pos		{ buffer.data().find(alignment_flag_info.flag) };
+		const std::size_t flag_end_pos	{ buffer.data().find(alignment_info::flag_end, flag_pos + flag_size) };
+		const std::size_t to_align_size	{ flag_end_pos - flag_pos - flag_size };
 
-		const auto aligned{ alignment_formatter::align(
-			pattern.substr(flag_pos + flag_size, to_align_size), 
-			alignment_flag_info.width, 
+		alignment_formatter::apply_padding(buffer, 
+			flag_end_pos - to_align_size, to_align_size, 
+			alignment_flag_info.width,
 			alignment_flag_info.fill_char, 
 			alignment_flag_info.side
-		) };
+		);
 
-		pattern.replace(flag_pos, to_align_size + flag_size + flag_end_indicator_size, aligned);
+		buffer.erase(flag_pos + flag_size + alignment_flag_info.width, flag_end_indicator_size);
+		buffer.erase(flag_pos, flag_size);
 	}
 
-	std::string alignment_formatter::align(const std::string& to_align, std::uint8_t width, char fill_char, 
-		alignment_info::align_side side)
+	void alignment_formatter::apply_padding(memory_buffer<>& buffer, std::size_t to_align_pos, std::size_t to_align_size,
+		std::uint8_t width, char fill_char, alignment_info::align_side side)
 	{
 		switch (side)
 		{
-		case alignment_info::align_side::left:		return align_left(to_align, width, fill_char);
-		case alignment_info::align_side::right:		return align_right(to_align, width, fill_char);
-		case alignment_info::align_side::center:	return align_center(to_align, width, fill_char);
+		case alignment_info::align_side::left:		
+			pad_left(buffer, to_align_pos, to_align_size, width, fill_char);
+			break;
+		case alignment_info::align_side::right:		
+			pad_right(buffer, to_align_pos, to_align_size, width, fill_char);
+			break;
+		case alignment_info::align_side::center:	
+			pad_center(buffer, to_align_pos, to_align_size, width, fill_char);
+			break;
 		}
 	}
 
-	std::string alignment_formatter::align_left(const std::string& to_align, std::uint8_t width, char fill_char)
+	void alignment_formatter::pad_left(memory_buffer<>& buffer, std::size_t to_align_pos,
+		std::size_t to_align_size, std::uint8_t width, char fill_char)
 	{
-		if (width <= to_align.size()) return to_align;
+		const std::size_t padding_width{ width - to_align_size };
 
-		std::string result;
-		result.reserve(width);
+		char padding[12]{};
+		std::memset(padding, fill_char, padding_width);
 
-		result.append(to_align);
-		result.append(width - to_align.size(), fill_char);
-
-		return result;
+        buffer.insert(to_align_pos, padding_width, padding);
 	}
 
-	std::string alignment_formatter::align_right(const std::string& to_align, std::uint8_t width, char fill_char)
+	void alignment_formatter::pad_right(memory_buffer<>& buffer, std::size_t to_align_pos,
+		std::size_t to_align_size, std::uint8_t width, char fill_char)
 	{
-		if (width <= to_align.size()) return to_align;
+		const std::size_t padding_width{ width - to_align_size };
 
-		std::string result;
-		result.reserve(width);
+		char padding[12]{};
+		std::memset(padding, fill_char, padding_width);
 
-		result.append(width - to_align.size(), fill_char);
-		result.append(to_align);
-
-		return result;
+		buffer.insert(to_align_pos + to_align_size, padding_width, padding);
 	}
 
-	std::string alignment_formatter::align_center(const std::string& to_align, std::uint8_t width, char fill_char)
+	void alignment_formatter::pad_center(memory_buffer<>& buffer, std::size_t to_align_pos,
+		std::size_t to_align_size, std::uint8_t width, char fill_char)
 	{
-		if (width <= to_align.size()) return to_align;
+		const std::size_t total_padding{ width - to_align_size };
+		const std::size_t left_padding{ total_padding / 2 };
+		const std::size_t right_padding{ total_padding - left_padding };
 
-		const auto total_padding{ width - to_align.size()		};
-		const auto padding_left	{ total_padding / 2				};
-		const auto padding_right{ total_padding - padding_left	};
+		char padding[12]{};
+		std::memset(padding, fill_char, right_padding);
 
-		std::string result;
-		result.reserve(width);
-
-		result.append(padding_left, fill_char);
-		result.append(to_align);
-		result.append(padding_right, fill_char);
-
-		return result;
+		buffer.insert(to_align_pos, left_padding, padding);
+		buffer.insert(to_align_pos + to_align_size + left_padding, right_padding, padding);
 	}
 }
