@@ -7,7 +7,7 @@ namespace lwlog::details
 {
 	struct formatter
 	{
-		static constexpr std::uint8_t attribute_buffer_size{ 32 };
+		static constexpr std::uint8_t attribute_buffer_size{ 128 };
 
 		virtual ~formatter() = default;
 		virtual void format(memory_buffer<>&, const record_base&) const = 0;

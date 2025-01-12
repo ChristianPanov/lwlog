@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "details/memory_buffer.h"
+
 #if __cplusplus < 202002L
 	#ifdef FMT_VERSION
 		#include <fmt/format.h>
@@ -12,12 +14,7 @@
 
 namespace lwlog::details
 {
-	using format_args_list = std::initializer_list<const char*>;
-
-	static std::string format_args_impl(std::string_view format, format_args_list args);
-	static std::string format_args(std::string_view format, format_args_list args);
-
-	template<typename T> static const char* to_raw_string(T arg);
+	static void format_args(memory_buffer<256>& message_buffer, char(&args_buffer)[10][24]);
 }
 
 #include "argument_format_impl.h"

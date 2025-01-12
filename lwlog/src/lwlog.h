@@ -40,32 +40,6 @@ namespace lwlog
 	using async_file_logger_mt		= async_logger_mt<sinks::file_sink>;
 }
 
-namespace lwlog
-{
-	void init_default_logger();
-	void register_logger(logger_ptr logger);
-	void set_automatic_registry(bool is_registry_automatic);
-	void drop(std::string_view logger_name);
-	void drop_all();
-	void apply_to_all(const std::function<void(logger_ptr)>& function);
-	bool is_registry_automatic();
-	const std::unique_ptr<interface::logger>& default_logger();
-	logger_ptr get(std::string_view logger_name);
-
-	void set_level_filter(level log_level);
-	void set_pattern(std::string_view pattern);
-
-	void set_topic_separator(std::string_view separator);
-	void start_topic(std::string_view name);
-	void end_topic();
-
-	template<typename... Args> void info(const details::log_message& log_msg, Args&&... args);
-	template<typename... Args> void warning(const details::log_message& log_msg, Args&&... args);
-	template<typename... Args> void error(const details::log_message& log_msg, Args&&... args);
-	template<typename... Args> void critical(const details::log_message& log_msg, Args&&... args);
-	template<typename... Args> void debug(const details::log_message& log_msg, Args&&... args);
-}
-
 #ifndef LWLOG_DISABLE
 #define LWLOG_INIT_DEFAULT_LOGGER() lwlog::init_default_logger()
 #else

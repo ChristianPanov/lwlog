@@ -2,6 +2,8 @@
 
 #include "lwlog.h"
 
+#include "buffer_sizes.h"
+
 static size_t allocation_count = 0;
 
 // Override global new operator
@@ -20,9 +22,16 @@ int main()
 		lwlog::disable_topics
 	>;
 
+	using memory_buffer_sizes = lwlog::memory_buffer_sizes<
+		lwlog::pattern_buffer_size<128>, 
+		lwlog::message_buffer_size<128>,
+		lwlog::padding_buffer_size<24>,
+		lwlog::conv_buffer_size<64>
+	>;
+
 	auto console = std::make_shared<
 		lwlog::logger<
-			logger_config,
+			lwlog::default_config,
 			lwlog::asynchronous_policy<
 				lwlog::default_overflow_policy,
 				lwlog::default_async_queue_size,
@@ -35,7 +44,7 @@ int main()
 	>("CONSOLE");
 
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
-	console->set_pattern(".red([%T] [%n]) .dark_green([:^10{level}]): .cyan(%v) TEXT");
+	console->set_pattern(".red([%T] [%n]) .dark_green([{level}]): .cyan(%v) TEXT");
 
 	lwlog::details::memory_buffer<> buffer;
 	buffer.append(".red([%T] [%n]) .dark_green([:^10{level}:|]): .cyan(%v) TEXT");
@@ -45,7 +54,7 @@ int main()
 	{
 		Timer timer("timer");
 		//lwlog::details::alignment_formatter::format(buffer, info);
-		console->critical("First critical message");
+		console->critical("First {} critical message {}");
 	}
 
 	//lwlog::details::memory_buffer<> buffer;

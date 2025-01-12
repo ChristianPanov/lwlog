@@ -23,10 +23,10 @@ namespace lwlog
 		template<typename Config, typename ConcurrencyModelPolicy>
 		static void init(backend<Config, ConcurrencyModelPolicy>&) {}
 
-		template<typename Config, typename ConcurrencyModelPolicy>
+		template<typename Config, typename ConcurrencyModelPolicy, typename... Args>
 		static void log(backend<Config, ConcurrencyModelPolicy>& backend, 
 			const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
-			level log_level, const details::source_meta& meta, details::format_args_list args);
+			level log_level, const details::source_meta& meta, Args&&... args);
 	};
 
 	template<
@@ -58,10 +58,10 @@ namespace lwlog
 		template<typename Config, typename ConcurrencyModelPolicy>
 		static void init(backend<Config, ConcurrencyModelPolicy>& backend);
 
-		template<typename Config, typename ConcurrencyModelPolicy>
+		template<typename Config, typename ConcurrencyModelPolicy, typename... Args>
 		static void log(backend<Config, ConcurrencyModelPolicy>& backend, 
 			const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
-			level log_level, const details::source_meta& meta, details::format_args_list args);
+			level log_level, const details::source_meta& meta, Args&&... args);
 	};
 }
 

@@ -25,7 +25,7 @@ namespace lwlog::details
 			formatter::format_attribute(
 				dst,
 				flag::message,
-				record.message
+				record.message_buffer.data()
 			);
 		}
 	};

@@ -4,7 +4,7 @@
 #include "details/pattern/pattern.h"
 #include "policy/flush_policy.h"
 #include "policy/threading_policy.h"
-#include "interface/sink_interface.h"
+#include "sink_interface.h"
 
 namespace lwlog::sinks
 {

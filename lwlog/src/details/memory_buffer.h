@@ -35,12 +35,6 @@ namespace lwlog::details
         std::size_t m_size{};
     };
 
-    template<std::size_t Capacity = 256>
-    std::size_t memory_buffer_find(const memory_buffer<Capacity>& buffer, const char* str, std::size_t offset = 0);
-
-    template<std::size_t Capacity = 256>
-    std::size_t memory_buffer_find(const memory_buffer<Capacity>& buffer, char ch, std::size_t offset = 0);
-
     template<typename T>
     std::size_t convert_to_chars(char* const __restrict buffer, std::size_t buffer_size, T value)
     {
@@ -48,6 +42,7 @@ namespace lwlog::details
 		{
 			const std::to_chars_result res{ std::to_chars(buffer, buffer + buffer_size, value) };
 			const std::uint8_t value_size = res.ptr - buffer;
+            buffer[value_size] = '\0';
 
             return value_size;
 		}
@@ -62,16 +57,19 @@ namespace lwlog::details
 			{
 				value_size = value.size();
                 std::memcpy(buffer, value.data(), value_size);
+                buffer[value_size] = '\0';
 			}
 			else if constexpr (std::is_same_v<T, const char*>)
 			{
 				value_size = std::strlen(value);
                 std::memcpy(buffer, value, value_size);
+                buffer[value_size] = '\0';
 			}
             else if constexpr (std::is_same_v<T, char*>)
             {
                 value_size = std::strlen(value);
                 std::memcpy(buffer, value, value_size);
+                buffer[value_size] = '\0';
             }
 
             return value_size;

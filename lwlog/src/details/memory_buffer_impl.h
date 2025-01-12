@@ -114,16 +114,4 @@ namespace lwlog::details
     {
         return m_buffer[index];
     }
-
-    template<std::size_t Capacity>
-    std::size_t memory_buffer_find(const memory_buffer<Capacity>& buffer, const char* str, std::size_t offset)
-    {
-        return buffer.data().find(str, offset);
-    }
-
-    template<std::size_t Capacity>
-    std::size_t memory_buffer_find(const memory_buffer<Capacity>& buffer, char ch, std::size_t offset)
-    {
-        return buffer.data().find(ch, offset);
-    }
 }

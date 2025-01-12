@@ -1,14 +1,26 @@
 #pragma once
 
+#include "details/memory_buffer.h"
+
+#include <charconv>
+#include <iostream>
+
 namespace lwlog
 {
-    template<typename Config, typename ConcurrencyModelPolicy>
+    template<typename Config, typename ConcurrencyModelPolicy, typename... Args>
     void synchronous_policy::log(backend<Config, ConcurrencyModelPolicy>& backend, 
         const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
-        level log_level, const details::source_meta& meta, details::format_args_list args)
+        level log_level, const details::source_meta& meta, Args&&... args)
     {
-        const auto formatted_message{ details::format_args(message, args) };
-        const details::record<Config> record{ formatted_message, log_level, meta, topic_registry };
+        char args_buffers[10][24]{};
+        if (sizeof...(args) > 0)
+        {
+            std::uint8_t buffer_index{ 0 };
+            (details::convert_to_chars(args_buffers[buffer_index++], 24, std::forward<Args>(args)), ...);
+        }
+
+        details::record<Config> record{ message, log_level, meta, topic_registry };
+        details::format_args(record.message_buffer, args_buffers);
 
         for (const auto& sink : backend.sink_storage)
         {
@@ -27,8 +39,10 @@ namespace lwlog
         std::string_view			                        message;
         level						                        log_level;
         details::source_meta		                        meta;
-        details::format_args_list                           args;
         details::topic_registry<typename Config::topic_t>   topic_registry;
+
+        std::function<void(char(&args_buffers)[10][24])>    lazy_convert_to_chars;
+        char						                        args_buffers[10][24]{};
     };
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
@@ -48,15 +62,20 @@ namespace lwlog
                 {
                     if (!backend.queue.is_empty())
                     {
-                        const auto& item{ backend.queue.dequeue() };
-                        const auto formatted_message{ details::format_args(item.message, item.args) };
+                        auto& item{ backend.queue.dequeue() };
 
-                        const details::record<Config> record{ 
-                            formatted_message, 
-                            item.log_level, 
+                        details::record<Config> record{ 
+                            item.message, 
+                            item.log_level,
                             item.meta, 
                             item.topic_registry 
                         };
+
+                        if (item.lazy_convert_to_chars)
+                        {
+                            item.lazy_convert_to_chars(item.args_buffers);
+                            details::format_args(record.message_buffer, item.args_buffers);
+                        }
 
                         for (const auto& sink : backend.sink_storage)
                         {
@@ -71,13 +90,26 @@ namespace lwlog
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
-    template<typename Config, typename ConcurrencyModelPolicy>
+    template<typename Config, typename ConcurrencyModelPolicy, typename... Args>
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::log(
         backend<Config, ConcurrencyModelPolicy>& backend,
         const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
-        level log_level, const details::source_meta& meta, details::format_args_list args)
+        level log_level, const details::source_meta& meta, Args&&... args)
     {
-        backend.queue.enqueue({ message, log_level, meta, args, topic_registry });
+        if constexpr(sizeof...(args) == 0)
+        {
+            backend.queue.enqueue({ message, log_level, meta, topic_registry });
+        }
+        else
+        {
+            backend.queue.enqueue({ message, log_level, meta, topic_registry, 
+                [args...](char(&args_buffers)[10][24])
+                { 
+                    std::uint8_t buffer_index{ 0 };
+                    (details::convert_to_chars(args_buffers[buffer_index++], 24, args), ...);
+                } 
+            });
+        }
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>

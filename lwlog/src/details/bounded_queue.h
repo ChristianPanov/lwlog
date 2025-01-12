@@ -16,7 +16,7 @@ namespace lwlog::details
 
     public:
         void enqueue(T&& item);
-        const T& dequeue();
+        T& dequeue();
         bool is_empty() const;
 
     private:

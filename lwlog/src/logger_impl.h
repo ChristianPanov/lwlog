@@ -1,7 +1,6 @@
 #pragma once
 
 #include "sinks/sink_factory.h"
-#include "registry.h"
 
 namespace lwlog
 {
@@ -13,9 +12,6 @@ namespace lwlog
 		: m_name{ name }
 	{
 		LogExecutionPolicy::template init<Config>(m_backend);
-
-		if(registry::instance().is_registry_automatic()) 
-			registry::instance().register_logger(this);
 
 		m_backend.sink_storage = { sinks::sink_factory<Sinks<FlushPolicy, ThreadingPolicy>>::request(
 			std::forward<SinkParams>(params)...
@@ -154,49 +150,56 @@ namespace lwlog
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
+	template<typename... Args>
 	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::log(
-		const details::log_message& log_msg, level log_level, details::format_args_list args)
+		const details::log_message& log_msg, level log_level, Args&&... args)
 	{
-		LogExecutionPolicy::template log<Config>(m_backend, m_topics, log_msg.message, log_level, log_msg.meta, args);
+		LogExecutionPolicy::template log<Config>(m_backend, m_topics, 
+			log_msg.message, log_level, log_msg.meta, std::forward<Args>(args)...);
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
-	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::info_impl(
-		const details::log_message& log_msg, details::format_args_list args)
+	template<typename... Args>
+	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::info(
+		const details::log_message& log_msg, Args&&... args)
 	{
-		this->log(log_msg, level::info, args);
+		this->log(log_msg, level::info, std::forward<Args>(args)...);
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
-	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::warning_impl(
-		const details::log_message& log_msg, details::format_args_list args)
+	template<typename... Args>
+	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::warning(
+		const details::log_message& log_msg, Args&&... args)
 	{
-		this->log(log_msg, level::warning, args);
+		this->log(log_msg, level::warning, std::forward<Args>(args)...);
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
-	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::error_impl(
-		const details::log_message& log_msg, details::format_args_list args)
+	template<typename... Args>
+	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::error(
+		const details::log_message& log_msg, Args&&... args)
 	{
-		this->log(log_msg, level::error, args);
+		this->log(log_msg, level::error, std::forward<Args>(args)...);
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
-	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::critical_impl(
-		const details::log_message& log_msg, details::format_args_list args)
+	template<typename... Args>
+	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::critical(
+		const details::log_message& log_msg, Args&&... args)
 	{
-		this->log(log_msg, level::critical, args);
+		this->log(log_msg, level::critical, std::forward<Args>(args)...);
 	}
 
 	template<typename Config, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename> typename... Sinks>
-	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::debug_impl(
-		const details::log_message& log_msg, details::format_args_list args)
+	template<typename... Args>
+	void logger<Config, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::debug(
+		const details::log_message& log_msg, Args&&... args)
 	{
-		this->log(log_msg, level::debug, args);
+		this->log(log_msg, level::debug, std::forward<Args>(args)...);
 	}
 }

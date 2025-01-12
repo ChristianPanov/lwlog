@@ -3,10 +3,11 @@
 namespace lwlog::details
 {
     inline record_base::record_base(std::string_view message, level log_level, const source_meta& meta)
-		: message{ message }
-		, log_level{ log_level }
+		: log_level{ log_level }
 		, meta{ meta }
-	{}
+	{
+		message_buffer.append(message);
+	}
 
 	template<typename Config>
 	record<Config>::record(std::string_view message, level log_level, const source_meta& meta, 

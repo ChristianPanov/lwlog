@@ -5,6 +5,7 @@
 #include "topic_registry.h"
 #include "os/time_point.h"
 #include "os/os.h"
+#include "details/memory_buffer.h"
 
 namespace lwlog::details
 {
@@ -18,7 +19,7 @@ namespace lwlog::details
 		virtual const os::execution_context_base& exec_context() const = 0;
 		virtual const topic_registry_base& get_topic_registry() const = 0;
 
-		std::string_view message;
+		memory_buffer<256> message_buffer;
 		level log_level;
 		source_meta meta;
 	};
