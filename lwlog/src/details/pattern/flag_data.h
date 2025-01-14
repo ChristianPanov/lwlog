@@ -1,5 +1,7 @@
 #pragma once
 
+#include "attribute.h"
+
 namespace lwlog::details::flag
 {
 	inline constexpr flag_pair level		{ "{level}",		"%l" };

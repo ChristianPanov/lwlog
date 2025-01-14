@@ -2,24 +2,21 @@
 
 #include "details/memory_buffer.h"
 
-#include <charconv>
-#include <iostream>
-
 namespace lwlog
 {
-    template<typename Config, typename ConcurrencyModelPolicy, typename... Args>
-    void synchronous_policy::log(backend<Config, ConcurrencyModelPolicy>& backend, 
+    template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
+    void synchronous_policy::log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend,
         const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
         level log_level, const details::source_meta& meta, Args&&... args)
     {
-        char args_buffers[10][24]{};
+        char args_buffers[BufferLimits::arg_count][BufferLimits::argument]{};
         if (sizeof...(args) > 0)
         {
             std::uint8_t buffer_index{ 0 };
-            (details::convert_to_chars(args_buffers[buffer_index++], 24, std::forward<Args>(args)), ...);
+            (details::convert_to_chars(args_buffers[buffer_index++], BufferLimits::argument, std::forward<Args>(args)), ...);
         }
 
-        details::record<Config> record{ message, log_level, meta, topic_registry };
+        details::record<Config, BufferLimits> record{ message, log_level, meta, topic_registry };
         details::format_args(record.message_buffer, args_buffers);
 
         for (const auto& sink : backend.sink_storage)
@@ -32,23 +29,24 @@ namespace lwlog
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
-    template<typename Config, typename ConcurrencyModelPolicy>
+    template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
     struct asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::backend<
-        Config, ConcurrencyModelPolicy>::queue_item
+        Config, BufferLimits, ConcurrencyModelPolicy>::queue_item
     {
         std::string_view			                        message;
         level						                        log_level;
         details::source_meta		                        meta;
         details::topic_registry<typename Config::topic_t>   topic_registry;
 
-        std::function<void(char(&args_buffers)[10][24])>    lazy_convert_to_chars;
-        char						                        args_buffers[10][24]{};
+        std::function<void(char(&args_buffers)
+            [BufferLimits::arg_count][BufferLimits::argument])> lazy_convert_to_chars;
+        char args_buffers[BufferLimits::arg_count][BufferLimits::argument]{};
     };
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
-    template<typename Config, typename ConcurrencyModelPolicy>
+    template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::init(
-        backend<Config, ConcurrencyModelPolicy>& backend)
+        backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend)
     {
         backend.shutdown.store(false, std::memory_order_relaxed);
         backend.worker_thread = std::thread([&backend]() 
@@ -64,7 +62,7 @@ namespace lwlog
                     {
                         auto& item{ backend.queue.dequeue() };
 
-                        details::record<Config> record{ 
+                        details::record<Config, BufferLimits> record{
                             item.message, 
                             item.log_level,
                             item.meta, 
@@ -74,7 +72,7 @@ namespace lwlog
                         if (item.lazy_convert_to_chars)
                         {
                             item.lazy_convert_to_chars(item.args_buffers);
-                            details::format_args(record.message_buffer, item.args_buffers);
+                            details::format_args<BufferLimits>(record.message_buffer, item.args_buffers);
                         }
 
                         for (const auto& sink : backend.sink_storage)
@@ -90,9 +88,9 @@ namespace lwlog
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
-    template<typename Config, typename ConcurrencyModelPolicy, typename... Args>
+    template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::log(
-        backend<Config, ConcurrencyModelPolicy>& backend,
+        backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend,
         const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
         level log_level, const details::source_meta& meta, Args&&... args)
     {
@@ -102,19 +100,19 @@ namespace lwlog
         }
         else
         {
-            backend.queue.enqueue({ message, log_level, meta, topic_registry, 
-                [args...](char(&args_buffers)[10][24])
-                { 
+            const auto lazy_convert_to_chars{ [args...](char(&args_buffers)
+                [BufferLimits::arg_count][BufferLimits::argument])
+                {
                     std::uint8_t buffer_index{ 0 };
-                    (details::convert_to_chars(args_buffers[buffer_index++], 24, args), ...);
-                } 
-            });
+                    (details::convert_to_chars(args_buffers[buffer_index++], BufferLimits::argument, args), ...);
+                } };
+            backend.queue.enqueue({ message, log_level, meta, topic_registry, lazy_convert_to_chars });
         }
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
-    template<typename Config, typename ConcurrencyModelPolicy>
-    asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::backend<Config, ConcurrencyModelPolicy>::~backend()
+    template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
+    asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::backend<Config, BufferLimits, ConcurrencyModelPolicy>::~backend()
     {
         shutdown.store(true, std::memory_order_relaxed);
 

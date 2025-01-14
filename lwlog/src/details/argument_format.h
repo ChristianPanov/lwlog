@@ -14,7 +14,9 @@
 
 namespace lwlog::details
 {
-	static void format_args(memory_buffer<256>& message_buffer, char(&args_buffer)[10][24]);
+	template<typename BufferLimits>
+	static void format_args(memory_buffer<BufferLimits::message>& message_buffer,
+		char(&args_buffers)[BufferLimits::arg_count][BufferLimits::argument]);
 }
 
 #include "argument_format_impl.h"

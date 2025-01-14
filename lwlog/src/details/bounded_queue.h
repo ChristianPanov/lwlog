@@ -24,7 +24,7 @@ namespace lwlog::details
         void enqueue(T&& item, [[maybe_unused]] mpsc_model_policy);
 
     private:
-        std::vector<T> m_storage{ Capacity + 1, T{} };
+        T m_storage[Capacity + 1]{};
         alignas(cache_line_size) std::atomic_size_t m_write_index{};
         alignas(cache_line_size) std::atomic_size_t m_read_index{};
     };

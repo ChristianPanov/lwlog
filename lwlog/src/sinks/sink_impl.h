@@ -2,8 +2,8 @@
 
 namespace lwlog::sinks
 {
-	template<bool EnableAnsiColors, typename ThreadingPolicy>
-	sink<EnableAnsiColors, ThreadingPolicy>::sink()
+	template<bool EnableAnsiColors, typename Config, typename BufferLimits, typename ThreadingPolicy>
+	sink<EnableAnsiColors, Config, BufferLimits, ThreadingPolicy>::sink()
 	{
 		if (!details::os::are_ansi_colors_enabled())
 		{
@@ -28,8 +28,8 @@ namespace lwlog::sinks
 		});
 	}
 
-	template<bool EnableAnsiColors, typename ThreadingPolicy>
-	bool sink<EnableAnsiColors, ThreadingPolicy>::should_sink(level log_level) const
+	template<bool EnableAnsiColors, typename Config, typename BufferLimits, typename ThreadingPolicy>
+	bool sink<EnableAnsiColors, Config, BufferLimits, ThreadingPolicy>::should_sink(level log_level) const
 	{
 		Lock lock(m_mtx);
 		
@@ -42,35 +42,35 @@ namespace lwlog::sinks
 		return false;
 	}
 
-	template<bool EnableAnsiColors, typename ThreadingPolicy>
-	void sink<EnableAnsiColors, ThreadingPolicy>::set_level_filter(level level_filter)
+	template<bool EnableAnsiColors, typename Config, typename BufferLimits, typename ThreadingPolicy>
+	void sink<EnableAnsiColors, Config, BufferLimits, ThreadingPolicy>::set_level_filter(level level_filter)
 	{
 		Lock lock(m_mtx);
 		m_level_filter = level_filter;
 	}
 
-	template<bool EnableAnsiColors, typename ThreadingPolicy>
-	void sink<EnableAnsiColors, ThreadingPolicy>::set_pattern(std::string_view pattern)
+	template<bool EnableAnsiColors, typename Config, typename BufferLimits, typename ThreadingPolicy>
+	void sink<EnableAnsiColors, Config, BufferLimits, ThreadingPolicy>::set_pattern(std::string_view pattern)
 	{
 		Lock lock(m_mtx);
 		m_pattern.set_pattern(pattern);
 		m_pattern.parse_alignment_flags();
 		m_pattern.request_flag_formatters();
 		m_pattern.process_color_flags(EnableAnsiColors);
-		m_pattern.save_pattern_state();
+		m_pattern.cache_pattern();
 	}
 
-	template<bool EnableAnsiColors, typename ThreadingPolicy>
-	void sink<EnableAnsiColors, ThreadingPolicy>::add_attribute(std::string_view flag,
+	template<bool EnableAnsiColors, typename Config, typename BufferLimits, typename ThreadingPolicy>
+	void sink<EnableAnsiColors, Config, BufferLimits, ThreadingPolicy>::add_attribute(std::string_view flag,
 		details::attrib_value value)
 	{
 		Lock lock(m_mtx);
 		m_pattern.add_attribute(flag, value);
 	}
 
-	template<bool EnableAnsiColors, typename ThreadingPolicy>
-	void sink<EnableAnsiColors, ThreadingPolicy>::add_attribute(std::string_view flag, details::attrib_value value,
-		const details::attrib_callback_t& fn)
+	template<bool EnableAnsiColors, typename Config, typename BufferLimits, typename ThreadingPolicy>
+	void sink<EnableAnsiColors, Config, BufferLimits, ThreadingPolicy>::add_attribute(std::string_view flag, 
+		details::attrib_value value, const details::attrib_callback_t& fn)
 	{
 		Lock lock(m_mtx);
 		m_pattern.add_attribute(flag, value, fn);

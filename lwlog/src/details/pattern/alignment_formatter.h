@@ -26,17 +26,20 @@ namespace lwlog::details
 		std::string flag;
 	};
 
+	template<typename BufferLimits>
 	struct alignment_formatter
 	{
-		static void format(memory_buffer<>& buffer, const alignment_info& alignment_flag_info);
-		static void apply_padding(memory_buffer<>& buffer, std::size_t to_align_pos, std::size_t to_align_size, 
-			std::uint8_t width, char fill_char, alignment_info::align_side side);
+		static void format(memory_buffer<BufferLimits::pattern>& buffer, const alignment_info& alignment_flag_info);
+		static void apply_padding(memory_buffer<BufferLimits::pattern>& buffer, std::size_t to_align_pos,
+			std::size_t to_align_size, std::uint8_t width, char fill_char, alignment_info::align_side side);
 
-		static void pad_left(memory_buffer<>& buffer, std::size_t to_align_pos, std::size_t to_align_size, 
-			std::uint8_t width, char fill_char);
-		static void pad_right(memory_buffer<>& buffer, std::size_t to_align_pos, std::size_t to_align_size,
-			std::uint8_t width, char fill_char);
-		static void pad_center(memory_buffer<>& buffer, std::size_t to_align_pos, std::size_t to_align_size,
-			std::uint8_t width, char fill_char);
+		static void pad_left(memory_buffer<BufferLimits::pattern>& buffer, std::size_t to_align_pos,
+			std::size_t to_align_size, std::uint8_t width, char fill_char);
+		static void pad_right(memory_buffer<BufferLimits::pattern>& buffer, std::size_t to_align_pos,
+			std::size_t to_align_size, std::uint8_t width, char fill_char);
+		static void pad_center(memory_buffer<BufferLimits::pattern>& buffer, std::size_t to_align_pos,
+			std::size_t to_align_size, std::uint8_t width, char fill_char);
 	};
 }
+
+#include "alignment_formatter_impl.h"

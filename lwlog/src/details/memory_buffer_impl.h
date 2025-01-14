@@ -114,4 +114,40 @@ namespace lwlog::details
     {
         return m_buffer[index];
     }
+
+    template<typename T>
+    void convert_to_chars(char* const __restrict buffer, std::size_t buffer_size, T value)
+    {
+        if constexpr (std::is_arithmetic_v<T>)
+        {
+            const std::to_chars_result res{ std::to_chars(buffer, buffer + buffer_size, value) };
+            buffer[res.ptr - buffer] = '\0';
+        }
+        else if constexpr (std::is_same_v<T, std::string_view> ||
+            std::is_same_v<T, std::string> ||
+            std::is_same_v<T, const char*> || std::is_same_v<T, char*>)
+        {
+            std::size_t value_size{};
+
+            if constexpr (std::is_same_v<T, std::string_view> ||
+                std::is_same_v<T, std::string>)
+            {
+                value_size = value.size();
+                std::memcpy(buffer, value.data(), value_size);
+                buffer[value_size] = '\0';
+            }
+            else if constexpr (std::is_same_v<T, const char*>)
+            {
+                value_size = std::strlen(value);
+                std::memcpy(buffer, value, value_size);
+                buffer[value_size] = '\0';
+            }
+            else if constexpr (std::is_same_v<T, char*>)
+            {
+                value_size = std::strlen(value);
+                std::memcpy(buffer, value, value_size);
+                buffer[value_size] = '\0';
+            }
+        }
+    }
 }

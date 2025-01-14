@@ -2,17 +2,17 @@
 
 namespace lwlog::sinks
 {
-	template<typename Sink>
+	template<typename Config, typename BufferLimits, typename Sink>
 	class sink_factory
 	{
 	public:
 		template<typename... SinkParams>
-		static sink_ptr request(SinkParams&&... params);
+		static sink_ptr<Config, BufferLimits> request(SinkParams&&... params);
 	};
 
-	template<typename Sink>
+	template<typename Config, typename BufferLimits, typename Sink>
 	template<typename... SinkParams>
-	[[nodiscard]] sink_ptr sink_factory<Sink>::request(SinkParams&&... params)
+	[[nodiscard]] sink_ptr<Config, BufferLimits> sink_factory<Config, BufferLimits, Sink>::request(SinkParams&&... params)
 	{
 		if constexpr (std::is_constructible_v<Sink, SinkParams...>)
 		{
@@ -22,6 +22,6 @@ namespace lwlog::sinks
 		{
 			return std::make_shared<Sink>();
 		}
-		return sink_ptr{};
+		return sink_ptr<Config, BufferLimits>{};
 	}
 }

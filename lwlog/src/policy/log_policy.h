@@ -14,17 +14,18 @@ namespace lwlog
 
 	struct synchronous_policy
 	{
-		template<typename Config, typename ConcurrencyModelPolicy>
+		template<typename Config, typename BufferLimits, 
+			typename ConcurrencyModelPolicy>
 		struct backend
 		{
-			std::vector<sink_ptr> sink_storage;
+			std::vector<sink_ptr<Config, BufferLimits>> sink_storage;
 		};
 
-		template<typename Config, typename ConcurrencyModelPolicy>
-		static void init(backend<Config, ConcurrencyModelPolicy>&) {}
+		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
+		static void init(backend<Config, BufferLimits, ConcurrencyModelPolicy>&) {}
 
-		template<typename Config, typename ConcurrencyModelPolicy, typename... Args>
-		static void log(backend<Config, ConcurrencyModelPolicy>& backend, 
+		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
+		static void log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend,
 			const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
 			level log_level, const details::source_meta& meta, Args&&... args);
 	};
@@ -36,12 +37,13 @@ namespace lwlog
 	> 
 	struct asynchronous_policy
 	{
-		template<typename Config, typename ConcurrencyModelPolicy>
+		template<typename Config, typename BufferLimits, 
+			typename ConcurrencyModelPolicy>
 		struct backend
 		{
 			~backend();
 
-			std::vector<sink_ptr> sink_storage;
+			std::vector<sink_ptr<Config, BufferLimits>> sink_storage;
 
 			std::atomic_bool shutdown;
 			std::thread worker_thread;
@@ -55,11 +57,11 @@ namespace lwlog
 			> queue;
 		};
 
-		template<typename Config, typename ConcurrencyModelPolicy>
-		static void init(backend<Config, ConcurrencyModelPolicy>& backend);
+		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
+		static void init(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend);
 
-		template<typename Config, typename ConcurrencyModelPolicy, typename... Args>
-		static void log(backend<Config, ConcurrencyModelPolicy>& backend, 
+		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
+		static void log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend,
 			const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
 			level log_level, const details::source_meta& meta, Args&&... args);
 	};

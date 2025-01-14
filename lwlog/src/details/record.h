@@ -9,23 +9,8 @@
 
 namespace lwlog::details
 {
-	struct record_base
-	{
-		record_base() = default;
-		record_base(std::string_view message, level log_level, const source_meta& meta);
-		virtual ~record_base() = default;
-
-		virtual const os::time_point_base& time_point() const = 0;
-		virtual const os::execution_context_base& exec_context() const = 0;
-		virtual const topic_registry_base& get_topic_registry() const = 0;
-
-		memory_buffer<256> message_buffer;
-		level log_level;
-		source_meta meta;
-	};
-
-	template<typename Config>
-	struct record : public record_base
+	template<typename Config, typename BufferLimits>
+	struct record
 	{
 		record() = default;
 		record(std::string_view message, level log_level, const source_meta& meta, 
@@ -34,6 +19,11 @@ namespace lwlog::details
 		const os::time_point_base& time_point() const override;
 		const os::execution_context_base& exec_context() const override;
 		const topic_registry_base& get_topic_registry() const override;
+
+	public:
+		memory_buffer<BufferLimits::message> message_buffer;
+		level log_level;
+		source_meta meta;
 
 	private:
 		const os::time_point<

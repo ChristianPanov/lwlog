@@ -5,16 +5,15 @@
 
 namespace lwlog::details
 {
+	template<typename Config, typename BufferLimits>
 	struct formatter
 	{
-		static constexpr std::uint8_t attribute_buffer_size{ 128 };
-
 		virtual ~formatter() = default;
-		virtual void format(memory_buffer<>&, const record_base&) const = 0;
+		virtual void format(memory_buffer<BufferLimits::pattern>&, const record<Config, BufferLimits>&) const = 0;
 
 		template<typename T> 
-		static void format_attribute(memory_buffer<>& buffer, const flag_pair& flags, T value);
-		static void format_custom_attribute(memory_buffer<>& buffer, const attribute& attrib);
+		static void format_attribute(memory_buffer<BufferLimits::pattern>& buffer, const flag_pair& flags, T value);
+		static void format_custom_attribute(memory_buffer<BufferLimits::pattern>& buffer, const attribute& attrib);
 	};
 }
 

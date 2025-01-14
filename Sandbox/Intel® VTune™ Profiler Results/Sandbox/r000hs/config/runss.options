@@ -1,0 +1,18 @@
+-r
+E:\C++ Programs\Plain C++ Projects\lwlog\Sandbox\Intel® VTune™ Profiler Results\Sandbox\r000hs
+--stack-stitching
+--data-limit-mb=1000
+--disk-space-limit=0
+--mrte-type=java,dotnet,python
+--stack-unwind-limit=8388608
+--itt-config=frame
+--itt-config=task,event,counter
+--stackwalk=offline
+--mrte-mode=auto
+--type=cpu:counters:nostack
+--type=cpu:stack
+--interval=10
+--platform-type=103
+--app-working-dir=E:\C++ Programs\Plain C++ Projects\lwlog\Sandbox\
+--
+E:\C++ Programs\Plain C++ Projects\lwlog\bin\Release-windows-x86_64\Sandbox\Sandbox.exe

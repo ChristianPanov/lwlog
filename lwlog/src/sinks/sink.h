@@ -8,8 +8,9 @@
 
 namespace lwlog::sinks
 {
-	template<bool EnableAnsiColors, typename ThreadingPolicy>
-	class sink : public interface::sink
+	template<bool EnableAnsiColors, typename Config, 
+		typename BufferLimits, typename ThreadingPolicy>
+	class sink : public interface::sink<Config, BufferLimits>
 	{
 	private:
 		using Mutex = typename ThreadingPolicy::mutex_t;
@@ -28,7 +29,7 @@ namespace lwlog::sinks
 
 	protected:
 		mutable Mutex m_mtx;
-		details::pattern m_pattern;
+		details::pattern<Config, BufferLimits> m_pattern;
 		level m_current_level{ level::all };
 		level m_level_filter{ level::all };
 	};

@@ -4,7 +4,9 @@
 
 namespace lwlog::details
 {
-	static void format_args(memory_buffer<256>& message_buffer, char(&args_buffer)[10][24])
+	template<typename BufferLimits>
+	static void format_args(memory_buffer<BufferLimits::message>& message_buffer,
+		char(&args_buffers)[BufferLimits::arg_count][BufferLimits::argument])
 	{
 		std::size_t pos{ 0 };
 		std::size_t buffer_index{ 0 };
@@ -12,7 +14,7 @@ namespace lwlog::details
 		{
 			if (message_buffer[pos] == '{' && message_buffer[pos + 1] == '}')
 			{
-				message_buffer.replace(pos, 2, args_buffer[buffer_index++], std::strlen(args_buffer[buffer_index]));
+				message_buffer.replace(pos, 2, args_buffers[buffer_index++], std::strlen(args_buffers[buffer_index]));
 			}
 			++pos;
 		}

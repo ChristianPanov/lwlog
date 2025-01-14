@@ -1,0 +1,106 @@
+128 [99944] INFO perfrun.launcher <> - Launcher main begin
+137 [99944] INFO perfrun.launcher <> - MessageCatalogInit finished
+137 [99944] INFO perfrun.launcher <> - Launcher instance created
+137 [99944] INFO perfrun.launcher <> - argc = 7; cmdline = C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin64\amplxe-runss.exe --ui-output-format xml --ui-output-fd 1180 --option-file E:\C++ Programs\Plain C++ Projects\lwlog\Sandbox\Intel® VTune™ Profiler Results\Sandbox\r001hs\config\runss.options 
+166 [99944] INFO perfrun.launcher <> - New signal handler callback was added
+273 [99944] INFO perfrun.perfcollector <> - SEP tool path: C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin64\sep.exe
+300 [99944] INFO perfrun.launcher <> - create msngr2::ICliToolContext
+301 [99944] INFO perfrun.launcher <> - create file finder object
+301 [99944] INFO perfrun.launcher <> - create a result directory: pattern = E:\C++ Programs\Plain C++ Projects\lwlog\Sandbox\Intel® VTune™ Profiler Results\Sandbox\r001hs pid = 4294967295
+308 [99944] INFO perfrun.launcher <> - create data directory = E:\C++ Programs\Plain C++ Projects\lwlog\Sandbox\Intel® VTune™ Profiler Results\Sandbox\r001hs\data.0
+308 [99944] INFO perfrun.launcher <> - Creating the master collection flag
+336 [99944] INFO perfrun.launcher <> - Done creating the master collection flag
+336 [105400] INFO perfrun.launcher <> - plugin [remoteplug] was disabled because it doesn't support the given collection type.
+337 [105400] INFO perfrun.sdk <> - Allocating TMU :E:\C++ Programs\Plain C++ Projects\lwlog\Sandbox\Intel® VTune™ Profiler Results\Sandbox\r001hs\data.0\systemcollector-11704-DESKTOP-VI5BEEO.sc
+337 [105400] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+341 [105400] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+341 [105400] INFO perfrun.launcher <> - plugin [gpu] was disabled because it doesn't support the given collection type.
+341 [105400] INFO perfrun.launcher <> - plugin [etw.kernel] was disabled because it doesn't support the given collection type.
+341 [105400] INFO perfrun.launcher <> - plugin [etw.dx] was disabled because it doesn't support the given collection type.
+341 [105400] INFO perfrun.launcher <> - plugin [etw.wsa] was disabled because it doesn't support the given collection type.
+341 [105400] INFO perfrun.mrte <> - system-wide mode is 0
+341 [105400] INFO perfrun.mrte <> - Getting  mrte profiling environment ...
+385 [105400] INFO perfrun.mrte <> - INTEL_MRTE_DATA_DIR=E:\C++ Programs\Plain C++ Projects\lwlog\Sandbox\Intel® VTune™ Profiler Results\Sandbox\r001hs\data.0
+385 [105400] INFO perfrun.mrte <> - INTEL_MRTE_HOST_NAME=DESKTOP-VI5BEEO
+385 [105400] INFO perfrun.mrte <> - JAVA_TOOL_OPTIONS=-agentlib:amplxe_samplingmrte_javaprof_1.0
+385 [105400] INFO perfrun.mrte <> - PATH=C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin32\runtime;C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin64\runtime;C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\VulkanSDK\1.3.216.0\Bin;C:\VulkanSDK\1.2.189.2\Bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64_win\compiler;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;$(OPENCV3_DIR)\bin;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Common Files\Autodesk Shared\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\doxygen\bin;C:\Users\user\Documents\Visual Studio 2019\Libs\opencv\build\x64\vc15\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\CMake\bin;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Git\cmd;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\;%SYSTEMROOT%\System32\OpenSSH\;C:\Users\user\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\user\AppData\Local\Programs\Python\Python313\;C:\Program Files\Conan\conan;C:\Users\user\AppData\Local\Programs\Python\Python36-32\Scripts\;C:\Users\user\AppData\Local\Programs\Python\Python36-32\;C:\Users\user\AppData\Local\Programs\Python\Python37-32\Scripts\;C:\Users\user\AppData\Local\Programs\Python\Python37-32\;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\GitHubDesktop\bin;E:\CLion 2019.2.1\bin;c:\users\user\appdata\local\microsoft\visualstudio\16.0_a78be107\extensions\zzlzni0k.fjj;C:\Users\user\AppData\Local\gitkraken\bin;C:\Program Files\Neovim\bin;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin
+385 [105400] INFO perfrun.mrte <> - COR_ENABLE_PROFILING=1
+385 [105400] INFO perfrun.mrte <> - COR_PROFILER={AA5E4821-E3B1-479c-B7FF-5AD047D22CED}
+385 [105400] INFO perfrun.mrte <> - COMPLUS_ProfAPI_ProfilerCompatibilitySetting=EnableV2Profiler
+385 [105400] INFO perfrun.mrte <> - CORECLR_ENABLE_PROFILING=1
+385 [105400] INFO perfrun.mrte <> - CORECLR_PROFILER={AA5E4821-E3B1-479c-B7FF-5AD047D22CED}
+386 [105400] INFO perfrun.mrte <> - CORECLR_PROFILER_PATH=C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin64/amplxe_samplingmrte_clrprof_1.0.dll
+386 [105400] INFO perfrun.mrte <> - INTEL_MRTE_PROFILER_MODE=mixed
+386 [105400] INFO perfrun.mrte <> - Data directory: E:\C++ Programs\Plain C++ Projects\lwlog\Sandbox\Intel® VTune™ Profiler Results\Sandbox\r001hs\data.0
+386 [105400] INFO perfrun.mrte <> - Mrte plugin is initialized
+386 [105400] INFO perfrun.launcher <> - plugin [emon] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [cuscol] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [stdsrc] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [sep] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [vtsspp] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [perf] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [aoclprofile] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.tpss <> - initialize tpss controller
+386 [105400] INFO perfrun.tpss <> - configure collection mode: value = cpu:counters:nostack
+386 [105400] INFO perfrun.tpss <> - configure collection mode: value = cpu:stack
+386 [105400] INFO perfrun.tpss <> - default obj-size-min=1024
+386 [105400] INFO perfrun.tpss <> - default hash-table-size=0
+386 [105400] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [power] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [ipmwatch] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [os_counters] was disabled because it doesn't support the given collection type.
+386 [105400] INFO perfrun.launcher <> - plugin [l0_metrics] was disabled because it doesn't support the given collection type.
+387 [99944] INFO perfrun.launcher <> - set environment variable: PATH = C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin32\runtime;C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin64\runtime;C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\VulkanSDK\1.3.216.0\Bin;C:\VulkanSDK\1.2.189.2\Bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64_win\compiler;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;$(OPENCV3_DIR)\bin;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Common Files\Autodesk Shared\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\doxygen\bin;C:\Users\user\Documents\Visual Studio 2019\Libs\opencv\build\x64\vc15\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\CMake\bin;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Git\cmd;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\;%SYSTEMROOT%\System32\OpenSSH\;C:\Users\user\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\user\AppData\Local\Programs\Python\Python313\;C:\Program Files\Conan\conan;C:\Users\user\AppData\Local\Programs\Python\Python36-32\Scripts\;C:\Users\user\AppData\Local\Programs\Python\Python36-32\;C:\Users\user\AppData\Local\Programs\Python\Python37-32\Scripts\;C:\Users\user\AppData\Local\Programs\Python\Python37-32\;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\GitHubDesktop\bin;E:\CLion 2019.2.1\bin;c:\users\user\appdata\local\microsoft\visualstudio\16.0_a78be107\extensions\zzlzni0k.fjj;C:\Users\user\AppData\Local\gitkraken\bin;C:\Program Files\Neovim\bin;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin
+387 [99944] INFO perfrun.launcher <> - set environment variable: INTEL_LIBITTNOTIFY32 = C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin32\runtime\ittnotify_collector.dll
+387 [99944] INFO perfrun.launcher <> - set environment variable: INTEL_LIBITTNOTIFY64 = C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin64\runtime\ittnotify_collector.dll
+387 [99944] INFO perfrun.launcher <> - set environment variable: INTEL_ITTNOTIFY_GROUPS = 
+387 [99944] INFO perfrun.launcher <> - set environment variable: INTEL_JIT_PROFILER32 = C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin32\runtime\ittnotify_collector.dll
+387 [99944] INFO perfrun.launcher <> - set environment variable: INTEL_JIT_PROFILER64 = C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin64\runtime\ittnotify_collector.dll
+387 [99944] INFO perfrun.launcher <> - set environment variable: CCL_ITT_LEVEL = 1
+388 [99944] INFO perfrun.launcher <> - set environment variable: ENABLE_JITPROFILING = 1
+388 [99944] INFO perfrun.launcher <> - set environment variable: CL_CONFIG_USE_VTUNE = True
+388 [99944] INFO perfrun.launcher <> - set environment variable: KMP_FORKJOIN_FRAMES = 0
+388 [99944] INFO perfrun.launcher <> - set environment variable: KMP_FORKJOIN_FRAMES_MODE = 0
+388 [99944] INFO perfrun.launcher <> - set environment variable: INTEL_MRTE_DATA_DIR = E:\C++ Programs\Plain C++ Projects\lwlog\Sandbox\Intel® VTune™ Profiler Results\Sandbox\r001hs\data.0
+388 [99944] INFO perfrun.launcher <> - set environment variable: INTEL_MRTE_HOST_NAME = DESKTOP-VI5BEEO
+388 [99944] INFO perfrun.launcher <> - set environment variable: JAVA_TOOL_OPTIONS = -agentlib:amplxe_samplingmrte_javaprof_1.0
+388 [99944] INFO perfrun.launcher <> - set environment variable: PATH = C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin32\runtime;C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin64\runtime;C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\VulkanSDK\1.3.216.0\Bin;C:\VulkanSDK\1.2.189.2\Bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64_win\compiler;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;$(OPENCV3_DIR)\bin;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Common Files\Autodesk Shared\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\doxygen\bin;C:\Users\user\Documents\Visual Studio 2019\Libs\opencv\build\x64\vc15\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\CMake\bin;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Git\cmd;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\;%SYSTEMROOT%\System32\OpenSSH\;C:\Users\user\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\user\AppData\Local\Programs\Python\Python313\;C:\Program Files\Conan\conan;C:\Users\user\AppData\Local\Programs\Python\Python36-32\Scripts\;C:\Users\user\AppData\Local\Programs\Python\Python36-32\;C:\Users\user\AppData\Local\Programs\Python\Python37-32\Scripts\;C:\Users\user\AppData\Local\Programs\Python\Python37-32\;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\GitHubDesktop\bin;E:\CLion 2019.2.1\bin;c:\users\user\appdata\local\microsoft\visualstudio\16.0_a78be107\extensions\zzlzni0k.fjj;C:\Users\user\AppData\Local\gitkraken\bin;C:\Program Files\Neovim\bin;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin
+389 [99944] INFO perfrun.launcher <> - set environment variable: COR_ENABLE_PROFILING = 1
+389 [99944] INFO perfrun.launcher <> - set environment variable: COR_PROFILER = {AA5E4821-E3B1-479c-B7FF-5AD047D22CED}
+389 [99944] INFO perfrun.launcher <> - set environment variable: COMPLUS_ProfAPI_ProfilerCompatibilitySetting = EnableV2Profiler
+389 [99944] INFO perfrun.launcher <> - set environment variable: CORECLR_ENABLE_PROFILING = 1
+389 [99944] INFO perfrun.launcher <> - set environment variable: CORECLR_PROFILER = {AA5E4821-E3B1-479c-B7FF-5AD047D22CED}
+389 [99944] INFO perfrun.launcher <> - set environment variable: CORECLR_PROFILER_PATH = C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin64/amplxe_samplingmrte_clrprof_1.0.dll
+389 [99944] INFO perfrun.launcher <> - set environment variable: INTEL_MRTE_PROFILER_MODE = mixed
+389 [99944] INFO perfrun.launcher <> - RpcServer: run RPC server to handle requests
+393 [99944] INFO perfrun.sdk <> - IProcessUtil: the given executable 'E:\C++ Programs\Plain C++ Projects\lwlog\bin\Release-windows-x86_64\Sandbox\Sandbox.exe' is valid.
+393 [99944] INFO perfrun.launcher <> - Launcher: command line to start before modification = E:\C++ Programs\Plain C++ Projects\lwlog\bin\Release-windows-x86_64\Sandbox\Sandbox.exe
+396 [99944] INFO perfrun.launcher <> - Launcher: command line to start after modification = C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin64\pin.exe -error_file E:\C++ Programs\Plain C++ Projects\lwlog\Sandbox\Intel® VTune™ Profiler Results\Sandbox\r001hs\data.0\pinerr.tpsslog -detach_reattach -probe -follow_execv -p32 C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin32\pin.exe -p64 C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin64\pin.exe -t64 C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin64\tpsstool.dll -t C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3\bin32\tpsstool.dll -server_name tpss_ipc.11704 -prd_dir C:\Program Files (x86)\Intel\oneAPI\vtune\2024.3 -- E:\C++ Programs\Plain C++ Projects\lwlog\bin\Release-windows-x86_64\Sandbox\Sandbox.exe
+396 [99944] INFO perfrun.launcher <> - ProcessCreator object was created
+399 [99944] INFO perfrun.launcher <> - Launcher: the process was started in suspend mode
+400 [105400] INFO perfrun.itt <> - start itt controller for pid #41632
+401 [105400] INFO perfrun.tpss <> - start tpss controller for pid #41632
+461 [99944] INFO perfrun.launcher <> - Launcher: all plugins were started
+461 [99944] INFO perfrun.launcher <> - DirectoryMonitor object was created
+461 [99944] INFO perfrun.launcher <> - DirectoryMonitor: a callback was added
+461 [99944] INFO perfrun.launcher <> - DirectoryMonitor was started with pingTime = 1000
+461 [99944] INFO perfrun.launcher <> - DeadlineTimer is going to be constructed
+462 [99944] INFO perfrun.launcher <> - DeadlineTimer: a callback was added
+490 [99944] INFO perfrun.launcher <> - Launcher: resume the profiled application and  wait its termination or stop command
+6940 [99944] INFO perfrun.launcher <> - Launcher: the profiled application was terminated  with exit code = 0
+6947 [105400] INFO perfrun.itt <> - detach itt controller
+6947 [105400] INFO perfrun.itt <> - detach itt controller done
+6947 [105400] INFO perfrun.tpss <> - stop tpss controller
+6948 [105400] INFO perfrun.sdk <> - De-allocating TMU: E:\C++ Programs\Plain C++ Projects\lwlog\Sandbox\Intel® VTune™ Profiler Results\Sandbox\r001hs\data.0\systemcollector-11704-DESKTOP-VI5BEEO.sc
+6968 [105400] INFO perfrun.system <> - closed the system trace file: E:\C++ Programs\Plain C++ Projects\lwlog\Sandbox\Intel® VTune™ Profiler Results\Sandbox\r001hs\data.0\systemcollector-11704-DESKTOP-VI5BEEO.sc
+6968 [99944] INFO perfrun.launcher <> - Launcher: all plugins were stopped.
+6968 [99944] INFO perfrun.launcher <> - DeadlineTimer is going to be destroyed
+6968 [99944] INFO perfrun.launcher <> - DeadlineTimer was destroyed
+6969 [99944] INFO perfrun.launcher <> - DirectoryMonitor object was destroyed
+6969 [99944] WARN perfrun.launcher <> - Stop command is ignored because it is received when collection is already stopped, at file: vcs\perfrun1\launcher\src\command_handler.cpp:226
+6970 [99944] INFO perfrun.launcher <> - Application exit code: 0
+6970 [99944] INFO perfrun.launcher <> - Exit code: 0
