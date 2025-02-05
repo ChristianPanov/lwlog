@@ -24,6 +24,7 @@ namespace lwlog::sinks
 				case level::debug:		return "\u001b[37;1m";
 				case level::all: 		return "";
 				case level::none: 		return "";
+				default:                return "";
 			}
 		});
 	}
