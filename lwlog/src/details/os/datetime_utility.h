@@ -34,7 +34,7 @@ namespace lwlog::details::os::datetime
 			::TIME_ZONE_INFORMATION tz_info;
 			::GetTimeZoneInformation(&tz_info);
 
-			return -tz_info.Bias / 60;
+			return static_cast<int8_t>(-tz_info.Bias / 60);
 		#else
 			const std::time_t now{ std::time(nullptr) };
 
