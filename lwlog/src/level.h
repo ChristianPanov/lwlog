@@ -52,6 +52,7 @@ namespace lwlog::level_details
 		case level::debug:		return "debug";
 		case level::all: 		return {};
 		case level::none:		return {};
+		default:				return {};
 		}
 	}
 }
