@@ -21,12 +21,14 @@ set(LWLOG_SOURCE_FILES
 
 message("Creating lwlog library")
 add_library(lwlog_lib STATIC ${LWLOG_SOURCE_FILES})
-target_include_directories(lwlog_lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/lwlog/src/")
+target_include_directories(lwlog_lib PUBLIC  
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lwlog/src/>  
+    $<INSTALL_INTERFACE:/lwlog/src/>
+)
 add_library(lwlog::lwlog_lib ALIAS lwlog_lib)
 
 message("Creating lwlog sandbox")
 add_executable(lwlog_sandbox "${CMAKE_CURRENT_SOURCE_DIR}/Sandbox/Sandbox.cpp")
-target_include_directories(lwlog_sandbox PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/lwlog/src/")
 
 message("Linking libraries")
 target_link_libraries(lwlog_lib PRIVATE Threads::Threads)
