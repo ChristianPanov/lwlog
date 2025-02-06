@@ -1,9 +1,9 @@
 #pragma once
 
 #ifdef _WIN32
-	#include "details/windows_lightweight.h"
+    #include "details/windows_lightweight.h"
 #else
-	#include <chrono>
+    #include <chrono>
 #endif
 
 #include "configuration.h"
@@ -29,12 +29,12 @@ namespace lwlog::details::os
         std::uint32_t nanosecond;
     };
 
-	template<typename LocalTimePolicy>
-	class time_point : public time_point_base
-	{
-	public:
-		time_point();
-	};
+    template<typename LocalTimePolicy>
+    class time_point : public time_point_base
+    {
+    public:
+        time_point();
+    };
 }
 
 #include "time_point_impl.h"
