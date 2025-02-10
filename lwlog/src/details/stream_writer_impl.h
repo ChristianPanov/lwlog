@@ -22,14 +22,22 @@ namespace lwlog::details
             std::filesystem::create_directory(m_path.parent_path());
         }
 
-#if defined(WIN32) && defined(__clang__)
+#if defined(WIN32)
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#elif #defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
+#endif
         m_stream = std::fopen(m_path.string().data(), "a");
-
-#if defined(WIN32) && defined(__clang__)
+#if defined(WIN32)
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#elif #defined(__clang__)
 #pragma clang diagnostic pop
+#endif
 #endif
 
         if (m_stream != nullptr)
