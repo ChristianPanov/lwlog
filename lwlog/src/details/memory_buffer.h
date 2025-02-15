@@ -13,10 +13,6 @@ namespace lwlog::details
     {
     public:
         memory_buffer() = default;
-        memory_buffer(std::string_view data)
-        {
-            this->append(data);
-        }
 
         void append(const char* data, std::size_t size);
         void append(std::string_view data);
