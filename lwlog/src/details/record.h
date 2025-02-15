@@ -14,11 +14,11 @@ namespace lwlog::details
 	{
 		record() = default;
 		record(const char* message, level log_level, const source_meta& meta,
-			const topic_registry<typename Config::topic_t>& topic_registry) 
+			const topic_registry<typename Config::topic_t>& topics) 
 			: message{ message }
 			, log_level{ log_level }
 			, meta{ meta }
-			, topic_registry{ topic_registry }
+			, topic_registry{ topics }
 		{}
 
 	public:
