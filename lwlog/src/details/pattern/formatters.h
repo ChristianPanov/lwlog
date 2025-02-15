@@ -113,7 +113,7 @@ namespace lwlog::details
 			formatter<Config, BufferLimits>::format_attribute(
 				pattern_buffer, conv_buffer,
 				flag::topic,
-				record.topic_registry.current_topic()
+				record.topics.current_topic()
 			);
 		}
 	};
@@ -127,7 +127,7 @@ namespace lwlog::details
 			formatter<Config, BufferLimits>::format_attribute(
 				pattern_buffer, conv_buffer,
 				flag::full_topic,
-				record.topic_registry.full_topic()
+				record.topics.full_topic()
 			);
 		}
 	};

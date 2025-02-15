@@ -18,7 +18,7 @@ namespace lwlog::details
 			: message{ message }
 			, log_level{ log_level }
 			, meta{ meta }
-			, topic_registry{ topics }
+			, topics{ topics }
 		{}
 
 	public:
@@ -38,6 +38,6 @@ namespace lwlog::details
 
 		const topic_registry<
 			typename Config::topic_t
-		>& topic_registry;
+		>& topics;
 	};
 }
