@@ -3,9 +3,11 @@
 #include "level.h"
 #include "sinks/sink.h"
 #include "details/bounded_queue.h"
-#include "details/argument_format.h"
 #include "details/source_meta.h"
 #include "details/topic_registry.h"
+
+#include "details/argument_formatter/argument_format.h"
+#include "details/argument_formatter/argument_buffers_pool.h"
 
 namespace lwlog
 {
@@ -18,6 +20,9 @@ namespace lwlog
 			typename ConcurrencyModelPolicy>
 		struct backend
 		{
+			details::memory_buffer<BufferLimits::message> message_buffer;
+			details::argument_buffers_pool<BufferLimits> arg_buffers_pool;
+
 			std::vector<sink_ptr<Config, BufferLimits>> sink_storage;
 		};
 
@@ -42,6 +47,9 @@ namespace lwlog
 		struct backend
 		{
 			~backend();
+
+			details::memory_buffer<BufferLimits::message> message_buffer;
+			details::argument_buffers_pool<BufferLimits> arg_buffers_pool;
 
 			std::vector<sink_ptr<Config, BufferLimits>> sink_storage;
 

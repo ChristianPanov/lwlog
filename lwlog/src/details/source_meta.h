@@ -19,21 +19,24 @@ namespace lwlog::details
 	{
 	public:
 		constexpr source_meta() = default;
+		constexpr source_meta(std::uint32_t line, 
+			const char* const file, 
+			const char* const function);
 
 	public:
 		static constexpr source_meta current(
-			std::uint32_t line			= BUILTIN_LINE, 
-			std::string_view file		= BUILTIN_FILE, 
-			std::string_view function	= BUILTIN_FUNCTION);
+			std::uint32_t line = BUILTIN_LINE, 
+			const char* const file = BUILTIN_FILE,
+			const char* const function = BUILTIN_FUNCTION);
 
 		constexpr std::uint32_t	line() const;
-		constexpr std::string_view file_name() const;
-		constexpr std::string_view function_name() const;
+		constexpr const char* const file_name() const;
+		constexpr const char* const function_name() const;
 
 	private:
 		std::uint32_t m_line{};
-		std::string_view m_file;
-		std::string_view m_function;
+		const char* m_file{};
+		const char* m_function{};
 	};
 }
 

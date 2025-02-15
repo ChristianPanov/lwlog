@@ -1,5 +1,7 @@
-#include "datetime_utility.h"
 #pragma once
+
+#include "details/memory_buffer.h"
+#include "datetime_utility.h"
 
 namespace lwlog::details::os::datetime
 {
@@ -23,8 +25,40 @@ namespace lwlog::details::os::datetime
 		return hour > 12 ? hour - 12 : hour;
 	}
 
-	static std::string ensure_two_digit_format(std::uint32_t digit)
+	template<std::size_t Size>
+	timestamp_builder<Size>& timestamp_builder<Size>::append(std::size_t value)
 	{
-		return (digit <= 9 ? "0" : "") + std::to_string(digit);
+		if (value <= 9)
+		{
+			m_buffer[m_pos++] = '0';
+		}
+
+		const auto [ptr, ec]{ std::to_chars(m_buffer + m_pos, m_buffer + Size, value) };
+		m_pos = ptr - m_buffer;
+
+		return *this;
+	}
+
+	template<std::size_t Size>
+	timestamp_builder<Size>& timestamp_builder<Size>::append_ampm(std::size_t hour)
+	{
+		std::memcpy(m_buffer + m_pos, hour >= 12 ? "pm" : "am", 2);
+		m_pos += 2;
+
+		return *this;
+	}
+
+	template<std::size_t Size>
+	timestamp_builder<Size>& timestamp_builder<Size>::separate(char separator)
+	{
+		m_buffer[m_pos++] = separator;
+
+		return *this;
+	}
+
+	template<std::size_t Size>
+	const char* timestamp_builder<Size>::data() const
+	{
+		return m_buffer;
 	}
 }

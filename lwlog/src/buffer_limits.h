@@ -40,12 +40,15 @@ namespace lwlog
 		static constexpr std::size_t arg_count{ ArgCountLimit::Value };
 		static constexpr std::size_t padding{ PaddingLimit::Value };
 		static constexpr std::size_t conversion{ ConvLimit::Value };
+
+		static constexpr std::size_t pool_size{ 8 };
+
 	};
 
-	using default_pattern_limit = pattern_limit<512>;
-	using default_message_limit = message_limit<256>;
-	using default_argument_limit = argument_limit<24>;
-	using default_arg_count_limit = arg_count_limit<10>;
+	using default_pattern_limit = pattern_limit<256>;
+	using default_message_limit = message_limit<128>;
+	using default_argument_limit = argument_limit<12>;
+	using default_arg_count_limit = arg_count_limit<4>;
 	using default_padding_limit = padding_limit<24>;
 	using default_conv_limit = conv_limit<64>;
 

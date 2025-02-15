@@ -9,11 +9,14 @@ namespace lwlog::details
 	struct formatter
 	{
 		virtual ~formatter() = default;
-		virtual void format(memory_buffer<BufferLimits::pattern>&, const record<Config, BufferLimits>&) const = 0;
+		virtual void format(details::memory_buffer<BufferLimits::pattern>&, char*, 
+			const record<Config, BufferLimits>&) const = 0;
 
 		template<typename T> 
-		static void format_attribute(memory_buffer<BufferLimits::pattern>& buffer, const flag_pair& flags, T value);
-		static void format_custom_attribute(memory_buffer<BufferLimits::pattern>& buffer, const attribute& attrib);
+		static void format_attribute(details::memory_buffer<BufferLimits::pattern>& pattern_buffer, 
+			char* conv_buffer, const flag_pair& flags, const T& value);
+		static void format_custom_attribute(details::memory_buffer<BufferLimits::pattern>& pattern_buffer, 
+			char* conv_buffer, const attribute& attrib);
 	};
 }
 

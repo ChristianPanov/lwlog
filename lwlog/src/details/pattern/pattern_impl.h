@@ -10,13 +10,13 @@ namespace lwlog::details
 	const char* pattern<Config, BufferLimits>::compile(const details::record<Config, BufferLimits>& record)
 	{
 		for (const auto& formatter : m_formatters)
-			formatter->format(m_pattern_buffer, record);
+			formatter->format(m_pattern_buffer, m_conv_buffer, record);
 
 		for (const auto& attribute : m_attributes)
-			formatter<Config, BufferLimits>::format_custom_attribute(m_pattern_buffer, attribute);
+			formatter<Config, BufferLimits>::format_custom_attribute(m_pattern_buffer, m_conv_buffer, attribute);
 
 		for (const auto& info : m_alignment_flags_info)
-			alignment_formatter<BufferLimits>::format(m_pattern_buffer, info);
+			alignment_formatter<BufferLimits>::format(m_pattern_buffer, m_padding_buffer, info);
 
 		return m_pattern_buffer.c_str();
 	}
@@ -136,14 +136,14 @@ namespace lwlog::details
 	template<typename Config, typename BufferLimits>
 	void pattern<Config, BufferLimits>::cache_pattern()
 	{
-		std::memcpy(m_chached_pattern, m_pattern_buffer.c_str(), m_pattern_buffer.size());
+		std::memcpy(m_cached_pattern_buffer, m_pattern_buffer.c_str(), m_pattern_buffer.size());
 	}
 
 	template<typename Config, typename BufferLimits>
 	void pattern<Config, BufferLimits>::reset_pattern()
 	{
 		m_pattern_buffer.reset();
-		m_pattern_buffer.append(m_chached_pattern);
+		m_pattern_buffer.append(m_cached_pattern_buffer);
 	}
 
 	template<typename Config, typename BufferLimits>
@@ -292,7 +292,7 @@ namespace lwlog::details
 	}
 
 	template<typename Config, typename BufferLimits>
-	std::vector<std::string_view> pattern<Config, BufferLimits>::parse_verbose_flags() const
+	std::vector<std::string_view> pattern<Config, BufferLimits>::parse_verbose_flags()
 	{
 		const std::string_view pattern_view{ m_pattern_buffer.data() };
 
@@ -312,7 +312,7 @@ namespace lwlog::details
 	}
 
 	template<typename Config, typename BufferLimits>
-	std::vector<std::string_view> pattern<Config, BufferLimits>::parse_short_flags() const
+	std::vector<std::string_view> pattern<Config, BufferLimits>::parse_short_flags()
 	{
 		constexpr std::uint8_t flag_size{ 2 };
 		const std::string_view pattern_view{ m_pattern_buffer.data() };

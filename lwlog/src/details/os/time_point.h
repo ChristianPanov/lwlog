@@ -8,15 +8,17 @@
 
 #include "configuration.h"
 #include "datetime_utility.h"
+#include "details/memory_buffer.h"
 
 namespace lwlog::details::os
 {
-    class time_point_base
-    {
-    public:
-        virtual ~time_point_base() = default;
+	template<typename LocalTimePolicy>
+	class time_point
+	{
+	public:
+		time_point();
 
-    public:
+	public:
         std::uint16_t year;
         std::uint8_t month;
         std::uint8_t weekday;
@@ -27,13 +29,6 @@ namespace lwlog::details::os
         std::uint16_t millisecond;
         std::uint32_t microsecond;
         std::uint32_t nanosecond;
-    };
-
-	template<typename LocalTimePolicy>
-	class time_point : public time_point_base
-	{
-	public:
-		time_point();
 	};
 }
 

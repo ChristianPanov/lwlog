@@ -116,12 +116,12 @@ namespace lwlog::details
     }
 
     template<typename T>
-    void convert_to_chars(char* const __restrict buffer, std::size_t buffer_size, T value)
+    void convert_to_chars(char* const __restrict buffer, std::size_t buffer_size, const T& value)
     {
         if constexpr (std::is_arithmetic_v<T>)
         {
-            const std::to_chars_result res{ std::to_chars(buffer, buffer + buffer_size, value) };
-            buffer[res.ptr - buffer] = '\0';
+            const auto [ptr, ec]{ std::to_chars(buffer, buffer + buffer_size, value) };
+            buffer[ptr - buffer] = '\0';
         }
         else if constexpr (std::is_same_v<T, std::string_view> ||
             std::is_same_v<T, std::string> ||

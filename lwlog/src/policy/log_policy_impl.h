@@ -9,19 +9,19 @@ namespace lwlog
         const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
         level log_level, const details::source_meta& meta, Args&&... args)
     {
-        char args_buffers[BufferLimits::arg_count][BufferLimits::argument]{};
-        if (sizeof...(args) > 0)
-        {
-            std::uint8_t buffer_index{ 0 };
-            (details::convert_to_chars(args_buffers[buffer_index++], BufferLimits::argument, std::forward<Args>(args)), ...);
-        }
+        backend.message_buffer.reset();
+        backend.message_buffer.append(message);
 
-        details::record<Config, BufferLimits> record{ message, log_level, meta, topic_registry };
-        details::format_args(record.message_buffer, args_buffers);
+        const details::record<Config, BufferLimits> record{ 
+            backend.message_buffer.c_str(),
+            log_level, 
+            meta, 
+            topic_registry 
+        };
 
         for (const auto& sink : backend.sink_storage)
         {
-            if (sink->should_sink(record.log_level))
+            if (sink->should_sink(log_level))
             {
                 sink->sink_it(record);
             }
@@ -33,14 +33,13 @@ namespace lwlog
     struct asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::backend<
         Config, BufferLimits, ConcurrencyModelPolicy>::queue_item
     {
-        std::string_view			                        message;
+        const char*			                                message;
         level						                        log_level;
         details::source_meta		                        meta;
         details::topic_registry<typename Config::topic_t>   topic_registry;
 
-        std::function<void(char(&args_buffers)
-            [BufferLimits::arg_count][BufferLimits::argument])> lazy_convert_to_chars;
-        char args_buffers[BufferLimits::arg_count][BufferLimits::argument]{};
+        std::uint8_t args_buffer_index{ 0 };
+        bool has_args{ false };
     };
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
@@ -62,18 +61,24 @@ namespace lwlog
                     {
                         auto& item{ backend.queue.dequeue() };
 
-                        details::record<Config, BufferLimits> record{
-                            item.message, 
+                        backend.message_buffer.reset();
+                        backend.message_buffer.append(item.message);
+
+                        if (item.has_args)
+                        {
+                            auto* args_buffer{ backend.arg_buffers_pool.get_args_buffer(item.args_buffer_index) };
+
+                            details::format_args<BufferLimits>(backend.message_buffer, *args_buffer);
+
+                            backend.arg_buffers_pool.release_args_buffer(item.args_buffer_index);
+                        }
+
+                        const details::record<Config, BufferLimits> record{
+                            backend.message_buffer.c_str(),
                             item.log_level,
                             item.meta, 
                             item.topic_registry 
                         };
-
-                        if (item.lazy_convert_to_chars)
-                        {
-                            item.lazy_convert_to_chars(item.args_buffers);
-                            details::format_args<BufferLimits>(record.message_buffer, item.args_buffers);
-                        }
 
                         for (const auto& sink : backend.sink_storage)
                         {
@@ -94,19 +99,33 @@ namespace lwlog
         const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
         level log_level, const details::source_meta& meta, Args&&... args)
     {
-        if constexpr(sizeof...(args) == 0)
+        if constexpr (sizeof...(args) > 0)
         {
-            backend.queue.enqueue({ message, log_level, meta, topic_registry });
+            typename asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::
+                backend<Config, BufferLimits, ConcurrencyModelPolicy>::queue_item item
+            {
+                message.data(), 
+                log_level, 
+                meta, 
+                topic_registry
+            };
+
+            item.has_args = true;
+
+            const std::uint8_t buf_index{ backend.arg_buffers_pool.acquire_args_buffer() };
+            auto* args_buffer{ backend.arg_buffers_pool.get_args_buffer(buf_index) };
+
+            item.args_buffer_index = buf_index;
+
+            std::uint8_t buffer_index{ 0 };
+            (details::convert_to_chars((*args_buffer)[buffer_index++],
+                BufferLimits::argument, std::forward<Args>(args)), ...);
+
+            backend.queue.enqueue(std::move(item));
         }
         else
         {
-            const auto lazy_convert_to_chars{ [args...](char(&args_buffers)
-                [BufferLimits::arg_count][BufferLimits::argument])
-                {
-                    std::uint8_t buffer_index{ 0 };
-                    (details::convert_to_chars(args_buffers[buffer_index++], BufferLimits::argument, args), ...);
-                } };
-            backend.queue.enqueue({ message, log_level, meta, topic_registry, lazy_convert_to_chars });
+            backend.queue.enqueue({ message.data(), log_level, meta, topic_registry });
         }
     }
 

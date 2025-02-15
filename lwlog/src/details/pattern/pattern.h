@@ -31,13 +31,17 @@ namespace lwlog::details
 
 	private:
 		std::unique_ptr<formatter<Config, BufferLimits>> flag_to_formatter(std::string_view flag) const;
-		std::vector<std::string_view> parse_verbose_flags() const;
-		std::vector<std::string_view> parse_short_flags() const;
+		std::vector<std::string_view> parse_verbose_flags();
+		std::vector<std::string_view> parse_short_flags();
 
 	private:
-		char m_chached_pattern[BufferLimits::cached_pattern];
 		details::memory_buffer<BufferLimits::pattern> m_pattern_buffer;
 
+		char m_cached_pattern_buffer[BufferLimits::pattern];
+		char m_padding_buffer[BufferLimits::padding];
+		char m_conv_buffer[BufferLimits::conversion];
+
+	private:
 		std::vector<alignment_info> m_alignment_flags_info;
 		std::vector<std::unique_ptr<formatter<Config, BufferLimits>>> m_formatters;
 		std::vector<attribute> m_attributes;

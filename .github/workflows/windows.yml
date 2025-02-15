@@ -3,9 +3,9 @@ name: Windows
 on: 
   workflow_dispatch:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "experimental" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "experimental" ]
 
 env:
   BUILD_TYPE: Release

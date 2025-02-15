@@ -11,6 +11,12 @@ namespace lwlog::details
     class memory_buffer
     {
     public:
+        memory_buffer() = default;
+        memory_buffer(std::string_view data)
+        {
+            this->append(data);
+        }
+
         void append(const char* data, std::size_t size);
         void append(std::string_view data);
         void append(char ch);
@@ -36,7 +42,7 @@ namespace lwlog::details
     };
 
     template<typename T>
-    void convert_to_chars(char* const __restrict buffer, std::size_t buffer_size, T value);
+    void convert_to_chars(char* const __restrict buffer, std::size_t buffer_size, const T& value);
 }
 
 #include "memory_buffer_impl.h"

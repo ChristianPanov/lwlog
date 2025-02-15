@@ -2,7 +2,7 @@
 
 #include <cstdint>
 #include <array>
-#include <string>
+#include <charconv>
 
 #ifdef _WIN32
 	#include "details/windows_lightweight.h"
@@ -60,7 +60,20 @@ namespace lwlog::details::os::datetime
 
 	static std::uint8_t to_12h(std::uint8_t hour);
 
-	static std::string ensure_two_digit_format(std::uint32_t digit);
+    template<std::size_t Size>
+    struct timestamp_builder
+    {
+    public:
+		timestamp_builder& append(std::size_t value);
+		timestamp_builder& append_ampm(std::size_t hour);
+		timestamp_builder& separate(char separator);
+
+		const char* data() const;
+
+    private:
+        std::uint64_t m_pos{};
+        char m_buffer[Size]{};
+    };
 }
 
 #include "datetime_utility_impl.h"

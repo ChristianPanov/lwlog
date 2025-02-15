@@ -1,16 +1,17 @@
+#include "source_meta.h"
 #pragma once
 
 namespace lwlog::details
 {
-    constexpr source_meta source_meta::current(std::uint32_t line, std::string_view file, std::string_view function)
+	constexpr source_meta::source_meta(std::uint32_t line, const char* const file, const char* const function)
+		: m_line{ line }
+        , m_file{ file }
+        , m_function{ function }
+	{}
+
+	constexpr source_meta source_meta::current(std::uint32_t line, const char* const file, const char* const function)
     {
-		source_meta meta;
-
-		meta.m_line = line;
-		meta.m_file = file;
-		meta.m_function = function;
-
-		return meta;
+		return { line, file, function };
     }
 
 	constexpr std::uint32_t source_meta::line() const
@@ -18,12 +19,12 @@ namespace lwlog::details
 		return m_line;
 	}
 
-	constexpr std::string_view source_meta::file_name() const
+	constexpr const char* const source_meta::file_name() const
 	{
 		return m_file;
 	}
 
-	constexpr std::string_view source_meta::function_name() const
+	constexpr const char* const source_meta::function_name() const
 	{
 		return m_function;
 	}
