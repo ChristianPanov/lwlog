@@ -12,43 +12,55 @@ env:
 
 jobs:
   gcc_build:
-    runs-on: ubuntu-latest
-    name: GCC Build
-
+    strategy:
+      matrix:
+        runner: [ "ubuntu-latest", "ubuntu-24.04-arm" ]
+    runs-on: ${{ matrix.runner }}
+    name: GCC Build on ${{ matrix.runner }}
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Install GCC
-      run: sudo apt-get install -y gcc g++ 
+      - name: Install GCC
+        run: sudo apt-get update && sudo apt-get install -y gcc g++ 
 
-    - name: Create Build Environment
-      run: cmake -E make_directory ${{runner.workspace}}/build
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{ runner.workspace }}/build
 
-    - name: Configure GCC Build
-      working-directory: ${{runner.workspace}}/build
-      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ $GITHUB_WORKSPACE
+      - name: Configure GCC Build
+        working-directory: ${{ runner.workspace }}/build
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_COMPILER=gcc \
+                -DCMAKE_CXX_COMPILER=g++ \
+                $GITHUB_WORKSPACE
 
-    - name: Build with GCC
-      working-directory: ${{ runner.workspace }}/build
-      run: cmake --build . --config ${{ env.BUILD_TYPE }}
+      - name: Build with GCC
+        working-directory: ${{ runner.workspace }}/build
+        run: cmake --build . --config ${{ env.BUILD_TYPE }}
 
   clang_build:
-    runs-on: ubuntu-latest
-    name: Clang Build
-
+    strategy:
+      matrix:
+        runner: [ "ubuntu-latest", "ubuntu-24.04-arm" ]
+    runs-on: ${{ matrix.runner }}
+    name: Clang Build on ${{ matrix.runner }}
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Install Clang
-      run: sudo apt-get install -y clang 
+      - name: Install Clang
+        run: sudo apt-get update && sudo apt-get install -y clang
 
-    - name: Create Build Environment
-      run: cmake -E make_directory ${{ runner.workspace }}/build
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{ runner.workspace }}/build
 
-    - name: Configure Clang Build
-      working-directory: ${{ runner.workspace }}/build
-      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ $GITHUB_WORKSPACE
+      - name: Configure Clang Build
+        working-directory: ${{ runner.workspace }}/build
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_COMPILER=clang \
+                -DCMAKE_CXX_COMPILER=clang++ \
+                $GITHUB_WORKSPACE
 
-    - name: Build with Clang
-      working-directory: ${{ runner.workspace }}/build
-      run: cmake --build . --config ${{ env.BUILD_TYPE }}
+      - name: Build with Clang
+        working-directory: ${{ runner.workspace }}/build
+        run: cmake --build . --config ${{ env.BUILD_TYPE }}
