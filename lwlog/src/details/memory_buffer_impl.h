@@ -94,7 +94,7 @@ namespace lwlog::details
     }
 
     template<std::size_t Capacity>
-    const char* memory_buffer<Capacity>::c_str()
+    const char* const memory_buffer<Capacity>::c_str()
     {
         if (m_size <= Capacity)
         {

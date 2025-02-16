@@ -40,9 +40,10 @@ namespace lwlog::details
             }
         }
     }
+
     template<typename BufferLimits>
-    char(*argument_buffers_pool<BufferLimits>::get_args_buffer(std::uint8_t idx))[BufferLimits::arg_count][BufferLimits::argument]
+    char(&argument_buffers_pool<BufferLimits>::get_args_buffer(std::uint8_t idx))[BufferLimits::arg_count][BufferLimits::argument]
     {
-        return &m_args_buffers[idx];
+        return m_args_buffers[idx];
     }
 }

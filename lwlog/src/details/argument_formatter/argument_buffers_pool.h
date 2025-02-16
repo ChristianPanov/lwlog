@@ -9,7 +9,7 @@ namespace lwlog::details
         argument_buffers_pool();
         std::uint8_t acquire_args_buffer();
         void release_args_buffer(std::uint8_t idx);
-        char(*get_args_buffer(std::uint8_t idx))[BufferLimits::arg_count][BufferLimits::argument];
+        char(&get_args_buffer(std::uint8_t idx))[BufferLimits::arg_count][BufferLimits::argument];
 
     private:
         char m_args_buffers[BufferLimits::pool_size][BufferLimits::arg_count][BufferLimits::argument];

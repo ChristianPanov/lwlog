@@ -21,7 +21,7 @@ namespace lwlog
 		struct backend
 		{
 			details::memory_buffer<BufferLimits::message> message_buffer;
-			details::argument_buffers_pool<BufferLimits> arg_buffers_pool;
+			char args_buffers[BufferLimits::arg_count][BufferLimits::argument];
 
 			std::vector<sink_ptr<Config, BufferLimits>> sink_storage;
 		};

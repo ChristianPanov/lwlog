@@ -13,7 +13,7 @@ namespace lwlog::details
 	struct record
 	{
 		record() = default;
-		record(const char* message, level log_level, const source_meta& meta,
+		record(const char* const message, level log_level, const source_meta& meta,
 			const topic_registry<typename Config::topic_t>& topics) 
 			: message{ message }
 			, log_level{ log_level }
@@ -22,10 +22,9 @@ namespace lwlog::details
 		{}
 
 	public:
+		const char* const message;
 		level log_level;
 		source_meta meta;
-
-		const char* message;
 
 		const os::time_point<
 			typename Config::local_time_t

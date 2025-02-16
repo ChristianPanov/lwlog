@@ -27,7 +27,7 @@ namespace lwlog::details
     public:
         std::size_t size() const;
         std::string_view data() const;
-        const char* c_str();
+        const char* const c_str();
 
     public:
         char& operator[](std::size_t index);
