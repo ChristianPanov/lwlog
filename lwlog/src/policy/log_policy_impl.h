@@ -7,22 +7,22 @@ namespace lwlog
         const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
         level log_level, const details::source_meta& meta, Args&&... args)
     {
+        backend.message_buffer.reset();
+        backend.message_buffer.append(message);
+
+        if constexpr (sizeof...(args) > 0)
+        {
+            std::uint8_t buffer_index{ 0 };
+            (details::convert_to_chars(backend.args_buffers[buffer_index++],
+                BufferLimits::argument, std::forward<Args>(args)), ...);
+
+            details::format_args<BufferLimits>(backend.message_buffer, backend.args_buffers);
+        }
+
         for (const auto& sink : backend.sink_storage)
         {
             if (sink->should_sink(log_level))
             {
-                backend.message_buffer.reset();
-                backend.message_buffer.append(message);
-
-                if constexpr (sizeof...(args) > 0)
-                {
-                    std::uint8_t buffer_index{ 0 };
-                    (details::convert_to_chars(backend.args_buffers[buffer_index++],
-                        BufferLimits::argument, std::forward<Args>(args)), ...);
-
-                    details::format_args<BufferLimits>(backend.message_buffer, backend.args_buffers);
-                }
-
                 sink->sink_it({ backend.message_buffer.c_str(), log_level, meta, topic_registry });
             }
         }
@@ -61,22 +61,22 @@ namespace lwlog
                     {
                         auto& item{ backend.queue.dequeue() };
 
+                        backend.message_buffer.reset();
+                        backend.message_buffer.append(item.message);
+
+                        if (item.has_args)
+                        {
+                            auto& args_buffer{ backend.arg_buffers_pool.get_args_buffer(item.args_buffer_index) };
+
+                            details::format_args<BufferLimits>(backend.message_buffer, args_buffer);
+
+                            backend.arg_buffers_pool.release_args_buffer(item.args_buffer_index);
+                        }
+
                         for (const auto& sink : backend.sink_storage)
                         {
                             if (sink->should_sink(item.log_level))
                             {
-                                backend.message_buffer.reset();
-                                backend.message_buffer.append(item.message);
-
-                                if (item.has_args)
-                                {
-                                    auto& args_buffer{ backend.arg_buffers_pool.get_args_buffer(item.args_buffer_index) };
-
-                                    details::format_args<BufferLimits>(backend.message_buffer, args_buffer);
-
-                                    backend.arg_buffers_pool.release_args_buffer(item.args_buffer_index);
-                                }
-
                                 sink->sink_it({ backend.message_buffer.c_str(), 
                                     item.log_level, item.meta, item.topic_registry });
                             }
