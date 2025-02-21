@@ -94,7 +94,7 @@ namespace lwlog::details
     }
 
     template<std::size_t Capacity>
-    const char* const memory_buffer<Capacity>::c_str()
+    const char* memory_buffer<Capacity>::c_str()
     {
         if (m_size <= Capacity)
         {
@@ -136,13 +136,8 @@ namespace lwlog::details
                 std::memcpy(buffer, value.data(), value_size);
                 buffer[value_size] = '\0';
             }
-            else if constexpr (std::is_same_v<T, const char*>)
-            {
-                value_size = std::strlen(value);
-                std::memcpy(buffer, value, value_size);
-                buffer[value_size] = '\0';
-            }
-            else if constexpr (std::is_same_v<T, char*>)
+            else if constexpr (std::is_same_v<T, const char*> || 
+                std::is_same_v<T, char*>)
             {
                 value_size = std::strlen(value);
                 std::memcpy(buffer, value, value_size);
