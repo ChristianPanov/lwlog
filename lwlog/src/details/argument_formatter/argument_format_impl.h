@@ -6,7 +6,7 @@ namespace lwlog::details
 {
 	template<typename BufferLimits>
 	static void format_args(memory_buffer<BufferLimits::message>& message_buffer,
-		char(&args_buffers)[BufferLimits::arg_count][BufferLimits::argument])
+		const char(&args_buffers)[BufferLimits::arg_count][BufferLimits::argument])
 	{
 		std::size_t pos{ 0 };
 		std::size_t buffer_index{ 0 };

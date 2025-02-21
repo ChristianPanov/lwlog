@@ -58,7 +58,7 @@ namespace lwlog::details
 
     template<std::size_t Capacity, typename T,
         typename OverflowPolicy, typename ConcurrencyModelPolicy>
-    T& bounded_queue<Capacity, T, OverflowPolicy, ConcurrencyModelPolicy>::dequeue()
+    const T& bounded_queue<Capacity, T, OverflowPolicy, ConcurrencyModelPolicy>::dequeue()
     {
         const std::size_t current_read_index{ m_read_index.load(std::memory_order_relaxed) };
         const std::size_t next_write_index{ (current_read_index + 1) % Capacity };

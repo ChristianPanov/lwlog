@@ -33,13 +33,13 @@ namespace lwlog
     struct asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::backend<
         Config, BufferLimits, ConcurrencyModelPolicy>::queue_item
     {
+        bool has_args{ false };
+        std::uint8_t args_buffer_index{ 0 };
+
         const char*			                                message;
         level						                        log_level;
         details::source_meta		                        meta;
         details::topic_registry<typename Config::topic_t>   topic_registry;
-
-        bool has_args{ false };
-        std::uint8_t args_buffer_index{ 0 };
     };
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
@@ -59,14 +59,14 @@ namespace lwlog
                 {
                     if (!backend.queue.is_empty())
                     {
-                        auto& item{ backend.queue.dequeue() };
+                        const auto& item{ backend.queue.dequeue() };
 
                         backend.message_buffer.reset();
                         backend.message_buffer.append(item.message);
 
                         if (item.has_args)
                         {
-                            auto& args_buffer{ backend.arg_buffers_pool.get_args_buffer(item.args_buffer_index) };
+                            const auto& args_buffer{ backend.arg_buffers_pool.get_args_buffer(item.args_buffer_index) };
 
                             details::format_args<BufferLimits>(backend.message_buffer, args_buffer);
 
@@ -95,30 +95,18 @@ namespace lwlog
     {
         if constexpr (sizeof...(args) > 0)
         {
-            typename asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::
-                backend<Config, BufferLimits, ConcurrencyModelPolicy>::queue_item item
-            {
-                message.data(), 
-                log_level, 
-                meta, 
-                topic_registry
-            };
-
-            const std::uint8_t buf_index{ backend.arg_buffers_pool.acquire_args_buffer() };
-            auto& args_buffer{ backend.arg_buffers_pool.get_args_buffer(buf_index) };
-
-            item.has_args = true;
-            item.args_buffer_index = buf_index;
+            const std::uint8_t buff_index{ backend.arg_buffers_pool.acquire_args_buffer() };
+            auto& args_buffer{ backend.arg_buffers_pool.get_args_buffer(buff_index) };
 
             std::uint8_t buffer_index{ 0 };
             (details::convert_to_chars(args_buffer[buffer_index++], 
                 BufferLimits::argument, std::forward<Args>(args)), ...);
 
-            backend.queue.enqueue(std::move(item));
+            backend.queue.enqueue({ true, buff_index, message.data(), log_level, meta, topic_registry });
         }
         else
         {
-            backend.queue.enqueue({ message.data(), log_level, meta, topic_registry });
+            backend.queue.enqueue({ false, 0, message.data(), log_level, meta, topic_registry });
         }
     }
 
