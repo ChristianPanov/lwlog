@@ -10,8 +10,8 @@ namespace lwlog::details
 	{}
 
 	template<typename BufferLimits>
-	void alignment_formatter<BufferLimits>::format(details::memory_buffer<BufferLimits::pattern>& pattern_buffer, char* padding_buffer,
-		const alignment_info& alignment_flag_info)
+	void alignment_formatter<BufferLimits>::format(details::memory_buffer<BufferLimits::pattern>& pattern_buffer, 
+		char* padding_buffer, const alignment_info& alignment_flag_info)
 	{
 		constexpr std::size_t flag_end_indicator_size{ 2 };
 

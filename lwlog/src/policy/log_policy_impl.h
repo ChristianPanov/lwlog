@@ -77,8 +77,8 @@ namespace lwlog
                         {
                             if (sink->should_sink(item.log_level))
                             {
-                                sink->sink_it({ backend.message_buffer.c_str(), 
-                                    item.log_level, item.meta, item.topic_registry });
+                                sink->sink_it({ backend.message_buffer.c_str(), item.log_level, 
+                                    item.meta, item.topic_registry });
                             }
                         }
                     }
@@ -93,20 +93,20 @@ namespace lwlog
         const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
         level log_level, const details::source_meta& meta, Args&&... args)
     {
-        if constexpr (sizeof...(args) > 0)
+        if constexpr (sizeof...(args) == 0)
+        {
+            backend.queue.enqueue({ false, 0, message.data(), log_level, meta, topic_registry });
+        }
+        else
         {
             const std::uint8_t buff_index{ backend.arg_buffers_pool.acquire_args_buffer() };
             auto& args_buffer{ backend.arg_buffers_pool.get_args_buffer(buff_index) };
 
             std::uint8_t buffer_index{ 0 };
-            (details::convert_to_chars(args_buffer[buffer_index++], 
+            (details::convert_to_chars(args_buffer[buffer_index++],
                 BufferLimits::argument, std::forward<Args>(args)), ...);
 
             backend.queue.enqueue({ true, buff_index, message.data(), log_level, meta, topic_registry });
-        }
-        else
-        {
-            backend.queue.enqueue({ false, 0, message.data(), log_level, meta, topic_registry });
         }
     }
 

@@ -12,8 +12,12 @@ namespace lwlog::details
     class memory_buffer
     {
     public:
-        memory_buffer() = default;
+        memory_buffer();
 
+    private:
+        void grow(std::size_t new_capacity);
+
+    public:
         void append(const char* data, std::size_t size);
         void append(std::string_view data);
         void append(char ch);
@@ -34,8 +38,11 @@ namespace lwlog::details
         const char& operator[](std::size_t index) const;
 
     private:
-        char m_buffer[Capacity]{};
+        char m_inline_buffer[Capacity];
+        char* m_buffer{ nullptr };
+
         std::size_t m_size{};
+        std::size_t m_capacity{};
     };
 
     template<typename T>

@@ -3,13 +3,41 @@
 namespace lwlog::details
 {
     template<std::size_t Capacity>
+    memory_buffer<Capacity>::memory_buffer()
+        : m_buffer{ m_inline_buffer }
+        , m_capacity{ Capacity }
+    {}
+
+    template<std::size_t Capacity>
+    void memory_buffer<Capacity>::grow(std::size_t new_capacity)
+    {
+        char* const new_buffer{ new char[new_capacity] };
+
+        if (m_size > 0)
+        {
+            std::memcpy(new_buffer, m_buffer, m_size);
+        }
+
+        if (m_buffer != m_inline_buffer)
+        {
+            delete[] m_buffer;
+            m_buffer = nullptr;
+        }
+
+        m_buffer = new_buffer;
+        m_capacity = new_capacity;
+    }
+
+    template<std::size_t Capacity>
     void memory_buffer<Capacity>::append(const char* data, std::size_t size)
     {
-        if (m_size + size <= Capacity)
+        if (m_size + size > m_capacity)
         {
-            std::memcpy(m_buffer + m_size, data, size);
-            m_size += size;
+            memory_buffer<Capacity>::grow(m_capacity * 1.5f);
         }
+
+        std::memcpy(m_buffer + m_size, data, size);
+        m_size += size;
     }
 
     template<std::size_t Capacity>
@@ -21,44 +49,50 @@ namespace lwlog::details
     template<std::size_t Capacity>
     void memory_buffer<Capacity>::append(char ch)
     {
-        if (m_size + 1 <= Capacity)
+        if (m_size + 1 > m_capacity)
         {
-            m_buffer[m_size++] = ch;
+            memory_buffer<Capacity>::grow(m_capacity * 1.5f);
         }
+
+        m_buffer[m_size++] = ch;
     }
 
     template<std::size_t Capacity>
     void memory_buffer<Capacity>::replace(std::size_t to_replace_pos, std::size_t to_replace_size,
         const char* const __restrict replace_with, std::size_t replace_with_size)
     {
-        if(m_size - to_replace_size + replace_with_size <= Capacity)
+        if(m_size - to_replace_size + replace_with_size > m_capacity)
         {
-            char* const __restrict shift_dest{ m_buffer + to_replace_pos + replace_with_size };
-            const char* const __restrict shift_source{ m_buffer + to_replace_pos + to_replace_size };
-            const std::size_t shift_size{ m_size - (to_replace_pos + to_replace_size) };
-
-            std::memcpy(shift_dest, shift_source, shift_size);
-            std::memcpy(m_buffer + to_replace_pos, replace_with, replace_with_size);
-
-            m_size = m_size - to_replace_size + replace_with_size;
+            memory_buffer<Capacity>::grow(m_capacity * 1.5f);
         }
+
+        char* const __restrict shift_dest{ m_buffer + to_replace_pos + replace_with_size };
+        const char* const __restrict shift_source{ m_buffer + to_replace_pos + to_replace_size };
+        const std::size_t shift_size{ m_size - (to_replace_pos + to_replace_size) };
+
+        std::memcpy(shift_dest, shift_source, shift_size);
+        std::memcpy(m_buffer + to_replace_pos, replace_with, replace_with_size);
+
+        m_size = m_size - to_replace_size + replace_with_size;
     }
 
     template<std::size_t Capacity>
     void memory_buffer<Capacity>::insert(std::size_t insert_pos, std::size_t insert_size, 
         const char* const __restrict to_insert)
     {
-        if (m_size + insert_size <= Capacity)
+        if (m_size + insert_size > m_capacity)
         {
-            char* const __restrict shift_dest{ m_buffer + insert_pos + insert_size };
-            const char* const __restrict shift_source{ m_buffer + insert_pos };
-            const std::size_t shift_size{ m_size - insert_pos };
-
-            std::memcpy(shift_dest, shift_source, shift_size);
-            std::memcpy(m_buffer + insert_pos, to_insert, insert_size);
-
-            m_size += insert_size;
+            memory_buffer<Capacity>::grow(m_capacity * 1.5f);
         }
+
+        char* const __restrict shift_dest{ m_buffer + insert_pos + insert_size };
+        const char* const __restrict shift_source{ m_buffer + insert_pos };
+        const std::size_t shift_size{ m_size - insert_pos };
+
+        std::memcpy(shift_dest, shift_source, shift_size);
+        std::memcpy(m_buffer + insert_pos, to_insert, insert_size);
+
+        m_size += insert_size;
     }
 
     template<std::size_t Capacity>
@@ -96,11 +130,12 @@ namespace lwlog::details
     template<std::size_t Capacity>
     const char* memory_buffer<Capacity>::c_str()
     {
-        if (m_size <= Capacity)
+        if (m_size < m_capacity)
         {
             m_buffer[m_size] = '\0';
-            return m_buffer;
         }
+
+        return m_buffer;
     }
 
     template<std::size_t Capacity>

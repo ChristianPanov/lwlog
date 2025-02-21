@@ -16,8 +16,7 @@ namespace lwlog
 
 	struct synchronous_policy
 	{
-		template<typename Config, typename BufferLimits, 
-			typename ConcurrencyModelPolicy>
+		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
 		struct backend
 		{
 			details::memory_buffer<BufferLimits::message> message_buffer;
@@ -42,8 +41,7 @@ namespace lwlog
 	> 
 	struct asynchronous_policy
 	{
-		template<typename Config, typename BufferLimits, 
-			typename ConcurrencyModelPolicy>
+		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
 		struct backend
 		{
 			~backend();
