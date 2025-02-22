@@ -72,6 +72,7 @@ jobs:
       run: cmake -E make_directory ${{ runner.workspace }}/build
 
     - name: Configure Clang Build
+      shell: bash
       working-directory: ${{ runner.workspace }}/build
       run: |
         cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
