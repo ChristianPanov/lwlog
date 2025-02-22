@@ -31,7 +31,7 @@ jobs:
         working-directory: "${{ runner.workspace }}/build"
         run: |
           $threads = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
-          cmake --build . --config $env:BUILD_TYPE --parallel $threads
+          cmake --build . --config ${{ env.BUILD_TYPE }} --parallel $threads
 
   mingw_build:
     runs-on: windows-latest
@@ -106,4 +106,4 @@ jobs:
         working-directory: "${{ runner.workspace }}/build"
         run: |
           $threads = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
-          cmake --build . --config $env:BUILD_TYPE --parallel $threads
+          cmake --build . --config ${{ env.BUILD_TYPE }} --parallel $threads
