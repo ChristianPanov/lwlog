@@ -102,8 +102,8 @@ jobs:
         working-directory: "${{ runner.workspace }}/build"
         run: |
           cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-                -DCMAKE_C_COMPILER=icx \
-                -DCMAKE_CXX_COMPILER=icpc \
+                -DCMAKE_C_COMPILER=/opt/intel/oneapi/compiler/latest/linux/bin/icx \
+                -DCMAKE_CXX_COMPILER=/opt/intel/oneapi/compiler/latest/linux/bin/icpc \
                 "${{ github.workspace }}"
 
       - name: Build with Intel

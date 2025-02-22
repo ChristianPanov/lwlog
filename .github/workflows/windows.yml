@@ -74,8 +74,7 @@ jobs:
         shell: bash
         working-directory: "${{ runner.workspace }}/build"
         run: |
-          cmake -G "Ninja" \
-                -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
                 -DCMAKE_C_COMPILER=clang \
                 -DCMAKE_CXX_COMPILER=clang++ \
                 "${{ github.workspace }}"

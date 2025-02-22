@@ -28,7 +28,7 @@ jobs:
 
       - name: Configure CMake
         working-directory: "${{ runner.workspace }}/build"
-        run: cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} $GITHUB_WORKSPACE
+        run: cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} "${{ github.workspace }}"
 
       - name: Build
         working-directory: "${{ runner.workspace }}/build"
