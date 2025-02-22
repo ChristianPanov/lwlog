@@ -7,24 +7,29 @@ on:
   pull_request:
     branches: [ "master", "experimental" ]
 
+env:
+  BUILD_TYPE: Release
+
 jobs:
   build:
     runs-on: macos-latest
     name: Apple Clang Build
-
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Xcode (optional)
-      run: sudo xcode-select -s /Applications/Xcode.app
+      - name: Set up Xcode (optional)
+        run: sudo xcode-select -s /Applications/Xcode.app
 
-    - name: Create Build Environment
-      run: cmake -E make_directory ${{ runner.workspace }}/build
+      - name: Install Ninja
+        run: brew install ninja
 
-    - name: Configure CMake
-      working-directory: ${{ runner.workspace }}/build
-      run: cmake -DCMAKE_BUILD_TYPE=Release $GITHUB_WORKSPACE
+      - name: Create Build Environment
+        run: cmake -E make_directory "${{ runner.workspace }}/build"
 
-    - name: Build
-      working-directory: ${{ runner.workspace }}/build
-      run: cmake --build .
+      - name: Configure CMake
+        working-directory: "${{ runner.workspace }}/build"
+        run: cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} $GITHUB_WORKSPACE
+
+      - name: Build
+        working-directory: "${{ runner.workspace }}/build"
+        run: cmake --build . --parallel $(sysctl -n hw.logicalcpu)

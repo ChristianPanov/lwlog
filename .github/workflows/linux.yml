@@ -20,23 +20,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install GCC
-        run: sudo apt-get update && sudo apt-get install -y gcc g++ 
-
+      - name: Install GCC and Ninja
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc g++ ninja-build
+          
       - name: Create Build Environment
-        run: cmake -E make_directory ${{ runner.workspace }}/build
+        run: cmake -E make_directory "${{ runner.workspace }}/build"
 
       - name: Configure GCC Build
-        working-directory: ${{ runner.workspace }}/build
+        working-directory: "${{ runner.workspace }}/build"
         run: |
-          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
                 -DCMAKE_C_COMPILER=gcc \
                 -DCMAKE_CXX_COMPILER=g++ \
-                $GITHUB_WORKSPACE
+                "${{ github.workspace }}"
 
       - name: Build with GCC
-        working-directory: ${{ runner.workspace }}/build
-        run: cmake --build . --config ${{ env.BUILD_TYPE }}
+        working-directory: "${{ runner.workspace }}/build"
+        run: cmake --build . --parallel $(nproc)
 
   clang_build:
     strategy:
@@ -47,20 +49,63 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Clang
-        run: sudo apt-get update && sudo apt-get install -y clang
+      - name: Install Clang and Ninja
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang ninja-build
 
       - name: Create Build Environment
-        run: cmake -E make_directory ${{ runner.workspace }}/build
+        run: cmake -E make_directory "${{ runner.workspace }}/build"
 
       - name: Configure Clang Build
-        working-directory: ${{ runner.workspace }}/build
+        working-directory: "${{ runner.workspace }}/build"
         run: |
-          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
                 -DCMAKE_C_COMPILER=clang \
                 -DCMAKE_CXX_COMPILER=clang++ \
-                $GITHUB_WORKSPACE
+                "${{ github.workspace }}"
 
       - name: Build with Clang
-        working-directory: ${{ runner.workspace }}/build
-        run: cmake --build . --config ${{ env.BUILD_TYPE }}
+        working-directory: "${{ runner.workspace }}/build"
+        run: cmake --build . --parallel $(nproc)
+
+  intel_build:
+    runs-on: ubuntu-latest
+    name: Intel oneAPI Build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gpg-agent wget ninja-build
+
+      - name: Add Intel oneAPI GPG Key
+        run: |
+          wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+          | gpg --dearmor | sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
+
+      - name: Add Intel oneAPI Repository
+        run: |
+          echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
+          | sudo tee /etc/apt/sources.list.d/oneAPI.list
+
+      - name: Install Intel oneAPI Compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y intel-oneapi-compiler-dpcpp-cpp
+
+      - name: Create Build Environment
+        run: cmake -E make_directory "${{ runner.workspace }}/build"
+
+      - name: Configure Intel Build
+        working-directory: "${{ runner.workspace }}/build"
+        run: |
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_COMPILER=icx \
+                -DCMAKE_CXX_COMPILER=icpc \
+                "${{ github.workspace }}"
+
+      - name: Build with Intel
+        working-directory: "${{ runner.workspace }}/build"
+        run: cmake --build . --parallel $(nproc)
