@@ -40,7 +40,6 @@ int main()
 
 	{
 		Timer timer("timer");
-		//lwlog::details::alignment_formatter::format(buffer, info);
 		console->critical("First {} critical message {}");
 	}
 

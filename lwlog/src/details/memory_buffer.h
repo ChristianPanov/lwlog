@@ -38,7 +38,7 @@ namespace lwlog::details
         const char& operator[](std::size_t index) const;
 
     private:
-        char m_inline_buffer[Capacity];
+        char m_inline_buffer[Capacity]{};
         char* m_buffer{ nullptr };
 
         std::size_t m_size{};

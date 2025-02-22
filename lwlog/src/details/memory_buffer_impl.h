@@ -158,26 +158,19 @@ namespace lwlog::details
             const auto [ptr, ec]{ std::to_chars(buffer, buffer + buffer_size, value) };
             buffer[ptr - buffer] = '\0';
         }
-        else if constexpr (std::is_same_v<T, std::string_view> ||
-            std::is_same_v<T, std::string> ||
-            std::is_same_v<T, const char*> || std::is_same_v<T, char*>)
+        else if constexpr (std::is_same_v<T, std::string_view> || 
+            std::is_same_v<T, std::string>) 
         {
-            std::size_t value_size{};
-
-            if constexpr (std::is_same_v<T, std::string_view> ||
-                std::is_same_v<T, std::string>)
-            {
-                value_size = value.size();
-                std::memcpy(buffer, value.data(), value_size);
-                buffer[value_size] = '\0';
-            }
-            else if constexpr (std::is_same_v<T, const char*> || 
-                std::is_same_v<T, char*>)
-            {
-                value_size = std::strlen(value);
-                std::memcpy(buffer, value, value_size);
-                buffer[value_size] = '\0';
-            }
+            std::size_t value_size{ value.size() };
+            std::memcpy(buffer, value.data(), value_size);
+            buffer[value_size] = '\0';
+        }
+        else if constexpr (std::is_same_v<T, const char*> ||
+            std::is_same_v<T, char*>)
+        {
+            std::size_t value_size{ std::strlen(value) };
+            std::memcpy(buffer, value, value_size);
+            buffer[value_size] = '\0';
         }
     }
 }
