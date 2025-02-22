@@ -86,23 +86,39 @@ jobs:
 
   intel_build:
     runs-on: windows-latest
-    name: Intel x64 Build (Integrated with Visual Studio)
+    name: Intel oneAPI Build
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Intel oneAPI Compiler
+        shell: pwsh
+        run: |
+          choco install intel-oneapi-dpcpp-cpp-compiler -y
+          echo "Intel oneAPI installed successfully."
+
+      - name: Set Up Intel Compiler Paths
+        shell: pwsh
+        run: |
+          $env:ONEAPI_ROOT="C:\Program Files (x86)\Intel\oneAPI"
+          $env:PATH="$env:ONEAPI_ROOT\compiler\latest\windows\bin;$env:PATH"
+          echo "Intel oneAPI environment set up."
+
       - name: Create Build Environment
-        shell: bash
+        shell: pwsh
         run: cmake -E make_directory "${{ runner.workspace }}/build"
 
       - name: Configure Intel Build
-        shell: bash
+        shell: pwsh
         working-directory: "${{ runner.workspace }}/build"
         run: |
-          cmake -A x64 -T "Intel" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} "${{ github.workspace }}"
+          $env:CC="icx"
+          $env:CXX="icpx"
+          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} `
+                -DCMAKE_C_COMPILER=icx `
+                -DCMAKE_CXX_COMPILER=icpx `
+                "${{ github.workspace }}"
 
       - name: Build with Intel
         shell: pwsh
         working-directory: "${{ runner.workspace }}/build"
-        run: |
-          $threads = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
-          cmake --build . --config ${{ env.BUILD_TYPE }} --parallel $threads
+        run: cmake --build . --parallel
