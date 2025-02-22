@@ -104,7 +104,7 @@ jobs:
           source /opt/intel/oneapi/setvars.sh && \
           cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
                 -DCMAKE_C_COMPILER=icx \
-                -DCMAKE_CXX_COMPILER=icpc \
+                -DCMAKE_CXX_COMPILER=icpx \
                 "${{ github.workspace }}"
 
       - name: Build with Intel (with oneAPI Environment)
