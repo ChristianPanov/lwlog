@@ -95,6 +95,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y intel-oneapi-compiler-dpcpp-cpp
 
+      - name: Source Intel oneAPI Environment
+        run: |
+          source /opt/intel/oneapi/setvars.sh
+          echo "Intel oneAPI environment set."
+
       - name: Create Build Environment
         run: cmake -E make_directory "${{ runner.workspace }}/build"
 
@@ -102,8 +107,8 @@ jobs:
         working-directory: "${{ runner.workspace }}/build"
         run: |
           cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-                -DCMAKE_C_COMPILER=/opt/intel/oneapi/compiler/latest/linux/bin/icx \
-                -DCMAKE_CXX_COMPILER=/opt/intel/oneapi/compiler/latest/linux/bin/icpc \
+                -DCMAKE_C_COMPILER=icx \
+                -DCMAKE_CXX_COMPILER=icpc \
                 "${{ github.workspace }}"
 
       - name: Build with Intel
