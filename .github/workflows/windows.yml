@@ -84,27 +84,20 @@ jobs:
         working-directory: "${{ runner.workspace }}/build"
         run: cmake --build . --config ${{ env.BUILD_TYPE }} --parallel
 
-  intel_build:
+ intel_build:
     runs-on: windows-latest
-    name: Intel oneAPI Build (Standalone)
+    name: Intel x64 Build (VS Integrated)
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download Intel oneAPI Compiler Runtime
+      - name: Install Intel oneAPI Integration via VS Installer
         shell: pwsh
         run: |
-          $url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/e2308d8f-75aa-428f-a7de-dad2ae14469e/w_dpcpp_cpp_runtime_p_2025.0.0.1166.exe"
-          $output = "${env:USERPROFILE}\Downloads\w_dpcpp_cpp_runtime_p_2025.0.0.1166.exe"
-          Write-Host "Downloading Intel oneAPI Compiler Runtime from $url ..."
-          Invoke-WebRequest -Uri $url -OutFile $output
-
-      - name: Install Intel oneAPI Compiler Runtime
-        shell: pwsh
-        run: |
-          $installer = "${env:USERPROFILE}\Downloads\w_dpcpp_cpp_runtime_p_2025.0.0.1166.exe"
-          Write-Host "Installing Intel oneAPI Compiler Runtime..."
-          Start-Process -FilePath $installer -ArgumentList "/quiet","/norestart" -Wait
-          Write-Host "Installation completed."
+          # Define the Visual Studio installation path and installer path.
+          $vsInstallPath = "C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise"
+          $installerPath = "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe"
+          Write-Host "Modifying Visual Studio installation to add Intel oneAPI integration..."
+          & $installerPath modify --installPath $vsInstallPath --add Microsoft.VisualStudio.Component.IntelOneAPIDPCPP
 
       - name: Create Build Environment
         shell: bash
@@ -113,11 +106,7 @@ jobs:
       - name: Configure Intel Build
         shell: bash
         working-directory: "${{ runner.workspace }}/build"
-        run: |
-          cmake -A x64 -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-                -DCMAKE_C_COMPILER="C:\Program Files (x86)\Intel\oneAPI\compiler\2025.0\windows\bin\icx.exe" \
-                -DCMAKE_CXX_COMPILER="C:\Program Files (x86)\Intel\oneAPI\compiler\2025.0\windows\bin\icpx.exe" \
-                "${{ github.workspace }}"
+        run: cmake -A x64 -T "Intel" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} "${{ github.workspace }}"
 
       - name: Build with Intel
         shell: pwsh
