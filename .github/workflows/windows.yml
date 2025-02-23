@@ -84,41 +84,44 @@ jobs:
         working-directory: "${{ runner.workspace }}/build"
         run: cmake --build . --config ${{ env.BUILD_TYPE }} --parallel
 
-  intel_build:
+intel_build:
     runs-on: windows-latest
-    name: Intel oneAPI Build
+    name: Intel oneAPI Build (Standalone)
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Intel oneAPI Compiler
+      - name: Download Intel oneAPI Compiler Runtime
         shell: pwsh
         run: |
-          choco install intel-oneapi-dpcpp-cpp-compiler -y
-          echo "Intel oneAPI installed successfully."
+          $url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/e2308d8f-75aa-428f-a7de-dad2ae14469e/w_dpcpp_cpp_runtime_p_2025.0.0.1166.exe"
+          $output = "${env:USERPROFILE}\Downloads\w_dpcpp_cpp_runtime_p_2025.0.0.1166.exe"
+          Write-Host "Downloading Intel oneAPI Compiler Runtime from $url ..."
+          Invoke-WebRequest -Uri $url -OutFile $output
 
-      - name: Set Up Intel Compiler Paths
+      - name: Install Intel oneAPI Compiler Runtime
         shell: pwsh
         run: |
-          $env:ONEAPI_ROOT="C:\Program Files (x86)\Intel\oneAPI"
-          $env:PATH="$env:ONEAPI_ROOT\compiler\latest\windows\bin;$env:PATH"
-          echo "Intel oneAPI environment set up."
+          $installer = "${env:USERPROFILE}\Downloads\w_dpcpp_cpp_runtime_p_2025.0.0.1166.exe"
+          Write-Host "Installing Intel oneAPI Compiler Runtime..."
+          Start-Process -FilePath $installer -ArgumentList "/quiet","/norestart" -Wait
+          Write-Host "Installation completed."
 
       - name: Create Build Environment
-        shell: pwsh
+        shell: bash
         run: cmake -E make_directory "${{ runner.workspace }}/build"
 
       - name: Configure Intel Build
-        shell: pwsh
+        shell: bash
         working-directory: "${{ runner.workspace }}/build"
         run: |
-          $env:CC="icx"
-          $env:CXX="icpx"
-          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} `
-                -DCMAKE_C_COMPILER=icx `
-                -DCMAKE_CXX_COMPILER=icpx `
+          cmake -A x64 -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_COMPILER="C:\Program Files (x86)\Intel\oneAPI\compiler\2025.0\windows\bin\icx.exe" \
+                -DCMAKE_CXX_COMPILER="C:\Program Files (x86)\Intel\oneAPI\compiler\2025.0\windows\bin\icpx.exe" \
                 "${{ github.workspace }}"
 
       - name: Build with Intel
         shell: pwsh
         working-directory: "${{ runner.workspace }}/build"
-        run: cmake --build . --parallel
+        run: |
+          $threads = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
+          cmake --build . --config ${{ env.BUILD_TYPE }} --parallel $threads
