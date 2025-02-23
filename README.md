@@ -17,23 +17,29 @@ Very fast C++17 logging library
 ```
 git clone --recursive https://github.com/ChristianPanov/lwlog
 ```
-
 ## Installing the CMake Package
 ```
 cmake -B <Build Directory> -S <Directory of CMakeLists.txt> -DCMAKE_INSTALL_PREFIX=<Installation Directory>
 cmake --build <Build Directory> --target install --config <Debug/Release>
 ```
-
 ## Linking lwlog to your project with CMake
 ```
 find_package(lwlog_lib HINTS <Installation Directory>/lib/cmake)
 
 target_link_libraries(MyExe PRIVATE lwlog::lwlog_lib)
 ```
-## Release 1.4 (Upcoming)
+# Supported Platforms and Compilers
+The project is continuously tested on the following platforms and compilers:
+| Platform | Architecture         | Compilers Supported
+|----------|----------------------|-----------------------------------------------
+| Windows  | x64                  | MSVC, MinGW (MINGW64, UCRT64), Clang
+| Linux    | x64                  | GCC, Clang, Intel oneAPI (icx/icpx)
+| Linux    | arm64                | GCC, Clang
+| macOS    | x64   | Apple Clang
+# Release 1.4 (Upcoming)
 The upcoming release of 1.4 brings a significant focus on performance optimization and resource efficiency.
 
-### Static Buffer for String Manipulations ###
+## ~~Static Buffer for String Manipulations~~ ###
 **What’s New:**
 - Introducing a static pre-allocated memory buffer for string manipulations to minimize dynamic memory allocations.
 - Promotes memory reuse and improves performance for high-frequency logging scenarios.
@@ -41,7 +47,7 @@ The upcoming release of 1.4 brings a significant focus on performance optimizati
 **Why It Matters:**
 - Reduces the overhead associated with creating and destroying temporary strings during log formatting.
 - Particularly beneficial for applications requiring low-latency logging or operating in resource-constrained environments.
-### Faster Floating-Point and Integer String Conversions ### 
+## ~~Faster Floating-Point and Integer String Conversions~~ ### 
 **What’s New:**
 - Custom-built algorithms for converting floating-point and integer values to strings.
 - Optimized to outperform std::to_string with more efficient operations.
@@ -49,7 +55,7 @@ The upcoming release of 1.4 brings a significant focus on performance optimizati
 **Why It Matters:**
 - Achieves significantly faster number-to-string conversions, which are a critical part of many log messages.
 - Provides more consistent and predictable performance across different platforms.
-### Improved String Manipulation Algorithms ### 
+## ~~Improved String Manipulation Algorithms~~ ### 
 **What’s New:**
 - Enhanced algorithms for searching and replacing substrings in patterns.
 - Reduces computational overhead, especially for patterns with frequent or repetitive placeholders.
@@ -57,10 +63,10 @@ The upcoming release of 1.4 brings a significant focus on performance optimizati
 **Why It Matters:**
 - Faster string replacements lead to reduced latency in log generation, improving overall logging performance.
 - Handles larger log patterns and more complex formatting with ease.
-### ~~Thread Affinity for Asynchronous Logger~~ (Done) ### 
+## ~~Thread Affinity for Asynchronous Logger~~ (Done) ### 
 **What’s New:**
 - The asynchronous logger can now be configured to bind its background threads to specific CPU cores.
-  
+
 **Why It Matters:**
 - Reduces context switching and improves cache efficiency for background log processing.
 - Boosts throughput in high-concurrency environments by isolating logging threads from other workloads.
@@ -71,15 +77,15 @@ _Another logging library, how boring, right, as If we don't see a new one each w
 _No matter what you do or say, there will always be people who hold a different view. It might always happen that you were in the wrong or that you could have done better. Anyone could take away the joy of your creation. However, no one can take away the hours you've spent crafting it, no one can take away the hours you've spent studying and learning in the process, no one can take away the times when you've felt the pride-inducing adrenaline rush when you faced a challenge that was out of your league, were stubborn enough not to give up, and actually did it. No one can take away any of that, any of the things that should make you proud. That's what real craftsmanship is - taking pride in what you do with all your heart and being too stubborn to give up on the currently impossible, it is an act of self expression that transcends simple interest and mindless action._
 
 # Design Highlights
-- **Code Base:** The code is crafted with clarity, elegance, and readability in mind, hoping it is structured enough to prove relatively easy for developers to understand, modify, extend, and learn from.
+- **Zero Allocation Log Call:** ***lwlog*** eliminates dynamic memory allocations during log calls by using a pre-allocated static buffer for string formatting. This improves performance by avoiding frequent heap allocations and reducing memory fragmentation—especially important for high-frequency logging in resource-constrained or real-time environments.
 - **Performance:** ***lwlog*** offers very fast logging capabilities, both in synchronous and asynchronous modes, ensuring minimal impact on your application’s performance.
 - **Extensibility:** Adding new types of sinks and loggers is straightforward, providing flexibility to adapt the library to your specific needs. [Check out how to create your own sink for a practical example](https://github.com/ChristianPanov/lwlog#creating-your-own-sink)
 - **Configurability:** ***lwlog*** uses [policy classes](https://github.com/ChristianPanov/lwlog#logger-policies) which you can just plug in based on your needs.
 - **Ease of Use:** ***lwlog*** tries to follow a philosophy of intuitiveness. As the author, I am biased, so I can only hope the API is as intuitive as I see it in my eyes. Convenient easy-to-use predefined types([convenience aliases](https://github.com/ChristianPanov/lwlog#convenience-logger-aliases)) are made for simplicity without too much configuration. Most of the time, you will be just fine with using the predefined types.
+- **Code Base:** The code is crafted with clarity, elegance, and readability in mind, hoping it is structured enough to prove relatively easy for developers to understand, modify, extend, and learn from.
 # Features
 - Written in modern C++17
 - Very fast synchronous and asynchronous logging
-- Forward(default, linear) and [deferred(non-linear)](https://github.com/ChristianPanov/lwlog#deferred-logging) logging mechanisms
 - Verbosity levels
 - Various log sinks
 	- Console (stdout, stderr)
@@ -90,10 +96,6 @@ _No matter what you do or say, there will always be people who hold a different 
 - Log formatting according to a [custom user-defined pattern](https://github.com/ChristianPanov/lwlog#formatting)
 - [Source Metainformation Attributes](https://github.com/ChristianPanov/lwlog/blob/master/README.md#source-metainformation-function-name-file-path-current-line)
 - [Custom Attributes](https://github.com/ChristianPanov/lwlog#custom-attributes)
-- Global logger registry
-# TODO
-- Memory-mapped file sink
-- Package managers support
 # Benchmarks
 Benchmarked with picobench(https://github.com/iboB/picobench)
 
@@ -167,18 +169,16 @@ Benchmarked with picobench(https://github.com/iboB/picobench)
 ```
 # Logical Architecture
 ```
-Registry
-└── Logger
+Logger
     └── Sink
         └── Record
 ```
-The architecture of ***lwlog*** is very simple, it's divided into three main modules - the **registry**, the **logger**, the **sinks**, and the **record**.
+The architecture of ***lwlog*** is very simple, it's divided into three main modules - the **logger**, the **sinks**, and the **record**.
 Module | Description
 ------------ | -------------
 ```Record``` | An object that encapsulates the data that will be logged, including the message, logging level, metadata (current line, file, and function), timepoint, and execution context (current thread ID and process ID).
 ```Sink``` | An object that sends(sinks) data to an output destination. Usually, the data could be handled by a writer object, or you can directly handle the output in the ```sink_it()``` function without using a writer.
 ```Logger``` | An object that manages a number of sinks. It provides the same functionality as a sink, with the difference being that it contains a storage of sinks, and every operation the logger performs is distributed to all the sinks it contains. You can configure the logger to log synchronously or asynchronously. **NOTE**: I highly encourage using a logger, even when you are going to be using a single sink
-```Registry``` | A global singleton class that acts as a repository for all created loggers, ensuring easy access throughout your application. Loggers are automatically registered upon creation unless automatic registration is disabled.
 # Usage
 ## Basic Usage
 ```cpp
@@ -722,56 +722,6 @@ int main()
 [22, 20:00:15] [critical] [DEFAULT]: Critical message
 [22, 20:00:15] [debug] [DEFAULT]: Debug message
 [20:00:15] [DEFAULT] [debug]: Will be displayed according to the new pattern
-```
-## Global operations
-In order to apply a logger function to all loggers present in the registry, you can use the function ```lwlog::apply_to_all()``` in such manner
-```cpp
-#include "lwlog.h"
-
-int main()
-{
-	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
-	auto file = std::make_shared<lwlog::file_logger>("FILE", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
-	
-	//Pattern will be applied to all loggers present in the registry
-	lwlog::apply_to_all([](lwlog::logger_ptr logger)
-		{
-			logger->set_pattern("[%T] [%n] [%l]: %v");
-		});
-	
-	return 0;
-}
-```
-## Accessing a logger from the global registry by name
-```cpp
-#include "lwlog.h"
-
-int main()
-{
-	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
-	
-	lwlog::get("CONSOLE")->critical("First critical message");
-	
-	return 0;
-}
-```
-## Disabling logging
-In most scenarios, you want to be able to disable logging entirely from your codebase. ***lwlog*** provides a flexible way to achieve this using preprocessor directives.
-To turn off all logging function calls, define the ```LWLOG_DISABLE``` preprocessor directive at the top of your source file.
-When ```LWLOG_DISABLE``` is defined, all logging calls expand to nothing.
-```cpp
-#define LWLOG_DISABLE
-#define LWLOG_ERROR_OFF
-#include "lwlog.h"
-
-int main()
-{
-	LWLOG_INIT_DEFAULT_LOGGER();
-	LWLOG_SET_PATTERN("[%T] [%n] [%l]: %v");
-	LWLOG_SET_LEVEL_FILTER(lwlog::level::error | lwlog::level::critical);
-	LWLOG_ERROR("First error message");
-	return 0;
-}
 ```
 # Performance
 So how does ***lwlog*** achieve this performance? In the following section, I will break down all the performance-enhancing decisions that I've made.
