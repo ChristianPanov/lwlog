@@ -83,34 +83,3 @@ jobs:
         shell: bash
         working-directory: "${{ runner.workspace }}/build"
         run: cmake --build . --config ${{ env.BUILD_TYPE }} --parallel
-
-  intel_build:
-    runs-on: windows-latest
-    name: Intel x64 Build (VS Integrated)
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Intel oneAPI Integration via VS Installer
-        shell: pwsh
-        run: |
-          # Define the Visual Studio installation path and installer path.
-          $vsInstallPath = "C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise"
-          $installerPath = "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe"
-          Write-Host "Modifying Visual Studio installation to add Intel oneAPI integration..."
-          & $installerPath modify --installPath $vsInstallPath --add Microsoft.VisualStudio.Component.IntelOneAPIDPCPP
-
-      - name: Create Build Environment
-        shell: bash
-        run: cmake -E make_directory "${{ runner.workspace }}/build"
-
-      - name: Configure Intel Build
-        shell: bash
-        working-directory: "${{ runner.workspace }}/build"
-        run: cmake -A x64 -T "Intel" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} "${{ github.workspace }}"
-
-      - name: Build with Intel
-        shell: pwsh
-        working-directory: "${{ runner.workspace }}/build"
-        run: |
-          $threads = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
-          cmake --build . --config ${{ env.BUILD_TYPE }} --parallel $threads
