@@ -84,7 +84,7 @@ jobs:
         working-directory: "${{ runner.workspace }}/build"
         run: cmake --build . --config ${{ env.BUILD_TYPE }} --parallel
 
-intel_build:
+  intel_build:
     runs-on: windows-latest
     name: Intel oneAPI Build (Standalone)
     steps:
