@@ -1,0 +1,74 @@
+name: Dynamic Analysis
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master", "experimental" ]
+  pull_request:
+    branches: [ "master", "experimental" ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  dynamic_analysis:
+    runs-on: "ubuntu-latest"
+    name: Dynamic Analysis with Valgrind Tools
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Build Dependencies and Valgrind
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc g++ ninja-build valgrind
+          
+      - name: Create Build Environment
+        run: cmake -E make_directory "${{ runner.workspace }}/build"
+
+      - name: Configure Build
+        working-directory: "${{ runner.workspace }}/build"
+        run: |
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_COMPILER=gcc \
+                -DCMAKE_CXX_COMPILER=g++ \
+                "${{ github.workspace }}"
+
+      - name: Build
+        working-directory: "${{ runner.workspace }}/build"
+        run: cmake --build . --parallel $(nproc)
+
+      - name: Set Executable Permissions
+        run: chmod +x ./lwlog_sandbox
+        
+      - name: Run Valgrind Memcheck
+        run: |
+          echo "Running Valgrind Memcheck..."
+          valgrind --tool=memcheck --leak-check=full --error-exitcode=1 ./lwlog_sandbox &> memcheck_results.txt
+
+      - name: Upload Memcheck Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: memcheck_results
+          path: memcheck_results.txt
+
+      - name: Run Valgrind Helgrind
+        run: |
+          echo "Running Valgrind Helgrind..."
+          valgrind --tool=helgrind --error-exitcode=1 ./lwlog_sandbox &> helgrind_results.txt
+
+      - name: Upload Helgrind Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: helgrind_results
+          path: helgrind_results.txt
+
+      - name: Run Valgrind Cachegrind
+        run: |
+          echo "Running Valgrind Helgrind..."
+          valgrind --tool=cachegrind ./lwlog_sandbox &> cachegrind_results.txt
+
+      - name: Upload Cachegrind Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: cachegrind_results
+          path: cachegrind_results.txt
