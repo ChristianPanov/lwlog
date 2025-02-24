@@ -2,7 +2,7 @@ name: Dynamic Analysis
 
 on:
   workflow_run:
-    workflows: ["linux"]  # Replace with the exact name of your Linux build workflow
+    workflows: ["Linux"]  # Replace with the exact name of your Linux build workflow
     types: [completed]
   push:
     branches: [ "master", "experimental" ]
