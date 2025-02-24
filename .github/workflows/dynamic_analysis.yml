@@ -17,6 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Create dynamic_analysis directory
+        run: mkdir -p dynamic_analysis
+
       - name: Install Build Dependencies and Valgrind
         run: |
           sudo apt-get update
@@ -45,37 +48,37 @@ jobs:
         working-directory: "${{ runner.workspace }}/build"
         run: |
           echo "Running Valgrind Memcheck..."
-          valgrind --tool=memcheck --leak-check=full --error-exitcode=1 ./lwlog_sandbox &> memcheck_results.txt
+          valgrind --tool=memcheck --leak-check=full --error-exitcode=1 ./lwlog_sandbox &> dynamic_analysis/memcheck_results.txt
         continue-on-error: true
 
       - name: Upload Memcheck Results
         uses: actions/upload-artifact@v4
         with:
           name: memcheck_results
-          path: memcheck_results.txt
+          path: dynamic_analysis/memcheck_results.txt
 
       - name: Run Valgrind Helgrind
         working-directory: "${{ runner.workspace }}/build"
         run: |
           echo "Running Valgrind Helgrind..."
-          valgrind --tool=helgrind --error-exitcode=1 ./lwlog_sandbox &> helgrind_results.txt
+          valgrind --tool=helgrind --error-exitcode=1 ./lwlog_sandbox &> dynamic_analysis/helgrind_results.txt
         continue-on-error: true
 
       - name: Upload Helgrind Results
         uses: actions/upload-artifact@v4
         with:
           name: helgrind_results
-          path: helgrind_results.txt
+          path: dynamic_analysis/helgrind_results.txt
 
       - name: Run Valgrind Cachegrind
         working-directory: "${{ runner.workspace }}/build"
         run: |
           echo "Running Valgrind Helgrind..."
-          valgrind --tool=cachegrind ./lwlog_sandbox &> cachegrind_results.txt
+          valgrind --tool=cachegrind ./lwlog_sandbox &> dynamic_analysis/cachegrind_results.txt
         continue-on-error: true
 
       - name: Upload Cachegrind Results
         uses: actions/upload-artifact@v4
         with:
           name: cachegrind_results
-          path: cachegrind_results.txt
+          path: dynamic_analysis/cachegrind_results.txt
