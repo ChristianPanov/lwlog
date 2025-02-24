@@ -17,9 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create dynamic_analysis directory
-        run: mkdir -p "${{ runner.workspace }}/dynamic_analysis"
-
       - name: Install Build Dependencies and Valgrind
         run: |
           sudo apt-get update

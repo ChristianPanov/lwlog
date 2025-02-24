@@ -16,28 +16,23 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Create static_analysis directory
-      run: mkdir -p static_analysis
-
     - name: Run Cppcheck
       run: |
         sudo apt-get install -y cppcheck
-        cppcheck --enable=all --inconclusive --force --language=c++ --file-list=<(find lwlog/src/ -name "*.cpp" -o -name "*.h") &> static_analysis/cppcheck.txt
+        cppcheck --enable=all --inconclusive --force --language=c++ --file-list=<(find lwlog/src/ -name "*.cpp" -o -name "*.h") &> \
+        "${{ runner.workspace }}/cppcheck.txt"
       continue-on-error: true
 
     - name: Upload Cppcheck Results
       uses: actions/upload-artifact@v4
       with:
         name: cppcheck_results
-        path: static_analysis/cppcheck.txt
+        path: "${{ runner.workspace }}/cppcheck.txt"
 
   clang-tidy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-
-    - name: Create static_analysis directory
-      run: mkdir -p static_analysis
 
     - name: Install Dependencies
       run: sudo apt-get install -y build-essential cmake
@@ -54,14 +49,15 @@ jobs:
     - name: Run Clang-Tidy
       run: |
         sudo apt-get install -y clang-tidy
-        find lwlog/src/ -name "*.cpp" -o -name "*.h" | xargs clang-tidy -p=build/compile_commands.json &> static_analysis/clang-tidy.txt
+        find lwlog/src/ -name "*.cpp" -o -name "*.h" | xargs clang-tidy -p=build/compile_commands.json &> \
+        "${{ runner.workspace }}/clang-tidy.txt"
       continue-on-error: true
 
     - name: Upload Clang-Tidy Results
       uses: actions/upload-artifact@v4
       with:
         name: clangtidy_results
-        path: static_analysis/clang-tidy.txt
+        path: "${{ runner.workspace }}/clang-tidy.txt"
 
   sonar-scanner:
     runs-on: ubuntu-latest
