@@ -1,6 +1,7 @@
 name: Dynamic Analysis
 
-on:
+on:  
+  workflow_dispatch:
   workflow_run:
     workflows: ["Linux"]  # Replace with the exact name of your Linux build workflow
     types: [completed]
