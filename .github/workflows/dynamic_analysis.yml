@@ -4,10 +4,6 @@ on:
   workflow_run:
     workflows: ["Linux"]  # Replace with the exact name of your Linux build workflow
     types: [completed]
-  push:
-    branches: [ "master", "experimental" ]
-  pull_request:
-    branches: [ "master", "experimental" ]
 
 jobs:
   valgrind_memcheck:
