@@ -1,16 +1,29 @@
 name: Static Analysis
 
 on:
-  workflow_dispatch:
-  push:
-    branches: [ "master", "experimental" ]
-  pull_request:
-    branches: [ "master", "experimental" ]
+  workflow_dispatch: {}
+  workflow_run:
+    workflows: ["Linux"]
+    types: [completed]
 
 env:
   BUILD_TYPE: Release
 
 jobs:
+  valgrind_memcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Executable Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: test_executable
+      - name: Install Valgrind
+        run: sudo apt-get update && sudo apt-get install -y valgrind
+      - name: Run Valgrind Memcheck
+        run: |
+          valgrind --tool=memcheck --leak-check=full --error-exitcode=1 ./lwlog_sandbox
+          
   cppcheck:
     runs-on: ubuntu-latest
     steps:
