@@ -40,6 +40,12 @@ jobs:
         working-directory: "${{ runner.workspace }}/build"
         run: cmake --build . --parallel $(nproc)
 
+      - name: Upload Executable Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test_executable
+          path: "${{ runner.workspace }}/build/lwlog_sandbox"
+
   clang_build:
     strategy:
       matrix:

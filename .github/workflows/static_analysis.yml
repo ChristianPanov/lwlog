@@ -13,7 +13,6 @@ env:
 jobs:
   cppcheck:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
 
@@ -34,7 +33,6 @@ jobs:
 
   clang-tidy:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
 
@@ -45,7 +43,7 @@ jobs:
       run: sudo apt-get install -y build-essential cmake
 
     - name: Create Build Environment
-      run: cmake -E make_directory ${{runner.workspace}}/build
+      run: cmake -E make_directory "${{runner.workspace}}/build"
 
     - name: Generate compile_commands.json
       run: |
@@ -67,10 +65,8 @@ jobs:
 
   sonar-scanner:
     runs-on: ubuntu-latest
-
     env:
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
-
     steps:
     - uses: actions/checkout@v4
       with:
@@ -83,21 +79,28 @@ jobs:
       uses: SonarSource/sonarcloud-github-c-cpp@v3
 
     - name: Create Build Environment
-      run: cmake -E make_directory ${{ runner.workspace }}/build
+      run: cmake -E make_directory "${{ runner.workspace }}/build"
 
     - name: Configure GCC Build
-      working-directory: ${{ runner.workspace }}/build
-      run: | 
-        cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_EXPORT_COMPILE_COMMANDS=1 $GITHUB_WORKSPACE
+      working-directory: "${{ runner.workspace }}/build"
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_COMPILER=gcc \
+                -DCMAKE_CXX_COMPILER=g++ \
+                -DCMAKE_EXPORT_COMPILE_COMMANDS=1 "${{ github.workspace }}"
 
     - name: Build with GCC (with build-wrapper)
-      working-directory: ${{ runner.workspace }}/build
+      working-directory: "${{ runner.workspace }}/build"
       run: |
-        build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build . --config ${{ env.BUILD_TYPE }}
+        build-wrapper-linux-x86-64 --out-dir "${{ env.BUILD_WRAPPER_OUT_DIR }}" cmake --build . --config ${{ env.BUILD_TYPE }}
           
     - name: Run sonar-scanner
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: |
-        sonar-scanner --define sonar.cfamily.compile-commands="${{ runner.workspace }}/build/compile_commands.json"
+        run: |
+          sonar-scanner \
+            -Dsonar.cfamily.compile-commands="${{ runner.workspace }}/build/compile_commands.json" \
+            -Dsonar.projectKey=ChristianPanov_lwlog \
+            -Dsonar.organization=christianpanov \
+            -Dsonar.sources=lwlog/src
