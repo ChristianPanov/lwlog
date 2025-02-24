@@ -38,9 +38,11 @@ jobs:
         run: cmake --build . --parallel $(nproc)
 
       - name: Set Executable Permissions
+        working-directory: "${{ runner.workspace }}/build"
         run: chmod +x ./lwlog_sandbox
         
       - name: Run Valgrind Memcheck
+        working-directory: "${{ runner.workspace }}/build"
         run: |
           echo "Running Valgrind Memcheck..."
           valgrind --tool=memcheck --leak-check=full --error-exitcode=1 ./lwlog_sandbox &> memcheck_results.txt
@@ -52,6 +54,7 @@ jobs:
           path: memcheck_results.txt
 
       - name: Run Valgrind Helgrind
+        working-directory: "${{ runner.workspace }}/build"
         run: |
           echo "Running Valgrind Helgrind..."
           valgrind --tool=helgrind --error-exitcode=1 ./lwlog_sandbox &> helgrind_results.txt
@@ -63,6 +66,7 @@ jobs:
           path: helgrind_results.txt
 
       - name: Run Valgrind Cachegrind
+        working-directory: "${{ runner.workspace }}/build"
         run: |
           echo "Running Valgrind Helgrind..."
           valgrind --tool=cachegrind ./lwlog_sandbox &> cachegrind_results.txt
