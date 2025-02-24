@@ -41,6 +41,7 @@ jobs:
         run: cmake --build . --parallel $(nproc)
 
       - name: Upload Executable Artifact
+        if: matrix.runner == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
           name: test_executable
