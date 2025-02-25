@@ -2,6 +2,10 @@ name: Dynamic Analysis
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ "master", "experimental" ]
+  pull_request:
+    branches: [ "master", "experimental" ]
 
 env:
   BUILD_TYPE: Debug
