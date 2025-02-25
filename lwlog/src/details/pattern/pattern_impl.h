@@ -289,6 +289,8 @@ namespace lwlog::details
         {
             return std::make_unique<nanosecond_formatter<Config, BufferLimits>>();
         }
+
+		return nullptr;
 	}
 
 	template<typename Config, typename BufferLimits>

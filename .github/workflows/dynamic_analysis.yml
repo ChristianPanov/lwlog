@@ -2,13 +2,9 @@ name: Dynamic Analysis
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "master", "experimental" ]
-  pull_request:
-    branches: [ "master", "experimental" ]
 
 env:
-  BUILD_TYPE: Release
+  BUILD_TYPE: Debug
 
 jobs:
   dynamic_analysis:
@@ -31,6 +27,8 @@ jobs:
           cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
                 -DCMAKE_C_COMPILER=gcc \
                 -DCMAKE_CXX_COMPILER=g++ \
+                -DCMAKE_C_FLAGS="-g -O0" \
+                -DCMAKE_CXX_FLAGS="-g -O0" \
                 "${{ github.workspace }}"
 
       - name: Build
