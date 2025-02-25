@@ -15,16 +15,19 @@ namespace lwlog::sinks
 
 		sink::add_attribute(".level(", m_current_level, [&](char* buffer, std::size_t size)
 		{
+			std::string_view color_code;
 			switch (m_current_level)
 			{
-			case level::info:		buffer = "\u001b[37m"; break;
-			case level::warning:	buffer = "\u001b[33;1m"; break;
-			case level::error:		buffer = "\u001b[31;1m"; break;
-			case level::critical:	buffer = "\u001b[41;1m"; break;
-			case level::debug:		buffer = "\u001b[37;1m"; break;
-			case level::all: 		buffer = ""; break;
-			case level::none: 		buffer = ""; break;
+			case level::info:		color_code = "\u001b[37m"; break;
+			case level::warning:	color_code = "\u001b[33;1m"; break;
+			case level::error:		color_code = "\u001b[31;1m"; break;
+			case level::critical:	color_code = "\u001b[41;1m"; break;
+			case level::debug:		color_code = "\u001b[37;1m"; break;
+			case level::all: 		color_code = ""; break;
+			case level::none: 		color_code = ""; break;
 			}
+
+			details::convert_to_chars(buffer, size, color_code);
 		});
 	}
 
