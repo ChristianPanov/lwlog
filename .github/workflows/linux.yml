@@ -34,6 +34,8 @@ jobs:
           cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
                 -DCMAKE_C_COMPILER=gcc \
                 -DCMAKE_CXX_COMPILER=g++ \
+                -DCMAKE_C_FLAGS="-Wall -Wextra -Wpedantic" \
+                -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic" \
                 "${{ github.workspace }}"
 
       - name: Build with GCC
@@ -63,6 +65,8 @@ jobs:
           cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
                 -DCMAKE_C_COMPILER=clang \
                 -DCMAKE_CXX_COMPILER=clang++ \
+                -DCMAKE_C_FLAGS="-Wall -Wextra -Wpedantic" \
+                -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic" \
                 "${{ github.workspace }}"
 
       - name: Build with Clang
@@ -105,6 +109,8 @@ jobs:
           cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
                 -DCMAKE_C_COMPILER=icx \
                 -DCMAKE_CXX_COMPILER=icpx \
+                -DCMAKE_C_FLAGS="-Wall -Wextra -Wpedantic" \
+                -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic" \
                 "${{ github.workspace }}"
 
       - name: Build with Intel (with oneAPI Environment)

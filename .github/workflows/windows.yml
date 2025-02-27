@@ -24,7 +24,11 @@ jobs:
       - name: Configure MSVC Build
         shell: bash
         working-directory: "${{ runner.workspace }}/build"
-        run: cmake -A x64 -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} "${{ github.workspace }}"
+        run: |
+          cmake -A x64 -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_FLAGS="-Wall" \
+                -DCMAKE_CXX_FLAGS="-Wall" \
+                "${{ github.workspace }}"
 
       - name: Build with MSVC
         shell: pwsh
@@ -54,7 +58,10 @@ jobs:
       - name: Configure MinGW Build
         shell: msys2 {0}
         run: |
-          cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} "${{ github.workspace }}"
+          cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_FLAGS="-Wall -Wextra -Wpedantic" \
+                -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic" \
+                "${{ github.workspace }}"
 
       - name: Build with MinGW
         shell: msys2 {0}
@@ -77,6 +84,8 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
                 -DCMAKE_C_COMPILER=clang \
                 -DCMAKE_CXX_COMPILER=clang++ \
+                -DCMAKE_C_FLAGS="-Wall -Wextra -Wpedantic" \
+                -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic" \
                 "${{ github.workspace }}"
 
       - name: Build with Clang

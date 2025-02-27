@@ -28,7 +28,11 @@ jobs:
 
       - name: Configure CMake
         working-directory: "${{ runner.workspace }}/build"
-        run: cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} "${{ github.workspace }}"
+        run: |
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_FLAGS="-Wall -Wextra -Wpedantic" \
+                -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic" \
+                "${{ github.workspace }}"
 
       - name: Build
         working-directory: "${{ runner.workspace }}/build"
