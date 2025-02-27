@@ -91,7 +91,7 @@ jobs:
         working-directory: "${{ runner.workspace }}/build"
         run: |
           echo "Running perf stat..."
-          perf stat -e cycles,instructions,branches,branch-misses,context-switches,cpu-migrations,page-faults,\
+          sudo perf stat -e cycles,instructions,branches,branch-misses,context-switches,cpu-migrations,page-faults,\
           cache-references,cache-misses,\
           L1-dcache-loads,L1-dcache-load-misses \
           ./${{ env.BIN_NAME }} &> \
