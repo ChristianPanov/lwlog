@@ -81,11 +81,9 @@ jobs:
         shell: bash
         working-directory: "${{ runner.workspace }}/build"
         run: |
-          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-                -DCMAKE_C_COMPILER=clang \
-                -DCMAKE_CXX_COMPILER=clang++ \
-                -DCMAKE_C_FLAGS="-Wall -Wextra -Wpedantic" \
-                -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic" \
+          cmake -A x64 -T clang-cl -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_FLAGS="/W4" \
+                -DCMAKE_CXX_FLAGS="/W4" \
                 "${{ github.workspace }}"
 
       - name: Build with Clang
