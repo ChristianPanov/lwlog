@@ -98,7 +98,7 @@ namespace lwlog::details
     template<std::size_t Capacity>
     void memory_buffer<Capacity>::erase(std::size_t erase_pos, std::size_t erase_size)
     {
-        if (m_size - erase_size >= 0)
+        if (m_size - erase_size != 0)
         {
             char* const __restrict shift_dest{ m_buffer + erase_pos };
             const char* const __restrict shift_source{ m_buffer + erase_pos + erase_size };
