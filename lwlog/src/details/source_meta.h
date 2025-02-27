@@ -30,8 +30,8 @@ namespace lwlog::details
 			const char* const function = BUILTIN_FUNCTION);
 
 		constexpr std::uint32_t	line() const;
-		constexpr const char* const file_name() const;
-		constexpr const char* const function_name() const;
+		constexpr const char* file_name() const;
+		constexpr const char* function_name() const;
 
 	private:
 		std::uint32_t m_line{};

@@ -14,7 +14,7 @@ namespace lwlog::details
 		{
 			if (message_buffer[pos] == '{' && message_buffer[pos + 1] == '}')
 			{
-				message_buffer.replace(pos, 2, args_buffers[buffer_index++], std::strlen(args_buffers[buffer_index]));
+				message_buffer.replace(pos, 2, args_buffers[buffer_index], std::strlen(args_buffers[buffer_index++]));
 			}
 			++pos;
 		}

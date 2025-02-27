@@ -26,7 +26,6 @@
 #define NOMB
 #define NOMEMMGR
 #define NOMETAFILE
-#define NOMINMAX
 #define NOMSG
 #define NOOPENFILE
 #define NOSCROLL
@@ -41,5 +40,12 @@
 #define NOPROFILER
 #define NODEFERWINDOWPOS
 #define NOMCX
+#define NOIME
+#define NOSYSPARAMSINFO
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
 
 #include <Windows.h>

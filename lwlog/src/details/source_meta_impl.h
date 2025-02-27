@@ -19,12 +19,12 @@ namespace lwlog::details
 		return m_line;
 	}
 
-	constexpr const char* const source_meta::file_name() const
+	constexpr const char* source_meta::file_name() const
 	{
 		return m_file;
 	}
 
-	constexpr const char* const source_meta::function_name() const
+	constexpr const char* source_meta::function_name() const
 	{
 		return m_function;
 	}
