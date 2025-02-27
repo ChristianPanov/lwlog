@@ -93,7 +93,7 @@ jobs:
           echo "Running perf stat..."
           perf stat -e cycles,instructions,branches,branch-misses,context-switches,cpu-migrations,page-faults,\
           cache-references,cache-misses,\
-          L1-dcache-loads,L1-dcache-load-misses,
+          L1-dcache-loads,L1-dcache-load-misses \
           ./${{ env.BIN_NAME }} &> \
           "${{ runner.workspace }}/perf_stat_results.txt"
         continue-on-error: true
