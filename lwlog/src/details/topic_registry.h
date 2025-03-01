@@ -20,8 +20,8 @@ namespace lwlog::details
 		std::string full_topic(std::uint8_t topic_index) const;
 
 	private:
-		std::uint8_t m_topic_index{ 0 };
-		const char* m_separator;
 		std::vector<const char*> m_topics;
+		const char* m_separator;
+		std::uint8_t m_topic_index{ 0 };
 	};
 }

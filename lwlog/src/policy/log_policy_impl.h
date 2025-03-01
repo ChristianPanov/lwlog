@@ -33,13 +33,13 @@ namespace lwlog
     struct asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::backend<
         Config, BufferLimits, ConcurrencyModelPolicy>::queue_item
     {
+        details::source_meta meta;
+        const char* message;
+        level log_level;
+
         bool has_args{ false };
         std::uint8_t args_buffer_index{ 0 };
         std::uint8_t topic_index{ 0 };
-
-        const char* message;
-        level log_level;
-        details::source_meta meta;
     };
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
@@ -94,7 +94,7 @@ namespace lwlog
     {
         if constexpr (sizeof...(args) == 0)
         {
-            backend.queue.enqueue({ false, 0, backend.topics.topic_index(), message, log_level, meta });
+            backend.queue.enqueue({ meta, message, log_level, false, 0, backend.topics.topic_index() });
         }
         else
         {
