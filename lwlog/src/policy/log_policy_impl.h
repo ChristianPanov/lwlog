@@ -1,10 +1,12 @@
 #pragma once
 
+#include "log_policy.h"
+
 namespace lwlog
 {
     template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
     void synchronous_policy::log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, 
-        std::string_view message, level log_level, const details::source_meta& meta, Args&&... args)
+        const char* const message, level log_level, const details::source_meta& meta, Args&&... args)
     {
         backend.message_buffer.reset();
         backend.message_buffer.append(message);
@@ -87,12 +89,12 @@ namespace lwlog
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
     template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::log(
-        backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, std::string_view message, 
+        backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message,
         level log_level, const details::source_meta& meta, Args&&... args)
     {
         if constexpr (sizeof...(args) == 0)
         {
-            backend.queue.enqueue({ false, 0, message.data(), log_level, meta });
+            backend.queue.enqueue({ false, 0, message, log_level, meta });
         }
         else
         {
@@ -103,7 +105,7 @@ namespace lwlog
             (details::convert_to_chars(args_buffer[buffer_index++],
                 BufferLimits::argument, std::forward<Args>(args)), ...);
 
-            backend.queue.enqueue({ true, buff_index, message.data(), log_level, meta });
+            backend.queue.enqueue({ true, buff_index, message, log_level, meta });
         }
     }
 

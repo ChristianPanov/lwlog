@@ -30,7 +30,7 @@ namespace lwlog
 		static void init(backend<Config, BufferLimits, ConcurrencyModelPolicy>&) {}
 
 		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
-		static void log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, std::string_view message, 
+		static void log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message,
 			level log_level, const details::source_meta& meta, Args&&... args);
 	};
 
@@ -68,7 +68,7 @@ namespace lwlog
 		static void init(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend);
 
 		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
-		static void log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, std::string_view message, 
+		static void log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message, 
 			level log_level, const details::source_meta& meta, Args&&... args);
 	};
 }

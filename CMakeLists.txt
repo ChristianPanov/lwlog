@@ -10,6 +10,7 @@ set(version 1.3.0)
 
 message("Adding source files")
 set(LWLOG_SOURCE_FILES
+    ${CMAKE_SOURCE_DIR}/lwlog/src/details/topic_registry.cpp
     ${CMAKE_SOURCE_DIR}/lwlog/src/details/pattern/attribute.cpp
 )
 
