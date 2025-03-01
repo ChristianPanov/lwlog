@@ -2,39 +2,43 @@
 
 namespace lwlog::details
 {
-    void topic_registry::set_separator(std::string_view separator)
+    void topic_registry::set_separator(const char* separator)
     {
         m_separator = separator;
     }
 
-    void topic_registry::start_topic(std::string_view topic)
+    void topic_registry::start_topic(const char* topic)
     {
         m_topics.push_back(topic);
 
-        m_current_topic = m_topics.back();
+        m_topic_index = m_topics.size() - 1;
     }
 
     void topic_registry::end_topic()
     {
-        m_topics.pop_back();
-
-        m_current_topic = m_topics.back();
+        m_topic_index = m_topics.size() - 2;
     }
 
-    std::string_view topic_registry::current_topic() const
+    std::uint8_t topic_registry::topic_index() const
     {
-        return m_current_topic;
+        return m_topic_index;
     }
 
-    std::string topic_registry::full_topic() const
+    const std::vector<const char*>& topic_registry::topics() const
+    {
+        return m_topics;
+    }
+
+    std::string topic_registry::full_topic(std::uint8_t topic_index) const
     {
         std::string full_topic;
 
-        for (auto it = m_topics.cbegin(); it != m_topics.cend(); ++it)
+        const auto end{ m_topics.cbegin() + topic_index + 1 };
+        for (auto it = m_topics.cbegin(); it != end; ++it)
         {
             full_topic.append(*it);
 
-            if ((it + 1) != m_topics.end())
+            if ((it + 1) != end)
             {
                 full_topic.append(m_separator);
             }

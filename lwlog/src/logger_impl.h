@@ -117,14 +117,15 @@ namespace lwlog
 	template<typename Config, typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename, typename> typename... Sinks>
 	void logger<Config, BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::set_topic_separator(
-		std::string_view separator)
+		const char* separator)
 	{
 		m_backend.topics.set_separator(separator);
 	}
 
 	template<typename Config, typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename, typename> typename... Sinks>
-	void logger<Config, BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::start_topic(std::string_view topic)
+	void logger<Config, BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::start_topic(
+		const char* topic)
 	{
 		m_backend.topics.start_topic(topic);
 	}

@@ -21,7 +21,7 @@ int main()
 
 	auto console = std::make_shared<
 		lwlog::logger<
-		lwlog::default_config,
+		logger_config,
 		lwlog::default_memory_buffer_limits,
 		lwlog::asynchronous_policy<
 			lwlog::default_overflow_policy,

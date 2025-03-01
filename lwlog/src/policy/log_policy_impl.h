@@ -1,7 +1,5 @@
 #pragma once
 
-#include "log_policy.h"
-
 namespace lwlog
 {
     template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
@@ -24,7 +22,8 @@ namespace lwlog
         {
             if (sink->should_sink(log_level))
             {
-                sink->sink_it({ backend.message_buffer.c_str(), log_level, meta, backend.topics });
+                sink->sink_it({ backend.message_buffer.c_str(), log_level, meta, 
+                    backend.topics, backend.topics.topic_index() });
             }
         }
     }
@@ -36,6 +35,7 @@ namespace lwlog
     {
         bool has_args{ false };
         std::uint8_t args_buffer_index{ 0 };
+        std::uint8_t topic_index{ 0 };
 
         const char* message;
         level log_level;
@@ -78,7 +78,7 @@ namespace lwlog
                             if (sink->should_sink(item.log_level))
                             {
                                 sink->sink_it({ backend.message_buffer.c_str(), item.log_level, 
-                                    item.meta, backend.topics });
+                                    item.meta, backend.topics, item.topic_index });
                             }
                         }
                     }
@@ -94,7 +94,7 @@ namespace lwlog
     {
         if constexpr (sizeof...(args) == 0)
         {
-            backend.queue.enqueue({ false, 0, message, log_level, meta });
+            backend.queue.enqueue({ false, 0, backend.topics.topic_index(), message, log_level, meta });
         }
         else
         {
@@ -105,7 +105,7 @@ namespace lwlog
             (details::convert_to_chars(args_buffer[buffer_index++],
                 BufferLimits::argument, std::forward<Args>(args)), ...);
 
-            backend.queue.enqueue({ true, buff_index, message, log_level, meta });
+            backend.queue.enqueue({ true, buff_index, backend.topics.topic_index(), message, log_level, meta });
         }
     }
 

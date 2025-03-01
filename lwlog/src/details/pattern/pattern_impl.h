@@ -149,6 +149,7 @@ namespace lwlog::details
 	template<typename Config, typename BufferLimits>
 	void pattern<Config, BufferLimits>::set_pattern(std::string_view pattern)
 	{
+		m_formatters.clear();
 		m_pattern_buffer.reset();
 		m_pattern_buffer.append(pattern);
 		m_pattern_buffer.append('\n');

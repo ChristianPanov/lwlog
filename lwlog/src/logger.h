@@ -28,8 +28,8 @@ namespace lwlog
 		void add_attribute(std::string_view flag, details::attrib_value value);
 		void add_attribute(std::string_view flag, details::attrib_value value, const details::attrib_callback_t& fn);
 
-		void set_topic_separator(std::string_view separator);
-		void start_topic(std::string_view topic);
+		void set_topic_separator(const char* separator);
+		void start_topic(const char* topic);
 		void end_topic();
 
 		std::string_view name() const;

@@ -13,18 +13,22 @@ namespace lwlog::details
 	struct record
 	{
 		record() = default;
-		record(const char* const message, level log_level, 
-			const source_meta& meta, const topic_registry& topics) 
+		record(const char* const message, level log_level, const source_meta& meta,
+			const topic_registry& topics, std::uint8_t topic_index)
 			: message{ message }
 			, log_level{ log_level }
 			, meta{ meta }
 			, topics{ topics }
+			, topic_index{ topic_index }
 		{}
 
 	public:
 		const char* const message;
-		level log_level;
-		source_meta meta;
+		const level log_level;
+		const source_meta meta;
+
+		const topic_registry& topics;
+		const std::uint8_t topic_index{ 0 };
 
 		const os::time_point<
 			typename Config::local_time_t
@@ -34,7 +38,5 @@ namespace lwlog::details
 			typename Config::thread_id_t,
 			typename Config::process_id_t
 		> execution_context{};
-
-		const topic_registry& topics;
 	};
 }
