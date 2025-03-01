@@ -8,8 +8,7 @@
 
 namespace lwlog
 {
-	using default_config = configuration<disable_local_time, enable_thread_id,
-		enable_process_id, enable_topics>;
+	using default_config = configuration<disable_local_time, enable_thread_id, enable_process_id>;
 
 	using default_overflow_policy = block_overflow_policy;
 	using default_flush_policy = immediate_flush_policy;

@@ -23,14 +23,14 @@ namespace lwlog
 			char args_buffers[BufferLimits::arg_count][BufferLimits::argument];
 
 			std::vector<sink_ptr<Config, BufferLimits>> sink_storage;
+			details::topic_registry topics;
 		};
 
 		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
 		static void init(backend<Config, BufferLimits, ConcurrencyModelPolicy>&) {}
 
 		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
-		static void log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend,
-			const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
+		static void log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, std::string_view message, 
 			level log_level, const details::source_meta& meta, Args&&... args);
 	};
 
@@ -50,6 +50,7 @@ namespace lwlog
 			details::argument_buffers_pool<BufferLimits> arg_buffers_pool;
 
 			std::vector<sink_ptr<Config, BufferLimits>> sink_storage;
+			details::topic_registry topics;
 
 			std::atomic_bool shutdown;
 			std::thread worker_thread;
@@ -67,8 +68,7 @@ namespace lwlog
 		static void init(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend);
 
 		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
-		static void log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend,
-			const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
+		static void log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, std::string_view message, 
 			level log_level, const details::source_meta& meta, Args&&... args);
 	};
 }

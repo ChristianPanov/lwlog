@@ -50,7 +50,6 @@ namespace lwlog
 		std::string_view m_name;
 		typename LogExecutionPolicy::template backend<Config, BufferLimits, 
 			typename ThreadingPolicy::concurrency_model_policy> m_backend;
-		details::topic_registry<typename Config::topic_t> m_topics;
 	};
 }
 

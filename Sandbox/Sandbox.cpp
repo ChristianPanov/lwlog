@@ -16,8 +16,7 @@ int main()
 	using logger_config = lwlog::configuration<
 		lwlog::disable_local_time,
 		lwlog::disable_thread_id,
-		lwlog::disable_process_id,
-		lwlog::disable_topics
+		lwlog::disable_process_id
 	>;
 
 	auto console = std::make_shared<

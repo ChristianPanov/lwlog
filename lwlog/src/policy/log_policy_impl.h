@@ -3,9 +3,8 @@
 namespace lwlog
 {
     template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
-    void synchronous_policy::log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend,
-        const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
-        level log_level, const details::source_meta& meta, Args&&... args)
+    void synchronous_policy::log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, 
+        std::string_view message, level log_level, const details::source_meta& meta, Args&&... args)
     {
         backend.message_buffer.reset();
         backend.message_buffer.append(message);
@@ -23,7 +22,7 @@ namespace lwlog
         {
             if (sink->should_sink(log_level))
             {
-                sink->sink_it({ backend.message_buffer.c_str(), log_level, meta, topic_registry });
+                sink->sink_it({ backend.message_buffer.c_str(), log_level, meta, backend.topics });
             }
         }
     }
@@ -36,10 +35,9 @@ namespace lwlog
         bool has_args{ false };
         std::uint8_t args_buffer_index{ 0 };
 
-        const char*			                                message;
-        level						                        log_level;
-        details::source_meta		                        meta;
-        details::topic_registry<typename Config::topic_t>   topic_registry;
+        const char* message;
+        level log_level;
+        details::source_meta meta;
     };
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
@@ -78,7 +76,7 @@ namespace lwlog
                             if (sink->should_sink(item.log_level))
                             {
                                 sink->sink_it({ backend.message_buffer.c_str(), item.log_level, 
-                                    item.meta, item.topic_registry });
+                                    item.meta, backend.topics });
                             }
                         }
                     }
@@ -89,13 +87,12 @@ namespace lwlog
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
     template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::log(
-        backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend,
-        const details::topic_registry<typename Config::topic_t>& topic_registry, std::string_view message, 
+        backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, std::string_view message, 
         level log_level, const details::source_meta& meta, Args&&... args)
     {
         if constexpr (sizeof...(args) == 0)
         {
-            backend.queue.enqueue({ false, 0, message.data(), log_level, meta, topic_registry });
+            backend.queue.enqueue({ false, 0, message.data(), log_level, meta });
         }
         else
         {
@@ -106,7 +103,7 @@ namespace lwlog
             (details::convert_to_chars(args_buffer[buffer_index++],
                 BufferLimits::argument, std::forward<Args>(args)), ...);
 
-            backend.queue.enqueue({ true, buff_index, message.data(), log_level, meta, topic_registry });
+            backend.queue.enqueue({ true, buff_index, message.data(), log_level, meta });
         }
     }
 

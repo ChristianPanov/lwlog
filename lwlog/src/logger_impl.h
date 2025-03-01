@@ -119,21 +119,21 @@ namespace lwlog
 	void logger<Config, BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::set_topic_separator(
 		std::string_view separator)
 	{
-		m_topics.set_separator(separator);
+		m_backend.topics.set_separator(separator);
 	}
 
 	template<typename Config, typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename, typename> typename... Sinks>
 	void logger<Config, BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::start_topic(std::string_view topic)
 	{
-		m_topics.start_topic(topic);
+		m_backend.topics.start_topic(topic);
 	}
 
 	template<typename Config, typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename, typename> typename... Sinks>
 	void logger<Config, BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::end_topic()
 	{
-		m_topics.end_topic();
+		m_backend.topics.end_topic();
 	}
 
 	template<typename Config, typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
@@ -156,8 +156,8 @@ namespace lwlog
 	void logger<Config, BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::log(
 		const details::log_message& log_msg, level log_level, Args&&... args)
 	{
-		LogExecutionPolicy::template log<Config, BufferLimits>(m_backend, m_topics,
-			log_msg.message, log_level, log_msg.meta, std::forward<Args>(args)...);
+		LogExecutionPolicy::template log<Config, BufferLimits>(m_backend, log_msg.message, 
+			log_level, log_msg.meta, std::forward<Args>(args)...);
 	}
 
 	template<typename Config, typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,

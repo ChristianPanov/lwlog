@@ -13,8 +13,8 @@ namespace lwlog::details
 	struct record
 	{
 		record() = default;
-		record(const char* const message, level log_level, const source_meta& meta,
-			const topic_registry<typename Config::topic_t>& topics) 
+		record(const char* const message, level log_level, 
+			const source_meta& meta, const topic_registry& topics) 
 			: message{ message }
 			, log_level{ log_level }
 			, meta{ meta }
@@ -35,8 +35,6 @@ namespace lwlog::details
 			typename Config::process_id_t
 		> execution_context{};
 
-		const topic_registry<
-			typename Config::topic_t
-		>& topics;
+		const topic_registry& topics;
 	};
 }
