@@ -47,5 +47,4 @@
 #define NOMINMAX
 #endif
 
-
 #include <Windows.h>
