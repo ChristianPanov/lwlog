@@ -99,4 +99,4 @@ jobs:
             -Dsonar.cfamily.compile-commands="${{ runner.workspace }}/build/compile_commands.json" \
             -Dsonar.projectKey=ChristianPanov_lwlog \
             -Dsonar.organization=christianpanov \
-            -Dsonar.sources=lwlog/src
+            -Dsonar.sources=lwlog/include
