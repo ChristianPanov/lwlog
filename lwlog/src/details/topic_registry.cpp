@@ -11,12 +11,12 @@ namespace lwlog::details
     {
         m_topics.push_back(topic);
 
-        m_topic_index = m_topics.size() - 1;
+        m_topic_index = static_cast<std::uint8_t>(m_topics.size() - 1);
     }
 
     void topic_registry::end_topic()
     {
-        m_topic_index = m_topics.size() - 2;
+        m_topic_index -= 1;
     }
 
     std::uint8_t topic_registry::topic_index() const
