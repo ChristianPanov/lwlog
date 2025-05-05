@@ -77,6 +77,20 @@ namespace lwlog::details
 	};
 
 	template<typename Config, typename BufferLimits>
+	struct path_formatter : public formatter<Config, BufferLimits>
+	{
+		void format(details::memory_buffer<BufferLimits::pattern>& pattern_buffer, char* conv_buffer,
+			const record<Config, BufferLimits>& record) const override
+		{
+			formatter<Config, BufferLimits>::format_attribute(
+				pattern_buffer, conv_buffer,
+				flag::path,
+				record.meta.file_path()
+			);
+		}
+	};
+
+	template<typename Config, typename BufferLimits>
 	struct file_formatter : public formatter<Config, BufferLimits>
 	{
 		void format(details::memory_buffer<BufferLimits::pattern>& pattern_buffer, char* conv_buffer, 

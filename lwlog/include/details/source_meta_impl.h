@@ -19,9 +19,31 @@ namespace lwlog::details
 		return m_line;
 	}
 
+	constexpr const char* source_meta::file_path() const
+    {
+        return m_file;
+    }
+
 	constexpr const char* source_meta::file_name() const
 	{
-		return m_file;
+        const char* path_end{ m_file };
+
+        while (*path_end != '\0')
+        {
+            ++path_end;
+        }
+
+        while (path_end != m_file)
+        {
+            --path_end;
+
+            if (*path_end == '\\' || *path_end == '/')
+            {
+                return path_end + 1;
+            }
+        }
+
+        return path_end;
 	}
 
 	constexpr const char* source_meta::function_name() const

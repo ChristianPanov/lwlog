@@ -190,6 +190,10 @@ namespace lwlog::details
         {
             return std::make_unique<line_formatter<Config, BufferLimits>>();
         }
+		else if (flag == flag::path.verbose || flag == flag::path.shortened)
+		{
+			return std::make_unique<path_formatter<Config, BufferLimits>>();
+		}
         else if (flag == flag::file.verbose || flag == flag::file.shortened)
         {
             return std::make_unique<file_formatter<Config, BufferLimits>>();

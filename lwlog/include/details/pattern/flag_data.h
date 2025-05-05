@@ -9,7 +9,8 @@ namespace lwlog::details::flag
 	inline constexpr flag_pair thread_id	{ "{thread}",		"%t" };
 	inline constexpr flag_pair process_id	{ "{process}",		"%P" };
 	inline constexpr flag_pair line			{ "{line}",			"%#" };
-	inline constexpr flag_pair file			{ "{file}",			"%@" };
+	inline constexpr flag_pair path			{ "{path}",			"%@" };
+	inline constexpr flag_pair file			{ "{file}",			"%$" };
 	inline constexpr flag_pair function		{ "{func}",			"%!" };
 	inline constexpr flag_pair topic		{ "{topic}",		"%." };
 	inline constexpr flag_pair full_topic	{ "{full_topic}",	"%," };
