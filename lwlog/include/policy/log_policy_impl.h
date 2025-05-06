@@ -44,7 +44,7 @@ namespace lwlog
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
     template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
-    static void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::process_item(
+    void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::process_item(
         backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend)
     {
         const auto& item{ backend.queue.dequeue() };
