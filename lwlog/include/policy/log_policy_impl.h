@@ -128,7 +128,7 @@ namespace lwlog
             (details::convert_to_chars(args_buffer[buffer_index++],
                 BufferLimits::argument, std::forward<Args>(args)), ...);
 
-            backend.queue.enqueue({ true, buff_index, backend.topics.topic_index(), message, log_level, meta });
+            backend.queue.enqueue({ meta, message, log_level, true, buff_index, backend.topics.topic_index() });
         }
 
         backend.has_work.test_and_set(std::memory_order_release);

@@ -12,6 +12,7 @@ namespace lwlog::sinks
 
 		m_pattern.set_pattern("[%d, %T] [%l] [%n]: %v");
 		m_pattern.request_flag_formatters();
+		m_pattern.cache_pattern();
 
 		sink::add_attribute(".level(", m_current_level, [&](char* buffer, std::size_t size)
 		{
