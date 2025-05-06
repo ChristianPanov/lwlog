@@ -58,7 +58,7 @@ namespace lwlog::details::os
 			minute 	= static_cast<std::uint8_t>(details.tm_min);
 			second 	= static_cast<std::uint8_t>(details.tm_sec);
 
-			hour = datetime::handle_timezone<LocalTimePolicy>(static_cast<std::uint8_t>(details.tm_hour));
+			hour = datetime::handle_timezone(static_cast<std::uint8_t>(details.tm_hour));
 
 			const auto nanoseconds_since_unix_epoch{ 
 				std::chrono::duration_cast<std::chrono::nanoseconds>(m_now.time_since_epoch()).count() };
