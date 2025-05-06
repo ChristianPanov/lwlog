@@ -5,16 +5,9 @@
 
 namespace lwlog::details::os::datetime
 {
-	template<typename LocalTimePolicy>
-	std::uint8_t handle_timezone(std::uint8_t hour)
-	{
-		return hour;
-	}
-
-    template <>
-    std::uint8_t handle_timezone<enable_local_time>(std::uint8_t hour)
+	static std::uint8_t handle_timezone(std::uint8_t hour)
     {
-		hour += cached_timezone_offset<enable_local_time>;
+		hour += cached_timezone_offset;
 		hour = (hour <= 23) ? hour : hour - 24;
 
 		return hour;

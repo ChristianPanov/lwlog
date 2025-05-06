@@ -17,21 +17,21 @@ namespace lwlog
 
 	struct synchronous_policy
 	{
-		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
+		template<typename BufferLimits, typename ConcurrencyModelPolicy>
 		struct backend
 		{
 			details::memory_buffer<BufferLimits::message> message_buffer;
 			char args_buffers[BufferLimits::arg_count][BufferLimits::argument];
 
-			std::vector<sink_ptr<Config, BufferLimits>> sink_storage;
+			std::vector<sink_ptr<BufferLimits>> sink_storage;
 			details::topic_registry topics;
 		};
 
-		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
-		static void init(backend<Config, BufferLimits, ConcurrencyModelPolicy>&) {}
+		template<typename BufferLimits, typename ConcurrencyModelPolicy>
+		static void init(backend<BufferLimits, ConcurrencyModelPolicy>&) {}
 
-		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
-		static void log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message,
+		template<typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
+		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message,
 			level log_level, const details::source_meta& meta, Args&&... args);
 	};
 
@@ -42,7 +42,7 @@ namespace lwlog
 	> 
 	struct asynchronous_policy
 	{
-		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
+		template<typename BufferLimits, typename ConcurrencyModelPolicy>
 		struct backend
 		{
 			~backend();
@@ -50,7 +50,7 @@ namespace lwlog
 			details::memory_buffer<BufferLimits::message> message_buffer;
 			details::argument_buffers_pool<BufferLimits> arg_buffers_pool;
 
-			std::vector<sink_ptr<Config, BufferLimits>> sink_storage;
+			std::vector<sink_ptr<BufferLimits>> sink_storage;
 			details::topic_registry topics;
 
 			std::atomic_flag has_work;
@@ -66,16 +66,16 @@ namespace lwlog
 			> queue;
 		};
 
-		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
-		static void init(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend);
+		template<typename BufferLimits, typename ConcurrencyModelPolicy>
+		static void init(backend<BufferLimits, ConcurrencyModelPolicy>& backend);
 
-		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
-		static void log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message, 
+		template<typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
+		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message, 
 			level log_level, const details::source_meta& meta, Args&&... args);
 
 	private:
-		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
-		static void process_item(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend);
+		template<typename BufferLimits, typename ConcurrencyModelPolicy>
+		static void process_item(backend<BufferLimits, ConcurrencyModelPolicy>& backend);
 	};
 }
 

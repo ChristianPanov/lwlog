@@ -13,12 +13,6 @@ void* operator new(size_t size)
 
 int main()
 {
-	using logger_config = lwlog::configuration<
-		lwlog::disable_local_time,
-		lwlog::disable_thread_id,
-		lwlog::disable_process_id
-	>;
-
 	using buffer_limits = lwlog::memory_buffer_limits<
 		lwlog::pattern_limit<256>,
         lwlog::message_limit<128>,
@@ -30,7 +24,6 @@ int main()
 
 	auto console = std::make_shared<
 		lwlog::logger<
-		logger_config,
 		lwlog::default_memory_buffer_limits,
 		lwlog::asynchronous_policy<
 			lwlog::default_overflow_policy,

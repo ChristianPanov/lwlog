@@ -16,17 +16,18 @@
 
 namespace lwlog::details::os
 {
-	template<typename ThreadIdPolicy>
 	static std::uint64_t get_thread_id();
-
-	template<typename ProcessIdPolicy>
 	static std::uint64_t get_process_id();
 
-	template<typename ThreadIdPolicy, typename ProcessIdPolicy>
 	struct execution_context
 	{
-		std::uint64_t thread_id() const;
-		std::uint64_t process_id() const;
+		execution_context()
+			: thread_id{ get_thread_id() }
+			, process_id{ get_process_id() }
+		{}
+
+		std::uint64_t thread_id;
+		std::uint64_t process_id;
 	};
 
 	static void set_thread_affinity(std::uint64_t affinity_mask);

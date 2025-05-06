@@ -2,9 +2,9 @@
 
 namespace lwlog::details
 {
-	template<typename Config, typename BufferLimits>
+	template<typename BufferLimits>
 	template<typename T>
-	void formatter<Config, BufferLimits>::format_attribute(details::memory_buffer<BufferLimits::pattern>& pattern_buffer,
+	void formatter<BufferLimits>::format_attribute(details::memory_buffer<BufferLimits::pattern>& pattern_buffer,
 		char* conv_buffer, const flag_pair& flags, const T& value)
 	{
 		const auto& [verbose, shortened] = flags;
@@ -23,8 +23,8 @@ namespace lwlog::details
 		}
 	}
 
-	template<typename Config, typename BufferLimits>
-	void formatter<Config, BufferLimits>::format_custom_attribute(details::memory_buffer<BufferLimits::pattern>& pattern_buffer,
+	template<typename BufferLimits>
+	void formatter<BufferLimits>::format_custom_attribute(details::memory_buffer<BufferLimits::pattern>& pattern_buffer,
 		char* conv_buffer, const attribute& attrib)
 	{
 		attrib.value_conv_callback(conv_buffer, BufferLimits::conversion);

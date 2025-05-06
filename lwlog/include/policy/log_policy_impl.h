@@ -2,8 +2,8 @@
 
 namespace lwlog
 {
-    template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
-    void synchronous_policy::log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, 
+    template<typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
+    void synchronous_policy::log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, 
         const char* const message, level log_level, const details::source_meta& meta, Args&&... args)
     {
         backend.message_buffer.reset();
@@ -29,9 +29,9 @@ namespace lwlog
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
-    template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
+    template<typename BufferLimits, typename ConcurrencyModelPolicy>
     struct asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::backend<
-        Config, BufferLimits, ConcurrencyModelPolicy>::queue_item
+        BufferLimits, ConcurrencyModelPolicy>::queue_item
     {
         details::source_meta meta;
         const char* message;
@@ -43,9 +43,9 @@ namespace lwlog
     };
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
-    template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
+    template<typename BufferLimits, typename ConcurrencyModelPolicy>
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::process_item(
-        backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend)
+        backend<BufferLimits, ConcurrencyModelPolicy>& backend)
     {
         const auto& item{ backend.queue.dequeue() };
 
@@ -72,9 +72,9 @@ namespace lwlog
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
-    template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
+    template<typename BufferLimits, typename ConcurrencyModelPolicy>
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::init(
-        backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend)
+        backend<BufferLimits, ConcurrencyModelPolicy>& backend)
     {
         backend.has_work.clear(std::memory_order_release);
         backend.shutdown.store(false, std::memory_order_relaxed);
@@ -110,9 +110,9 @@ namespace lwlog
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
-    template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
+    template<typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::log(
-        backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message,
+        backend<BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message,
         level log_level, const details::source_meta& meta, Args&&... args)
     {
         if constexpr (sizeof...(args) == 0)
@@ -135,8 +135,8 @@ namespace lwlog
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
-    template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
-    asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::backend<Config, BufferLimits, ConcurrencyModelPolicy>::~backend()
+    template<typename BufferLimits, typename ConcurrencyModelPolicy>
+    asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::backend<BufferLimits, ConcurrencyModelPolicy>::~backend()
     {
         shutdown.store(true, std::memory_order_relaxed);
 

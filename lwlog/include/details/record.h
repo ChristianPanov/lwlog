@@ -1,6 +1,5 @@
 #pragma once
 
-#include "configuration.h"
 #include "source_meta.h"
 #include "topic_registry.h"
 #include "os/time_point.h"
@@ -9,7 +8,7 @@
 
 namespace lwlog::details
 {
-	template<typename Config, typename BufferLimits>
+	template<typename BufferLimits>
 	struct record
 	{
 		record() = default;
@@ -30,13 +29,7 @@ namespace lwlog::details
 		const topic_registry& topics;
 		const std::uint8_t topic_index{ 0 };
 
-		const os::time_point<
-			typename Config::local_time_t
-		> time_point{};
-
-		const os::execution_context<
-			typename Config::thread_id_t,
-			typename Config::process_id_t
-		> execution_context{};
+		const os::time_point time_point;
+		const os::execution_context execution_context;
 	};
 }

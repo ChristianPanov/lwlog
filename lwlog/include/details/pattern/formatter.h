@@ -5,12 +5,11 @@
 
 namespace lwlog::details
 {
-	template<typename Config, typename BufferLimits>
+	template<typename BufferLimits>
 	struct formatter
 	{
 		virtual ~formatter() = default;
-		virtual void format(details::memory_buffer<BufferLimits::pattern>&, char*, 
-			const record<Config, BufferLimits>&) const = 0;
+		virtual void format(details::memory_buffer<BufferLimits::pattern>&, char*, const record<BufferLimits>&) const = 0;
 
 		template<typename T> 
 		static void format_attribute(details::memory_buffer<BufferLimits::pattern>& pattern_buffer, 

@@ -5,8 +5,8 @@
 
 namespace lwlog
 {
-	template<typename Config, typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
-		typename ThreadingPolicy, template<typename, typename, typename, typename> typename... Sinks>
+	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
+		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
 	class logger
 	{
 	public:
@@ -15,13 +15,13 @@ namespace lwlog
 		template<typename Iterator, typename... SinkParams>
 		logger(std::string_view name, Iterator begin, Iterator end, SinkParams&&... params);
 		template<typename... SinkParams>
-		logger(std::string_view name, sink_list<Config, BufferLimits> sink_list, SinkParams&&... params);
+		logger(std::string_view name, sink_list<BufferLimits> sink_list, SinkParams&&... params);
 		template<typename... SinkParams>
-		logger(std::string_view name, sink_ptr<Config, BufferLimits> sink, SinkParams&&... params);
+		logger(std::string_view name, sink_ptr<BufferLimits> sink, SinkParams&&... params);
 
 	public:
-		void add_sink(sink_ptr<Config, BufferLimits> sink);
-		void remove_sink(sink_ptr<Config, BufferLimits> sink);
+		void add_sink(sink_ptr<BufferLimits> sink);
+		void remove_sink(sink_ptr<BufferLimits> sink);
 
 		void set_level_filter(level log_level);
 		void set_pattern(std::string_view pattern);
@@ -33,7 +33,7 @@ namespace lwlog
 		void end_topic();
 
 		std::string_view name() const;
-		std::vector<sink_ptr<Config, BufferLimits>>& sinks();
+		std::vector<sink_ptr<BufferLimits>>& sinks();
 
 	public:
 		template<typename... Args> void info(const details::log_message& log_msg, Args&&... args);
@@ -48,7 +48,7 @@ namespace lwlog
 
 	private:
 		std::string_view m_name;
-		typename LogExecutionPolicy::template backend<Config, BufferLimits, 
+		typename LogExecutionPolicy::template backend<BufferLimits, 
 			typename ThreadingPolicy::concurrency_model_policy> m_backend;
 	};
 }
