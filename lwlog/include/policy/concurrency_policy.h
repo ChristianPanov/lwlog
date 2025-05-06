@@ -3,13 +3,12 @@
 #include <atomic>
 
 #if defined(__x86_64__) || defined(_M_X64)
-    #include <xmmintrin.h>
-    #define CPU_PAUSE() _mm_pause()
-#elif defined(__aarch64_)
-    #include <arm_acle.h>
-    #define CPU_PAUSE() __yield()
+    #include <immintrin.h>
+    #define LWLOG_CPU_PAUSE() _mm_pause()
+#elif defined(__aarch64__) || defined(_M_ARM64)
+    #define LWLOG_CPU_PAUSE() __asm__ volatile("yield")
 #else
-    #define CPU_PAUSE()
+    #define LWLOG_CPU_PAUSE() std::this_thread::yield()
 #endif
 
 namespace lwlog
@@ -19,8 +18,8 @@ namespace lwlog
 
     struct block_overflow_policy 
     {
-        static void handle_overflow()   { CPU_PAUSE();  }
-        static void handle_underflow()  { CPU_PAUSE();  }
+        static void handle_overflow()   { LWLOG_CPU_PAUSE();  }
+        static void handle_underflow()  { LWLOG_CPU_PAUSE();  }
         static bool should_discard()    { return false; }
     };
     

@@ -5,6 +5,7 @@
 #include "details/bounded_queue.h"
 #include "details/source_meta.h"
 #include "details/topic_registry.h"
+#include "details/adaptive_waiter.h"
 
 #include "details/argument_formatter/argument_format.h"
 #include "details/argument_formatter/argument_buffers_pool.h"
@@ -52,6 +53,7 @@ namespace lwlog
 			std::vector<sink_ptr<Config, BufferLimits>> sink_storage;
 			details::topic_registry topics;
 
+			std::atomic_flag has_work;
 			std::atomic_bool shutdown;
 			std::thread worker_thread;
 
@@ -70,6 +72,10 @@ namespace lwlog
 		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
 		static void log(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message, 
 			level log_level, const details::source_meta& meta, Args&&... args);
+
+	private:
+		template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
+		static void process_item(backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend);
 	};
 }
 

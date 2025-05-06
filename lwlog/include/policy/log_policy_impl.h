@@ -44,10 +44,41 @@ namespace lwlog
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
     template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
+    static void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::process_item(
+        backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend)
+    {
+        const auto& item{ backend.queue.dequeue() };
+
+        backend.message_buffer.reset();
+        backend.message_buffer.append(item.message);
+
+        if (item.has_args)
+        {
+            const auto& args_buffer{ backend.arg_buffers_pool.get_args_buffer(item.args_buffer_index) };
+
+            details::format_args<BufferLimits>(backend.message_buffer, args_buffer);
+
+            backend.arg_buffers_pool.release_args_buffer(item.args_buffer_index);
+        }
+
+        for (const auto& sink : backend.sink_storage)
+        {
+            if (sink->should_sink(item.log_level))
+            {
+                sink->sink_it({ backend.message_buffer.c_str(), item.log_level,
+                    item.meta, backend.topics, item.topic_index });
+            }
+        }
+    }
+
+    template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
+    template<typename Config, typename BufferLimits, typename ConcurrencyModelPolicy>
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::init(
         backend<Config, BufferLimits, ConcurrencyModelPolicy>& backend)
     {
+        backend.has_work.clear(std::memory_order_release);
         backend.shutdown.store(false, std::memory_order_relaxed);
+
         backend.worker_thread = std::thread([&backend]() 
             {
                 if (ThreadAffinity != default_thread_affinity)
@@ -55,32 +86,24 @@ namespace lwlog
                     details::os::set_thread_affinity(ThreadAffinity);
                 }
 
+                details::adaptive_waiter<4000, 10000> adaptive_waiter;
+
                 while (!backend.shutdown.load(std::memory_order_relaxed) || !backend.queue.is_empty())
                 {
-                    if (!backend.queue.is_empty())
+                    if (backend.has_work.test_and_set(std::memory_order_acquire) || !backend.queue.is_empty())
                     {
-                        const auto& item{ backend.queue.dequeue() };
+                        adaptive_waiter.reset();
 
-                        backend.message_buffer.reset();
-                        backend.message_buffer.append(item.message);
-
-                        if (item.has_args)
+                        while (!backend.queue.is_empty())
                         {
-                            const auto& args_buffer{ backend.arg_buffers_pool.get_args_buffer(item.args_buffer_index) };
-
-                            details::format_args<BufferLimits>(backend.message_buffer, args_buffer);
-
-                            backend.arg_buffers_pool.release_args_buffer(item.args_buffer_index);
+                            asynchronous_policy::process_item(backend);
                         }
 
-                        for (const auto& sink : backend.sink_storage)
-                        {
-                            if (sink->should_sink(item.log_level))
-                            {
-                                sink->sink_it({ backend.message_buffer.c_str(), item.log_level, 
-                                    item.meta, backend.topics, item.topic_index });
-                            }
-                        }
+                        backend.has_work.clear(std::memory_order_release);
+                    }
+                    else
+                    {
+                        adaptive_waiter.wait();
                     }
                 }
             });
@@ -107,6 +130,8 @@ namespace lwlog
 
             backend.queue.enqueue({ true, buff_index, backend.topics.topic_index(), message, log_level, meta });
         }
+
+        backend.has_work.test_and_set(std::memory_order_release);
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
