@@ -153,7 +153,15 @@ namespace lwlog::details
     template<typename T>
     void convert_to_chars(char* const __restrict buffer, std::size_t buffer_size, const T& value)
     {
-        if constexpr (std::is_arithmetic_v<T>)
+        if constexpr (std::is_same_v<T, bool>)
+        {
+            const char* const str_val{ value ? "true" : "false" };
+            const std::size_t value_size{ value ? static_cast<std::size_t>(4) : static_cast<std::size_t>(5) };
+
+            std::memcpy(buffer, str_val, value_size);
+            buffer[value_size] = '\0';
+        }
+        else if constexpr (std::is_arithmetic_v<T>)
         {
             const auto [ptr, ec]{ std::to_chars(buffer, buffer + buffer_size, value) };
             buffer[ptr - buffer] = '\0';
@@ -165,8 +173,8 @@ namespace lwlog::details
             std::memcpy(buffer, value.data(), value_size);
             buffer[value_size] = '\0';
         }
-        else if constexpr (std::is_same_v<T, const char*> ||
-            std::is_same_v<T, char*>)
+        else if constexpr (std::is_same_v<std::decay_t<T>, const char*> ||
+            std::is_same_v<std::decay_t<T>, char*>)
         {
             std::size_t value_size{ std::strlen(value) };
             std::memcpy(buffer, value, value_size);
