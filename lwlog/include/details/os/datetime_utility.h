@@ -29,6 +29,15 @@ namespace lwlog::details::os::datetime
 					::TIME_ZONE_INFORMATION tz_info;
 					::GetTimeZoneInformation(&tz_info);
 
+					::LONG bias{ tz_info.Bias };
+
+					if (tz_info.StandardDate.wMonth != 0)
+					{
+						bias += tz_info.DaylightBias;
+					}
+
+					return -bias / 60;
+
 					return -tz_info.Bias / 60;
 			#else
 					const std::time_t now{ std::time(nullptr) };
