@@ -137,6 +137,7 @@ namespace lwlog::details
 	void pattern<Config, BufferLimits>::cache_pattern()
 	{
 		std::memcpy(m_cached_pattern_buffer, m_pattern_buffer.c_str(), m_pattern_buffer.size());
+		m_cached_pattern_buffer[m_pattern_buffer.size()] = '\0';
 	}
 
 	template<typename Config, typename BufferLimits>
