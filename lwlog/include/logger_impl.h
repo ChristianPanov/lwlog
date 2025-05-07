@@ -13,9 +13,9 @@ namespace lwlog
 	{
 		LogExecutionPolicy::template init<BufferLimits>(m_backend);
 
-		m_backend.sink_storage = { sinks::sink_factory<BufferLimits, Sinks<FlushPolicy, BufferLimits, ThreadingPolicy>>::request(
-			std::forward<SinkParams>(params)...
-		)... };
+		m_backend.sink_storage = { sinks::sink_factory<BufferLimits, 
+			Sinks<BufferLimits, FlushPolicy, ThreadingPolicy>>::request(std::forward<SinkParams>(params)...)... 
+		};
 
 		logger::add_attribute("{name}", m_name);
 		logger::add_attribute("%n", m_name);

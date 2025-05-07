@@ -188,9 +188,8 @@ int main()
 {
 	auto console = std::make_shared<
 		lwlog::logger<
-			lwlog::default_config,
+			lwlog::default_memory_buffer_limits,
 			lwlog::default_log_policy,
-			lwlog::default_storage_policy,
 			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_sink
@@ -237,35 +236,33 @@ Both the sinks and the logger classes expect a threading policy as a template pa
 However, if you want to use the convenience aliases mentioned above, you need to keep in mind they are not thread-safe.\
 To facilitate ease of use while ensuring thread safety, ***lwlog*** offers thread-safe variants for all of its convenience aliases. These variants are distinguished by an ```_mt``` suffix in their names, indicating “multi-threaded” capability.
 ## Logger configuration
-The first template parameter that ```lwlog::logger``` takes is a template structure called ```lwlog::configuration```. It allows the user to enable or disable certain features in order to cater the logger to their specific use case.
+The first template parameter that ```lwlog::logger``` takes is a template structure called ```lwlog::memory_buffer_limits```. It allows the user to specify the sizes of each internal pre-allocated static buffer that the logger uses. This allows the user to tailor the logger object to their very specific use case, by specifying limits for log message length, pattern size, maximum number of arguments, and their maximum length, and so on.
 Configuration | Description
 ------------ | -------------
-```lwlog::enable_thread_id``` | Enables the inclusion of the thread ID in log messages. This can be useful for debugging multi-threaded applications by identifying which thread generated a particular log message
-```lwlog::disable_thread_id``` | Disables the inclusion of the thread ID in log messages. Use this option if thread ID information is not needed, to reduce the size of log messages
-```lwlog::enable_process_id``` | Enables the inclusion of the process ID in log messages. This can be useful for debugging applications that spawn multiple processes, by identifying which process generated a particular log message
-```lwlog::disable_process_id``` | Disables the inclusion of the process ID in log messages. Use this option if process ID information is not needed, to reduce the size of log messages
-```lwlog::enable_local_time``` | Enables the inclusion of the local time in log messages. This can be useful for timestamping log messages with the local time zone to track when events occurred
-```lwlog::disable_local_time``` | Uses UTC time instead of local time in log messages. This can be useful for timestamping log messages in a consistent time zone, regardless of the local time zone
-```lwlog::enable_topics``` | Enables the use of topics in log messages. Topics can be used to categorize log messages, making it easier to filter and search for specific types of messages
-```lwlog::disable_topics``` | Disables the use of topics in log messages. Use this option if categorization by topics is not needed, to simplify log messages
-
-The ```lwlog::default_config``` alias is configured with enabled thread id, process id, and topics, and disabled local time.
+```lwlog::pattern_limit<N>``` | Maximum pattern length, including the log message itself
+```lwlog::message_limit<N>``` | Maximum log message length
+```lwlog::argument_limit<N>``` | Maximum length of a single log argument
+```lwlog::arg_count_limit<N>``` | Maximum number of log arguments per log call
+```lwlog::padding_limit<N>``` | Maximum length of flag padding (for alignment)
+```lwlog::conv_limit<N>``` | Maximum length of a single formatting flag
 #### Example
 ```cpp
 #include "lwlog.h"
 
 int main()
 {
-	using logger_config = lwlog::configuration<
-		lwlog::enable_local_time,
-		lwlog::disable_thread_id, 
-		lwlog::enable_process_id,
-		lwlog::enable_topics
+	using buffer_limits = lwlog::memory_buffer_limits<
+		lwlog::pattern_limit<256>,
+        lwlog::message_limit<128>,
+        lwlog::argument_limit<12>,
+        lwlog::arg_count_limit<4>,
+        lwlog::padding_limit<24>,
+        lwlog::conv_limit<64>
 	>;
 
 	auto console = std::make_shared<
 		lwlog::logger<
-			logger_config,
+			buffer_limits,
 			lwlog::synchronous_policy,
 			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
@@ -276,8 +273,20 @@ int main()
 	return 0;
 }
 ```
+### Default Configuration
+If you do not provide custom buffer limits, the ```lwlog::default_memory_buffer_limits``` alias can be used, which is defined as such:
+```cpp
+using default_memory_buffer_limits = lwlog::memory_buffer_limits<
+	lwlog::pattern_limit<256>,
+	lwlog::message_limit<128>,
+	lwlog::argument_limit<12>,
+	lwlog::arg_count_limit<4>,
+	lwlog::padding_limit<24>,
+	lwlog::conv_limit<64>
+>;
+```
 ## Logger policies
-The rest of the ```lwlog::logger``` template parameters are special policy structures. Unlike the configuration structure from the previous section, which enables and disables features(similar to macros, with the idea of almost completely removing them from the binary within the limitations of template generation), policy structures describe how the logger operates. These policies define the behavior of the logger, such as whether it logs synchronously or asynchronously, how it handles flushing, and whether it is single-threaded or multi-threaded.
+The rest of the ```lwlog::logger``` template parameters are special policy structures. These policies define the behavior of the logger, such as whether it logs synchronously or asynchronously, how it handles flushing, and whether it is single-threaded or multi-threaded.
 Policy | Description
 ------------ | -------------
 ```lwlog::synchronous_policy``` | Your standard linear logging mechanism. You call a log function, and it's immediately processed and outputted to the specified sink. Works on a single thread, no background threads doing any processing
@@ -299,7 +308,7 @@ int main()
 {
 	auto console = std::make_shared<
 		lwlog::logger<
-			lwlog::default_config,
+			lwlog::default_memory_buffer_limits,
 			lwlog::synchronous_policy,
 			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
@@ -331,7 +340,7 @@ int main()
 {
 	auto console = std::make_shared<
 		lwlog::logger<
-			lwlog::default_config,
+			lwlog::default_memory_buffer_limits,
 			lwlog::asynchronous_policy<
 				lwlog::default_overflow_policy,
 				lwlog::default_async_queue_size,
@@ -555,11 +564,12 @@ int main()
 {
 	auto logger = std::make_shared<
 		lwlog::logger<
+			lwlog::default_memory_buffer_limits,
 			lwlog::synchronous_policy,
 			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
 			lwlog::sinks::stdout_sink
-      			lwlog::sinks::file_sink
+      		lwlog::sinks::file_sink
 			>
 		>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
 
@@ -587,6 +597,7 @@ int main()
 	
 	auto logger_combined = std::make_shared<
 		lwlog::logger<
+			lwlog::default_memory_buffer_limits,
 			lwlog::synchronous_policy,
 			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
@@ -604,61 +615,64 @@ Begin by inheriting from ```lwlog::sinks::sink```, which serves as the base clas
 ```cpp
 namespace lwlog::sinks
 {
-	template<typename FlushPolicy, typename ThreadingPolicy>
+	template<typename BufferLimits, typename FlushPolicy, typename ThreadingPolicy>
 	class stdout_sink 
-		: public sink<true, ThreadingPolicy>
+		: public sink<true, BufferLimits, ThreadingPolicy>
 		, private details::stream_writer<FlushPolicy>
 	{
 		// ...
 	};
 }
 ```
-In the example above, ```stdout_sink``` inherits from ```lwlog::sinks::sink``` and has two template parameters to handle the flush policy and the threading policy respectively.
+In the example above, ```stdout_sink``` inherits from ```lwlog::sinks::sink``` and has three template parameters to handle the buffer limits, flush policy, and the threading policy respectively.
 ### Step 2: Configure ANSI Color Support
 The first template parameter for ```lwlog::sinks::sink``` indicates whether the sink supports ANSI colors. Set this to true for console sinks that utilize console-specific color codes. If set to false, the sink will ignore color flags in the pattern.
 ### Step 3: Implement the sink_it() Function
 The ```sink_it()``` function is where your sink handles the log message. It receives a ```const details::record&```, representing the log message.
 ```cpp
 template<typename FlushPolicy, typename ThreadingPolicy>
-void stdout_sink<FlushPolicy, ThreadingPolicy>::sink_it(const details::record& record)
+void stdout_sink<FlushPolicy, ThreadingPolicy>::sink_it(const details::record<BufferLimits>& record)
 {
-	m_current_level = record.log_level;
+	sink_t::m_current_level = record.log_level;
 	details::stream_writer<FlushPolicy>::write(sink_t::m_pattern.compile(record));
+	sink_t::m_pattern.reset_pattern();
 }
 ```
 In this function:
 1. Set the current severity level to allow for level-based colors.
 2. Compile the log message using the pattern.
 3. Output the formatted message. You can utilize a writer class as shown in the example, or handle the writing directly within this function.
+4. Because of the static buffer nature of the logger, you need to reset the pattern in order to avoid old data from previous a previous log bleeding into the new log
 ### Step 4: Handle Flushing (For Stream-Based Sinks)
 If your sink is stream-based (e.g., writing to stdout, stderr, or a file), you should also consider a flushing policy. While the flush policy needs to be provided as part of the interface, it might not be applicable if your sink sends data in a non-stream-based manner.
 ### Full Example
 ```cpp
 namespace lwlog::sinks
 {
-	template<typename FlushPolicy, typename ThreadingPolicy>
+	template<typename BufferLimits, typename FlushPolicy, typename ThreadingPolicy>
 	class stdout_sink 
-		: public sink<true, ThreadingPolicy>
+		: public sink<true, BufferLimits, ThreadingPolicy>
 		, private details::stream_writer<FlushPolicy>
 	{
 	private:
-		using sink_t = sink<true, ThreadingPolicy>;
-		
+		using sink_t = sink<true, BufferLimits, ThreadingPolicy>;
+
 	public:
 		stdout_sink();
-		void sink_it(const details::record& record) override;
+		void sink_it(const details::record<BufferLimits>& record) override;
 	};
 
-	template<typename FlushPolicy, typename ThreadingPolicy>
-	stdout_sink<FlushPolicy, ThreadingPolicy>::stdout_sink()
+	template<typename BufferLimits, typename FlushPolicy, typename ThreadingPolicy>
+	stdout_sink<BufferLimits, FlushPolicy, ThreadingPolicy>::stdout_sink()
 		: details::stream_writer<FlushPolicy>(stdout)
 	{}
 
-	template<typename FlushPolicy, typename ThreadingPolicy>
-	void stdout_sink<FlushPolicy, ThreadingPolicy>::sink_it(const details::record& record)
+	template<typename BufferLimits, typename FlushPolicy, typename ThreadingPolicy>
+	void stdout_sink<BufferLimits, FlushPolicy, ThreadingPolicy>::sink_it(const details::record<BufferLimits>& record)
 	{
-        	sink_t::m_current_level = record.log_level;
+		sink_t::m_current_level = record.log_level;
 		details::stream_writer<FlushPolicy>::write(sink_t::m_pattern.compile(record));
+		sink_t::m_pattern.reset_pattern();
 	}
 }
 ```
@@ -669,63 +683,38 @@ namespace lwlog::sinks
 
 namespace lwlog::sinks
 {
-	template<typename ThreadingPolicy>
+	template<typename BufferLimits, typename FlushPolicy, typename ThreadingPolicy>
 	class new_custom_sink
-		: public sink</*EnableAnsiColors*/, ThreadingPolicy>
+		: public sink</*EnableAnsiColors*/, BufferLimits, ThreadingPolicy>
 	{
-		using sink_t = sink</*EnableAnsiColors*/, ThreadingPolicy>;
+		using sink_t = sink</*EnableAnsiColors*/, BufferLimits, ThreadingPolicy>;
+
 	public:
-		void sink_it(const details::record& record) override
+		void sink_it(const details::record<BufferLimits>& record) override
 		{
-        		sink_t::m_current_level = record.log_level;
+        	sink_t::m_current_level = record.log_level;
 			// sink message to somewhere
+			sink_t::m_pattern.reset_pattern();
 		}
 	};
 }
 ```
-## Default logger
-***lwlog*** provides a globally accessible default logger, designed for convenience and ease of use.\
-Here are some key points about this logger:
-- **Pre-configured:** It's set up with a default configuration, eliminating the need for manual setup for simple logging tasks. It's synchronous.
-- **Global Access:** It's a global logger, making it accessible from anywhere within your application.
-- **Not Thread-safe:** It's important to note that this logger is **NOT** designed for concurrent multi-threaded logging. If thread safety is a requirement, consider creating a custom logger with the appropriate configuration.
-- **Sink configuration:** By default, it sinks to stdout, making it suitable for console-based applications or debugging sessions.
-- **Independent:** The default logger isn't registered in the logger registry. This means it operates independently of any other custom loggers you might set up.
-  
-Before you start using the default logger, it requires initialization through a specific function call. Once initialized, you can log messages without the need to manually create logger instances, which is particularly useful for small projects or for getting started quickly with ***lwlog***.
-```cpp
-#include "lwlog.h"
-
-int main()
-{
-	lwlog::init_default_logger();
-	
-	lwlog::info("Info message");
-	lwlog::warning("Warning message");
-	lwlog::error("Error message");
-	lwlog::critical("Critical message");
-	lwlog::debug("Debug message");
-
-	lwlog::set_level_filter(lwlog::level::debug | lwlog::level::critical);
-	lwlog::info("Will not be displayed");
-
-	lwlog::set_pattern("[%T] [%n] [%l]: %v");
-	lwlog::debug("Will be displayed according to the new pattern");
-
-	return 0;
-}
+## Local Time
+By default ***lwlog*** uses UTC time for its time-based attributes. However, you can also use your local time by building the logger with the ```LWLOG_LOCALTIME``` macro, or simply by defining it before including the  ***lwlog*** headers in your project.
+### Example for building with macro
 ```
-##### Output
-```
-[22, 20:00:15] [info] [DEFAULT]: Info message
-[22, 20:00:15] [warning] [DEFAULT]: Warning message
-[22, 20:00:15] [error] [DEFAULT]: Error message
-[22, 20:00:15] [critical] [DEFAULT]: Critical message
-[22, 20:00:15] [debug] [DEFAULT]: Debug message
-[20:00:15] [DEFAULT] [debug]: Will be displayed according to the new pattern
+cmake -B <Build Directory> -S <Directory of CMakeLists.txt> \
+    -DCMAKE_INSTALL_PREFIX=<Installation Directory> \
+    -DCMAKE_CXX_FLAGS="-DLWLOG_LOCALTIME"
 ```
 # Performance
 So how does ***lwlog*** achieve this performance? In the following section, I will break down all the performance-enhancing decisions that I've made.
+### Static Buffers
+Dynamic allocations are usually not preferable when performance is the focus or you are dealing with memory-constrained environments like embedded. They are non-deterministic due to possible memory fragmentation which could cause big delay spikes, they could fail at any time, they could cause memory leaks, and generally have a performance overhead. 
+
+To solve these issues, ***lwlog*** uses pre-allocated static buffers for all of its string operations. When a log is registered, its log message and it's format data is passed into a specific buffer which is shared through all log messages, and its processed and formatted in-place, without any dynamic allocations.
+
+Still, careful consideration needs to be taken here, because this buffer's management can become very tricky, especially with heavy workload and if you are doing asynchronous logging. It needs to be ensured that no old data from a previous log will bleed into a new log, for example, since all hundreds of thousands of logs which might be called at different times from different threads, will be goind through the same static buffer and will have to be properly formatted with their respective format data. Therefore, if simplicity is more desirable than performance and efficiency, this approach might not be appropriate, since a lot of things could go wrong and it's harder to debug.
 ### Asynchronous logging
 Asynchronous logging is a very interesting topic because a lot of decisions need to be made and a lot of factors to be taken into account. For one, do we need a bounded or a dynamic queue, and what type of queue in terms of producer-consumer model.
 Cache efficiency is a topic of its own and ensuring atomicity of operations is not exactly a trivial task. Let's look at how ***lwlog*** handles all of that.

@@ -5,7 +5,7 @@
 
 namespace lwlog::sinks
 {
-	template<typename FlushPolicy, typename BufferLimits, typename ThreadingPolicy>
+	template<typename BufferLimits, typename FlushPolicy, typename ThreadingPolicy>
 	class file_sink 
 		: public sink<false, BufferLimits, ThreadingPolicy>
 		, private details::stream_writer<FlushPolicy>
@@ -21,13 +21,13 @@ namespace lwlog::sinks
 		void sink_it(const details::record<BufferLimits>& record) override;
 	};
 
-	template<typename FlushPolicy, typename BufferLimits, typename ThreadingPolicy>
-	file_sink<FlushPolicy, BufferLimits, ThreadingPolicy>::file_sink(std::string_view path)
+	template<typename BufferLimits, typename FlushPolicy, typename ThreadingPolicy>
+	file_sink<BufferLimits, FlushPolicy, ThreadingPolicy>::file_sink(std::string_view path)
 		: details::stream_writer<FlushPolicy>(path)
 	{}
 
-	template<typename FlushPolicy, typename BufferLimits, typename ThreadingPolicy>
-	void file_sink<FlushPolicy, BufferLimits, ThreadingPolicy>::sink_it(const details::record<BufferLimits>& record)
+	template<typename BufferLimits, typename FlushPolicy, typename ThreadingPolicy>
+	void file_sink<BufferLimits, FlushPolicy, ThreadingPolicy>::sink_it(const details::record<BufferLimits>& record)
 	{
 		sink_t::m_current_level = record.log_level;
 		details::stream_writer<FlushPolicy>::write(sink_t::m_pattern.compile(record));
