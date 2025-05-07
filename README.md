@@ -252,7 +252,7 @@ Configuration | Description
 int main()
 {
 	using buffer_limits = lwlog::memory_buffer_limits<
-		lwlog::pattern_limit<256>,
+	lwlog::pattern_limit<256>,
         lwlog::message_limit<128>,
         lwlog::argument_limit<12>,
         lwlog::arg_count_limit<4>,
