@@ -9,17 +9,31 @@ namespace lwlog::details
 	{
 		const auto& [verbose, shortened] = flags;
 
-		convert_to_chars(conv_buffer, BufferLimits::conversion, value);
+		const char* final_value; 
+		std::size_t value_length;
+
+        if constexpr (std::is_same_v<T, const char*>)
+        {
+            final_value = value;
+			value_length = std::strlen(value);
+        }
+        else
+        {
+			convert_to_chars(conv_buffer, BufferLimits::conversion, value);
+
+            final_value = conv_buffer;
+			value_length = std::strlen(conv_buffer);
+        }
 
 		std::size_t flag_pos{};
 		while ((flag_pos = pattern_buffer.data().find(verbose.data())) != std::string_view::npos)
 		{
-			pattern_buffer.replace(flag_pos, verbose.length(), conv_buffer, std::strlen(conv_buffer));
+			pattern_buffer.replace(flag_pos, verbose.length(), final_value, value_length);
 		}
 
 		while ((flag_pos = pattern_buffer.data().find(shortened.data())) != std::string_view::npos)
 		{
-			pattern_buffer.replace(flag_pos, shortened.length(), conv_buffer, std::strlen(conv_buffer));
+			pattern_buffer.replace(flag_pos, shortened.length(), final_value, value_length);
 		}
 	}
 

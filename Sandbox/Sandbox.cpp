@@ -4,11 +4,10 @@
 
 static size_t allocation_count = 0;
 
-// Override global new operator
 void* operator new(size_t size)
 {
 	++allocation_count;
-	return std::malloc(size); // Use malloc for allocation
+	return std::malloc(size);
 }
 
 int main()
@@ -48,5 +47,3 @@ int main()
 
 	return 0;
 }
-
-// Total Allocations - 190
