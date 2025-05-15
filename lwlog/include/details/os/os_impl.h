@@ -31,7 +31,7 @@ namespace lwlog::details::os
 	static void set_thread_affinity(std::uint64_t affinity_mask)
 	{
 		#ifdef _WIN32
-			const DWORD_PTR mask = static_cast<DWORD_PTR>(affinity_mask);
+			const ::DWORD_PTR mask = static_cast<::DWORD_PTR>(affinity_mask);
 			if (::SetThreadAffinityMask(::GetCurrentThread(), mask) == 0) return;
 		#elif defined(__linux__)
 			::cpu_set_t cpuset;
