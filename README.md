@@ -181,29 +181,9 @@ Module | Description
 ```Registry``` | A global singleton class that acts as a repository for all created loggers, ensuring easy access throughout your application. Loggers are automatically registered upon creation unless automatic registration is disabled.
 # Usage
 ## Basic Usage
-```cpp
-#include "lwlog.h"
 
-int main()
-{
-	auto console = std::make_shared<
-		lwlog::logger<
-			lwlog::default_config,
-			lwlog::default_log_policy,
-			lwlog::default_storage_policy,
-			lwlog::default_flush_policy,
-			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_sink
-			>
-		>("CONSOLE");
-	
-	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
-	console->set_pattern("[%T] [%n] [%l]: %v");
-	console->critical("First critical message");
-	
-	return 0;
-}
-```
+Please refer to [Sandbox/Sandbox.cpp](Sandbox/Sandbox.cpp).
+
 ## Convenience logger aliases
 ***lwlog.h*** simplifies the process of creating and configuring loggers through a set of convenient aliases at your disposal which you can find in the [***lwlog.h***](https://github.com/ChristianPanov/lwlog/blob/master/lwlog/src/lwlog.h) header file.
 - **Ease of Use:** These aliases are intended for ease of use, simplifying the setup process, and offering straightforward access to logging functionalities. They are predefined with default configurations, making them ideal for general purposes.
