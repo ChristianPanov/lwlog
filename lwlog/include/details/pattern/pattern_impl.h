@@ -151,6 +151,8 @@ namespace lwlog::details
 	void pattern<BufferLimits>::set_pattern(std::string_view pattern)
 	{
 		m_formatters.clear();
+		m_alignment_flags_info.clear();
+
 		m_pattern_buffer.reset();
 		m_pattern_buffer.append(pattern);
 		m_pattern_buffer.append('\n');
