@@ -3,9 +3,9 @@ name: Static Analysis
 on:
   workflow_dispatch:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "experimental" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "experimental" ]
 
 env:
   BUILD_TYPE: Release
@@ -13,39 +13,32 @@ env:
 jobs:
   cppcheck:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
-
-    - name: Create static_analysis directory
-      run: mkdir -p static_analysis
 
     - name: Run Cppcheck
       run: |
         sudo apt-get install -y cppcheck
-        cppcheck --enable=all --inconclusive --force --language=c++ --file-list=<(find lwlog/src/ -name "*.cpp" -o -name "*.h") &> static_analysis/cppcheck.txt
+        cppcheck --enable=all --inconclusive --force --language=c++ --file-list=<(find lwlog/include/ -name "*.cpp" -o -name "*.h") &> \
+        "${{ runner.workspace }}/cppcheck.txt"
       continue-on-error: true
 
     - name: Upload Cppcheck Results
       uses: actions/upload-artifact@v4
       with:
         name: cppcheck_results
-        path: static_analysis/cppcheck.txt
+        path: "${{ runner.workspace }}/cppcheck.txt"
 
   clang-tidy:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
-
-    - name: Create static_analysis directory
-      run: mkdir -p static_analysis
 
     - name: Install Dependencies
       run: sudo apt-get install -y build-essential cmake
 
     - name: Create Build Environment
-      run: cmake -E make_directory ${{runner.workspace}}/build
+      run: cmake -E make_directory "${{runner.workspace}}/build"
 
     - name: Generate compile_commands.json
       run: |
@@ -56,21 +49,20 @@ jobs:
     - name: Run Clang-Tidy
       run: |
         sudo apt-get install -y clang-tidy
-        find lwlog/src/ -name "*.cpp" -o -name "*.h" | xargs clang-tidy -p=build/compile_commands.json &> static_analysis/clang-tidy.txt
+        find lwlog/include/ -name "*.cpp" -o -name "*.h" | xargs clang-tidy -p=build/compile_commands.json &> \
+        "${{ runner.workspace }}/clang-tidy.txt"
       continue-on-error: true
 
     - name: Upload Clang-Tidy Results
       uses: actions/upload-artifact@v4
       with:
         name: clangtidy_results
-        path: static_analysis/clang-tidy.txt
+        path: "${{ runner.workspace }}/clang-tidy.txt"
 
   sonar-scanner:
     runs-on: ubuntu-latest
-
     env:
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
-
     steps:
     - uses: actions/checkout@v4
       with:
@@ -83,21 +75,28 @@ jobs:
       uses: SonarSource/sonarcloud-github-c-cpp@v3
 
     - name: Create Build Environment
-      run: cmake -E make_directory ${{ runner.workspace }}/build
+      run: cmake -E make_directory "${{ runner.workspace }}/build"
 
     - name: Configure GCC Build
-      working-directory: ${{ runner.workspace }}/build
-      run: | 
-        cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_EXPORT_COMPILE_COMMANDS=1 $GITHUB_WORKSPACE
+      working-directory: "${{ runner.workspace }}/build"
+      run: |
+          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_COMPILER=gcc \
+                -DCMAKE_CXX_COMPILER=g++ \
+                -DCMAKE_EXPORT_COMPILE_COMMANDS=1 "${{ github.workspace }}"
 
     - name: Build with GCC (with build-wrapper)
-      working-directory: ${{ runner.workspace }}/build
+      working-directory: "${{ runner.workspace }}/build"
       run: |
-        build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build . --config ${{ env.BUILD_TYPE }}
+        build-wrapper-linux-x86-64 --out-dir "${{ env.BUILD_WRAPPER_OUT_DIR }}" cmake --build . --config ${{ env.BUILD_TYPE }}
           
     - name: Run sonar-scanner
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        sonar-scanner --define sonar.cfamily.compile-commands="${{ runner.workspace }}/build/compile_commands.json"
+          sonar-scanner \
+            -Dsonar.cfamily.compile-commands="${{ runner.workspace }}/build/compile_commands.json" \
+            -Dsonar.projectKey=ChristianPanov_lwlog \
+            -Dsonar.organization=christianpanov \
+            -Dsonar.sources=lwlog/include

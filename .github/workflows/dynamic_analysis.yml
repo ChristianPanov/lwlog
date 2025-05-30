@@ -1,0 +1,87 @@
+name: Dynamic Analysis
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master", "experimental" ]
+  pull_request:
+    branches: [ "master", "experimental" ]
+
+env:
+  BUILD_TYPE: Debug
+  BIN_NAME: lwlog_sandbox
+
+jobs:
+  dynamic_analysis:
+    runs-on: "ubuntu-latest"
+    name: Dynamic Analysis with Valgrind Tools
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Build Dependencies and Valgrind
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc g++ ninja-build valgrind
+          
+      - name: Create Build Environment
+        run: cmake -E make_directory "${{ runner.workspace }}/build"
+
+      - name: Configure Build
+        working-directory: "${{ runner.workspace }}/build"
+        run: |
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_COMPILER=gcc \
+                -DCMAKE_CXX_COMPILER=g++ \
+                -DCMAKE_C_FLAGS="-g -O0" \
+                -DCMAKE_CXX_FLAGS="-g -O0" \
+                "${{ github.workspace }}"
+
+      - name: Build
+        working-directory: "${{ runner.workspace }}/build"
+        run: cmake --build . --parallel $(nproc)
+
+      - name: Set Executable Permissions
+        working-directory: "${{ runner.workspace }}/build"
+        run: chmod +x ./${{ env.BIN_NAME }}
+        
+      - name: Run Valgrind Memcheck
+        working-directory: "${{ runner.workspace }}/build"
+        run: |
+          echo "Running Valgrind Memcheck..."
+          valgrind --tool=memcheck --leak-check=full --error-exitcode=1 ./${{ env.BIN_NAME }} &> \
+          "${{ runner.workspace }}/memcheck_results.txt"
+        continue-on-error: true
+
+      - name: Upload Memcheck Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: memcheck_results
+          path: "${{ runner.workspace }}/memcheck_results.txt"
+
+      - name: Run Valgrind Helgrind
+        working-directory: "${{ runner.workspace }}/build"
+        run: |
+          echo "Running Valgrind Helgrind..."
+          valgrind --tool=helgrind --error-exitcode=1 ./${{ env.BIN_NAME }} &> \
+          "${{ runner.workspace }}/helgrind_results.txt"
+        continue-on-error: true
+
+      - name: Upload Helgrind Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: helgrind_results
+          path: "${{ runner.workspace }}/helgrind_results.txt"
+
+      - name: Run Valgrind Cachegrind
+        working-directory: "${{ runner.workspace }}/build"
+        run: |
+          echo "Running Valgrind Helgrind..."
+          valgrind --tool=cachegrind ./${{ env.BIN_NAME }} &> \
+          "${{ runner.workspace }}/cachegrind_results.txt"
+        continue-on-error: true
+
+      - name: Upload Cachegrind Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: cachegrind_results
+          path: "${{ runner.workspace }}/cachegrind_results.txt"

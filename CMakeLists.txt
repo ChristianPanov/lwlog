@@ -10,21 +10,19 @@ set(version 1.3.0)
 
 message("Adding source files")
 set(LWLOG_SOURCE_FILES
-    ${CMAKE_SOURCE_DIR}/lwlog/src/registry.cpp
-    ${CMAKE_SOURCE_DIR}/lwlog/src/details/pattern/alignment_formatter.cpp
-    ${CMAKE_SOURCE_DIR}/lwlog/src/details/pattern/attribute.cpp
-    ${CMAKE_SOURCE_DIR}/lwlog/src/details/pattern/pattern.cpp
+    ${CMAKE_SOURCE_DIR}/lwlog/include/details/topic_registry.cpp
+    ${CMAKE_SOURCE_DIR}/lwlog/include/details/pattern/attribute.cpp
 )
 
 message("Creating lwlog library")
 add_library(lwlog_lib STATIC ${LWLOG_SOURCE_FILES})
 target_compile_features(lwlog_lib PUBLIC cxx_std_17)
-target_include_directories(lwlog_lib PRIVATE ${CMAKE_SOURCE_DIR}/lwlog/src/)
+target_include_directories(lwlog_lib PRIVATE ${CMAKE_SOURCE_DIR}/lwlog/include/)
 add_library(lwlog::lwlog_lib ALIAS lwlog_lib)
 
 message("Creating lwlog sandbox")
 add_executable(lwlog_sandbox ${CMAKE_SOURCE_DIR}/Sandbox/Sandbox.cpp)
-target_include_directories(lwlog_sandbox PRIVATE ${CMAKE_SOURCE_DIR}/lwlog/src/)
+target_include_directories(lwlog_sandbox PRIVATE ${CMAKE_SOURCE_DIR}/lwlog/include/)
 
 message("Linking libraries")
 target_link_libraries(lwlog_lib PRIVATE Threads::Threads)
@@ -34,7 +32,7 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 install(
-  DIRECTORY ${CMAKE_SOURCE_DIR}/lwlog/src/
+  DIRECTORY ${CMAKE_SOURCE_DIR}/lwlog/include/
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lwlog
   FILES_MATCHING PATTERN "*.h"
 )

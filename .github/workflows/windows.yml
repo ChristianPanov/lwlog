@@ -3,9 +3,9 @@ name: Windows
 on: 
   workflow_dispatch:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "experimental" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "experimental" ]
 
 env:
   BUILD_TYPE: Release
@@ -14,23 +14,28 @@ jobs:
   msvc_build:
     runs-on: windows-latest
     name: MSVC x64 Build
-
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Create Build Environment
-      run: cmake -E make_directory ${{ runner.workspace }}/build
+      - name: Create Build Environment
+        shell: bash
+        run: cmake -E make_directory "${{ runner.workspace }}/build"
 
-    - name: Configure MSVC Build
-      shell: bash
-      working-directory: ${{ runner.workspace }}/build
-      run: cmake -A x64 -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} $GITHUB_WORKSPACE
+      - name: Configure MSVC Build
+        shell: bash
+        working-directory: "${{ runner.workspace }}/build"
+        run: |
+          cmake -A x64 -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_FLAGS="-Wall" \
+                -DCMAKE_CXX_FLAGS="-Wall" \
+                "${{ github.workspace }}"
 
-    - name: Build with MSVC
-      working-directory: ${{ runner.workspace }}/build
-      run: |
-        $threads = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
-        cmake --build . --config ${{ env.BUILD_TYPE }} --parallel $threads
+      - name: Build with MSVC
+        shell: pwsh
+        working-directory: "${{ runner.workspace }}/build"
+        run: |
+          $threads = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
+          cmake --build . --config ${{ env.BUILD_TYPE }} --parallel $threads
 
   mingw_build:
     runs-on: windows-latest
@@ -40,23 +45,54 @@ jobs:
           - { msystem: 'MINGW64', toolchain: 'mingw-w64-x86_64-toolchain', cmake: 'mingw-w64-x86_64-cmake' }
           - { msystem: 'UCRT64', toolchain: 'mingw-w64-ucrt-x86_64-toolchain', cmake: 'mingw-w64-ucrt-x86_64-cmake' }
     name: MinGW x64 ${{ matrix.msys2_env.msystem }} Build
-
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup MSYS2
-      uses: msys2/setup-msys2@v2
-      with:
-        msystem: ${{ matrix.msys2_env.msystem }}
-        update: true
-        install: ${{ matrix.msys2_env.toolchain }} ${{ matrix.msys2_env.cmake }}
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{ matrix.msys2_env.msystem }}
+          update: true
+          install: ${{ matrix.msys2_env.toolchain }} ${{ matrix.msys2_env.cmake }}
 
-    - name: Configure MinGW Build
-      shell: msys2 {0}
-      run: |
-        cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} $GITHUB_WORKSPACE
+      - name: Configure MinGW Build
+        shell: msys2 {0}
+        run: |
+          cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_FLAGS="-Wall -Wextra -Wpedantic" \
+                -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic" \
+                "${{ github.workspace }}"
 
-    - name: Build with MinGW
-      shell: msys2 {0}
-      run: |
-        cmake --build . --config ${{ env.BUILD_TYPE }}
+      - name: Build with MinGW
+        shell: msys2 {0}
+        run: cmake --build . --config ${{ env.BUILD_TYPE }}
+
+  clang_build:
+    runs-on: windows-latest
+    name: Clang x64 Build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Ninja
+        shell: pwsh
+        run: choco install ninja -y
+
+      - name: Create Build Environment
+        shell: bash
+        run: cmake -E make_directory "${{ runner.workspace }}/build"
+
+      - name: Configure Clang Build
+        shell: bash
+        working-directory: "${{ runner.workspace }}/build"
+        run: |
+          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_C_COMPILER=clang \
+                -DCMAKE_CXX_COMPILER=clang++ \
+                -DCMAKE_C_FLAGS="-Wall -Wextra -Wpedantic" \
+                -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic" \
+                "${{ github.workspace }}"
+
+      - name: Build with Clang
+        shell: bash
+        working-directory: "${{ runner.workspace }}/build"
+        run: cmake --build . --config ${{ env.BUILD_TYPE }} --parallel
