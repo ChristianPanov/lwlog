@@ -36,41 +36,6 @@ The project is continuously tested on the following platforms and compilers:
 | Linux    | x64                  | GCC, Clang, Intel oneAPI (icx/icpx)
 | Linux    | arm64                | GCC, Clang
 | macOS    | x64   | Apple Clang
-# Release 1.4 (Upcoming)
-The upcoming release of 1.4 brings a significant focus on performance optimization and resource efficiency.
-
-## ~~Static Buffer for String Manipulations~~ ###
-**What’s New:**
-- Introducing a static pre-allocated memory buffer for string manipulations to minimize dynamic memory allocations.
-- Promotes memory reuse and improves performance for high-frequency logging scenarios.
-
-**Why It Matters:**
-- Reduces the overhead associated with creating and destroying temporary strings during log formatting.
-- Particularly beneficial for applications requiring low-latency logging or operating in resource-constrained environments.
-## ~~Faster Floating-Point and Integer String Conversions~~ ### 
-**What’s New:**
-- Custom-built algorithms for converting floating-point and integer values to strings.
-- Optimized to outperform std::to_string with more efficient operations.
-  
-**Why It Matters:**
-- Achieves significantly faster number-to-string conversions, which are a critical part of many log messages.
-- Provides more consistent and predictable performance across different platforms.
-## ~~Improved String Manipulation Algorithms~~ ### 
-**What’s New:**
-- Enhanced algorithms for searching and replacing substrings in patterns.
-- Reduces computational overhead, especially for patterns with frequent or repetitive placeholders.
-  
-**Why It Matters:**
-- Faster string replacements lead to reduced latency in log generation, improving overall logging performance.
-- Handles larger log patterns and more complex formatting with ease.
-## ~~Thread Affinity for Asynchronous Logger~~ (Done) ### 
-**What’s New:**
-- The asynchronous logger can now be configured to bind its background threads to specific CPU cores.
-
-**Why It Matters:**
-- Reduces context switching and improves cache efficiency for background log processing.
-- Boosts throughput in high-concurrency environments by isolating logging threads from other workloads.
-
 # The Most Important Question - Why Yet Another Logging Library?
 _Another logging library, how boring, right, as If we don't see a new one each week. So why do I keep shoving it down your throats for a drop of recognition? I will cut short on the speed or code simplicity that every other logging library boasts about. The actual importance of the library lies within its meaning to me. This library has served as a pivotal factor in my journey to becoming a software craftsman. I started it when I knew very little, and when I still made no distinction between writing reusable pieces of code and crafting libraries. I can say that I am proud of what I've made, for it has been a long journey comprised of not giving up and constantly daring to do what was currently impossible for me, which forced me to broaden my knowledge very quickly and apply that knowledge in practice. As you will see later in the documentation, I do claim this library to be very fast and to have very clean code. I do claim to have designed it in a good way. However, even if that weren't objectively true, that would make no difference in the importance of this work to me, as I would still be just as proud of it, for it's an extension of my essence, a reflection of my discipline, perseverance, my desire for perfection and improvement, most importantly, of my love of the process, love of the craft. And if it were a half-baked product of any of those attributes, I would rest assured that it's only a matter of time before it sheds its ugly skin and something better emerges from within, a natural consequence of loving the journey more than the destination itself - inevitable metamorphosis to something greater._
 
