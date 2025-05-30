@@ -4,14 +4,6 @@
 
 #include "details/memory_buffer.h"
 
-#if __cplusplus < 202002L
-	#ifdef FMT_VERSION
-		#include <fmt/format.h>
-	#endif
-#else
-	#include <format>
-#endif
-
 namespace lwlog::details
 {
 	template<typename BufferLimits>
