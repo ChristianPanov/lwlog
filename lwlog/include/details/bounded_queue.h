@@ -13,7 +13,7 @@ namespace lwlog::details
     struct bounded_queue
     {
         static constexpr auto cache_line_size{ 64 };
-        static constexpr auto ring_size{ Capacity + 1 };
+        static constexpr auto index_mask{ Capacity - 1 };
 
     public:
         void enqueue(T&& item);
@@ -24,10 +24,8 @@ namespace lwlog::details
         void enqueue(T&& item, [[maybe_unused]] spsc_model_policy);
         void enqueue(T&& item, [[maybe_unused]] mpsc_model_policy);
 
-        bool is_full(std::size_t next_write, std::atomic_size_t& read_idx) const;
-
     private:
-        T m_storage[ring_size];
+        T m_storage[Capacity];
         alignas(cache_line_size) std::atomic_size_t m_write_index{};
         alignas(cache_line_size) std::atomic_size_t m_read_index{};
         alignas(cache_line_size) std::atomic_flag m_mpsc_lock{ ATOMIC_FLAG_INIT };

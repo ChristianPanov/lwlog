@@ -2,13 +2,6 @@
 
 namespace lwlog::details
 {
-    template<std::size_t Capacity, typename T, typename OverflowPolicy, typename ConcurrencyModelPolicy>
-    bool bounded_queue<Capacity, T, OverflowPolicy, ConcurrencyModelPolicy>::is_full(std::size_t next_write, 
-        std::atomic_size_t& read_idx) const
-    {
-        return next_write == read_idx.load(std::memory_order_acquire);
-    }
-
     template<std::size_t Capacity, typename T,
         typename OverflowPolicy, typename ConcurrencyModelPolicy>
     void bounded_queue<Capacity, T, OverflowPolicy, ConcurrencyModelPolicy>::enqueue(T&& item)
@@ -22,9 +15,9 @@ namespace lwlog::details
         [[maybe_unused]] spsc_model_policy)
     {
         const std::size_t current_write_index{ m_write_index.load(std::memory_order_relaxed) };
-        const std::size_t next_write_index{ (current_write_index + 1) % ring_size };
+        const std::size_t next_write_index{ (current_write_index + 1) & index_mask };
 
-        while (this->is_full(next_write_index, m_read_index))
+        while (next_write_index == m_read_index.load(std::memory_order_acquire))
         {
             OverflowPolicy::handle_overflow();
             if (OverflowPolicy::should_discard()) 
@@ -48,9 +41,9 @@ namespace lwlog::details
         }
 
         const std::size_t current_write_index{ m_write_index.load(std::memory_order_relaxed) };
-        const std::size_t next_write_index{ (current_write_index + 1) % ring_size };
+        const std::size_t next_write_index{ (current_write_index + 1) & index_mask };
 
-        while (this->is_full(next_write_index, m_read_index))
+        while (next_write_index == m_read_index.load(std::memory_order_acquire))
         {
             m_mpsc_lock.clear(std::memory_order_release);
             OverflowPolicy::handle_overflow();
@@ -67,6 +60,7 @@ namespace lwlog::details
         }
 
         m_storage[current_write_index] = std::move(item);
+
         m_write_index.store(next_write_index, std::memory_order_release);
         m_mpsc_lock.clear(std::memory_order_release);
     }
@@ -84,8 +78,7 @@ namespace lwlog::details
 
         T out{ std::move(m_storage[current_read_index]) };
 
-        const std::size_t next{ (current_read_index + 1) % ring_size };
-        m_read_index.store(next, std::memory_order_release);
+        m_read_index.store((current_read_index + 1) & index_mask, std::memory_order_release);
 
         return out;
     }
