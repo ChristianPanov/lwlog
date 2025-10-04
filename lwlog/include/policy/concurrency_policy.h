@@ -2,41 +2,44 @@
 
 #include <atomic>
 
-#if defined(__x86_64__) || defined(_M_X64)
-    #include <immintrin.h>
-    #define LWLOG_CPU_PAUSE() _mm_pause()
-#elif defined(__aarch64__) || defined(_M_ARM64)
-    #define LWLOG_CPU_PAUSE() __asm__ volatile("yield")
-#else
-    #define LWLOG_CPU_PAUSE() std::this_thread::yield()
-#endif
+#include "details/adaptive_waiter.h"
 
 namespace lwlog
 {
     struct spsc_model_policy {};
     struct mpsc_model_policy {};
 
-    struct block_overflow_policy 
-    {
-        static void handle_overflow()   { LWLOG_CPU_PAUSE();  }
-        static void handle_underflow()  { LWLOG_CPU_PAUSE();  }
-        static bool should_discard()    { return false; }
-    };
-    
-    struct overwrite_last_overflow_policy
-    {
-        static void handle_overflow()   {}
-        static void handle_underflow()  {}
-        static bool should_discard()    { return false; }
-    };
+    enum class overflow_action  : std::uint8_t { wait, overwrite_last, discard_new };
+    enum class underflow_action : std::uint8_t { wait };
 
-    struct discard_new_overflow_policy
-    {
-        static void handle_overflow()   { m_is_full.store(true, std::memory_order_relaxed);     }
-        static void handle_underflow()  { m_is_full.store(false, std::memory_order_relaxed);    }
-        static bool should_discard()    { return m_is_full.load(std::memory_order_relaxed);     }
+    struct block_overflow_policy {};
+    struct overwrite_last_overflow_policy {};
+    struct discard_new_overflow_policy {};
 
-    private:
-        static inline std::atomic_bool m_is_full{ false };
+    template<typename Queue, typename OverflowPolicy>
+    struct overflow_adapter
+    {
+        static overflow_action handle_full(Queue& queue)
+        {
+            if constexpr (std::is_same_v<OverflowPolicy, block_overflow_policy>)
+            {
+                LWLOG_CPU_PAUSE();
+                return overflow_action::wait;
+            }
+            else if constexpr (std::is_same_v<OverflowPolicy, overwrite_last_overflow_policy>)
+            {
+                queue.advance_read_index();
+                return overflow_action::overwrite_last;
+            }
+            else if constexpr (std::is_same_v<OverflowPolicy, discard_new_overflow_policy>)
+            {
+                return overflow_action::discard_new;
+            }
+        }
+
+        static void handle_empty(Queue& queue)
+        {
+            LWLOG_CPU_PAUSE();
+        }
     };
 }
