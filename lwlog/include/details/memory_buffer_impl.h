@@ -153,30 +153,76 @@ namespace lwlog::details
     template<typename T>
     void convert_to_chars(char* const __restrict buffer, std::size_t buffer_size, const T& value)
     {
+        if (buffer_size == 0)
+        {
+            return;
+        }
+
+        const std::size_t max_write{ buffer_size - 1 };
+
         if constexpr (std::is_same_v<T, bool>)
         {
             const char* const str_val{ value ? "true" : "false" };
-            const std::size_t value_size{ value ? static_cast<std::size_t>(4) : static_cast<std::size_t>(5) };
+            std::size_t value_size{ value ? static_cast<std::size_t>(4) : static_cast<std::size_t>(5) };
+            if (value_size > max_write)
+            {
+                value_size = max_write;
+            }
 
             std::memcpy(buffer, str_val, value_size);
             buffer[value_size] = '\0';
         }
-        else if constexpr (std::is_arithmetic_v<T>)
+        else if constexpr (std::is_integral_v<T> && !std::is_same_v<T, bool>)
         {
-            const auto [ptr, ec]{ std::to_chars(buffer, buffer + buffer_size, value) };
-            buffer[ptr - buffer] = '\0';
+            const auto [ptr, ec] { std::to_chars(buffer, buffer + max_write, value) };
+            if (ec != std::errc{})
+            {
+                buffer[0] = '\0';
+            }
+            else
+            {
+                *ptr = '\0';
+            }
         }
-        else if constexpr (std::is_same_v<T, std::string_view> || 
-            std::is_same_v<T, std::string>) 
+        else if constexpr (std::is_floating_point_v<T>)
+        {
+            const auto [ptr, ec] { std::to_chars(buffer, buffer + max_write, value, std::chars_format::general) };
+            if (ec != std::errc{})
+            {
+                buffer[0] = '\0';
+            }
+            else
+            {
+                *ptr = '\0';
+            }
+        }
+        else if constexpr (std::is_same_v<T, std::string_view> ||
+            std::is_same_v<T, std::string>)
         {
             std::size_t value_size{ value.size() };
+            if (value_size > max_write)
+            {
+                value_size = max_write;
+            }
+
             std::memcpy(buffer, value.data(), value_size);
             buffer[value_size] = '\0';
         }
         else if constexpr (std::is_same_v<std::decay_t<T>, const char*> ||
             std::is_same_v<std::decay_t<T>, char*>)
         {
+            if (!value)
+            {
+                buffer[0] = '\0';
+                return;
+            }
+
             std::size_t value_size{ std::strlen(value) };
+            if (value_size > max_write)
+            {
+                value_size = max_write;
+            }
+
             std::memcpy(buffer, value, value_size);
             buffer[value_size] = '\0';
         }
