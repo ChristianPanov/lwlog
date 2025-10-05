@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdio>
+
 namespace lwlog
 {
 	template<std::size_t BufferSize = (1 << 22)>
