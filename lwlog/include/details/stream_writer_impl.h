@@ -15,7 +15,7 @@ namespace lwlog::details
 	stream_writer<FlushPolicy>::stream_writer(std::string_view path)
 		: m_path{ path }
 	{
-		if (!std::filesystem::exists(m_path.parent_path()))
+        if (!std::filesystem::exists(std::filesystem::absolute(m_path).parent_path()))
 		{
 			std::filesystem::create_directory(m_path.parent_path());
 		}
