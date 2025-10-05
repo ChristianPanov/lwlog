@@ -47,7 +47,7 @@ namespace lwlog
 
 	using default_pattern_limit = pattern_limit<256>;
 	using default_message_limit = message_limit<128>;
-	using default_argument_limit = argument_limit<12>;
+	using default_argument_limit = argument_limit<64>;
 	using default_arg_count_limit = arg_count_limit<4>;
 	using default_padding_limit = padding_limit<24>;
 	using default_conv_limit = conv_limit<64>;

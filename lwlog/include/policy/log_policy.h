@@ -2,7 +2,7 @@
 
 #include "level.h"
 #include "sinks/sink.h"
-#include "details/bounded_queue.h"
+#include "details/bounded_queue/bounded_queue.h"
 #include "details/source_meta.h"
 #include "details/topic_registry.h"
 #include "details/adaptive_waiter.h"

@@ -11,8 +11,8 @@ namespace lwlog
 
         if constexpr (sizeof...(args) > 0)
         {
-            std::uint8_t buffer_index{ 0 };
-            (details::convert_to_chars(backend.args_buffers[buffer_index++],
+            std::uint8_t arg_count{ 0 };
+            (details::convert_to_chars(backend.args_buffers[arg_count++],
                 BufferLimits::argument, std::forward<Args>(args)), ...);
 
             details::format_args<BufferLimits>(backend.message_buffer, backend.args_buffers);
@@ -59,7 +59,7 @@ namespace lwlog
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::process_item(
         backend<BufferLimits, ConcurrencyModelPolicy>& backend)
     {
-        const auto& item{ backend.queue.dequeue() };
+        const auto item{ backend.queue.dequeue() };
 
         backend.message_buffer.reset();
         backend.message_buffer.append(item.message);
@@ -133,18 +133,19 @@ namespace lwlog
     {
         if constexpr (sizeof...(args) == 0)
         {
-            backend.queue.enqueue({ meta, message, log_level, false, 0, backend.topics.topic_index() });
+            backend.queue.enqueue(meta, message, log_level, false, 
+                static_cast<std::uint8_t>(0), backend.topics.topic_index());
         }
         else
         {
-            const std::uint8_t buff_index{ backend.arg_buffers_pool.acquire_args_buffer() };
-            auto& args_buffer{ backend.arg_buffers_pool.get_args_buffer(buff_index) };
+            const std::uint8_t buffer_index{ backend.arg_buffers_pool.acquire_args_buffer() };
+            auto& args_buffer{ backend.arg_buffers_pool.get_args_buffer(buffer_index) };
 
-            std::uint8_t buffer_index{ 0 };
-            (details::convert_to_chars(args_buffer[buffer_index++],
+            std::uint8_t arg_count{ 0 };
+            (details::convert_to_chars(args_buffer[arg_count++],
                 BufferLimits::argument, std::forward<Args>(args)), ...);
 
-            backend.queue.enqueue({ meta, message, log_level, true, buff_index, backend.topics.topic_index() });
+            backend.queue.enqueue(meta, message, log_level, true, buffer_index, backend.topics.topic_index());
         }
 
         backend.has_work.test_and_set(std::memory_order_release);
@@ -155,7 +156,7 @@ namespace lwlog
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::log(
         backend<BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message)
     {
-        backend.queue.enqueue({ {}, message, {}, {}, {}, {} });
+        backend.queue.enqueue(details::source_meta{}, message, level{}, bool{}, std::uint8_t{}, std::uint8_t{});
 
         backend.has_work.test_and_set(std::memory_order_release);
     }

@@ -213,4 +213,13 @@ namespace lwlog
 	{
 		this->log(log_msg, level::debug, std::forward<Args>(args)...);
 	}
+
+	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
+		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
+	template<typename... Args>
+	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::trace(
+		const details::log_message& log_msg, Args&&... args)
+	{
+		this->log(log_msg, level::trace, std::forward<Args>(args)...);
+	}
 }

@@ -43,6 +43,7 @@ namespace lwlog
 		template<typename... Args> void error(const details::log_message& log_msg, Args&&... args);
 		template<typename... Args> void critical(const details::log_message& log_msg, Args&&... args);
 		template<typename... Args> void debug(const details::log_message& log_msg, Args&&... args);
+		template<typename... Args> void trace(const details::log_message& log_msg, Args&&... args);
 	
 	private:
 		template<typename... Args> 

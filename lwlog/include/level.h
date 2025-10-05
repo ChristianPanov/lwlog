@@ -13,7 +13,8 @@ namespace lwlog
 		error		=	(1 << 3),
 		critical	=	(1 << 4),
 		debug		=	(1 << 5),
-		all			=	(1 << 6)
+		trace		=	(1 << 6),
+		all			=	(1 << 7)
 	};
 
 	constexpr level operator|(level lhs, level rhs)
@@ -50,6 +51,7 @@ namespace lwlog::level_details
 		case level::error:		return "error";
 		case level::critical:	return "critical";
 		case level::debug:		return "debug";
+		case level::trace:		return "trace";
 		case level::all: 		return {};
 		case level::none:		return {};
 		}
