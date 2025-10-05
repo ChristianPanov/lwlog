@@ -24,6 +24,7 @@ namespace lwlog::sinks
 			case level::error:		color_code = "\u001b[31;1m"; break;
 			case level::critical:	color_code = "\u001b[41;1m"; break;
 			case level::debug:		color_code = "\u001b[37;1m"; break;
+			case level::trace:		color_code = "\u001b[37;1m"; break;
 			case level::all: 		color_code = ""; break;
 			case level::none: 		color_code = ""; break;
 			}
