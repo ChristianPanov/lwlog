@@ -43,7 +43,5 @@ int main()
 		console->critical("First {} critical message {}");
 	}
 
-
-
 	return 0;
 }

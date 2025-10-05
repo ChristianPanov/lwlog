@@ -18,7 +18,6 @@ namespace lwlog::details::os
 		{
 		#ifdef _WIN32
 			::SYSTEMTIME m_now;
-
 			::GetSystemTime(&m_now);
 
 			year 	= m_now.wYear;
