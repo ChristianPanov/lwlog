@@ -219,7 +219,7 @@ int main()
 	using buffer_limits = lwlog::memory_buffer_limits<
 		lwlog::pattern_limit<256>,
         	lwlog::message_limit<128>,
-        	lwlog::argument_limit<12>,
+        	lwlog::argument_limit<64>,
         	lwlog::arg_count_limit<4>,
         	lwlog::padding_limit<24>,
         	lwlog::conv_limit<64>
@@ -244,7 +244,7 @@ If you do not provide custom buffer limits, the ```lwlog::default_memory_buffer_
 using default_memory_buffer_limits = lwlog::memory_buffer_limits<
 	lwlog::pattern_limit<256>,
 	lwlog::message_limit<128>,
-	lwlog::argument_limit<12>,
+	lwlog::argument_limit<64>,
 	lwlog::arg_count_limit<4>,
 	lwlog::padding_limit<24>,
 	lwlog::conv_limit<64>
@@ -555,7 +555,7 @@ int main()
 			lwlog::synchronous_policy,
 			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_sink
+			lwlog::sinks::stdout_sink,
       		lwlog::sinks::file_sink
 			>
 		>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
