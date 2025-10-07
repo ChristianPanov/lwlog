@@ -37,6 +37,6 @@ namespace lwlog::details
 
 	private:
 		static const sgr_color_spec* find_color_spec(std::string_view color);
-		static const std::uint8_t resolve_color(const sgr_color_spec&, bool is_background, bool is_dark);
+		static std::uint8_t resolve_color(const sgr_color_spec&, bool is_background, bool is_dark);
 	};
 }

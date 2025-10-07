@@ -60,7 +60,7 @@ namespace lwlog::details
 		return nullptr;
 	}
 
-	const std::uint8_t sgr_encoder::resolve_color(const sgr_color_spec& spec, bool is_background, bool is_dark)
+	std::uint8_t sgr_encoder::resolve_color(const sgr_color_spec& spec, bool is_background, bool is_dark)
 	{
 		const std::uint8_t channel_offset{ static_cast<std::uint8_t>(is_background ? 
 			color_channel_offset::background : color_channel_offset::foreground) };
