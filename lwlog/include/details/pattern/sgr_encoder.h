@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #include "details/memory_buffer.h"
 
 namespace lwlog::details

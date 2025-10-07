@@ -37,7 +37,7 @@ namespace lwlog
             }
         }
 
-        static void handle_empty(Queue& queue)
+        static void handle_empty()
         {
             LWLOG_CPU_PAUSE();
         }

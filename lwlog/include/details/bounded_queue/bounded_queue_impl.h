@@ -145,7 +145,7 @@ namespace lwlog::details
                 return out;
             }
 
-            overflow_adapter::handle_empty(*this);
+            overflow_adapter::handle_empty();
         }
     }
 
