@@ -3,7 +3,7 @@
 #include <cstring>
 #include <cstddef>
 #include <memory>
-#include <string_view>
+#include <string>
 #include <charconv>
 
 namespace lwlog::details

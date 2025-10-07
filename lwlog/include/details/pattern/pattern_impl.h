@@ -1,7 +1,6 @@
 #pragma once
 
 #include "pattern.h"
-#include "color_format_data.h"
 #include "formatters.h"
 
 namespace lwlog::details
@@ -94,42 +93,68 @@ namespace lwlog::details
 	template<typename BufferLimits>
 	void pattern<BufferLimits>::process_color_flags(bool use_color)
 	{
-		const char* const reset_seq{ use_color ? "\u001b[0m" : "" };
-		const std::uint8_t reset_seq_len{ use_color ?
-			static_cast<std::uint8_t>(4) :
-			static_cast<std::uint8_t>(0)
-		};
+		memory_buffer<10> color_buffer;
+
+		const char* const reset_seq{ use_color ? sgr_encoder::reset : "" };
+		const std::uint8_t reset_seq_len{ use_color ? sgr_encoder::reset_length : static_cast<std::uint8_t>(0) };
 
 		std::size_t pos{ 0 };
+		std::size_t dot_pos{ std::string_view::npos };
+		std::size_t open_brace_pos{ std::string_view::npos };
+		std::size_t close_brace_pos{ std::string_view::npos };
+
+		bool is_flag_valid{ true };
+
 		while (pos < m_pattern_buffer.size())
 		{
 			if (m_pattern_buffer[pos] == '.')
 			{
-				const std::size_t color_seq_end_pos{ m_pattern_buffer.data().find("(", pos) };
-				const std::string_view color_flag{ m_pattern_buffer.c_str() + pos, color_seq_end_pos - pos + 1 };
-
-				if (const auto it = color_data.find(color_flag); it != color_data.end())
-				{
-					const char* const color_seq{ use_color ? it->second.data() : "" };
-					const std::size_t color_seq_len{ use_color ? it->second.size() : 0 };
-
-					m_pattern_buffer.replace(pos, color_seq_end_pos - pos + 1, color_seq, color_seq_len);
-					pos += color_seq_len;
-				}
-				else
-				{
-					++pos;
-				}
+				dot_pos = pos;
+				is_flag_valid = true;
+			}
+			else if (m_pattern_buffer[pos] == '(')
+			{
+				open_brace_pos = pos;
 			}
 			else if (m_pattern_buffer[pos] == ')')
 			{
-				m_pattern_buffer.replace(pos, 1, reset_seq, reset_seq_len);
-				pos += reset_seq_len;
+				close_brace_pos = pos;
 			}
-			else
+			else if (m_pattern_buffer[pos] == ' ' && dot_pos != std::string_view::npos
+				&& (pos > dot_pos) && (pos < open_brace_pos))
 			{
-				++pos;
+				is_flag_valid = false;
 			}
+
+			if (dot_pos != std::string_view::npos && open_brace_pos != std::string_view::npos
+				&& close_brace_pos != std::string_view::npos)
+			{
+				if ((dot_pos < open_brace_pos && open_brace_pos < close_brace_pos) && is_flag_valid == true)
+				{
+					const std::size_t color_flag_len{ open_brace_pos - dot_pos + 1 };
+					const std::size_t color_name_len{ open_brace_pos - dot_pos - 1 };
+					const std::string_view color_name{ &m_pattern_buffer[dot_pos + 1], color_name_len };
+
+					color_encoder.encode(color_name, color_buffer);
+
+					const char* const color_seq{ use_color ? color_buffer.c_str() : "" };
+					const std::size_t color_seq_len{ use_color ? color_buffer.size() : 0 };
+
+					m_pattern_buffer.replace(dot_pos, color_flag_len, color_seq, color_seq_len);
+
+					const std::size_t recalculate_close_brace_pos{ close_brace_pos - color_flag_len + color_seq_len };
+					m_pattern_buffer.replace(recalculate_close_brace_pos, 1, reset_seq, reset_seq_len);
+
+					pos = recalculate_close_brace_pos + reset_seq_len;
+
+					is_flag_valid = true;
+					dot_pos = std::string_view::npos;
+					open_brace_pos = std::string_view::npos;
+					close_brace_pos = std::string_view::npos;
+				}
+			}
+
+			++pos;
 		}
 	}
 

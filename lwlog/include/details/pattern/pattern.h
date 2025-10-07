@@ -1,13 +1,14 @@
 #pragma once
 
+#include <string>
 #include <memory>
 #include <vector>
-#include <unordered_map>
 #include <algorithm>
 
 #include "attribute.h"
 #include "formatter.h"
 #include "alignment_formatter.h"
+#include "sgr_encoder.h"
 #include "details/record.h"
 #include "details/memory_buffer.h"
 
@@ -35,6 +36,8 @@ namespace lwlog::details
 		std::vector<std::string_view> parse_short_flags();
 
 	private:
+		sgr_encoder color_encoder;
+
 		details::memory_buffer<BufferLimits::pattern> m_pattern_buffer;
 
 		char m_cached_pattern_buffer[BufferLimits::pattern];
