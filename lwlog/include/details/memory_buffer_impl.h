@@ -33,7 +33,7 @@ namespace lwlog::details
     {
         if (m_size + size > m_capacity)
         {
-            memory_buffer<Capacity>::grow(m_capacity * 1.5f);
+            memory_buffer<Capacity>::grow(static_cast<std::size_t>(m_capacity * 1.5f));
         }
 
         std::memcpy(m_buffer + m_size, data, size);
@@ -51,7 +51,7 @@ namespace lwlog::details
     {
         if (m_size + 1 > m_capacity)
         {
-            memory_buffer<Capacity>::grow(m_capacity * 1.5f);
+            memory_buffer<Capacity>::grow(static_cast<std::size_t>(m_capacity * 1.5f));
         }
 
         m_buffer[m_size++] = ch;
@@ -63,7 +63,7 @@ namespace lwlog::details
     {
         if(m_size - to_replace_size + replace_with_size > m_capacity)
         {
-            memory_buffer<Capacity>::grow(m_capacity * 1.5f);
+            memory_buffer<Capacity>::grow(static_cast<std::size_t>(m_capacity * 1.5f));
         }
 
         char* const __restrict shift_dest{ m_buffer + to_replace_pos + replace_with_size };
@@ -82,7 +82,7 @@ namespace lwlog::details
     {
         if (m_size + insert_size > m_capacity)
         {
-            memory_buffer<Capacity>::grow(m_capacity * 1.5f);
+            memory_buffer<Capacity>::grow(static_cast<std::size_t>(m_capacity * 1.5f));
         }
 
         char* const __restrict shift_dest{ m_buffer + insert_pos + insert_size };
