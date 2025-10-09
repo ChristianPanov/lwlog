@@ -36,8 +36,6 @@ namespace lwlog::details
 		std::vector<std::string_view> parse_short_flags();
 
 	private:
-		sgr_encoder color_encoder;
-
 		details::memory_buffer<BufferLimits::pattern> m_pattern_buffer;
 
 		char m_cached_pattern_buffer[BufferLimits::pattern];

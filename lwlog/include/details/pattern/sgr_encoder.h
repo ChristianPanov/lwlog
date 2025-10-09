@@ -31,14 +31,22 @@ namespace lwlog::details
 		static constexpr std::uint8_t intensity_offset{ 60 };
 
 	public:
-		static constexpr const char* const reset{ "\x1b[0m" };
-		static constexpr std::uint8_t reset_length{ 4 };
+		static constexpr const char* reset{ "\x1b[0m" };
 
 	public:
-		static void encode(std::string_view token, memory_buffer<10>& out);
+		template<std::size_t Size>
+		static void encode(std::string_view token, memory_buffer<Size>& out);
+
+		static bool can_encode(std::string_view token);
+
+	public:
+		static bool is_base_name_char(unsigned char ch);
 
 	private:
+		static bool has_prefix(std::string_view str, std::string_view prefix);
 		static const sgr_color_spec* find_color_spec(std::string_view color);
 		static std::uint8_t resolve_color(const sgr_color_spec&, bool is_background, bool is_dark);
 	};
 }
+
+#include "sgr_encoder_impl.h"

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "pattern.h"
 #include "formatters.h"
@@ -93,69 +93,74 @@ namespace lwlog::details
 	template<typename BufferLimits>
 	void pattern<BufferLimits>::process_color_flags(bool use_color)
 	{
-		memory_buffer<10> color_buffer;
+		memory_buffer<BufferLimits::pattern> temp_buffer;
 
-		const char* const reset_seq{ use_color ? sgr_encoder::reset : "" };
-		const std::uint8_t reset_seq_len{ use_color ? sgr_encoder::reset_length : static_cast<std::uint8_t>(0) };
+		const std::size_t pattern_buffer_size{ m_pattern_buffer.size() };
 
 		std::size_t pos{ 0 };
-		std::size_t dot_pos{ std::string_view::npos };
-		std::size_t open_brace_pos{ std::string_view::npos };
-		std::size_t close_brace_pos{ std::string_view::npos };
-
-		bool is_flag_valid{ true };
-
-		while (pos < m_pattern_buffer.size())
+		std::size_t open_pos{ 0 };
+		std::size_t close_pos{ 0 };
+		while (pos < pattern_buffer_size)
 		{
-			if (m_pattern_buffer[pos] == '.')
+			if (m_pattern_buffer[pos] != '.')
 			{
-				dot_pos = pos;
-				is_flag_valid = true;
-			}
-			else if (m_pattern_buffer[pos] == '(')
-			{
-				open_brace_pos = pos;
-			}
-			else if (m_pattern_buffer[pos] == ')')
-			{
-				close_brace_pos = pos;
-			}
-			else if (m_pattern_buffer[pos] == ' ' && dot_pos != std::string_view::npos
-				&& (pos > dot_pos) && (pos < open_brace_pos))
-			{
-				is_flag_valid = false;
+				temp_buffer.append(m_pattern_buffer[pos]);
+				++pos;
+				continue;
 			}
 
-			if (dot_pos != std::string_view::npos && open_brace_pos != std::string_view::npos
-				&& close_brace_pos != std::string_view::npos)
+			open_pos = pos + 1;
+			while (open_pos < pattern_buffer_size && sgr_encoder::is_base_name_char(m_pattern_buffer[open_pos]))
 			{
-				if ((dot_pos < open_brace_pos && open_brace_pos < close_brace_pos) && is_flag_valid == true)
-				{
-					const std::size_t color_flag_len{ open_brace_pos - dot_pos + 1 };
-					const std::size_t color_name_len{ open_brace_pos - dot_pos - 1 };
-					const std::string_view color_name{ &m_pattern_buffer[dot_pos + 1], color_name_len };
-
-					color_encoder.encode(color_name, color_buffer);
-
-					const char* const color_seq{ use_color ? color_buffer.c_str() : "" };
-					const std::size_t color_seq_len{ use_color ? color_buffer.size() : 0 };
-
-					m_pattern_buffer.replace(dot_pos, color_flag_len, color_seq, color_seq_len);
-
-					const std::size_t recalculate_close_brace_pos{ close_brace_pos - color_flag_len + color_seq_len };
-					m_pattern_buffer.replace(recalculate_close_brace_pos, 1, reset_seq, reset_seq_len);
-
-					pos = recalculate_close_brace_pos + reset_seq_len;
-
-					is_flag_valid = true;
-					dot_pos = std::string_view::npos;
-					open_brace_pos = std::string_view::npos;
-					close_brace_pos = std::string_view::npos;
-				}
+				++open_pos;
 			}
 
-			++pos;
+			if (open_pos >= pattern_buffer_size || open_pos == pos + 2 || m_pattern_buffer[open_pos] != '(')
+			{
+				temp_buffer.append('.');
+				++pos;
+				continue;
+			}
+
+			close_pos = open_pos + 1;
+			while (close_pos < pattern_buffer_size && m_pattern_buffer[close_pos] != ')')
+			{
+				++close_pos;
+			}
+
+			if (close_pos == pattern_buffer_size)
+			{
+				temp_buffer.append(&m_pattern_buffer[pos], (open_pos + 1) - pos);
+				pos = open_pos + 1;
+				continue;
+			}
+
+			const std::string_view color_name{ &m_pattern_buffer[pos + 1], open_pos - pos - 1 };
+			const std::string_view inner_text{ &m_pattern_buffer[open_pos + 1], close_pos - open_pos - 1 };
+			const bool is_encodable{ sgr_encoder::can_encode(color_name) };
+
+			if (use_color && is_encodable)
+			{
+				sgr_encoder::encode(color_name, temp_buffer);
+				temp_buffer.append(inner_text);
+				temp_buffer.append(sgr_encoder::reset);
+			}
+			else if (!is_encodable)
+			{
+				temp_buffer.append(&m_pattern_buffer[pos], open_pos - pos + 1);
+				temp_buffer.append(inner_text);
+				temp_buffer.append(')');
+			}
+			else
+			{
+				temp_buffer.append(inner_text);
+			}
+
+			pos = close_pos + 1;
 		}
+
+		m_pattern_buffer.reset();
+		m_pattern_buffer.append(temp_buffer.data());
 	}
 
 	template<typename BufferLimits>
