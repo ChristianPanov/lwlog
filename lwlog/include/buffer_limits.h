@@ -11,14 +11,9 @@ namespace lwlog
 	template<std::size_t Limit> struct padding_limit	{ static constexpr std::size_t Value{ Limit }; };
 	template<std::size_t Limit> struct conv_limit		{ static constexpr std::size_t Value{ Limit }; };
 
-	template<
-		typename PatternLimit,
-		typename MessageLimit,
-		typename ArgumentLimit,
-		typename ArgCountLimit,
-		typename PaddingLimit,
-		typename ConvLimit
-	> struct memory_buffer_limits
+	template<typename PatternLimit, typename MessageLimit, typename ArgumentLimit, 
+		typename ArgCountLimit, typename PaddingLimit, typename ConvLimit> 
+	struct memory_buffer_limits
 	{
 		static_assert(std::is_same_v<PatternLimit, pattern_limit<PatternLimit::Value>>,
 			"PatternLimit must be of type pattern_limit.");

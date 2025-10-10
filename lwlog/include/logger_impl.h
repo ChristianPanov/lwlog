@@ -7,8 +7,8 @@ namespace lwlog
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
 	template<typename... SinkParams>
-	logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(
-		std::string_view name, SinkParams&&... params)
+	logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name, 
+		SinkParams&&... params)
 		: m_name{ name }
 	{
 		LogExecutionPolicy::template init<BufferLimits>(m_backend);
@@ -26,8 +26,8 @@ namespace lwlog
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
 	template<typename Iterator, typename... SinkParams>
-	logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(
-		std::string_view name, Iterator begin, Iterator end, SinkParams&&... params)
+	logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name, 
+		Iterator begin, Iterator end, SinkParams&&... params)
 		: logger{ name, params... }
 	{
 		m_backend.sink_storage.insert(m_backend.sink_storage.end(), begin, end);
@@ -36,23 +36,22 @@ namespace lwlog
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
 	template<typename... SinkParams>
-	logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(
-		std::string_view name, sink_list<BufferLimits> sink_list, SinkParams&&... params)
+	logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name, 
+		sink_list<BufferLimits> sink_list, SinkParams&&... params)
 		: logger{ name, sink_list.begin(), sink_list.end(), params... }
 	{}
 
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
 	template<typename... SinkParams>
-	logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(
-		std::string_view name, sink_ptr<BufferLimits> sink, SinkParams&&... params)
+	logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name, 
+		sink_ptr<BufferLimits> sink, SinkParams&&... params)
 		: logger{ name, { sink }, params... }
 	{}
 
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
-	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_sink(
-		sink_ptr<BufferLimits> sink)
+	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_sink(sink_ptr<BufferLimits> sink)
 	{
 		m_backend.sink_storage.push_back(sink);
 	}
@@ -83,8 +82,7 @@ namespace lwlog
 
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
-	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::set_pattern(
-		std::string_view pattern)
+	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::set_pattern(std::string_view pattern)
 	{
 		for (const auto& sink : m_backend.sink_storage)
 		{ 
@@ -124,8 +122,7 @@ namespace lwlog
 
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
-	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::start_topic(
-		const char* topic)
+	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::start_topic(const char* topic)
 	{
 		m_backend.topics.start_topic(topic);
 	}
@@ -163,8 +160,7 @@ namespace lwlog
 
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
-	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::raw(
-		const char* const message)
+	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::raw(const char* const message)
 	{
 		LogExecutionPolicy::template log<BufferLimits>(m_backend, message);
 	}

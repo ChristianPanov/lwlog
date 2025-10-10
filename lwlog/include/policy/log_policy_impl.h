@@ -127,14 +127,12 @@ namespace lwlog
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
     template<typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
-    void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::log(
-        backend<BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message,
-        level log_level, const details::source_meta& meta, Args&&... args)
+    void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, 
+        const char* const message, level log_level, const details::source_meta& meta, Args&&... args)
     {
         if constexpr (sizeof...(args) == 0)
         {
-            backend.queue.enqueue(meta, message, log_level, false, 
-                static_cast<std::uint8_t>(0), backend.topics.topic_index());
+            backend.queue.enqueue(meta, message, log_level, false, static_cast<std::uint8_t>(0), backend.topics.topic_index());
         }
         else
         {
@@ -142,8 +140,7 @@ namespace lwlog
             auto& args_buffer{ backend.arg_buffers_pool.get_args_buffer(buffer_index) };
 
             std::uint8_t arg_count{ 0 };
-            (details::convert_to_chars(args_buffer[arg_count++],
-                BufferLimits::argument, std::forward<Args>(args)), ...);
+            (details::convert_to_chars(args_buffer[arg_count++], BufferLimits::argument, std::forward<Args>(args)), ...);
 
             backend.queue.enqueue(meta, message, log_level, true, buffer_index, backend.topics.topic_index());
         }

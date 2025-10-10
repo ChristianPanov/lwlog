@@ -4,7 +4,7 @@ namespace lwlog::details
 {
     template<typename T, std::size_t Capacity>
     template<typename... Args>
-    void bounded_queue_storage<T, Capacity>::construct_at(std::size_t index, Args&& ...args)
+    void bounded_queue_storage<T, Capacity>::construct_at(std::size_t index, Args&&... args)
     {
         ::new(static_cast<void*>(this->slot_ptr(index))) T{ std::forward<Args>(args)... };
     }

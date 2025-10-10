@@ -33,7 +33,8 @@ namespace lwlog::details
 
 	template<typename BufferLimits>
 	void alignment_formatter<BufferLimits>::apply_padding(details::memory_buffer<BufferLimits::pattern>& pattern_buffer, 
-		char* padding_buffer, std::size_t to_align_pos, std::size_t to_align_size, std::uint8_t width, char fill_char, alignment_info::align_side side)
+		char* padding_buffer, std::size_t to_align_pos, std::size_t to_align_size, std::uint8_t width, char fill_char, 
+		alignment_info::align_side side)
 	{
 		switch (side)
 		{
