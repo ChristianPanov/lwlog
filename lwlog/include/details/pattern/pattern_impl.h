@@ -149,7 +149,7 @@ namespace lwlog::details
 			{
 				temp_buffer.append(&m_pattern_buffer[pos], open_pos - pos + 1);
 				temp_buffer.append(inner_text);
-				temp_buffer.append(')');
+				temp_buffer.append(sgr_encoder::reset);
 			}
 			else
 			{
