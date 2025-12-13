@@ -132,7 +132,7 @@ namespace lwlog::details
             if ((write_index - read_index) != 0)
             {
                 T out{ m_storage.extract_at(read_index) };
-                m_read_index.store(read_index + 1, std::memory_order_release);
+                m_read_index.fetch_add(1, std::memory_order_release);
 
                 return out;
             }

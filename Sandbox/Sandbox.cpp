@@ -34,7 +34,7 @@ int main()
 		lwlog::sinks::stdout_sink
 		>
 	>("CONSOLE");
-
+																													   
 	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
 	console->set_pattern("{file} .red([%T] [%n]) .dark_green([:^12{level}]): .cyan(%v) TEXT");
 
