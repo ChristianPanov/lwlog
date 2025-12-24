@@ -56,4 +56,18 @@ namespace lwlog::level_details
 		case level::none:		return {};
 		}
 	}
+
+	constexpr std::string_view to_color(level log_level)
+	{
+		switch (log_level)
+		{
+		case level::trace:    return "\x1b[90m";
+		case level::debug:    return "\x1b[36m";
+		case level::info:     return "\x1b[32m";
+		case level::warning:  return "\x1b[30;103m";
+		case level::error:    return "\x1b[30;101m";
+		case level::critical: return "\x1b[1;97;101m";
+		default: return {};
+		}
+    }
 }

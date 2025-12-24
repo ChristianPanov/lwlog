@@ -11,24 +11,6 @@ namespace lwlog::sinks
 		}
 
 		m_pattern.set_pattern("[%d, %T] [%l] [%n]: %v", EnableAnsiColors);
-
-		sink::add_attribute(".level(", m_current_level, [&](char* buffer, std::size_t size)
-		{
-			std::string_view color_code;
-			switch (m_current_level)
-			{
-			case level::info:		color_code = "\x1b[37m"; break;
-			case level::warning:	color_code = "\x1b[93m"; break;
-			case level::error:		color_code = "\x1b[91m"; break;
-			case level::critical:	color_code = "\x1b[101m"; break;
-			case level::debug:		color_code = "\x1b[97m"; break;
-			case level::trace:		color_code = "\x1b[97m"; break;
-			case level::all: 		color_code = ""; break;
-			case level::none: 		color_code = ""; break;
-			}
-
-			details::convert_to_chars(buffer, size, color_code);
-		});
 	}
 
 	template<bool EnableAnsiColors, typename BufferLimits, typename ThreadingPolicy>

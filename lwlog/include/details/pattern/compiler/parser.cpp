@@ -103,9 +103,20 @@ namespace lwlog::details::pattern_compiler
     void parser::emit_field_instruction(pattern_bytecode::instruction_list& out,
         pattern_bytecode::field_id id, const pattern_bytecode::alignment_info& alignment)
     {
-        out.push_back(pattern_bytecode::instruction::make_field(id, alignment));
-
         m_pending_literal_begin = m_pos;
+
+        if (alignment.width == 0)
+        {
+            out.push_back(pattern_bytecode::instruction::make_field_noalign(id));
+            return;
+        }
+
+        switch (alignment.side_char)
+        {
+            case '<': out.push_back(pattern_bytecode::instruction::make_field_left(id, alignment)); return;
+            case '>': out.push_back(pattern_bytecode::instruction::make_field_right(id, alignment)); return;
+            case '^': out.push_back(pattern_bytecode::instruction::make_field_center(id, alignment)); return;
+        }
     }
 
     void parser::emit_sgr_begin_instruction(pattern_bytecode::instruction_list& out, std::uint8_t code)
@@ -116,6 +127,11 @@ namespace lwlog::details::pattern_compiler
     void parser::emit_sgr_end_instruction(pattern_bytecode::instruction_list& out)
     {
         out.push_back(pattern_bytecode::instruction::make_sgr_end());
+    }
+
+    void parser::emit_sgr_begin_level_instruction(pattern_bytecode::instruction_list& out)
+    {
+        out.push_back(pattern_bytecode::instruction::make_sgr_begin_level());
     }
 
     void parser::flush_pending_literal(pattern_bytecode::instruction_list& out, std::size_t literal_end_offset)
@@ -248,10 +264,13 @@ namespace lwlog::details::pattern_compiler
 
         const std::string_view token{ m_src + name_begin, name_end - name_begin };
 
+        const bool is_level_token{ (token == "level") };
+
         std::uint8_t sgr_code{};
         const bool is_valid_sgr{ sgr_resolver::try_resolve_code(token, sgr_code) };
 
-        if (!m_enable_color && !is_valid_sgr)
+
+        if (!is_level_token && !is_valid_sgr)
         {
             return false;
         }
@@ -265,14 +284,13 @@ namespace lwlog::details::pattern_compiler
 
         if (m_enable_color)
         {
-            if(is_valid_sgr)
+            if (is_level_token)
             {
-                this->emit_sgr_begin_instruction(out, sgr_code);
+                this->emit_sgr_begin_level_instruction(out);
             }
             else
             {
-                const std::uint16_t len{ static_cast<std::uint16_t>((name_end + 1) - dot_pos) };
-                this->emit_literal_instruction(out, dot_pos, len);
+                this->emit_sgr_begin_instruction(out, sgr_code);
             }
         }
 
@@ -281,20 +299,12 @@ namespace lwlog::details::pattern_compiler
             out.resize(saved_out_size);
             m_pos = saved_pos;
             m_pending_literal_begin = saved_literal_begin;
-
             return false;
         }
 
         if (m_enable_color)
         {
-            if (is_valid_sgr)
-            {
-                this->emit_sgr_end_instruction(out);
-            }
-            else
-            {
-                this->emit_literal_instruction(out, m_pos - 1, 1);
-            }
+            this->emit_sgr_end_instruction(out);
         }
 
         return true;

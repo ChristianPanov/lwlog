@@ -9,9 +9,15 @@ namespace lwlog::details::pattern_bytecode
     enum class op_code : std::uint8_t
     {
         literal,
-        field,
+
+        field_noalign,
+        field_align_left,
+        field_align_right,
+        field_align_center,
+
         sgr_begin,
-        sgr_reset
+        sgr_reset, 
+        sgr_begin_level
     };
      
     enum class field_id : std::uint8_t
@@ -63,9 +69,28 @@ namespace lwlog::details::pattern_bytecode
         std::uint8_t width;
     };
 
-    struct literal_payload  { std::uint16_t offset; std::uint16_t   size;   };
-    struct field_payload    { field_id      id;     alignment_info  align;  };
-    struct sgr_payload      { char          seq[6]; std::uint8_t    size;   };
+    struct literal_payload 
+    { 
+        std::uint16_t offset; 
+        std::uint16_t size; 
+    };
+    struct sgr_payload 
+    { 
+        char seq[6]; 
+        std::uint8_t size; 
+    };
+
+    struct field_noalign_payload 
+    { 
+        field_id id; 
+    };
+
+    struct field_align_payload 
+    { 
+        field_id id; 
+        char fill_char; 
+        std::uint8_t width; 
+    };
 
     struct instruction
     {
@@ -74,7 +99,8 @@ namespace lwlog::details::pattern_bytecode
         union 
         {
             literal_payload literal;
-            field_payload field;
+            field_align_payload field_align;
+            field_noalign_payload field_noalign;
             sgr_payload sgr;
         } u;
 
@@ -87,11 +113,38 @@ namespace lwlog::details::pattern_bytecode
             return instr;
         }
 
-        static instruction make_field(field_id id, const alignment_info& alignment)
+        static instruction make_field_noalign(field_id id)
         {
             instruction instr{};
-            instr.code = op_code::field;
-            instr.u.field = field_payload{ id, alignment };
+            instr.code = op_code::field_noalign;
+            instr.u.field_noalign = field_noalign_payload{ id };
+
+            return instr;
+        }
+
+        static instruction make_field_left(field_id id, const alignment_info& alignment)
+        {
+            instruction instr{};
+            instr.code = op_code::field_align_left;
+            instr.u.field_align = field_align_payload{ id, alignment.fill_char, alignment.width };
+
+            return instr;
+        }
+
+        static instruction make_field_right(field_id id, const alignment_info& alignment)
+        {
+            instruction instr{};
+            instr.code = op_code::field_align_right;
+            instr.u.field_align = field_align_payload{ id, alignment.fill_char, alignment.width };
+
+            return instr;
+        }
+
+        static instruction make_field_center(field_id id, const alignment_info& alignment)
+        {
+            instruction instr{};
+            instr.code = op_code::field_align_center;
+            instr.u.field_align = field_align_payload{ id, alignment.fill_char, alignment.width };
 
             return instr;
         }
@@ -130,6 +183,14 @@ namespace lwlog::details::pattern_bytecode
             instr.code = op_code::sgr_reset;
 
             return instr;
+        }
+
+        static instruction make_sgr_begin_level()
+        {
+            instruction i{};
+            i.code = op_code::sgr_begin_level;
+
+            return i;
         }
     };
 

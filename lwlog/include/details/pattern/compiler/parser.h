@@ -19,6 +19,7 @@ namespace lwlog::details::pattern_compiler
             const pattern_bytecode::alignment_info& alignment);
         void emit_sgr_begin_instruction(pattern_bytecode::instruction_list& out, std::uint8_t code);
         void emit_sgr_end_instruction(pattern_bytecode::instruction_list& out);
+        void emit_sgr_begin_level_instruction(pattern_bytecode::instruction_list& out);
 
         void flush_pending_literal(pattern_bytecode::instruction_list& out, std::size_t literal_end_offset);
 
