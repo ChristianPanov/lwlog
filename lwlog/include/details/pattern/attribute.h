@@ -12,7 +12,7 @@ namespace lwlog::details
 	struct flag_pair
 	{
 		std::string_view verbose;
-		std::string_view shortened;
+		char shortened;
 	};
 
 	template<typename... Ts>

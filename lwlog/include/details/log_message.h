@@ -12,7 +12,7 @@ namespace lwlog::details
 			, meta{ meta }
 		{}
 
-		const char* const message{};
+		std::string_view message{};
 		const source_meta meta{};
 	};
 }

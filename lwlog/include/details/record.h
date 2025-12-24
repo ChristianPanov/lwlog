@@ -12,7 +12,7 @@ namespace lwlog::details
 	struct record
 	{
 		record() = default;
-		record(const char* const message, level log_level, const source_meta& meta,
+		record(std::string_view message, level log_level, const source_meta& meta,
 			const topic_registry& topics, std::uint8_t topic_index)
 			: message{ message }
 			, log_level{ log_level }
@@ -22,7 +22,7 @@ namespace lwlog::details
 		{}
 
 	public:
-		const char* const message;
+		std::string_view message;
 		const level log_level;
 		const source_meta meta;
 

@@ -3,13 +3,13 @@
 
 namespace lwlog::details
 {
-	constexpr source_meta::source_meta(std::uint32_t line, const char* const file, const char* const function)
+	constexpr source_meta::source_meta(std::uint32_t line, std::string_view file, std::string_view function)
 		: m_line{ line }
         , m_file{ file }
         , m_function{ function }
 	{}
 
-	constexpr source_meta source_meta::current(std::uint32_t line, const char* const file, const char* const function)
+	constexpr source_meta source_meta::current(std::uint32_t line, std::string_view file, std::string_view function)
     {
 		return { line, file, function };
     }
@@ -19,40 +19,37 @@ namespace lwlog::details
 		return m_line;
 	}
 
-	constexpr const char* source_meta::file_path() const
+	constexpr std::string_view source_meta::file_path() const
     {
         return m_file;
     }
 
-	constexpr const char* source_meta::file_name() const
+	constexpr std::string_view source_meta::file_name() const
 	{
-        const char* path_end{ m_file };
-
-        while (*path_end != '\0')
+        if (m_file.empty())
         {
-            ++path_end;
+            return {};
         }
 
-        while (path_end != m_file)
+        for (std::size_t i = m_file.size(); i > 0; --i)
         {
-            --path_end;
-
-            if (*path_end == '\\' || *path_end == '/')
+            const char c{ m_file[i - 1] };
+            if (c == '/' || c == '\\')
             {
-                return path_end + 1;
+                return m_file.substr(i);
             }
         }
 
-        return path_end;
+        return m_file;
 	}
 
-	constexpr const char* source_meta::function_name() const
+	constexpr std::string_view source_meta::function_name() const
 	{
 		return m_function;
 	}
 
     constexpr bool source_meta::is_initialized() const
     {
-        return m_line != 0 && m_file != nullptr && m_function != nullptr;
+        return m_line != 0 && !m_file.empty() && !m_function.empty();
     }
 }

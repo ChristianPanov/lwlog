@@ -17,7 +17,6 @@ int main()
         lwlog::message_limit<128>,
         lwlog::argument_limit<12>,
         lwlog::arg_count_limit<4>,
-        lwlog::padding_limit<24>,
         lwlog::conv_limit<64>
 	>;
 
@@ -35,12 +34,15 @@ int main()
 		>
 	>("CONSOLE");
 																													   
-	console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
-	console->set_pattern("{file} .red([%T] [%n]) .dark_green([:^12{level}]): .cyan(%v) TEXT");
+	//console->set_level_filter(lwlog::level::info | lwlog::level::debug | lwlog::level::critical);
+	console->set_pattern("{file} .red([%T] [%n]) .dark_green([{:^12level}]): .cyan(%v) TEXT");
 
 	{
 		Timer timer("timer");
 		console->critical("First {} critical message {}");
+		console->info("First {} critical message {}");
+		console->debug("First {} critical message {}");
+		console->warning("First {} critical message {}");
 	}
 
 	std::cout << "Total allocations: " << allocation_count << "\n";

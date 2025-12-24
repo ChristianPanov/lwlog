@@ -58,6 +58,18 @@ namespace lwlog::details
     }
 
     template<std::size_t Capacity>
+    void memory_buffer<Capacity>::append(char ch, std::size_t count)
+    {
+        if (m_size + count > m_capacity)
+        {
+            memory_buffer<Capacity>::grow(static_cast<std::size_t>(m_capacity * 1.5f));
+        }
+
+        std::memset(m_buffer + m_size, ch, count);
+        m_size += count;
+    }
+
+    template<std::size_t Capacity>
     void memory_buffer<Capacity>::replace(std::size_t to_replace_pos, std::size_t to_replace_size,
         const char* const __restrict replace_with, std::size_t replace_with_size)
     {
@@ -74,39 +86,6 @@ namespace lwlog::details
         std::memcpy(m_buffer + to_replace_pos, replace_with, replace_with_size);
 
         m_size = m_size - to_replace_size + replace_with_size;
-    }
-
-    template<std::size_t Capacity>
-    void memory_buffer<Capacity>::insert(std::size_t insert_pos, std::size_t insert_size, 
-        const char* const __restrict to_insert)
-    {
-        if (m_size + insert_size > m_capacity)
-        {
-            memory_buffer<Capacity>::grow(static_cast<std::size_t>(m_capacity * 1.5f));
-        }
-
-        char* const __restrict shift_dest{ m_buffer + insert_pos + insert_size };
-        const char* const __restrict shift_source{ m_buffer + insert_pos };
-        const std::size_t shift_size{ m_size - insert_pos };
-
-        std::memcpy(shift_dest, shift_source, shift_size);
-        std::memcpy(m_buffer + insert_pos, to_insert, insert_size);
-
-        m_size += insert_size;
-    }
-
-    template<std::size_t Capacity>
-    void memory_buffer<Capacity>::erase(std::size_t erase_pos, std::size_t erase_size)
-    {
-        if (m_size - erase_size != 0)
-        {
-            char* const __restrict shift_dest{ m_buffer + erase_pos };
-            const char* const __restrict shift_source{ m_buffer + erase_pos + erase_size };
-            const std::size_t shift_size{ m_size - erase_pos + erase_size };
-
-            std::memcpy(shift_dest, shift_source, shift_size);
-            m_size -= erase_size;
-        }
     }
 
     template<std::size_t Capacity>
@@ -151,11 +130,11 @@ namespace lwlog::details
     }
 
     template<typename T>
-    void convert_to_chars(char* const __restrict buffer, std::size_t buffer_size, const T& value)
+    std::size_t convert_to_chars(char* const __restrict buffer, std::size_t buffer_size, const T& value)
     {
         if (buffer_size == 0)
         {
-            return;
+            return 0;
         }
 
         const std::size_t max_write{ buffer_size - 1 };
@@ -171,6 +150,8 @@ namespace lwlog::details
 
             std::memcpy(buffer, str_val, value_size);
             buffer[value_size] = '\0';
+
+            return value_size;
         }
         else if constexpr (std::is_integral_v<T> && !std::is_same_v<T, bool>)
         {
@@ -183,6 +164,8 @@ namespace lwlog::details
             {
                 *ptr = '\0';
             }
+
+            return static_cast<std::size_t>(ptr - buffer);
         }
         else if constexpr (std::is_floating_point_v<T>)
         {
@@ -195,6 +178,8 @@ namespace lwlog::details
             {
                 *ptr = '\0';
             }
+
+            return static_cast<std::size_t>(ptr - buffer);
         }
         else if constexpr (std::is_same_v<T, std::string_view> ||
             std::is_same_v<T, std::string>)
@@ -207,6 +192,8 @@ namespace lwlog::details
 
             std::memcpy(buffer, value.data(), value_size);
             buffer[value_size] = '\0';
+
+            return value_size;
         }
         else if constexpr (std::is_same_v<std::decay_t<T>, const char*> ||
             std::is_same_v<std::decay_t<T>, char*>)
@@ -214,7 +201,7 @@ namespace lwlog::details
             if (!value)
             {
                 buffer[0] = '\0';
-                return;
+                return 0;
             }
 
             std::size_t value_size{ std::strlen(value) };
@@ -225,6 +212,8 @@ namespace lwlog::details
 
             std::memcpy(buffer, value, value_size);
             buffer[value_size] = '\0';
+
+            return value_size;
         }
     }
 }

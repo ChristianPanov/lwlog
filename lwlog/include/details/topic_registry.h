@@ -15,12 +15,12 @@ namespace lwlog::details
 		void end_topic();
 
 		std::uint8_t topic_index() const;
-		const std::vector<const char*>& topics() const;
+		const std::vector<std::string_view>& topics() const;
 
 		std::string full_topic(std::uint8_t topic_index) const;
 
 	private:
-		std::vector<const char*> m_topics;
+		std::vector<std::string_view> m_topics;
 		const char* m_separator;
 		std::uint8_t m_topic_index{ 0 };
 	};

@@ -160,7 +160,7 @@ namespace lwlog
 
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
-	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::raw(const char* const message)
+	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::raw(std::string_view message)
 	{
 		LogExecutionPolicy::template log<BufferLimits>(m_backend, message);
 	}

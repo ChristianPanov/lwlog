@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 #include "details/memory_buffer.h"
 
@@ -25,19 +26,18 @@ namespace lwlog::details
 		{ "cyan",		36 }
 	};
 
-	class sgr_encoder
+	class sgr_resolver
 	{
 		enum class color_channel_offset { foreground = 0, background = 10 };
 		static constexpr std::uint8_t intensity_offset{ 60 };
 
 	public:
 		static constexpr const char* reset{ "\x1b[0m" };
+		static constexpr std::size_t reset_size{ 4 };
 
 	public:
-		template<std::size_t Size>
-		static void encode(std::string_view token, memory_buffer<Size>& out);
-
-		static bool can_encode(std::string_view token);
+		static bool try_resolve_code(std::string_view token, std::uint8_t& out_code);
+		static bool try_resolve_code_parts(std::string_view base, bool bg, bool dark, std::uint8_t& out_code);
 
 	public:
 		static bool is_base_name_char(unsigned char ch);
@@ -49,4 +49,4 @@ namespace lwlog::details
 	};
 }
 
-#include "sgr_encoder_impl.h"
+#include "sgr_resolver_impl.h"

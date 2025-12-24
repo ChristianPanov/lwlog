@@ -36,7 +36,7 @@ namespace lwlog
 		std::vector<sink_ptr<BufferLimits>>& sinks();
 
 	public:
-		void raw(const char* const message);
+		void raw(std::string_view message);
 
 		template<typename... Args> void info(const details::log_message& log_msg, Args&&... args);
 		template<typename... Args> void warning(const details::log_message& log_msg, Args&&... args);

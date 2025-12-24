@@ -19,6 +19,11 @@ namespace lwlog::details::os::datetime
 	}
 
 	template<std::size_t Size>
+	timestamp_builder<Size>::timestamp_builder(char* buffer)
+		: m_buffer{ buffer }
+	{}
+
+	template<std::size_t Size>
 	template<std::uint8_t Width>
 	timestamp_builder<Size>& timestamp_builder<Size>::append(std::size_t value)
 	{
@@ -78,5 +83,11 @@ namespace lwlog::details::os::datetime
 	const char* timestamp_builder<Size>::data() const
 	{
 		return m_buffer;
+	}
+
+	template<std::size_t Size>
+	std::size_t timestamp_builder<Size>::size() const
+	{
+		return m_pos;
 	}
 }

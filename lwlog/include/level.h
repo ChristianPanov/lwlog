@@ -42,7 +42,7 @@ namespace lwlog::level_details
 			static_cast<std::underlying_type_t<level>>(rhs);
 	}
 
-	constexpr const char* to_string(level log_level)
+	constexpr std::string_view to_string(level log_level)
 	{
 		switch (log_level)
 		{

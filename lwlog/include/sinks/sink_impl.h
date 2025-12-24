@@ -10,9 +10,7 @@ namespace lwlog::sinks
 			details::os::enable_ansi_colors();
 		}
 
-		m_pattern.set_pattern("[%d, %T] [%l] [%n]: %v");
-		m_pattern.request_flag_formatters();
-		m_pattern.cache_pattern();
+		m_pattern.set_pattern("[%d, %T] [%l] [%n]: %v", EnableAnsiColors);
 
 		sink::add_attribute(".level(", m_current_level, [&](char* buffer, std::size_t size)
 		{
@@ -58,11 +56,7 @@ namespace lwlog::sinks
 	void sink<EnableAnsiColors, BufferLimits, ThreadingPolicy>::set_pattern(std::string_view pattern)
 	{
 		Lock lock(m_mtx);
-		m_pattern.set_pattern(pattern);
-		m_pattern.parse_alignment_flags();
-		m_pattern.request_flag_formatters();
-		m_pattern.process_color_flags(EnableAnsiColors);
-		m_pattern.cache_pattern();
+		m_pattern.set_pattern(pattern, EnableAnsiColors);
 	}
 
 	template<bool EnableAnsiColors, typename BufferLimits, typename ThreadingPolicy>

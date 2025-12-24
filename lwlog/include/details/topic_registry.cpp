@@ -24,7 +24,7 @@ namespace lwlog::details
         return m_topic_index;
     }
 
-    const std::vector<const char*>& topic_registry::topics() const
+    const std::vector<std::string_view>& topic_registry::topics() const
     {
         return m_topics;
     }

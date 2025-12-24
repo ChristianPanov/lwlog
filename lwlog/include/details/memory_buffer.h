@@ -21,11 +21,10 @@ namespace lwlog::details
         void append(const char* data, std::size_t size);
         void append(std::string_view data);
         void append(char ch);
+        void append(char ch, std::size_t count);
 
         void replace(std::size_t to_replace_pos, std::size_t to_replace_size, 
             const char* const __restrict  replace_with, std::size_t replace_with_size);
-        void insert(std::size_t insert_pos, std::size_t insert_size, const char* const __restrict to_insert);
-        void erase(std::size_t erase_pos, std::size_t erase_size);
         void reset();
 
     public:
@@ -46,7 +45,7 @@ namespace lwlog::details
     };
 
     template<typename T>
-    void convert_to_chars(char* const __restrict buffer, std::size_t buffer_size, const T& value);
+    std::size_t convert_to_chars(char* const __restrict buffer, std::size_t buffer_size, const T& value);
 }
 
 #include "memory_buffer_impl.h"

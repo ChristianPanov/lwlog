@@ -31,11 +31,11 @@ namespace lwlog
 		static void init(backend<BufferLimits, ConcurrencyModelPolicy>&) {}
 
 		template<typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
-		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message,
+		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, std::string_view message,
 			level log_level, const details::source_meta& meta, Args&&... args);
 
 		template<typename BufferLimits, typename ConcurrencyModelPolicy>
-		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message);
+		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, std::string_view message);
 	};
 
 	template<
@@ -73,11 +73,11 @@ namespace lwlog
 		static void init(backend<BufferLimits, ConcurrencyModelPolicy>& backend);
 
 		template<typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
-		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message, 
+		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, std::string_view message,
 			level log_level, const details::source_meta& meta, Args&&... args);
 
 		template<typename BufferLimits, typename ConcurrencyModelPolicy>
-		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message);
+		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, std::string_view message);
 
 	private:
 		template<typename BufferLimits, typename ConcurrencyModelPolicy>
