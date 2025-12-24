@@ -43,7 +43,7 @@ namespace lwlog::sinks
 
 	template<bool EnableAnsiColors, typename BufferLimits, typename ThreadingPolicy>
 	void sink<EnableAnsiColors, BufferLimits, ThreadingPolicy>::add_attribute(std::string_view flag,
-		details::attrib_value value)
+		details::custom_value value)
 	{
 		Lock lock(m_mtx);
 		m_pattern.add_attribute(flag, value);
@@ -51,7 +51,7 @@ namespace lwlog::sinks
 
 	template<bool EnableAnsiColors, typename BufferLimits, typename ThreadingPolicy>
 	void sink<EnableAnsiColors, BufferLimits, ThreadingPolicy>::add_attribute(std::string_view flag, 
-		details::attrib_value value, const details::attrib_callback_t& fn)
+		details::custom_value value, const details::custom_format_fn& fn)
 	{
 		Lock lock(m_mtx);
 		m_pattern.add_attribute(flag, value, fn);

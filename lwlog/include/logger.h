@@ -25,8 +25,8 @@ namespace lwlog
 
 		void set_level_filter(level log_level);
 		void set_pattern(std::string_view pattern);
-		void add_attribute(std::string_view flag, details::attrib_value value);
-		void add_attribute(std::string_view flag, details::attrib_value value, const details::attrib_callback_t& fn);
+		void add_attribute(std::string_view flag, details::custom_value value);
+		void add_attribute(std::string_view flag, details::custom_value value, const details::custom_format_fn& fn);
 
 		void set_topic_separator(const char* separator);
 		void start_topic(const char* topic);

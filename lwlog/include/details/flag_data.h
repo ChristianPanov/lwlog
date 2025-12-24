@@ -1,6 +1,6 @@
 #pragma once
 
-#include "details/pattern/attribute.h"
+#include "details/pattern/custom_field.h"
 
 namespace lwlog::details::flag
 {

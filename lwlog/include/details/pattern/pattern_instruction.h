@@ -6,6 +6,8 @@
 
 namespace lwlog::details::pattern_bytecode
 {
+    static constexpr std::uint16_t invalid_custom_index{ 0xFFFFU };
+
     enum class op_code : std::uint8_t
     {
         literal,
@@ -14,6 +16,11 @@ namespace lwlog::details::pattern_bytecode
         field_align_left,
         field_align_right,
         field_align_center,
+
+        custom_noalign,
+        custom_align_left,
+        custom_align_right,
+        custom_align_center,
 
         sgr_begin,
         sgr_reset, 
@@ -92,6 +99,22 @@ namespace lwlog::details::pattern_bytecode
         std::uint8_t width; 
     };
 
+    struct custom_noalign_payload
+    {
+        std::uint16_t index;
+        std::uint16_t name_offset;
+        std::uint8_t  name_size;
+    };
+
+    struct custom_align_payload
+    {
+        std::uint16_t index;
+        std::uint16_t name_offset;
+        std::uint8_t  name_size;
+        char          fill_char;
+        std::uint8_t  width;
+    };
+
     struct instruction
     {
         op_code code{ op_code::literal };
@@ -99,8 +122,13 @@ namespace lwlog::details::pattern_bytecode
         union 
         {
             literal_payload literal;
+
             field_align_payload field_align;
             field_noalign_payload field_noalign;
+
+            custom_noalign_payload custom_noalign;
+            custom_align_payload custom_align;
+
             sgr_payload sgr;
         } u;
 
@@ -145,6 +173,41 @@ namespace lwlog::details::pattern_bytecode
             instruction instr{};
             instr.code = op_code::field_align_center;
             instr.u.field_align = field_align_payload{ id, alignment.fill_char, alignment.width };
+
+            return instr;
+        }
+
+        static instruction make_custom_noalign(std::uint16_t name_offset, std::uint8_t name_size)
+        {
+            instruction instr{};
+            instr.code = op_code::custom_noalign;
+            instr.u.custom_noalign = { invalid_custom_index, name_offset, name_size };
+
+            return instr;
+        }
+
+        static instruction make_custom_left(std::uint16_t off, std::uint8_t sz, const alignment_info& a)
+        {
+            instruction instr{};
+            instr.code = op_code::custom_align_left;
+            instr.u.custom_align = { invalid_custom_index, off, sz, a.fill_char, a.width };
+            return instr;
+        }
+
+        static instruction make_custom_right(std::uint16_t off, std::uint8_t sz, const alignment_info& a)
+        {
+            instruction instr{};
+            instr.code = op_code::custom_align_right;
+            instr.u.custom_align = { invalid_custom_index, off, sz, a.fill_char, a.width };
+
+            return instr;
+        }
+
+        static instruction make_custom_center(std::uint16_t off, std::uint8_t sz, const alignment_info& a)
+        {
+            instruction instr{};
+            instr.code = op_code::custom_align_center;
+            instr.u.custom_align = { invalid_custom_index, off, sz, a.fill_char, a.width };
 
             return instr;
         }

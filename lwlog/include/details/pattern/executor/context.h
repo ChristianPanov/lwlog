@@ -2,6 +2,7 @@
 
 #include "details/memory_buffer.h"
 #include "details/record.h"
+#include "details/pattern/custom_field.h"
 
 namespace lwlog::details::pattern_executor
 {
@@ -14,5 +15,8 @@ namespace lwlog::details::pattern_executor
         const char* pattern_src{};
 
         char* conversion_buffer;
+
+        const details::custom_field* custom_fields{};
+        std::uint16_t custom_field_count{};
     };
 }

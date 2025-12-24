@@ -14,10 +14,17 @@ namespace lwlog::details::pattern_executor
             switch (instr.code)
             {
             case pattern_bytecode::op_code::literal: op::literal(ctx, instr.u.literal); break;
+
             case pattern_bytecode::op_code::field_noalign: op::field_noalign(ctx, instr.u.field_noalign); break;
             case pattern_bytecode::op_code::field_align_left: op::field_align_left(ctx, instr.u.field_align); break;
             case pattern_bytecode::op_code::field_align_right: op::field_align_right(ctx, instr.u.field_align); break;
             case pattern_bytecode::op_code::field_align_center: op::field_align_center(ctx, instr.u.field_align); break;
+
+            case pattern_bytecode::op_code::custom_noalign:    op::custom_noalign(ctx, instr.u.custom_noalign); break;
+            case pattern_bytecode::op_code::custom_align_left: op::custom_align_left(ctx, instr.u.custom_align); break;
+            case pattern_bytecode::op_code::custom_align_right:op::custom_align_right(ctx, instr.u.custom_align); break;
+            case pattern_bytecode::op_code::custom_align_center:op::custom_align_center(ctx, instr.u.custom_align); break;
+
             case pattern_bytecode::op_code::sgr_begin: op::sgr_begin(ctx, instr.u.sgr); break;
             case pattern_bytecode::op_code::sgr_reset: op::sgr_reset(ctx); break;
             case pattern_bytecode::op_code::sgr_begin_level: op::sgr_begin_level(ctx); break;

@@ -119,6 +119,25 @@ namespace lwlog::details::pattern_compiler
         }
     }
 
+    void parser::emit_custom_instruction(pattern_bytecode::instruction_list& out, std::uint16_t name_offset,
+        std::uint8_t name_size, const pattern_bytecode::alignment_info& alignment)
+    {
+        m_pending_literal_begin = m_pos;
+
+        if (alignment.width == 0)
+        {
+            out.push_back(pattern_bytecode::instruction::make_custom_noalign(name_offset, name_size));
+            return;
+        }
+
+        switch (alignment.side_char)
+        {
+        case '<': out.push_back(pattern_bytecode::instruction::make_custom_left(name_offset, name_size, alignment)); return;
+        case '>': out.push_back(pattern_bytecode::instruction::make_custom_right(name_offset, name_size, alignment)); return;
+        case '^': out.push_back(pattern_bytecode::instruction::make_custom_center(name_offset, name_size, alignment)); return;
+        }
+    }
+
     void parser::emit_sgr_begin_instruction(pattern_bytecode::instruction_list& out, std::uint8_t code)
     {
         out.push_back(pattern_bytecode::instruction::make_sgr_begin(code));
@@ -162,7 +181,8 @@ namespace lwlog::details::pattern_compiler
         return true;
     }
 
-    bool parser::parse_verbose_token(pattern_bytecode::field_id& out)
+    verbose_token_result parser::parse_verbose_token(pattern_bytecode::field_id& out_id, 
+        std::uint16_t& out_name_offset, std::uint8_t& out_name_size)
     {
         const std::size_t name_begin{ m_pos };
 
@@ -173,17 +193,24 @@ namespace lwlog::details::pattern_compiler
 
         if (m_pos >= m_size)
         {
-            return false;
+            return verbose_token_result::error;
         }
 
-        const std::string_view flag_view{ m_src + name_begin, m_pos - name_begin };
+        const std::size_t name_end{ m_pos };
+        const std::size_t name_length{ name_end - name_begin };
+        const std::string_view name{ m_src + name_begin, name_length };
 
-        if (!parser::resolve_verbose_field_id(flag_view, out))
+        if (name_length == 0)
         {
-            return false;
+            return verbose_token_result::literal;
         }
 
-        return true;
+        out_name_offset = static_cast<std::uint16_t>(name_begin);
+        out_name_size = static_cast<std::uint8_t>(name_length);
+
+        return parser::resolve_verbose_field_id(name, out_id)
+            ? verbose_token_result::builtin
+            : verbose_token_result::custom;
     }
 
     bool parser::parse_alignment_specs(pattern_bytecode::alignment_info& out)
@@ -357,15 +384,28 @@ namespace lwlog::details::pattern_compiler
             }
         }
 
-        bool formatter_id_resolved{ false };
         pattern_bytecode::field_id id{};
+
+        std::uint16_t name_offset{};
+        std::uint8_t  name_lenght{};
+
+        bool builtin_resolved{ false };
+        bool custom_resolved{ false };
+
         if (m_pos < m_size && m_src[m_pos] == '%')
         {
-            formatter_id_resolved = this->parse_short_token(id);
+            builtin_resolved = this->parse_short_token(id);
         }
         else
-        {
-            formatter_id_resolved = this->parse_verbose_token(id);
+        {   
+            const auto result{ this->parse_verbose_token(id, name_offset, name_lenght) };
+            if(result == verbose_token_result::error)
+            {
+                return false;
+            }
+
+            builtin_resolved = (result == verbose_token_result::builtin);
+            custom_resolved = (result == verbose_token_result::custom);
         }
 
         if (m_pos >= m_size || m_src[m_pos] != '}')
@@ -381,14 +421,20 @@ namespace lwlog::details::pattern_compiler
 
         ++m_pos;
 
-        if (!formatter_id_resolved)
-        {
-            this->flush_pending_literal(out, m_pos);
+        if (builtin_resolved)
+        {   
+            this->emit_field_instruction(out, id, alignment);
+
             return true;
         }
 
-        this->emit_field_instruction(out, id, alignment);
+        if(custom_resolved)
+        {
+            this->emit_custom_instruction(out, name_offset, name_lenght, alignment);
+            return true;
+        }
 
+        this->flush_pending_literal(out, m_pos);
         return true;
     }
 
