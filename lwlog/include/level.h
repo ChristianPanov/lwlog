@@ -61,12 +61,12 @@ namespace lwlog::level_details
 	{
 		switch (log_level)
 		{
-		case level::trace:    return "\x1b[90m";
-		case level::debug:    return "\x1b[36m";
-		case level::info:     return "\x1b[32m";
-		case level::warning:  return "\x1b[30;103m";
-		case level::error:    return "\x1b[30;101m";
+		case level::info:     return "\x1b[37m";
+		case level::warning:  return "\x1b[93m";
+		case level::error:    return "\x1b[91m";
 		case level::critical: return "\x1b[1;97;101m";
+		case level::debug:    return "\x1b[97m";
+		case level::trace:    return "\x1b[97m";
 		default: return {};
 		}
     }
