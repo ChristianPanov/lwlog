@@ -20,7 +20,7 @@ namespace lwlog::details::pattern_executor
             case pattern_bytecode::op_code::field_align_right: op::field_align_right(ctx, instr.u.field_align); break;
             case pattern_bytecode::op_code::field_align_center: op::field_align_center(ctx, instr.u.field_align); break;
 
-            case pattern_bytecode::op_code::custom_noalign:    op::custom_noalign(ctx, instr.u.custom_noalign); break;
+            case pattern_bytecode::op_code::custom_noalign: op::custom_noalign(ctx, instr.u.custom_noalign); break;
             case pattern_bytecode::op_code::custom_align_left: op::custom_align_left(ctx, instr.u.custom_align); break;
             case pattern_bytecode::op_code::custom_align_right:op::custom_align_right(ctx, instr.u.custom_align); break;
             case pattern_bytecode::op_code::custom_align_center:op::custom_align_center(ctx, instr.u.custom_align); break;

@@ -44,7 +44,7 @@ namespace lwlog::details::pattern_compiler
 
                 pattern_bytecode::field_id id{};
                 const std::size_t start{ m_pos };
-                if (this->parse_short_token(id))
+                if (this->parse_short_token(id) == token_type::builtin)
                 {
                     this->emit_field_instruction(out, id, {});
                 }
@@ -119,22 +119,27 @@ namespace lwlog::details::pattern_compiler
         }
     }
 
-    void parser::emit_custom_instruction(pattern_bytecode::instruction_list& out, std::uint16_t name_offset,
-        std::uint8_t name_size, const pattern_bytecode::alignment_info& alignment)
+    void parser::emit_custom_instruction(pattern_bytecode::instruction_list& out, std::uint16_t token_offset, 
+        std::uint16_t token_size, std::uint16_t name_offset, std::uint8_t name_size, 
+        const pattern_bytecode::alignment_info& alignment)
     {
         m_pending_literal_begin = m_pos;
 
         if (alignment.width == 0)
         {
-            out.push_back(pattern_bytecode::instruction::make_custom_noalign(name_offset, name_size));
+            out.push_back(pattern_bytecode::instruction::make_custom_noalign(
+                token_offset, token_size, name_offset, name_size));
             return;
         }
 
         switch (alignment.side_char)
         {
-        case '<': out.push_back(pattern_bytecode::instruction::make_custom_left(name_offset, name_size, alignment)); return;
-        case '>': out.push_back(pattern_bytecode::instruction::make_custom_right(name_offset, name_size, alignment)); return;
-        case '^': out.push_back(pattern_bytecode::instruction::make_custom_center(name_offset, name_size, alignment)); return;
+        case '<': out.push_back(pattern_bytecode::instruction::make_custom_left(
+            token_offset, token_size, name_offset, name_size, alignment)); return;
+        case '>': out.push_back(pattern_bytecode::instruction::make_custom_right(
+            token_offset, token_size, name_offset, name_size, alignment)); return;
+        case '^': out.push_back(pattern_bytecode::instruction::make_custom_center(
+            token_offset, token_size, name_offset, name_size, alignment)); return;
         }
     }
 
@@ -164,24 +169,24 @@ namespace lwlog::details::pattern_compiler
         }
     }
 
-    bool parser::parse_short_token(pattern_bytecode::field_id& out)
+    token_type parser::parse_short_token(pattern_bytecode::field_id& out)
     {
         if (m_pos + 1 >= m_size)
         {
-            return false;
+            return token_type::literal;
         }
 
         if (!parser::resolve_short_field_id(m_src[m_pos + 1], out))
         {
-            return false;
+            return token_type::literal;
         }
 
         m_pos += 2;
 
-        return true;
+        return token_type::builtin;
     }
 
-    verbose_token_result parser::parse_verbose_token(pattern_bytecode::field_id& out_id, 
+    token_type parser::parse_verbose_token(pattern_bytecode::field_id& out_id,
         std::uint16_t& out_name_offset, std::uint8_t& out_name_size)
     {
         const std::size_t name_begin{ m_pos };
@@ -193,24 +198,28 @@ namespace lwlog::details::pattern_compiler
 
         if (m_pos >= m_size)
         {
-            return verbose_token_result::error;
+            return token_type::error;
         }
 
         const std::size_t name_end{ m_pos };
         const std::size_t name_length{ name_end - name_begin };
-        const std::string_view name{ m_src + name_begin, name_length };
 
         if (name_length == 0)
         {
-            return verbose_token_result::literal;
+            return token_type::literal;
+        }
+
+        const std::string_view name{ m_src + name_begin, name_length };
+
+        if (parser::resolve_verbose_field_id(name, out_id))
+        {
+            return token_type::builtin;
         }
 
         out_name_offset = static_cast<std::uint16_t>(name_begin);
         out_name_size = static_cast<std::uint8_t>(name_length);
 
-        return parser::resolve_verbose_field_id(name, out_id)
-            ? verbose_token_result::builtin
-            : verbose_token_result::custom;
+        return token_type::custom;
     }
 
     bool parser::parse_alignment_specs(pattern_bytecode::alignment_info& out)
@@ -389,23 +398,19 @@ namespace lwlog::details::pattern_compiler
         std::uint16_t name_offset{};
         std::uint8_t  name_lenght{};
 
-        bool builtin_resolved{ false };
-        bool custom_resolved{ false };
+        token_type type{ token_type::literal };
 
         if (m_pos < m_size && m_src[m_pos] == '%')
         {
-            builtin_resolved = this->parse_short_token(id);
+            type = this->parse_short_token(id);
         }
         else
         {   
-            const auto result{ this->parse_verbose_token(id, name_offset, name_lenght) };
-            if(result == verbose_token_result::error)
+            type = this->parse_verbose_token(id, name_offset, name_lenght);
+            if(type == token_type::error)
             {
                 return false;
             }
-
-            builtin_resolved = (result == verbose_token_result::builtin);
-            custom_resolved = (result == verbose_token_result::custom);
         }
 
         if (m_pos >= m_size || m_src[m_pos] != '}')
@@ -421,20 +426,32 @@ namespace lwlog::details::pattern_compiler
 
         ++m_pos;
 
-        if (builtin_resolved)
-        {   
-            this->emit_field_instruction(out, id, alignment);
-
-            return true;
-        }
-
-        if(custom_resolved)
+        switch (type)
         {
-            this->emit_custom_instruction(out, name_offset, name_lenght, alignment);
-            return true;
+        case token_type::literal:
+        {
+            this->flush_pending_literal(out, m_pos);
+            break;
+        }
+        case token_type::builtin:
+        {
+            this->emit_field_instruction(out, id, alignment);
+            break;
+        }
+        case token_type::custom:
+        {
+            const std::uint16_t token_offset{ static_cast<std::uint16_t>(start) };
+            const std::uint16_t token_size{ static_cast<std::uint16_t>(m_pos - start) };
+            this->emit_custom_instruction(out, token_offset, token_size, name_offset, name_lenght, alignment);
+            break;
+        }
+        default:
+        {
+            this->flush_pending_literal(out, m_pos);
+            break;
+        }
         }
 
-        this->flush_pending_literal(out, m_pos);
         return true;
     }
 

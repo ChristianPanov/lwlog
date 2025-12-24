@@ -81,16 +81,8 @@ namespace lwlog::details::pattern_executor::op
     template<typename BufferLimits>
     void custom_noalign(pattern_context<BufferLimits>& ctx, const pattern_bytecode::custom_noalign_payload& payload)
     {
-        if (payload.index == pattern_bytecode::invalid_custom_index || payload.index >= ctx.custom_field_count)
-        {
-            ctx.out.append("{", 1);
-            ctx.out.append(ctx.pattern_src + payload.name_offset, payload.name_size);
-            ctx.out.append("}", 1);
-            return;
-        }
-
         const auto& field{ ctx.custom_fields[payload.index] };
-        const auto field_size{ field.format_fn(ctx.conversion_buffer, BufferLimits::conversion) };
+        const auto field_size{ field.format_fn(field.value, ctx.conversion_buffer, BufferLimits::conversion) };
 
         ctx.out.append(ctx.conversion_buffer, field_size);
     }
@@ -98,13 +90,8 @@ namespace lwlog::details::pattern_executor::op
     template<typename BufferLimits>
     void custom_align_left(pattern_context<BufferLimits>& ctx, const pattern_bytecode::custom_align_payload& payload)
     {
-        if (payload.index == pattern_bytecode::invalid_custom_index || payload.index >= ctx.custom_field_count)
-        {
-            return;
-        }
-
         const auto& field{ ctx.custom_fields[payload.index] };
-        const auto field_size{ field.format_fn(ctx.conversion_buffer, BufferLimits::conversion) };
+        const auto field_size{ field.format_fn(field.value, ctx.conversion_buffer, BufferLimits::conversion) };
 
         if (payload.width <= field_size)
         {
@@ -121,13 +108,8 @@ namespace lwlog::details::pattern_executor::op
     template<typename BufferLimits>
     void custom_align_right(pattern_context<BufferLimits>& ctx, const pattern_bytecode::custom_align_payload& payload)
     {
-        if (payload.index == pattern_bytecode::invalid_custom_index || payload.index >= ctx.custom_field_count)
-        {
-            return;
-        }
-
         const auto& field{ ctx.custom_fields[payload.index] };
-        const auto field_size{ field.format_fn(ctx.conversion_buffer, BufferLimits::conversion) };
+        const auto field_size{ field.format_fn(field.value, ctx.conversion_buffer, BufferLimits::conversion) };
 
         if (payload.width <= field_size)
         {
@@ -144,13 +126,8 @@ namespace lwlog::details::pattern_executor::op
     template<typename BufferLimits>
     void custom_align_center(pattern_context<BufferLimits>& ctx, const pattern_bytecode::custom_align_payload& payload)
     {
-        if (payload.index == pattern_bytecode::invalid_custom_index || payload.index >= ctx.custom_field_count)
-        {
-            return;
-        }
-
         const auto& field{ ctx.custom_fields[payload.index] };
-        const auto field_size{ field.format_fn(ctx.conversion_buffer, BufferLimits::conversion) };
+        const auto field_size{ field.format_fn(field.value, ctx.conversion_buffer, BufferLimits::conversion) };
 
         if (payload.width <= field_size)
         {

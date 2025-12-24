@@ -22,8 +22,8 @@ namespace lwlog::sinks
 		bool should_sink(level log_level) const override;
 		void set_level_filter(level level_filter) override;
 		void set_pattern(std::string_view pattern) override;
-		void add_attribute(std::string_view flag, details::custom_value value) override;
-		void add_attribute(std::string_view flag, details::custom_value value,
+		void add_custom_field(std::string_view name, details::custom_value value) override;
+		void add_custom_field(std::string_view name, details::custom_value value,
 			const details::custom_format_fn& fn) override;
 
 	protected:

@@ -7,7 +7,7 @@
 
 namespace lwlog::details::pattern_compiler
 {
-    enum class verbose_token_result : std::uint8_t
+    enum class token_type : std::uint8_t
     {
         builtin,
         custom,
@@ -25,8 +25,9 @@ namespace lwlog::details::pattern_compiler
         void emit_literal_instruction(pattern_bytecode::instruction_list& out, std::uint16_t offset, std::uint16_t size);
         void emit_field_instruction(pattern_bytecode::instruction_list& out, pattern_bytecode::field_id id, 
             const pattern_bytecode::alignment_info& alignment);
-        void emit_custom_instruction(pattern_bytecode::instruction_list& out, std::uint16_t name_offset, 
-            std::uint8_t name_size, const pattern_bytecode::alignment_info& alignment);
+        void emit_custom_instruction(pattern_bytecode::instruction_list& out, 
+            std::uint16_t token_offset, std::uint16_t token_size,
+            std::uint16_t name_offset, std::uint8_t name_size, const pattern_bytecode::alignment_info& alignment);
         void emit_sgr_begin_instruction(pattern_bytecode::instruction_list& out, std::uint8_t code);
         void emit_sgr_end_instruction(pattern_bytecode::instruction_list& out);
         void emit_sgr_begin_level_instruction(pattern_bytecode::instruction_list& out);
@@ -34,8 +35,8 @@ namespace lwlog::details::pattern_compiler
         void flush_pending_literal(pattern_bytecode::instruction_list& out, std::size_t literal_end_offset);
 
     private:
-        bool parse_short_token(pattern_bytecode::field_id& out);
-        verbose_token_result parse_verbose_token(pattern_bytecode::field_id& out_id,
+        token_type parse_short_token(pattern_bytecode::field_id& out);
+        token_type parse_verbose_token(pattern_bytecode::field_id& out_id,
             std::uint16_t& out_name_offset, std::uint8_t& out_name_size);
         bool parse_alignment_specs(pattern_bytecode::alignment_info& out);
         bool parse_color(pattern_bytecode::instruction_list& out);

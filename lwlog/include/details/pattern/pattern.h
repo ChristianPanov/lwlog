@@ -1,9 +1,7 @@
 #pragma once
 
 #include <string>
-#include <memory>
 #include <vector>
-#include <algorithm>
 
 #include "pattern_instruction.h"
 #include "compiler/parser.h"
@@ -23,8 +21,8 @@ namespace lwlog::details
 
 	public:
 		void set_pattern(std::string_view pattern, bool enable_color);
-		void add_attribute(std::string_view flag, custom_value value);
-		void add_attribute(std::string_view flag, custom_value value, const custom_format_fn& fn);
+		void add_custom_field(std::string_view name, custom_value value);
+		void add_custom_field(std::string_view name, custom_value value, const custom_format_fn& fn);
 
 	private:
 		void link_custom_fields_if_needed();

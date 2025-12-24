@@ -102,6 +102,8 @@ namespace lwlog::details::pattern_bytecode
     struct custom_noalign_payload
     {
         std::uint16_t index;
+        std::uint16_t token_offset;
+        std::uint16_t token_size;
         std::uint16_t name_offset;
         std::uint8_t  name_size;
     };
@@ -109,6 +111,8 @@ namespace lwlog::details::pattern_bytecode
     struct custom_align_payload
     {
         std::uint16_t index;
+        std::uint16_t token_offset;
+        std::uint16_t token_size;
         std::uint16_t name_offset;
         std::uint8_t  name_size;
         char          fill_char;
@@ -177,37 +181,46 @@ namespace lwlog::details::pattern_bytecode
             return instr;
         }
 
-        static instruction make_custom_noalign(std::uint16_t name_offset, std::uint8_t name_size)
+        static instruction make_custom_noalign(std::uint16_t token_offset, std::uint16_t token_size, 
+            std::uint16_t name_offset, std::uint8_t name_size)
         {
             instruction instr{};
             instr.code = op_code::custom_noalign;
-            instr.u.custom_noalign = { invalid_custom_index, name_offset, name_size };
+            instr.u.custom_noalign = { invalid_custom_index, token_offset, token_size, name_offset, name_size };
 
             return instr;
         }
 
-        static instruction make_custom_left(std::uint16_t off, std::uint8_t sz, const alignment_info& a)
+        static instruction make_custom_left(std::uint16_t token_offset, std::uint16_t token_size, 
+            std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment)
         {
             instruction instr{};
             instr.code = op_code::custom_align_left;
-            instr.u.custom_align = { invalid_custom_index, off, sz, a.fill_char, a.width };
+            instr.u.custom_align = { invalid_custom_index, token_offset, token_size, 
+                name_offset, name_size, alignment.fill_char, alignment.width };
+
             return instr;
         }
 
-        static instruction make_custom_right(std::uint16_t off, std::uint8_t sz, const alignment_info& a)
+        static instruction make_custom_right(std::uint16_t token_offset, std::uint16_t token_size,
+            std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment)
         {
             instruction instr{};
             instr.code = op_code::custom_align_right;
-            instr.u.custom_align = { invalid_custom_index, off, sz, a.fill_char, a.width };
+            instr.u.custom_align = { invalid_custom_index, token_offset, token_size,
+                name_offset, name_size, alignment.fill_char, alignment.width };
+
 
             return instr;
         }
 
-        static instruction make_custom_center(std::uint16_t off, std::uint8_t sz, const alignment_info& a)
+        static instruction make_custom_center(std::uint16_t token_offset, std::uint16_t token_size,
+            std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment)
         {
             instruction instr{};
             instr.code = op_code::custom_align_center;
-            instr.u.custom_align = { invalid_custom_index, off, sz, a.fill_char, a.width };
+            instr.u.custom_align = { invalid_custom_index, token_offset, token_size,
+                name_offset, name_size, alignment.fill_char, alignment.width };
 
             return instr;
         }

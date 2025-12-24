@@ -17,8 +17,7 @@ namespace lwlog
 			Sinks<BufferLimits, FlushPolicy, ThreadingPolicy>>::request(std::forward<SinkParams>(params)...)... 
 		};
 
-		logger::add_attribute("{name}", m_name);
-		logger::add_attribute("%n", m_name);
+		logger::add_custom_field("name", m_name);
 
 		logger::set_topic_separator("/");
 	}
@@ -92,23 +91,23 @@ namespace lwlog
 
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
-	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_attribute(
-		std::string_view flag, details::custom_value value)
+	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_custom_field(
+		std::string_view name, details::custom_value value)
 	{
 		for (const auto& sink : m_backend.sink_storage)
 		{
-			sink->add_attribute(flag, value);
+			sink->add_custom_field(name, value);
 		}
 	}
 
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
-	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_attribute(
-		std::string_view flag, details::custom_value value, const details::custom_format_fn& fn)
+	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_custom_field(
+		std::string_view name, details::custom_value value, const details::custom_format_fn& fn)
 	{
 		for (const auto& sink : m_backend.sink_storage)
 		{
-			sink->add_attribute(flag, value, fn);
+			sink->add_custom_field(name, value, fn);
 		}
 	}
 

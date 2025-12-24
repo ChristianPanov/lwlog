@@ -4,9 +4,6 @@
 #include <variant>
 #include <functional>
 
-#include "level.h"
-#include "details/memory_buffer.h"
-
 namespace lwlog::details
 {
 	struct flag_pair
@@ -20,14 +17,14 @@ namespace lwlog::details
 
     using custom_value = ref_variant<bool, int, float, double, std::string, std::string_view>;
 
-    using custom_format_fn = std::function<std::size_t(char* buffer, std::size_t cap)>;
+    using custom_format_fn = std::size_t(*)(const custom_value& value, char* buffer, std::size_t size);
 
     struct custom_field
     {
         custom_field(std::string_view name, custom_value value);
         custom_field(std::string_view name, custom_value value, const custom_format_fn& fn);
 
-        std::string name;
+        std::string_view name;
         custom_value value;
         custom_format_fn format_fn;
     };
