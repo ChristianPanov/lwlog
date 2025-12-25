@@ -70,25 +70,6 @@ namespace lwlog::details
     }
 
     template<std::size_t Capacity>
-    void memory_buffer<Capacity>::replace(std::size_t to_replace_pos, std::size_t to_replace_size,
-        const char* const __restrict replace_with, std::size_t replace_with_size)
-    {
-        if(m_size - to_replace_size + replace_with_size > m_capacity)
-        {
-            memory_buffer<Capacity>::grow(static_cast<std::size_t>(m_capacity * 1.5f));
-        }
-
-        char* const __restrict shift_dest{ m_buffer + to_replace_pos + replace_with_size };
-        const char* const __restrict shift_source{ m_buffer + to_replace_pos + to_replace_size };
-        const std::size_t shift_size{ m_size - (to_replace_pos + to_replace_size) };
-
-        std::memcpy(shift_dest, shift_source, shift_size);
-        std::memcpy(m_buffer + to_replace_pos, replace_with, replace_with_size);
-
-        m_size = m_size - to_replace_size + replace_with_size;
-    }
-
-    template<std::size_t Capacity>
     void memory_buffer<Capacity>::reset()
     {
         m_size = 0;
@@ -153,7 +134,13 @@ namespace lwlog::details
 
             return value_size;
         }
-        else if constexpr (std::is_integral_v<T> && !std::is_same_v<T, bool>)
+        else if constexpr (std::is_same_v<T, char>)
+        {
+            buffer[0] = value;
+            buffer[1] = '\0';
+            return 1;
+        }
+        else if constexpr (std::is_integral_v<T> && !std::is_same_v<T, bool> && !std::is_same_v<T, char>)
         {
             const auto [ptr, ec] { std::to_chars(buffer, buffer + max_write, value) };
             if (ec != std::errc{})

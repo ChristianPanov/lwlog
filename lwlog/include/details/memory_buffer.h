@@ -23,8 +23,6 @@ namespace lwlog::details
         void append(char ch);
         void append(char ch, std::size_t count);
 
-        void replace(std::size_t to_replace_pos, std::size_t to_replace_size, 
-            const char* const __restrict  replace_with, std::size_t replace_with_size);
         void reset();
 
     public:
