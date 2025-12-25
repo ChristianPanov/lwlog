@@ -34,6 +34,8 @@ namespace lwlog::details
 		constexpr const char* file_name() const;
 		constexpr const char* function_name() const;
 
+		constexpr bool is_initialized() const;
+
 	private:
 		std::uint32_t m_line{};
 		const char* m_file{};

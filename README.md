@@ -219,7 +219,7 @@ int main()
 	using buffer_limits = lwlog::memory_buffer_limits<
 		lwlog::pattern_limit<256>,
         	lwlog::message_limit<128>,
-        	lwlog::argument_limit<12>,
+        	lwlog::argument_limit<64>,
         	lwlog::arg_count_limit<4>,
         	lwlog::padding_limit<24>,
         	lwlog::conv_limit<64>
@@ -244,7 +244,7 @@ If you do not provide custom buffer limits, the ```lwlog::default_memory_buffer_
 using default_memory_buffer_limits = lwlog::memory_buffer_limits<
 	lwlog::pattern_limit<256>,
 	lwlog::message_limit<128>,
-	lwlog::argument_limit<12>,
+	lwlog::argument_limit<64>,
 	lwlog::arg_count_limit<4>,
 	lwlog::padding_limit<24>,
 	lwlog::conv_limit<64>
@@ -521,6 +521,28 @@ int main()
 ```
 ##### Output
 ```active --- [19:44:50] [CONSOLE] [info]: First info message```
+## Raw Logging
+You can also log raw messages without any formatting and metadata. This is particularly useful when you want to print a newline or a string of characters for separation, as shown in the following example, or you simply want to print without any pattern formatting. Keep in mind that new line is not appended by default, so that should be done manually.
+```cpp
+#include "lwlog.h"
+
+int main()
+{
+	auto console = std::make_shared<lwlog::console_logger>("CONSOLE");
+
+	console->raw("------------\n");
+	console->raw("\n");
+	console->raw("------------\n");
+	
+	return 0;
+}
+```
+##### Output
+```
+------------
+
+------------
+```
 ## Multiple sinks (compile-time)
 ```cpp
 #include "lwlog.h"
@@ -533,7 +555,7 @@ int main()
 			lwlog::synchronous_policy,
 			lwlog::default_flush_policy,
 			lwlog::single_threaded_policy,
-			lwlog::sinks::stdout_sink
+			lwlog::sinks::stdout_sink,
       		lwlog::sinks::file_sink
 			>
 		>("LOGGER", "C:/Users/user/Desktop/LogFolder/LOGS.txt");
@@ -593,7 +615,7 @@ In the example above, ```stdout_sink``` inherits from ```lwlog::sinks::sink``` a
 ### Step 2: Configure ANSI Color Support
 The first template parameter for ```lwlog::sinks::sink``` indicates whether the sink supports ANSI colors. Set this to true for console sinks that utilize console-specific color codes. If set to false, the sink will ignore color flags in the pattern.
 ### Step 3: Implement the sink_it() Function
-The ```sink_it()``` function is where your sink handles the log message. It receives a ```const details::record&```, representing the log message.
+The ```sink_it()``` function is where your sink handles the log message. It has two overloads, one receives a ```const details::record&```, representing the log message, and one receives an ```std::string_view```, representing a raw, non-formatted message.
 ```cpp
 template<typename FlushPolicy, typename ThreadingPolicy>
 void stdout_sink<FlushPolicy, ThreadingPolicy>::sink_it(const details::record<BufferLimits>& record)
@@ -602,12 +624,21 @@ void stdout_sink<FlushPolicy, ThreadingPolicy>::sink_it(const details::record<Bu
 	details::stream_writer<FlushPolicy>::write(sink_t::m_pattern.compile(record));
 	sink_t::m_pattern.reset_pattern();
 }
+
+template<typename BufferLimits, typename FlushPolicy, typename ThreadingPolicy>
+void stdout_sink<BufferLimits, FlushPolicy, ThreadingPolicy>::sink_it(std::string_view message)
+{
+	details::stream_writer<FlushPolicy>::write(message);
+}
 ```
-In this function:
+In the first function function overload:
 1. Set the current severity level to allow for level-based colors.
 2. Compile the log message using the pattern.
 3. Output the formatted message. You can utilize a writer class as shown in the example, or handle the writing directly within this function.
-4. Because of the static buffer nature of the logger, you need to reset the pattern in order to avoid old data from previous a previous log bleeding into the new log
+4. Because of the static buffer nature of the logger, you need to reset the pattern in order to avoid old data from previous a previous log bleeding into the new log.
+
+In the second function function overload:
+1. Output the message. Nothing more needs to be done, since raw logs do not keep log level, patterns, and meta data.
 ### Step 4: Handle Flushing (For Stream-Based Sinks)
 If your sink is stream-based (e.g., writing to stdout, stderr, or a file), you should also consider a flushing policy. While the flush policy needs to be provided as part of the interface, it might not be applicable if your sink sends data in a non-stream-based manner.
 ### Full Example
@@ -625,6 +656,7 @@ namespace lwlog::sinks
 	public:
 		stdout_sink();
 		void sink_it(const details::record<BufferLimits>& record) override;
+		void sink_it(std::string_view message) override;
 	};
 
 	template<typename BufferLimits, typename FlushPolicy, typename ThreadingPolicy>
@@ -638,6 +670,12 @@ namespace lwlog::sinks
 		sink_t::m_current_level = record.log_level;
 		details::stream_writer<FlushPolicy>::write(sink_t::m_pattern.compile(record));
 		sink_t::m_pattern.reset_pattern();
+	}
+
+	template<typename BufferLimits, typename FlushPolicy, typename ThreadingPolicy>
+	void stdout_sink<BufferLimits, FlushPolicy, ThreadingPolicy>::sink_it(std::string_view message)
+	{
+		details::stream_writer<FlushPolicy>::write(message);
 	}
 }
 ```
@@ -660,6 +698,11 @@ namespace lwlog::sinks
         	sink_t::m_current_level = record.log_level;
 			// sink message to somewhere
 			sink_t::m_pattern.reset_pattern();
+		}
+
+		void sink_it(std::string_view message) override
+		{
+			// sink message to somewhere
 		}
 	};
 }

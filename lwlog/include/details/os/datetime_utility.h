@@ -37,8 +37,6 @@ namespace lwlog::details::os::datetime
 					}
 
 					return -bias / 60;
-
-					return -tz_info.Bias / 60;
 			#else
 					const std::time_t now{ std::time(nullptr) };
 
@@ -70,7 +68,9 @@ namespace lwlog::details::os::datetime
     struct timestamp_builder
     {
     public:
+		template<std::uint8_t Width>
 		timestamp_builder& append(std::size_t value);
+
 		timestamp_builder& append_ampm(std::size_t hour);
 		timestamp_builder& separate(char separator);
 

@@ -50,4 +50,9 @@ namespace lwlog::details
 	{
 		return m_function;
 	}
+
+    constexpr bool source_meta::is_initialized() const
+    {
+        return m_line != 0 && m_file != nullptr && m_function != nullptr;
+    }
 }

@@ -1,13 +1,14 @@
 #pragma once
 
+#include <string>
 #include <memory>
 #include <vector>
-#include <unordered_map>
 #include <algorithm>
 
 #include "attribute.h"
 #include "formatter.h"
 #include "alignment_formatter.h"
+#include "sgr_encoder.h"
 #include "details/record.h"
 #include "details/memory_buffer.h"
 

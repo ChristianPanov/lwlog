@@ -2,7 +2,7 @@
 
 #include "level.h"
 #include "sinks/sink.h"
-#include "details/bounded_queue.h"
+#include "details/bounded_queue/bounded_queue.h"
 #include "details/source_meta.h"
 #include "details/topic_registry.h"
 #include "details/adaptive_waiter.h"
@@ -33,6 +33,9 @@ namespace lwlog
 		template<typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
 		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message,
 			level log_level, const details::source_meta& meta, Args&&... args);
+
+		template<typename BufferLimits, typename ConcurrencyModelPolicy>
+		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message);
 	};
 
 	template<
@@ -72,6 +75,9 @@ namespace lwlog
 		template<typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
 		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message, 
 			level log_level, const details::source_meta& meta, Args&&... args);
+
+		template<typename BufferLimits, typename ConcurrencyModelPolicy>
+		static void log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, const char* const message);
 
 	private:
 		template<typename BufferLimits, typename ConcurrencyModelPolicy>

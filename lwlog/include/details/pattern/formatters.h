@@ -156,11 +156,11 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::date, 
 				os::datetime::timestamp_builder<10>()
-				.append(time_point.year)
+				.template append<2>(time_point.year)
 				.separate('-')
-				.append(time_point.month)
+				.template append<2>(time_point.month)
 				.separate('-')
-				.append(time_point.day).data()
+				.template append<2>(time_point.day).data()
 			);
 		}
 	};
@@ -175,11 +175,11 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::date_short, 
 				os::datetime::timestamp_builder<8>()
-				.append(time_point.month)
+				.template append<2>(time_point.month)
 				.separate('/')
-				.append(time_point.day)
+				.template append<2>(time_point.day)
 				.separate('/')
-				.append(time_point.year % 100).data()
+				.template append<2>(time_point.year % 100).data()
 			);
 		}
 	};
@@ -194,7 +194,7 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::year, 
 				os::datetime::timestamp_builder<4>()
-				.append(time_point.year)
+				.template append<2>(time_point.year)
 				.data()
 			);
 		}
@@ -210,7 +210,7 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::year_short, 
 				os::datetime::timestamp_builder<2>()
-				.append(time_point.year % 100)
+				.template append<2>(time_point.year % 100)
 				.data()
 			);
 		}
@@ -226,7 +226,7 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::month, 
 				os::datetime::timestamp_builder<2>()
-				.append(time_point.month)
+				.template append<2>(time_point.month)
 				.data()
 			);
 		}
@@ -274,7 +274,7 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::day,
 				os::datetime::timestamp_builder<2>()
-				.append(time_point.day)
+				.template append<2>(time_point.day)
 				.data()
 			);
 		}
@@ -322,11 +322,11 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::time, 
 				os::datetime::timestamp_builder<10>()
-				.append(time_point.hour)
+				.template append<2>(time_point.hour)
 				.separate(':')
-				.append(time_point.minute)
+				.template append<2>(time_point.minute)
 				.separate(':')
-				.append(time_point.second)
+				.template append<2>(time_point.second)
 				.data()
 			);
 		}
@@ -342,9 +342,9 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::hour_clock_24, 
 				os::datetime::timestamp_builder<5>()
-				.append(time_point.hour)
+				.template append<2>(time_point.hour)
 				.separate(':')
-				.append(time_point.minute)
+				.template append<2>(time_point.minute)
 				.data()
 			);
 		}
@@ -360,11 +360,11 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::hour_clock_12, 
 				os::datetime::timestamp_builder<10>()
-				.append(time_point.hour)
+				.template append<2>(time_point.hour)
 				.separate(':')
-				.append(time_point.minute)
+				.template append<2>(time_point.minute)
 				.separate(':')
-				.append(time_point.second)
+				.template append<2>(time_point.second)
 				.append_ampm(time_point.hour)
 				.data()
 			);
@@ -397,7 +397,7 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::hour_24,
 				os::datetime::timestamp_builder<2>()
-				.append(time_point.hour)
+				.template append<2>(time_point.hour)
 				.data()
 			);
 		}
@@ -413,7 +413,7 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::hour_12,
 				os::datetime::timestamp_builder<2>()
-				.append(os::datetime::to_12h(time_point.hour))
+				.template append<2>(os::datetime::to_12h(time_point.hour))
 				.data()
 			);
 		}
@@ -429,7 +429,7 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::minute,
 				os::datetime::timestamp_builder<2>()
-				.append(time_point.minute)
+				.template append<2>(time_point.minute)
 				.data()
 			);
 		}
@@ -445,7 +445,7 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::second,
 				os::datetime::timestamp_builder<2>()
-				.append(time_point.second)
+				.template append<2>(time_point.second)
 				.data()
 			);
 		}
@@ -461,7 +461,7 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::millisecond,
 				os::datetime::timestamp_builder<3>()
-				.append(time_point.millisecond)
+				.template append<3>(time_point.millisecond)
 				.data()
 			);
 		}
@@ -477,7 +477,7 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::microsecond,
 				os::datetime::timestamp_builder<6>()
-				.append(time_point.microsecond)
+				.template append<6>(time_point.microsecond)
 				.data()
 			);
 		}
@@ -493,7 +493,7 @@ namespace lwlog::details
 
 			formatter<BufferLimits>::format_attribute(pattern_buffer, conv_buffer, flag::nanosecond,
 				os::datetime::timestamp_builder<9>()
-				.append(time_point.nanosecond)
+				.template append<9>(time_point.nanosecond)
 				.data()
 			);
 		}

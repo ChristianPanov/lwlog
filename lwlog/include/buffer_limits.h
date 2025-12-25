@@ -11,14 +11,9 @@ namespace lwlog
 	template<std::size_t Limit> struct padding_limit	{ static constexpr std::size_t Value{ Limit }; };
 	template<std::size_t Limit> struct conv_limit		{ static constexpr std::size_t Value{ Limit }; };
 
-	template<
-		typename PatternLimit,
-		typename MessageLimit,
-		typename ArgumentLimit,
-		typename ArgCountLimit,
-		typename PaddingLimit,
-		typename ConvLimit
-	> struct memory_buffer_limits
+	template<typename PatternLimit, typename MessageLimit, typename ArgumentLimit, 
+		typename ArgCountLimit, typename PaddingLimit, typename ConvLimit> 
+	struct memory_buffer_limits
 	{
 		static_assert(std::is_same_v<PatternLimit, pattern_limit<PatternLimit::Value>>,
 			"PatternLimit must be of type pattern_limit.");
@@ -42,12 +37,11 @@ namespace lwlog
 		static constexpr std::size_t conversion{ ConvLimit::Value };
 
 		static constexpr std::size_t pool_size{ 8 };
-
 	};
 
 	using default_pattern_limit = pattern_limit<256>;
 	using default_message_limit = message_limit<128>;
-	using default_argument_limit = argument_limit<12>;
+	using default_argument_limit = argument_limit<64>;
 	using default_arg_count_limit = arg_count_limit<4>;
 	using default_padding_limit = padding_limit<24>;
 	using default_conv_limit = conv_limit<64>;

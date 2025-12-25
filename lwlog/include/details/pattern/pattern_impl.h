@@ -1,7 +1,6 @@
-#pragma once
+﻿#pragma once
 
 #include "pattern.h"
-#include "color_format_data.h"
 #include "formatters.h"
 
 namespace lwlog::details
@@ -94,43 +93,74 @@ namespace lwlog::details
 	template<typename BufferLimits>
 	void pattern<BufferLimits>::process_color_flags(bool use_color)
 	{
-		const char* const reset_seq{ use_color ? "\u001b[0m" : "" };
-		const std::uint8_t reset_seq_len{ use_color ?
-			static_cast<std::uint8_t>(4) :
-			static_cast<std::uint8_t>(0)
-		};
+		memory_buffer<BufferLimits::pattern> temp_buffer;
+
+		const std::size_t pattern_buffer_size{ m_pattern_buffer.size() };
 
 		std::size_t pos{ 0 };
-		while (pos < m_pattern_buffer.size())
+		std::size_t open_pos{ 0 };
+		std::size_t close_pos{ 0 };
+		while (pos < pattern_buffer_size)
 		{
-			if (m_pattern_buffer[pos] == '.')
+			if (m_pattern_buffer[pos] != '.')
 			{
-				const std::size_t color_seq_end_pos{ m_pattern_buffer.data().find("(", pos) };
-				const std::string_view color_flag{ m_pattern_buffer.c_str() + pos, color_seq_end_pos - pos + 1 };
-
-				if (const auto it = color_data.find(color_flag); it != color_data.end())
-				{
-					const char* const color_seq{ use_color ? it->second.data() : "" };
-					const std::size_t color_seq_len{ use_color ? it->second.size() : 0 };
-
-					m_pattern_buffer.replace(pos, color_seq_end_pos - pos + 1, color_seq, color_seq_len);
-					pos += color_seq_len;
-				}
-				else
-				{
-					++pos;
-				}
+				temp_buffer.append(m_pattern_buffer[pos]);
+				++pos;
+				continue;
 			}
-			else if (m_pattern_buffer[pos] == ')')
+
+			open_pos = pos + 1;
+			while (open_pos < pattern_buffer_size && sgr_encoder::is_base_name_char(m_pattern_buffer[open_pos]))
 			{
-				m_pattern_buffer.replace(pos, 1, reset_seq, reset_seq_len);
-				pos += reset_seq_len;
+				++open_pos;
+			}
+
+			if (open_pos >= pattern_buffer_size || open_pos == pos + 2 || m_pattern_buffer[open_pos] != '(')
+			{
+				temp_buffer.append('.');
+				++pos;
+				continue;
+			}
+
+			close_pos = open_pos + 1;
+			while (close_pos < pattern_buffer_size && m_pattern_buffer[close_pos] != ')')
+			{
+				++close_pos;
+			}
+
+			if (close_pos == pattern_buffer_size)
+			{
+				temp_buffer.append(&m_pattern_buffer[pos], (open_pos + 1) - pos);
+				pos = open_pos + 1;
+				continue;
+			}
+
+			const std::string_view color_name{ &m_pattern_buffer[pos + 1], open_pos - pos - 1 };
+			const std::string_view inner_text{ &m_pattern_buffer[open_pos + 1], close_pos - open_pos - 1 };
+			const bool is_encodable{ sgr_encoder::can_encode(color_name) };
+
+			if (use_color && is_encodable)
+			{
+				sgr_encoder::encode(color_name, temp_buffer);
+				temp_buffer.append(inner_text);
+				temp_buffer.append(sgr_encoder::reset);
+			}
+			else if (!is_encodable)
+			{
+				temp_buffer.append(&m_pattern_buffer[pos], open_pos - pos + 1);
+				temp_buffer.append(inner_text);
+				temp_buffer.append(sgr_encoder::reset);
 			}
 			else
 			{
-				++pos;
+				temp_buffer.append(inner_text);
 			}
+
+			pos = close_pos + 1;
 		}
+
+		m_pattern_buffer.reset();
+		m_pattern_buffer.append(temp_buffer.data());
 	}
 
 	template<typename BufferLimits>

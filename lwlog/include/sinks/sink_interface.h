@@ -10,6 +10,7 @@ namespace lwlog::interface
 
 	public:
 		virtual void sink_it(const details::record<BufferLimits>&) = 0;
+		virtual void sink_it(std::string_view) = 0;
 
 	public:
 		virtual bool should_sink(level) const = 0;

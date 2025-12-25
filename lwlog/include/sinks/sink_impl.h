@@ -19,11 +19,12 @@ namespace lwlog::sinks
 			std::string_view color_code;
 			switch (m_current_level)
 			{
-			case level::info:		color_code = "\u001b[37m"; break;
-			case level::warning:	color_code = "\u001b[33;1m"; break;
-			case level::error:		color_code = "\u001b[31;1m"; break;
-			case level::critical:	color_code = "\u001b[41;1m"; break;
-			case level::debug:		color_code = "\u001b[37;1m"; break;
+			case level::info:		color_code = "\x1b[37m"; break;
+			case level::warning:	color_code = "\x1b[93m"; break;
+			case level::error:		color_code = "\x1b[91m"; break;
+			case level::critical:	color_code = "\x1b[101m"; break;
+			case level::debug:		color_code = "\x1b[97m"; break;
+			case level::trace:		color_code = "\x1b[97m"; break;
 			case level::all: 		color_code = ""; break;
 			case level::none: 		color_code = ""; break;
 			}
