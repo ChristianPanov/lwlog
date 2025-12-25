@@ -83,9 +83,9 @@ namespace lwlog::details
         {
             switch (instr.code)
             {
-            case pattern_bytecode::op_code::custom_noalign:
+            case pattern_bytecode::op_code::custom_field_noalign:
             {
-                auto& payload{ instr.u.custom_noalign };
+                auto& payload{ instr.u.custom_field_noalign };
                 payload.index = find_index(payload.name_offset, payload.name_size);
 
                 if (payload.index == pattern_bytecode::invalid_custom_index)
@@ -99,11 +99,11 @@ namespace lwlog::details
                 break;
             }
 
-            case pattern_bytecode::op_code::custom_align_left:
-            case pattern_bytecode::op_code::custom_align_right:
-            case pattern_bytecode::op_code::custom_align_center:
+            case pattern_bytecode::op_code::custom_field_align_left:
+            case pattern_bytecode::op_code::custom_field_align_right:
+            case pattern_bytecode::op_code::custom_field_align_center:
             {
-                auto& payload{ instr.u.custom_align };
+                auto& payload{ instr.u.custom_field_align };
                 payload.index = find_index(payload.name_offset, payload.name_size);
 
                 if (payload.index == pattern_bytecode::invalid_custom_index)

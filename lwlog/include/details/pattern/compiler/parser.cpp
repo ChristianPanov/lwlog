@@ -127,18 +127,18 @@ namespace lwlog::details::pattern_compiler
 
         if (alignment.width == 0)
         {
-            out.push_back(pattern_bytecode::instruction::make_custom_noalign(
+            out.push_back(pattern_bytecode::instruction::make_custom_field_noalign(
                 token_offset, token_size, name_offset, name_size));
             return;
         }
 
         switch (alignment.side_char)
         {
-        case '<': out.push_back(pattern_bytecode::instruction::make_custom_left(
+        case '<': out.push_back(pattern_bytecode::instruction::make_custom_field_left(
             token_offset, token_size, name_offset, name_size, alignment)); return;
-        case '>': out.push_back(pattern_bytecode::instruction::make_custom_right(
+        case '>': out.push_back(pattern_bytecode::instruction::make_custom_field_right(
             token_offset, token_size, name_offset, name_size, alignment)); return;
-        case '^': out.push_back(pattern_bytecode::instruction::make_custom_center(
+        case '^': out.push_back(pattern_bytecode::instruction::make_custom_field_center(
             token_offset, token_size, name_offset, name_size, alignment)); return;
         }
     }

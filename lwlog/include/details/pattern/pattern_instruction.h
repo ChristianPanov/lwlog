@@ -17,10 +17,10 @@ namespace lwlog::details::pattern_bytecode
         field_align_right,
         field_align_center,
 
-        custom_noalign,
-        custom_align_left,
-        custom_align_right,
-        custom_align_center,
+        custom_field_noalign,
+        custom_field_align_left,
+        custom_field_align_right,
+        custom_field_align_center,
 
         sgr_begin,
         sgr_reset, 
@@ -99,7 +99,7 @@ namespace lwlog::details::pattern_bytecode
         std::uint8_t width; 
     };
 
-    struct custom_noalign_payload
+    struct custom_field_noalign_payload
     {
         std::uint16_t index;
         std::uint16_t token_offset;
@@ -108,14 +108,14 @@ namespace lwlog::details::pattern_bytecode
         std::uint8_t  name_size;
     };
 
-    struct custom_align_payload
+    struct custom_field_align_payload
     {
         std::uint16_t index;
         std::uint16_t token_offset;
         std::uint16_t token_size;
         std::uint16_t name_offset;
         std::uint8_t  name_size;
-        char          fill_char;
+        char fill_char;
         std::uint8_t  width;
     };
 
@@ -130,144 +130,31 @@ namespace lwlog::details::pattern_bytecode
             field_align_payload field_align;
             field_noalign_payload field_noalign;
 
-            custom_noalign_payload custom_noalign;
-            custom_align_payload custom_align;
+            custom_field_noalign_payload custom_field_noalign;
+            custom_field_align_payload custom_field_align;
 
             sgr_payload sgr;
         } u;
 
-        static instruction make_literal(std::uint16_t offset, std::uint16_t size)
-        {
-            instruction instr{};
-            instr.code = op_code::literal;
-            instr.u.literal = literal_payload{ offset, size };
+        static instruction make_literal(std::uint16_t offset, std::uint16_t size);
 
-            return instr;
-        }
+        static instruction make_field_noalign(field_id id);
+        static instruction make_field_left(field_id id, const alignment_info& alignment);
+        static instruction make_field_right(field_id id, const alignment_info& alignment);
+        static instruction make_field_center(field_id id, const alignment_info& alignment);
 
-        static instruction make_field_noalign(field_id id)
-        {
-            instruction instr{};
-            instr.code = op_code::field_noalign;
-            instr.u.field_noalign = field_noalign_payload{ id };
+        static instruction make_custom_field_noalign(std::uint16_t token_offset, std::uint16_t token_size,
+            std::uint16_t name_offset, std::uint8_t name_size);
+        static instruction make_custom_field_left(std::uint16_t token_offset, std::uint16_t token_size,
+            std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment);
+        static instruction make_custom_field_right(std::uint16_t token_offset, std::uint16_t token_size,
+            std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment);
+        static instruction make_custom_field_center(std::uint16_t token_offset, std::uint16_t token_size,
+            std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment);
 
-            return instr;
-        }
-
-        static instruction make_field_left(field_id id, const alignment_info& alignment)
-        {
-            instruction instr{};
-            instr.code = op_code::field_align_left;
-            instr.u.field_align = field_align_payload{ id, alignment.fill_char, alignment.width };
-
-            return instr;
-        }
-
-        static instruction make_field_right(field_id id, const alignment_info& alignment)
-        {
-            instruction instr{};
-            instr.code = op_code::field_align_right;
-            instr.u.field_align = field_align_payload{ id, alignment.fill_char, alignment.width };
-
-            return instr;
-        }
-
-        static instruction make_field_center(field_id id, const alignment_info& alignment)
-        {
-            instruction instr{};
-            instr.code = op_code::field_align_center;
-            instr.u.field_align = field_align_payload{ id, alignment.fill_char, alignment.width };
-
-            return instr;
-        }
-
-        static instruction make_custom_noalign(std::uint16_t token_offset, std::uint16_t token_size, 
-            std::uint16_t name_offset, std::uint8_t name_size)
-        {
-            instruction instr{};
-            instr.code = op_code::custom_noalign;
-            instr.u.custom_noalign = { invalid_custom_index, token_offset, token_size, name_offset, name_size };
-
-            return instr;
-        }
-
-        static instruction make_custom_left(std::uint16_t token_offset, std::uint16_t token_size, 
-            std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment)
-        {
-            instruction instr{};
-            instr.code = op_code::custom_align_left;
-            instr.u.custom_align = { invalid_custom_index, token_offset, token_size, 
-                name_offset, name_size, alignment.fill_char, alignment.width };
-
-            return instr;
-        }
-
-        static instruction make_custom_right(std::uint16_t token_offset, std::uint16_t token_size,
-            std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment)
-        {
-            instruction instr{};
-            instr.code = op_code::custom_align_right;
-            instr.u.custom_align = { invalid_custom_index, token_offset, token_size,
-                name_offset, name_size, alignment.fill_char, alignment.width };
-
-
-            return instr;
-        }
-
-        static instruction make_custom_center(std::uint16_t token_offset, std::uint16_t token_size,
-            std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment)
-        {
-            instruction instr{};
-            instr.code = op_code::custom_align_center;
-            instr.u.custom_align = { invalid_custom_index, token_offset, token_size,
-                name_offset, name_size, alignment.fill_char, alignment.width };
-
-            return instr;
-        }
-
-        static instruction make_sgr_begin(std::uint8_t code)
-        {
-            instruction i{};
-            i.code = op_code::sgr_begin;
-
-            char* s{ i.u.sgr.seq };
-            s[0] = '\x1b'; 
-            s[1] = '[';
-            std::uint8_t n{ 2 };
-
-            if (code >= 100) 
-            { 
-                s[n++] = '1'; 
-                s[n++] = char('0' + (code / 10) % 10); 
-                s[n++] = char('0' + (code % 10)); 
-            }
-            else 
-            { 
-                s[n++] = char('0' + (code / 10)); 
-                s[n++] = char('0' + (code % 10)); 
-            }
-
-            s[n++] = 'm';
-            i.u.sgr.size = n;
-
-            return i;
-        }
-
-        static instruction make_sgr_end()
-        {
-            instruction instr{};
-            instr.code = op_code::sgr_reset;
-
-            return instr;
-        }
-
-        static instruction make_sgr_begin_level()
-        {
-            instruction i{};
-            i.code = op_code::sgr_begin_level;
-
-            return i;
-        }
+        static instruction make_sgr_begin(std::uint8_t code);
+        static instruction make_sgr_end();
+        static instruction make_sgr_begin_level();
     };
 
     using instruction_list = std::vector<instruction>;

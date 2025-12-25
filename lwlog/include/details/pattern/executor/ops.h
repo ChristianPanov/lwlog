@@ -79,7 +79,7 @@ namespace lwlog::details::pattern_executor::op
     }
 
     template<typename BufferLimits>
-    void custom_noalign(pattern_context<BufferLimits>& ctx, const pattern_bytecode::custom_noalign_payload& payload)
+    void custom_field_noalign(pattern_context<BufferLimits>& ctx, const pattern_bytecode::custom_field_noalign_payload& payload)
     {
         const auto& field{ ctx.custom_fields[payload.index] };
         const auto field_size{ field.format_fn(field.value, ctx.conversion_buffer, BufferLimits::conversion) };
@@ -88,7 +88,7 @@ namespace lwlog::details::pattern_executor::op
     }
 
     template<typename BufferLimits>
-    void custom_align_left(pattern_context<BufferLimits>& ctx, const pattern_bytecode::custom_align_payload& payload)
+    void custom_field_align_left(pattern_context<BufferLimits>& ctx, const pattern_bytecode::custom_field_align_payload& payload)
     {
         const auto& field{ ctx.custom_fields[payload.index] };
         const auto field_size{ field.format_fn(field.value, ctx.conversion_buffer, BufferLimits::conversion) };
@@ -106,7 +106,7 @@ namespace lwlog::details::pattern_executor::op
     }
 
     template<typename BufferLimits>
-    void custom_align_right(pattern_context<BufferLimits>& ctx, const pattern_bytecode::custom_align_payload& payload)
+    void custom_field_align_right(pattern_context<BufferLimits>& ctx, const pattern_bytecode::custom_field_align_payload& payload)
     {
         const auto& field{ ctx.custom_fields[payload.index] };
         const auto field_size{ field.format_fn(field.value, ctx.conversion_buffer, BufferLimits::conversion) };
@@ -124,7 +124,7 @@ namespace lwlog::details::pattern_executor::op
     }
 
     template<typename BufferLimits>
-    void custom_align_center(pattern_context<BufferLimits>& ctx, const pattern_bytecode::custom_align_payload& payload)
+    void custom_field_align_center(pattern_context<BufferLimits>& ctx, const pattern_bytecode::custom_field_align_payload& payload)
     {
         const auto& field{ ctx.custom_fields[payload.index] };
         const auto field_size{ field.format_fn(field.value, ctx.conversion_buffer, BufferLimits::conversion) };

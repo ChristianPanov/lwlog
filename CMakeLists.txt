@@ -11,6 +11,7 @@ set(version 1.3.0)
 message("Adding source files")
 set(LWLOG_SOURCE_FILES
     ${CMAKE_SOURCE_DIR}/lwlog/include/details/topic_registry.cpp
+    ${CMAKE_SOURCE_DIR}/lwlog/include/details/pattern/pattern_instruction.cpp
     ${CMAKE_SOURCE_DIR}/lwlog/include/details/pattern/custom_field.cpp
     ${CMAKE_SOURCE_DIR}/lwlog/include/details/pattern/compiler/parser.cpp
 ) 
