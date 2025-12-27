@@ -146,6 +146,7 @@ namespace lwlog::details
             if (ec != std::errc{})
             {
                 buffer[0] = '\0';
+                return 0;
             }
             else
             {
@@ -160,6 +161,7 @@ namespace lwlog::details
             if (ec != std::errc{})
             {
                 buffer[0] = '\0';
+                return 0;
             }
             else
             {
