@@ -51,7 +51,7 @@ namespace lwlog::sinks
 
 	template<bool EnableAnsiColors, typename BufferLimits, typename ThreadingPolicy>
 	void sink<EnableAnsiColors, BufferLimits, ThreadingPolicy>::add_custom_field(std::string_view name,
-		details::custom_value value, const details::custom_format_fn& fn)
+		details::custom_value value, details::custom_format_fn fn)
 	{
 		Lock lock(m_mtx);
 		m_pattern.add_custom_field(name, value, fn);

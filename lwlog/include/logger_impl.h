@@ -103,7 +103,7 @@ namespace lwlog
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
 	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_custom_field(
-		std::string_view name, details::custom_value value, const details::custom_format_fn& fn)
+		std::string_view name, details::custom_value value, details::custom_format_fn fn)
 	{
 		for (const auto& sink : m_backend.sink_storage)
 		{

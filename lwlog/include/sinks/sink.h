@@ -23,8 +23,7 @@ namespace lwlog::sinks
 		void set_level_filter(level level_filter) override;
 		void set_pattern(std::string_view pattern) override;
 		void add_custom_field(std::string_view name, details::custom_value value) override;
-		void add_custom_field(std::string_view name, details::custom_value value,
-			const details::custom_format_fn& fn) override;
+		void add_custom_field(std::string_view name, details::custom_value value, details::custom_format_fn fn) override;
 
 	protected:
 		mutable Mutex m_mtx;

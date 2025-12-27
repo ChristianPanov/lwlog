@@ -22,7 +22,7 @@ namespace lwlog::details
     struct custom_field
     {
         custom_field(std::string_view name, custom_value value);
-        custom_field(std::string_view name, custom_value value, const custom_format_fn& fn);
+        custom_field(std::string_view name, custom_value value, custom_format_fn fn);
 
         std::string_view name;
         custom_value value;
