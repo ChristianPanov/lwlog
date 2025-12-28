@@ -7,7 +7,7 @@
 
 namespace lwlog::details::pattern_compiler
 {
-    enum class field_type : std::uint8_t
+    enum class field_parse_result : std::uint8_t
     {
         builtin,
         custom,
@@ -36,8 +36,8 @@ namespace lwlog::details::pattern_compiler
 
     private:
         bool recover_field_as_literal(pattern_bytecode::instruction_list& out);
-        field_type parse_field_short_alias(pattern_bytecode::builtin_field& out);
-        field_type parse_field_name(pattern_bytecode::builtin_field& out_id,
+        field_parse_result parse_field_short_alias(pattern_bytecode::builtin_field& out);
+        field_parse_result parse_field_name(pattern_bytecode::builtin_field& out_id,
             std::uint16_t& out_name_offset, std::uint8_t& out_name_size);
         bool parse_alignment_specs(pattern_bytecode::alignment_info& out);
         bool parse_color(pattern_bytecode::instruction_list& out);

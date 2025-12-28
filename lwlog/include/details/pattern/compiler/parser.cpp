@@ -44,7 +44,7 @@ namespace lwlog::details::pattern_compiler
 
                 pattern_bytecode::builtin_field field{};
                 const std::size_t start{ m_pos };
-                if (this->parse_field_short_alias(field) == field_type::builtin)
+                if (this->parse_field_short_alias(field) == field_parse_result::builtin)
                 {
                     this->emit_field_instruction(out, field, {});
                 }
@@ -188,24 +188,24 @@ namespace lwlog::details::pattern_compiler
         return true;
     }
 
-    field_type parser::parse_field_short_alias(pattern_bytecode::builtin_field& out)
+    field_parse_result parser::parse_field_short_alias(pattern_bytecode::builtin_field& out)
     {
         if (m_pos + 1 >= m_size)
         {
-            return field_type::literal;
+            return field_parse_result::literal;
         }
 
         if (!parser::lookup_field_short_alias(m_src[m_pos + 1], out))
         {
-            return field_type::literal;
+            return field_parse_result::literal;
         }
 
         m_pos += 2;
 
-        return field_type::builtin;
+        return field_parse_result::builtin;
     }
 
-    field_type parser::parse_field_name(pattern_bytecode::builtin_field& out_id,
+    field_parse_result parser::parse_field_name(pattern_bytecode::builtin_field& out_id,
         std::uint16_t& out_name_offset, std::uint8_t& out_name_size)
     {
         const std::size_t name_begin{ m_pos };
@@ -217,7 +217,7 @@ namespace lwlog::details::pattern_compiler
 
         if (m_pos >= m_size)
         {
-            return field_type::error;
+            return field_parse_result::error;
         }
 
         const std::size_t name_end{ m_pos };
@@ -225,20 +225,20 @@ namespace lwlog::details::pattern_compiler
 
         if (name_length == 0)
         {
-            return field_type::literal;
+            return field_parse_result::literal;
         }
 
         const std::string_view name{ m_src + name_begin, name_length };
 
         if (parser::lookup_field_name(name, out_id))
         {
-            return field_type::builtin;
+            return field_parse_result::builtin;
         }
 
         out_name_offset = static_cast<std::uint16_t>(name_begin);
         out_name_size = static_cast<std::uint8_t>(name_length);
 
-        return field_type::custom;
+        return field_parse_result::custom;
     }
 
     bool parser::parse_alignment_specs(pattern_bytecode::alignment_info& out)
@@ -381,15 +381,15 @@ namespace lwlog::details::pattern_compiler
         pattern_bytecode::builtin_field field{};
         std::uint16_t name_offset{};
         std::uint8_t name_length{};
-        field_type type{ field_type::literal };
+        field_parse_result parse_result{ field_parse_result::literal };
         if (m_pos < m_size && m_src[m_pos] == '%')
         {
-            type = this->parse_field_short_alias(field);
+            parse_result = this->parse_field_short_alias(field);
         }
         else
         {   
-            type = this->parse_field_name(field, name_offset, name_length);
-            if(type == field_type::error)
+            parse_result = this->parse_field_name(field, name_offset, name_length);
+            if(parse_result == field_parse_result::error)
             {
                 return false;
             }
@@ -413,19 +413,19 @@ namespace lwlog::details::pattern_compiler
 
         ++m_pos;
 
-        switch (type)
+        switch (parse_result)
         {
-        case field_type::literal:
+        case field_parse_result::literal:
         {
             this->flush_pending_literal(out, m_pos);
             break;
         }
-        case field_type::builtin:
+        case field_parse_result::builtin:
         {
             this->emit_field_instruction(out, field, alignment);
             break;
         }
-        case field_type::custom:
+        case field_parse_result::custom:
         {
             const std::uint16_t field_offset{ static_cast<std::uint16_t>(start) };
             const std::uint16_t field_size{ static_cast<std::uint16_t>(m_pos - start) };
