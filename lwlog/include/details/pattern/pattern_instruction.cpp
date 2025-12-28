@@ -129,9 +129,9 @@ namespace lwlog::details::pattern_bytecode
 
     instruction instruction::make_sgr_begin_level()
     {
-        instruction i{};
-        i.code = op_code::sgr_begin_level;
+        instruction instr{};
+        instr.code = op_code::sgr_begin_level;
 
-        return i;
+        return instr;
     }
 }
