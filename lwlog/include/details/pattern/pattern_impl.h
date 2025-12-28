@@ -90,11 +90,11 @@ namespace lwlog::details
 
                 if (payload.index == pattern_bytecode::invalid_custom_index)
                 {
-                    const auto token_offset{ payload.token_offset };
-                    const auto token_size{ payload.token_size };
+                    const auto field_offset{ payload.field_offset };
+                    const auto field_size{ payload.field_size };
 
                     instr.code = pattern_bytecode::op_code::literal;
-                    instr.u.literal = { token_offset, token_size };
+                    instr.u.literal = { field_offset, field_size };
                 }
                 break;
             }
@@ -108,11 +108,11 @@ namespace lwlog::details
 
                 if (payload.index == pattern_bytecode::invalid_custom_index)
                 {
-                    const auto token_offset{ payload.token_offset };
-                    const auto token_size{ payload.token_size };
+                    const auto field_offset{ payload.field_offset };
+                    const auto field_size{ payload.field_size };
 
                     instr.code = pattern_bytecode::op_code::literal;
-                    instr.u.literal = { token_offset, token_size };
+                    instr.u.literal = { field_offset, field_size };
                 }
                 break;
             }

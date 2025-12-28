@@ -42,11 +42,11 @@ namespace lwlog::details::pattern_compiler
             {
                 this->flush_pending_literal(out, m_pos);
 
-                pattern_bytecode::field_id id{};
+                pattern_bytecode::builtin_field field{};
                 const std::size_t start{ m_pos };
-                if (this->parse_short_token(id) == token_type::builtin)
+                if (this->parse_field_short_alias(field) == field_type::builtin)
                 {
-                    this->emit_field_instruction(out, id, {});
+                    this->emit_field_instruction(out, field, {});
                 }
                 else
                 {
@@ -101,26 +101,26 @@ namespace lwlog::details::pattern_compiler
     }
 
     void parser::emit_field_instruction(pattern_bytecode::instruction_list& out,
-        pattern_bytecode::field_id id, const pattern_bytecode::alignment_info& alignment)
+        pattern_bytecode::builtin_field field, const pattern_bytecode::alignment_info& alignment)
     {
         m_pending_literal_begin = m_pos;
 
         if (alignment.width == 0)
         {
-            out.push_back(pattern_bytecode::instruction::make_field_noalign(id));
+            out.push_back(pattern_bytecode::instruction::make_field_noalign(field));
             return;
         }
 
         switch (alignment.side_char)
         {
-            case '<': out.push_back(pattern_bytecode::instruction::make_field_left(id, alignment)); return;
-            case '>': out.push_back(pattern_bytecode::instruction::make_field_right(id, alignment)); return;
-            case '^': out.push_back(pattern_bytecode::instruction::make_field_center(id, alignment)); return;
+            case '<': out.push_back(pattern_bytecode::instruction::make_field_left(field, alignment)); return;
+            case '>': out.push_back(pattern_bytecode::instruction::make_field_right(field, alignment)); return;
+            case '^': out.push_back(pattern_bytecode::instruction::make_field_center(field, alignment)); return;
         }
     }
 
-    void parser::emit_custom_instruction(pattern_bytecode::instruction_list& out, std::uint16_t token_offset, 
-        std::uint16_t token_size, std::uint16_t name_offset, std::uint8_t name_size, 
+    void parser::emit_custom_instruction(pattern_bytecode::instruction_list& out, std::uint16_t field_offset,
+        std::uint16_t field_size, std::uint16_t name_offset, std::uint8_t name_size,
         const pattern_bytecode::alignment_info& alignment)
     {
         m_pending_literal_begin = m_pos;
@@ -128,18 +128,18 @@ namespace lwlog::details::pattern_compiler
         if (alignment.width == 0)
         {
             out.push_back(pattern_bytecode::instruction::make_custom_field_noalign(
-                token_offset, token_size, name_offset, name_size));
+                field_offset, field_size, name_offset, name_size));
             return;
         }
 
         switch (alignment.side_char)
         {
         case '<': out.push_back(pattern_bytecode::instruction::make_custom_field_left(
-            token_offset, token_size, name_offset, name_size, alignment)); return;
+            field_offset, field_size, name_offset, name_size, alignment)); return;
         case '>': out.push_back(pattern_bytecode::instruction::make_custom_field_right(
-            token_offset, token_size, name_offset, name_size, alignment)); return;
+            field_offset, field_size, name_offset, name_size, alignment)); return;
         case '^': out.push_back(pattern_bytecode::instruction::make_custom_field_center(
-            token_offset, token_size, name_offset, name_size, alignment)); return;
+            field_offset, field_size, name_offset, name_size, alignment)); return;
         }
     }
 
@@ -169,28 +169,8 @@ namespace lwlog::details::pattern_compiler
         }
     }
 
-    token_type parser::parse_short_token(pattern_bytecode::field_id& out)
+    bool parser::recover_field_as_literal(pattern_bytecode::instruction_list& out)
     {
-        if (m_pos + 1 >= m_size)
-        {
-            return token_type::literal;
-        }
-
-        if (!parser::resolve_short_field_id(m_src[m_pos + 1], out))
-        {
-            return token_type::literal;
-        }
-
-        m_pos += 2;
-
-        return token_type::builtin;
-    }
-
-    token_type parser::parse_verbose_token(pattern_bytecode::field_id& out_id,
-        std::uint16_t& out_name_offset, std::uint8_t& out_name_size)
-    {
-        const std::size_t name_begin{ m_pos };
-
         while (m_pos < m_size && m_src[m_pos] != '}')
         {
             ++m_pos;
@@ -198,7 +178,46 @@ namespace lwlog::details::pattern_compiler
 
         if (m_pos >= m_size)
         {
-            return token_type::error;
+            return false;
+        }
+
+        ++m_pos;
+
+        this->flush_pending_literal(out, m_pos);
+
+        return true;
+    }
+
+    field_type parser::parse_field_short_alias(pattern_bytecode::builtin_field& out)
+    {
+        if (m_pos + 1 >= m_size)
+        {
+            return field_type::literal;
+        }
+
+        if (!parser::lookup_field_short_alias(m_src[m_pos + 1], out))
+        {
+            return field_type::literal;
+        }
+
+        m_pos += 2;
+
+        return field_type::builtin;
+    }
+
+    field_type parser::parse_field_name(pattern_bytecode::builtin_field& out_id,
+        std::uint16_t& out_name_offset, std::uint8_t& out_name_size)
+    {
+        const std::size_t name_begin{ m_pos };
+
+        while (m_pos < m_size && m_src[m_pos] != '}' && m_src[m_pos] != ':')
+        {
+            ++m_pos;
+        }
+
+        if (m_pos >= m_size)
+        {
+            return field_type::error;
         }
 
         const std::size_t name_end{ m_pos };
@@ -206,20 +225,20 @@ namespace lwlog::details::pattern_compiler
 
         if (name_length == 0)
         {
-            return token_type::literal;
+            return field_type::literal;
         }
 
         const std::string_view name{ m_src + name_begin, name_length };
 
-        if (parser::resolve_verbose_field_id(name, out_id))
+        if (parser::lookup_field_name(name, out_id))
         {
-            return token_type::builtin;
+            return field_type::builtin;
         }
 
         out_name_offset = static_cast<std::uint16_t>(name_begin);
         out_name_size = static_cast<std::uint8_t>(name_length);
 
-        return token_type::custom;
+        return field_type::custom;
     }
 
     bool parser::parse_alignment_specs(pattern_bytecode::alignment_info& out)
@@ -335,6 +354,7 @@ namespace lwlog::details::pattern_compiler
             out.resize(saved_out_size);
             m_pos = saved_pos;
             m_pending_literal_begin = saved_literal_begin;
+
             return false;
         }
 
@@ -348,22 +368,6 @@ namespace lwlog::details::pattern_compiler
 
     bool parser::parse_field(pattern_bytecode::instruction_list& out)
     {
-        const auto skip_to_close_brace_and_consume{ [&]() -> bool {
-            while (m_pos < m_size && m_src[m_pos] != '}')
-            {
-                ++m_pos;
-            }
-
-            if (m_pos >= m_size)
-            {
-                return false;
-            }
-
-            ++m_pos;
-
-            return true;
-        } };
-
         const std::size_t start{ m_pos };
         ++m_pos;
 
@@ -374,75 +378,58 @@ namespace lwlog::details::pattern_compiler
             return false;
         }
 
-        pattern_bytecode::alignment_info alignment{};
+        pattern_bytecode::builtin_field field{};
+        std::uint16_t name_offset{};
+        std::uint8_t name_length{};
+        field_type type{ field_type::literal };
+        if (m_pos < m_size && m_src[m_pos] == '%')
+        {
+            type = this->parse_field_short_alias(field);
+        }
+        else
+        {   
+            type = this->parse_field_name(field, name_offset, name_length);
+            if(type == field_type::error)
+            {
+                return false;
+            }
+        }
 
-        if (m_src[m_pos] == ':')
+        pattern_bytecode::alignment_info alignment{};
+        if (m_pos < m_size && m_src[m_pos] == ':')
         {
             ++m_pos;
 
             if (!this->parse_alignment_specs(alignment))
             {
-                if (!skip_to_close_brace_and_consume())
-                {
-                    return false;
-                }
-
-                this->flush_pending_literal(out, m_pos);
-
-                return true;
-            }
-        }
-
-        pattern_bytecode::field_id id{};
-
-        std::uint16_t name_offset{};
-        std::uint8_t  name_lenght{};
-
-        token_type type{ token_type::literal };
-
-        if (m_pos < m_size && m_src[m_pos] == '%')
-        {
-            type = this->parse_short_token(id);
-        }
-        else
-        {   
-            type = this->parse_verbose_token(id, name_offset, name_lenght);
-            if(type == token_type::error)
-            {
-                return false;
+                return this->recover_field_as_literal(out);
             }
         }
 
         if (m_pos >= m_size || m_src[m_pos] != '}')
         {
-            if (!skip_to_close_brace_and_consume())
-            {
-                return false;
-            }
-
-            this->flush_pending_literal(out, m_pos);
-            return true;
+            return this->recover_field_as_literal(out);
         }
 
         ++m_pos;
 
         switch (type)
         {
-        case token_type::literal:
+        case field_type::literal:
         {
             this->flush_pending_literal(out, m_pos);
             break;
         }
-        case token_type::builtin:
+        case field_type::builtin:
         {
-            this->emit_field_instruction(out, id, alignment);
+            this->emit_field_instruction(out, field, alignment);
             break;
         }
-        case token_type::custom:
+        case field_type::custom:
         {
-            const std::uint16_t token_offset{ static_cast<std::uint16_t>(start) };
-            const std::uint16_t token_size{ static_cast<std::uint16_t>(m_pos - start) };
-            this->emit_custom_instruction(out, token_offset, token_size, name_offset, name_lenght, alignment);
+            const std::uint16_t field_offset{ static_cast<std::uint16_t>(start) };
+            const std::uint16_t field_size{ static_cast<std::uint16_t>(m_pos - start) };
+            this->emit_custom_instruction(out, field_offset, field_size, name_offset, name_length, alignment);
             break;
         }
         default:
@@ -455,80 +442,80 @@ namespace lwlog::details::pattern_compiler
         return true;
     }
 
-    bool parser::resolve_short_field_id(char ch, pattern_bytecode::field_id& out)
+    bool parser::lookup_field_short_alias(char ch, pattern_bytecode::builtin_field& out)
     {
         switch (ch)
         {
-        case flag::level.shortened:         out = pattern_bytecode::field_id::level;         return true;
-        case flag::message.shortened:       out = pattern_bytecode::field_id::message;       return true;
-        case flag::thread_id.shortened:     out = pattern_bytecode::field_id::thread_id;     return true;
-        case flag::process_id.shortened:    out = pattern_bytecode::field_id::process_id;    return true;
-        case flag::line.shortened:          out = pattern_bytecode::field_id::line;          return true;
-        case flag::file.shortened:          out = pattern_bytecode::field_id::file;          return true;
-        case flag::path.shortened:          out = pattern_bytecode::field_id::path;          return true;
-        case flag::function.shortened:      out = pattern_bytecode::field_id::function;      return true;
-        case flag::topic.shortened:         out = pattern_bytecode::field_id::topic;         return true;
-        case flag::full_topic.shortened:    out = pattern_bytecode::field_id::full_topic;    return true;
+        case flag::level.shortened:         out = pattern_bytecode::builtin_field::level;         return true;
+        case flag::message.shortened:       out = pattern_bytecode::builtin_field::message;       return true;
+        case flag::thread_id.shortened:     out = pattern_bytecode::builtin_field::thread_id;     return true;
+        case flag::process_id.shortened:    out = pattern_bytecode::builtin_field::process_id;    return true;
+        case flag::line.shortened:          out = pattern_bytecode::builtin_field::line;          return true;
+        case flag::file.shortened:          out = pattern_bytecode::builtin_field::file;          return true;
+        case flag::path.shortened:          out = pattern_bytecode::builtin_field::path;          return true;
+        case flag::function.shortened:      out = pattern_bytecode::builtin_field::function;      return true;
+        case flag::topic.shortened:         out = pattern_bytecode::builtin_field::topic;         return true;
+        case flag::full_topic.shortened:    out = pattern_bytecode::builtin_field::full_topic;    return true;
 
-        case flag::date.shortened:              out = pattern_bytecode::field_id::date;          return true;
-        case flag::date_short.shortened:        out = pattern_bytecode::field_id::date_short;    return true;
-        case flag::year.shortened:              out = pattern_bytecode::field_id::year;          return true;
-        case flag::year_short.shortened:        out = pattern_bytecode::field_id::year_short;    return true;
-        case flag::month.shortened:             out = pattern_bytecode::field_id::month;         return true;
-        case flag::month_name.shortened:        out = pattern_bytecode::field_id::month_name;    return true;
-        case flag::month_name_short.shortened:  out = pattern_bytecode::field_id::month_name_short; return true;
-        case flag::day.shortened:               out = pattern_bytecode::field_id::day;           return true;
-        case flag::weekday.shortened:           out = pattern_bytecode::field_id::weekday;       return true;
-        case flag::weekday_short.shortened:     out = pattern_bytecode::field_id::weekday_short; return true;
-        case flag::time.shortened:              out = pattern_bytecode::field_id::time;          return true;
-        case flag::hour_clock_24.shortened:     out = pattern_bytecode::field_id::hour_clock_24; return true;
-        case flag::hour_clock_12.shortened:     out = pattern_bytecode::field_id::hour_clock_12; return true;
-        case flag::ampm.shortened:              out = pattern_bytecode::field_id::ampm;          return true;
-        case flag::hour_24.shortened:           out = pattern_bytecode::field_id::hour_24;       return true;
-        case flag::hour_12.shortened:           out = pattern_bytecode::field_id::hour_12;       return true;
-        case flag::minute.shortened:            out = pattern_bytecode::field_id::minute;        return true;
-        case flag::second.shortened:            out = pattern_bytecode::field_id::second;        return true;
-        case flag::millisecond.shortened:       out = pattern_bytecode::field_id::millisecond;   return true;
-        case flag::microsecond.shortened:       out = pattern_bytecode::field_id::microsecond;   return true;
-        case flag::nanosecond.shortened:        out = pattern_bytecode::field_id::nanosecond;    return true;
+        case flag::date.shortened:              out = pattern_bytecode::builtin_field::date;          return true;
+        case flag::date_short.shortened:        out = pattern_bytecode::builtin_field::date_short;    return true;
+        case flag::year.shortened:              out = pattern_bytecode::builtin_field::year;          return true;
+        case flag::year_short.shortened:        out = pattern_bytecode::builtin_field::year_short;    return true;
+        case flag::month.shortened:             out = pattern_bytecode::builtin_field::month;         return true;
+        case flag::month_name.shortened:        out = pattern_bytecode::builtin_field::month_name;    return true;
+        case flag::month_name_short.shortened:  out = pattern_bytecode::builtin_field::month_name_short; return true;
+        case flag::day.shortened:               out = pattern_bytecode::builtin_field::day;           return true;
+        case flag::weekday.shortened:           out = pattern_bytecode::builtin_field::weekday;       return true;
+        case flag::weekday_short.shortened:     out = pattern_bytecode::builtin_field::weekday_short; return true;
+        case flag::time.shortened:              out = pattern_bytecode::builtin_field::time;          return true;
+        case flag::hour_clock_24.shortened:     out = pattern_bytecode::builtin_field::hour_clock_24; return true;
+        case flag::hour_clock_12.shortened:     out = pattern_bytecode::builtin_field::hour_clock_12; return true;
+        case flag::ampm.shortened:              out = pattern_bytecode::builtin_field::ampm;          return true;
+        case flag::hour_24.shortened:           out = pattern_bytecode::builtin_field::hour_24;       return true;
+        case flag::hour_12.shortened:           out = pattern_bytecode::builtin_field::hour_12;       return true;
+        case flag::minute.shortened:            out = pattern_bytecode::builtin_field::minute;        return true;
+        case flag::second.shortened:            out = pattern_bytecode::builtin_field::second;        return true;
+        case flag::millisecond.shortened:       out = pattern_bytecode::builtin_field::millisecond;   return true;
+        case flag::microsecond.shortened:       out = pattern_bytecode::builtin_field::microsecond;   return true;
+        case flag::nanosecond.shortened:        out = pattern_bytecode::builtin_field::nanosecond;    return true;
         default: return false;
         }
     }
 
-    bool parser::resolve_verbose_field_id(std::string_view name, pattern_bytecode::field_id& out)
+    bool parser::lookup_field_name(std::string_view name, pattern_bytecode::builtin_field& out)
     {
-        if (name == flag::level.verbose)            { out = pattern_bytecode::field_id::level;             return true; }
-        else if (name == flag::message.verbose)     { out = pattern_bytecode::field_id::message;           return true; }
-        else if (name == flag::thread_id.verbose)   { out = pattern_bytecode::field_id::thread_id;         return true; }
-        else if (name == flag::process_id.verbose)  { out = pattern_bytecode::field_id::process_id;        return true; }
-        else if (name == flag::line.verbose)        { out = pattern_bytecode::field_id::line;              return true; }
-        else if (name == flag::file.verbose)        { out = pattern_bytecode::field_id::file;              return true; }
-        else if (name == flag::path.verbose)        { out = pattern_bytecode::field_id::path;              return true; }
-        else if (name == flag::function.verbose)    { out = pattern_bytecode::field_id::function;          return true; }
-        else if (name == flag::topic.verbose)       { out = pattern_bytecode::field_id::topic;             return true; }
-        else if (name == flag::full_topic .verbose) { out = pattern_bytecode::field_id::full_topic;        return true; }
+        if (name == flag::level.verbose)            { out = pattern_bytecode::builtin_field::level;             return true; }
+        else if (name == flag::message.verbose)     { out = pattern_bytecode::builtin_field::message;           return true; }
+        else if (name == flag::thread_id.verbose)   { out = pattern_bytecode::builtin_field::thread_id;         return true; }
+        else if (name == flag::process_id.verbose)  { out = pattern_bytecode::builtin_field::process_id;        return true; }
+        else if (name == flag::line.verbose)        { out = pattern_bytecode::builtin_field::line;              return true; }
+        else if (name == flag::file.verbose)        { out = pattern_bytecode::builtin_field::file;              return true; }
+        else if (name == flag::path.verbose)        { out = pattern_bytecode::builtin_field::path;              return true; }
+        else if (name == flag::function.verbose)    { out = pattern_bytecode::builtin_field::function;          return true; }
+        else if (name == flag::topic.verbose)       { out = pattern_bytecode::builtin_field::topic;             return true; }
+        else if (name == flag::full_topic .verbose) { out = pattern_bytecode::builtin_field::full_topic;        return true; }
 
-        else if (name == flag::date.verbose)                { out = pattern_bytecode::field_id::date;              return true; }
-        else if (name == flag::date_short.verbose)          { out = pattern_bytecode::field_id::date_short;        return true; }
-        else if (name == flag::year.verbose)                { out = pattern_bytecode::field_id::year;              return true; }
-        else if (name == flag::year_short.verbose)          { out = pattern_bytecode::field_id::year_short;        return true; }
-        else if (name == flag::month.verbose)               { out = pattern_bytecode::field_id::month;             return true; }
-        else if (name == flag::month_name.verbose)          { out = pattern_bytecode::field_id::month_name;        return true; }
-        else if (name == flag::month_name_short.verbose)    { out = pattern_bytecode::field_id::month_name_short;  return true; }
-        else if (name == flag::day.verbose)                 { out = pattern_bytecode::field_id::day;               return true; }
-        else if (name == flag::weekday.verbose)             { out = pattern_bytecode::field_id::weekday;           return true; }
-        else if (name == flag::weekday_short.verbose)       { out = pattern_bytecode::field_id::weekday_short;     return true; }
-        else if (name == flag::time.verbose)                { out = pattern_bytecode::field_id::time;              return true; }
-        else if (name == flag::hour_clock_24.verbose)       { out = pattern_bytecode::field_id::hour_clock_24;     return true; }
-        else if (name == flag::hour_clock_12.verbose)       { out = pattern_bytecode::field_id::hour_clock_12;     return true; }
-        else if (name == flag::ampm.verbose)                { out = pattern_bytecode::field_id::ampm;              return true; }
-        else if (name == flag::hour_24.verbose)             { out = pattern_bytecode::field_id::hour_24;           return true; }
-        else if (name == flag::hour_12.verbose)             { out = pattern_bytecode::field_id::hour_12;           return true; }
-        else if (name == flag::minute.verbose)              { out = pattern_bytecode::field_id::minute;            return true; }
-        else if (name == flag::second.verbose)              { out = pattern_bytecode::field_id::second;            return true; }
-        else if (name == flag::millisecond.verbose)         { out = pattern_bytecode::field_id::millisecond;       return true; }
-        else if (name == flag::microsecond.verbose)         { out = pattern_bytecode::field_id::microsecond;       return true; }
-        else if (name == flag::nanosecond.verbose)          { out = pattern_bytecode::field_id::nanosecond;        return true; }
+        else if (name == flag::date.verbose)                { out = pattern_bytecode::builtin_field::date;              return true; }
+        else if (name == flag::date_short.verbose)          { out = pattern_bytecode::builtin_field::date_short;        return true; }
+        else if (name == flag::year.verbose)                { out = pattern_bytecode::builtin_field::year;              return true; }
+        else if (name == flag::year_short.verbose)          { out = pattern_bytecode::builtin_field::year_short;        return true; }
+        else if (name == flag::month.verbose)               { out = pattern_bytecode::builtin_field::month;             return true; }
+        else if (name == flag::month_name.verbose)          { out = pattern_bytecode::builtin_field::month_name;        return true; }
+        else if (name == flag::month_name_short.verbose)    { out = pattern_bytecode::builtin_field::month_name_short;  return true; }
+        else if (name == flag::day.verbose)                 { out = pattern_bytecode::builtin_field::day;               return true; }
+        else if (name == flag::weekday.verbose)             { out = pattern_bytecode::builtin_field::weekday;           return true; }
+        else if (name == flag::weekday_short.verbose)       { out = pattern_bytecode::builtin_field::weekday_short;     return true; }
+        else if (name == flag::time.verbose)                { out = pattern_bytecode::builtin_field::time;              return true; }
+        else if (name == flag::hour_clock_24.verbose)       { out = pattern_bytecode::builtin_field::hour_clock_24;     return true; }
+        else if (name == flag::hour_clock_12.verbose)       { out = pattern_bytecode::builtin_field::hour_clock_12;     return true; }
+        else if (name == flag::ampm.verbose)                { out = pattern_bytecode::builtin_field::ampm;              return true; }
+        else if (name == flag::hour_24.verbose)             { out = pattern_bytecode::builtin_field::hour_24;           return true; }
+        else if (name == flag::hour_12.verbose)             { out = pattern_bytecode::builtin_field::hour_12;           return true; }
+        else if (name == flag::minute.verbose)              { out = pattern_bytecode::builtin_field::minute;            return true; }
+        else if (name == flag::second.verbose)              { out = pattern_bytecode::builtin_field::second;            return true; }
+        else if (name == flag::millisecond.verbose)         { out = pattern_bytecode::builtin_field::millisecond;       return true; }
+        else if (name == flag::microsecond.verbose)         { out = pattern_bytecode::builtin_field::microsecond;       return true; }
+        else if (name == flag::nanosecond.verbose)          { out = pattern_bytecode::builtin_field::nanosecond;        return true; }
 
         return false;
     }

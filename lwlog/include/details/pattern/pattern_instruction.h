@@ -27,7 +27,7 @@ namespace lwlog::details::pattern_bytecode
         sgr_begin_level
     };
      
-    enum class field_id : std::uint8_t
+    enum class builtin_field : std::uint8_t
     {
         level,
         message,
@@ -89,12 +89,12 @@ namespace lwlog::details::pattern_bytecode
 
     struct field_noalign_payload 
     { 
-        field_id id; 
+        builtin_field field;
     };
 
     struct field_align_payload 
     { 
-        field_id id; 
+        builtin_field field;
         char fill_char; 
         std::uint8_t width; 
     };
@@ -102,8 +102,8 @@ namespace lwlog::details::pattern_bytecode
     struct custom_field_noalign_payload
     {
         std::uint16_t index;
-        std::uint16_t token_offset;
-        std::uint16_t token_size;
+        std::uint16_t field_offset;
+        std::uint16_t field_size;
         std::uint16_t name_offset;
         std::uint8_t  name_size;
     };
@@ -111,8 +111,8 @@ namespace lwlog::details::pattern_bytecode
     struct custom_field_align_payload
     {
         std::uint16_t index;
-        std::uint16_t token_offset;
-        std::uint16_t token_size;
+        std::uint16_t field_offset;
+        std::uint16_t field_size;
         std::uint16_t name_offset;
         std::uint8_t  name_size;
         char fill_char;
@@ -138,18 +138,18 @@ namespace lwlog::details::pattern_bytecode
 
         static instruction make_literal(std::uint16_t offset, std::uint16_t size);
 
-        static instruction make_field_noalign(field_id id);
-        static instruction make_field_left(field_id id, const alignment_info& alignment);
-        static instruction make_field_right(field_id id, const alignment_info& alignment);
-        static instruction make_field_center(field_id id, const alignment_info& alignment);
+        static instruction make_field_noalign(builtin_field field);
+        static instruction make_field_left(builtin_field field, const alignment_info& alignment);
+        static instruction make_field_right(builtin_field field, const alignment_info& alignment);
+        static instruction make_field_center(builtin_field field, const alignment_info& alignment);
 
-        static instruction make_custom_field_noalign(std::uint16_t token_offset, std::uint16_t token_size,
+        static instruction make_custom_field_noalign(std::uint16_t field_offset, std::uint16_t field_size,
             std::uint16_t name_offset, std::uint8_t name_size);
-        static instruction make_custom_field_left(std::uint16_t token_offset, std::uint16_t token_size,
+        static instruction make_custom_field_left(std::uint16_t field_offset, std::uint16_t field_size,
             std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment);
-        static instruction make_custom_field_right(std::uint16_t token_offset, std::uint16_t token_size,
+        static instruction make_custom_field_right(std::uint16_t field_offset, std::uint16_t field_size,
             std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment);
-        static instruction make_custom_field_center(std::uint16_t token_offset, std::uint16_t token_size,
+        static instruction make_custom_field_center(std::uint16_t field_offset, std::uint16_t field_size,
             std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment);
 
         static instruction make_sgr_begin(std::uint8_t code);

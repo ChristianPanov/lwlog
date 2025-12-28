@@ -9,57 +9,57 @@
 namespace lwlog::details::pattern_executor
 {
 	template<typename BufferLimits>
-	static std::string_view resolve_field(pattern_bytecode::field_id id, char* conv, const record<BufferLimits>& record)
+	static std::string_view resolve_field(pattern_bytecode::builtin_field field, char* conv, const record<BufferLimits>& record)
 	{
-		switch (id)
+		switch (field)
 		{
-		case pattern_bytecode::field_id::level:
+		case pattern_bytecode::builtin_field::level:
 		{
 			return level_details::to_string(record.log_level);
 		}
-		case pattern_bytecode::field_id::message:
+		case pattern_bytecode::builtin_field::message:
 		{
 			return record.message;
 		}
-		case pattern_bytecode::field_id::thread_id:
+		case pattern_bytecode::builtin_field::thread_id:
 		{
 			const auto size{ convert_to_chars(conv, BufferLimits::conversion, 
 				record.execution_context.thread_id) };
 			return { conv, size };
 		}
-		case pattern_bytecode::field_id::process_id:
+		case pattern_bytecode::builtin_field::process_id:
 		{
 			const auto size{ convert_to_chars(conv, BufferLimits::conversion, 
 				record.execution_context.process_id) };
 			return { conv, size };
 		}
-		case pattern_bytecode::field_id::line:
+		case pattern_bytecode::builtin_field::line:
 		{
 			const auto size{ convert_to_chars(conv, BufferLimits::conversion,  
 				record.meta.line()) };
 			return { conv, size };
 		}
-		case pattern_bytecode::field_id::file:
+		case pattern_bytecode::builtin_field::file:
 		{
 			return record.meta.file_name();
 		}
-		case pattern_bytecode::field_id::path:
+		case pattern_bytecode::builtin_field::path:
 		{
 			return record.meta.file_path();
 		}
-		case pattern_bytecode::field_id::function:
+		case pattern_bytecode::builtin_field::function:
 		{
 			return record.meta.function_name();
 		}
-		case pattern_bytecode::field_id::topic:
+		case pattern_bytecode::builtin_field::topic:
 		{
 			return record.topics.topics()[record.topic_index];
 		}
-		case pattern_bytecode::field_id::full_topic:
+		case pattern_bytecode::builtin_field::full_topic:
 		{
 			return record.topics.full_topic(record.topic_index);
 		}
-		case pattern_bytecode::field_id::date:
+		case pattern_bytecode::builtin_field::date:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -73,7 +73,7 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::date_short:
+		case pattern_bytecode::builtin_field::date_short:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -87,7 +87,7 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::year:
+		case pattern_bytecode::builtin_field::year:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -97,7 +97,7 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::year_short:
+		case pattern_bytecode::builtin_field::year_short:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -107,7 +107,7 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::month:
+		case pattern_bytecode::builtin_field::month:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -117,15 +117,15 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::month_name:
+		case pattern_bytecode::builtin_field::month_name:
 		{
 			return os::datetime::month_name[record.time_point.month];
 		}
-		case pattern_bytecode::field_id::month_name_short:
+		case pattern_bytecode::builtin_field::month_name_short:
 		{
 			return os::datetime::month_name_short[record.time_point.month];
 		}
-		case pattern_bytecode::field_id::day:
+		case pattern_bytecode::builtin_field::day:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -135,15 +135,15 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::weekday:
+		case pattern_bytecode::builtin_field::weekday:
 		{
 			return os::datetime::weekday_name[record.time_point.weekday];
 		}
-		case pattern_bytecode::field_id::weekday_short:
+		case pattern_bytecode::builtin_field::weekday_short:
 		{
 			return os::datetime::weekday_name_short[record.time_point.weekday];
 		}
-		case pattern_bytecode::field_id::time:
+		case pattern_bytecode::builtin_field::time:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -157,7 +157,7 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::hour_clock_24:
+		case pattern_bytecode::builtin_field::hour_clock_24:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -169,7 +169,7 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::hour_clock_12:
+		case pattern_bytecode::builtin_field::hour_clock_12:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -184,7 +184,7 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::ampm:
+		case pattern_bytecode::builtin_field::ampm:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -192,7 +192,7 @@ namespace lwlog::details::pattern_executor
 
 			return { ampm, 2 };
 		}
-		case pattern_bytecode::field_id::hour_24:
+		case pattern_bytecode::builtin_field::hour_24:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -202,7 +202,7 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::hour_12:
+		case pattern_bytecode::builtin_field::hour_12:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -214,7 +214,7 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::minute:
+		case pattern_bytecode::builtin_field::minute:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -224,7 +224,7 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::second:
+		case pattern_bytecode::builtin_field::second:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -234,7 +234,7 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::millisecond:
+		case pattern_bytecode::builtin_field::millisecond:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -244,7 +244,7 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::microsecond:
+		case pattern_bytecode::builtin_field::microsecond:
 		{
 			const auto& time_point{ record.time_point };
 
@@ -254,7 +254,7 @@ namespace lwlog::details::pattern_executor
 
 			return { timestamp.data(), timestamp.size() };
 		}
-		case pattern_bytecode::field_id::nanosecond:
+		case pattern_bytecode::builtin_field::nanosecond:
 		{
 			const auto& time_point{ record.time_point };
 
