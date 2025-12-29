@@ -111,7 +111,5 @@ namespace lwlog::details
             }
             }
         }
-
-        m_should_relink_custom_fields = false;
     }
 }

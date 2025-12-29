@@ -36,8 +36,6 @@ namespace lwlog::details
 	private:
 		std::vector<custom_field> m_attributes;
 		pattern_bytecode::instruction_list m_instructions;
-
-		bool m_should_relink_custom_fields{ true };
 	};
 }
 
