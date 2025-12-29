@@ -81,6 +81,7 @@ namespace lwlog::details::pattern_bytecode
         std::uint16_t offset; 
         std::uint8_t size;
     };
+
     struct sgr_payload 
     { 
         char seq[6]; 
@@ -116,7 +117,7 @@ namespace lwlog::details::pattern_bytecode
         std::uint8_t name_size;
         std::uint8_t index;
         char fill_char;
-        std::uint8_t  width;
+        std::uint8_t width;
     };
 
     struct instruction

@@ -25,7 +25,6 @@ namespace lwlog
 		static_assert(std::is_same_v<ConvLimit, conv_limit<ConvLimit::Value>>,
 			"ConvLimit must be of type conv_limit.");
 
-		static constexpr std::size_t cached_pattern{ PatternLimit::Value };
 		static constexpr std::size_t pattern{ PatternLimit::Value };
 		static constexpr std::size_t message{ MessageLimit::Value };
 		static constexpr std::size_t argument{ ArgumentLimit::Value };
