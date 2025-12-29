@@ -25,7 +25,7 @@ namespace lwlog::details
 		void add_custom_field(std::string_view name, custom_value value, const custom_format_fn& fn);
 
 	private:
-		void link_custom_fields_if_needed();
+		void link_custom_fields();
 
 	private:
 		details::memory_buffer<BufferLimits::pattern> m_pattern_src;

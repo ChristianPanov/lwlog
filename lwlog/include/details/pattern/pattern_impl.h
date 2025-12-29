@@ -7,8 +7,6 @@ namespace lwlog::details
 	template<typename BufferLimits>
 	const char* pattern<BufferLimits>::compile(const details::record<BufferLimits>& record)
 	{
-		this->link_custom_fields_if_needed();
-
         m_out.reset();
 
 		pattern_executor::pattern_context<BufferLimits> ctx{ 
@@ -38,31 +36,26 @@ namespace lwlog::details
 		parser.init(m_pattern_src.c_str(), m_pattern_src.size(), enable_color);
 		parser.parse_sequence(m_instructions);
 
-		m_should_relink_custom_fields = true;
+        this->link_custom_fields();
 	}
 
 	template<typename BufferLimits>
 	void pattern<BufferLimits>::add_custom_field(std::string_view name, custom_value value)
 	{
 		m_attributes.emplace_back(name, value);
-		m_should_relink_custom_fields = true;
+        this->link_custom_fields();
 	}
 
 	template<typename BufferLimits>
 	void pattern<BufferLimits>::add_custom_field(std::string_view name, custom_value value, const custom_format_fn& fn)
 	{
 		m_attributes.emplace_back(name, value, fn);
-		m_should_relink_custom_fields = true;
+        this->link_custom_fields();
 	}
 
     template<typename BufferLimits>
-    void pattern<BufferLimits>::link_custom_fields_if_needed()
+    void pattern<BufferLimits>::link_custom_fields()
     {
-        if (!m_should_relink_custom_fields)
-        {
-            return;
-        }
-
         const char* src{ m_pattern_src.c_str() };
 
         auto find_index{ [&](std::uint16_t offset, std::uint8_t size) -> std::uint8_t
