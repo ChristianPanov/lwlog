@@ -119,8 +119,8 @@ namespace lwlog::details::pattern_compiler
         }
     }
 
-    void parser::emit_custom_instruction(pattern_bytecode::instruction_list& out, std::uint16_t field_offset,
-        std::uint8_t field_size, std::uint16_t name_offset, std::uint8_t name_size,
+    void parser::emit_custom_instruction(pattern_bytecode::instruction_list& out, 
+        std::uint16_t field_offset, std::uint16_t name_offset, std::uint8_t field_size, std::uint8_t name_size,
         const pattern_bytecode::alignment_info& alignment)
     {
         m_pending_literal_begin = m_pos;
@@ -128,18 +128,18 @@ namespace lwlog::details::pattern_compiler
         if (alignment.width == 0)
         {
             out.push_back(pattern_bytecode::instruction::make_custom_field_noalign(
-                field_offset, field_size, name_offset, name_size));
+                field_offset, name_offset, field_size, name_size));
             return;
         }
 
         switch (alignment.side_char)
         {
         case '<': out.push_back(pattern_bytecode::instruction::make_custom_field_left(
-            field_offset, field_size, name_offset, name_size, alignment)); return;
+            field_offset, name_offset, field_size, name_size, alignment)); return;
         case '>': out.push_back(pattern_bytecode::instruction::make_custom_field_right(
-            field_offset, field_size, name_offset, name_size, alignment)); return;
+            field_offset, name_offset, field_size, name_size, alignment)); return;
         case '^': out.push_back(pattern_bytecode::instruction::make_custom_field_center(
-            field_offset, field_size, name_offset, name_size, alignment)); return;
+            field_offset, name_offset, field_size, name_size, alignment)); return;
         }
     }
 
@@ -430,7 +430,7 @@ namespace lwlog::details::pattern_compiler
         {
             const std::uint16_t field_offset{ static_cast<std::uint16_t>(start) };
             const std::uint8_t field_size{ static_cast<std::uint8_t>(m_pos - start) };
-            this->emit_custom_instruction(out, field_offset, field_size, name_offset, name_size, alignment);
+            this->emit_custom_instruction(out, field_offset, name_offset, field_size, name_size, alignment);
             break;
         }
         default:

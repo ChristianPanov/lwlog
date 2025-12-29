@@ -27,8 +27,8 @@ namespace lwlog::details::pattern_compiler
         void emit_field_instruction(pattern_bytecode::instruction_list& out, pattern_bytecode::builtin_field field,
             const pattern_bytecode::alignment_info& alignment);
         void emit_custom_instruction(pattern_bytecode::instruction_list& out, 
-            std::uint16_t field_offset, std::uint8_t field_size,
-            std::uint16_t name_offset, std::uint8_t name_size, const pattern_bytecode::alignment_info& alignment);
+            std::uint16_t field_offset, std::uint16_t name_offset, 
+            std::uint8_t field_size, std::uint8_t name_size, const pattern_bytecode::alignment_info& alignment);
         void emit_sgr_begin_instruction(pattern_bytecode::instruction_list& out, std::uint8_t code);
         void emit_sgr_end_instruction(pattern_bytecode::instruction_list& out);
         void emit_sgr_begin_level_instruction(pattern_bytecode::instruction_list& out);

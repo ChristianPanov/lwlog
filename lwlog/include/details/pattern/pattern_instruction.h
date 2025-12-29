@@ -143,14 +143,14 @@ namespace lwlog::details::pattern_bytecode
         static instruction make_field_right(builtin_field field, const alignment_info& alignment);
         static instruction make_field_center(builtin_field field, const alignment_info& alignment);
 
-        static instruction make_custom_field_noalign(std::uint16_t field_offset, std::uint8_t field_size,
-            std::uint16_t name_offset, std::uint8_t name_size);
-        static instruction make_custom_field_left(std::uint16_t field_offset, std::uint8_t field_size,
-            std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment);
-        static instruction make_custom_field_right(std::uint16_t field_offset, std::uint8_t field_size,
-            std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment);
-        static instruction make_custom_field_center(std::uint16_t field_offset, std::uint8_t field_size,
-            std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment);
+        static instruction make_custom_field_noalign(std::uint16_t field_offset, std::uint16_t name_offset, 
+            std::uint8_t field_size, std::uint8_t name_size);
+        static instruction make_custom_field_left(std::uint16_t field_offset, std::uint16_t name_offset, 
+            std::uint8_t field_size, std::uint8_t name_size, const alignment_info& alignment);
+        static instruction make_custom_field_right(std::uint16_t field_offset, std::uint16_t name_offset,
+            std::uint8_t field_size, std::uint8_t name_size, const alignment_info& alignment);
+        static instruction make_custom_field_center(std::uint16_t field_offset, std::uint16_t name_offset,
+            std::uint8_t field_size, std::uint8_t name_size, const alignment_info& alignment);
 
         static instruction make_sgr_begin(std::uint8_t code);
         static instruction make_sgr_end();

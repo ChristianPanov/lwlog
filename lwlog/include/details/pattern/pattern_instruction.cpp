@@ -47,8 +47,8 @@ namespace lwlog::details::pattern_bytecode
         return instr;
     }
 
-    instruction instruction::make_custom_field_noalign(std::uint16_t field_offset, std::uint8_t field_size,
-        std::uint16_t name_offset, std::uint8_t name_size)
+    instruction instruction::make_custom_field_noalign(std::uint16_t field_offset, std::uint16_t name_offset, 
+        std::uint8_t field_size, std::uint8_t name_size)
     {
         instruction instr{};
         instr.code = op_code::custom_field_noalign;
@@ -57,8 +57,8 @@ namespace lwlog::details::pattern_bytecode
         return instr;
     }
 
-    instruction instruction::make_custom_field_left(std::uint16_t field_offset, std::uint8_t field_size,
-        std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment)
+    instruction instruction::make_custom_field_left(std::uint16_t field_offset, std::uint16_t name_offset,
+        std::uint8_t field_size, std::uint8_t name_size, const alignment_info& alignment)
     {
         instruction instr{};
         instr.code = op_code::custom_field_align_left;
@@ -68,8 +68,8 @@ namespace lwlog::details::pattern_bytecode
         return instr;
     }
 
-    instruction instruction::make_custom_field_right(std::uint16_t field_offset, std::uint8_t field_size,
-        std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment)
+    instruction instruction::make_custom_field_right(std::uint16_t field_offset, std::uint16_t name_offset,
+        std::uint8_t field_size, std::uint8_t name_size, const alignment_info& alignment)
     {
         instruction instr{};
         instr.code = op_code::custom_field_align_right;
@@ -79,8 +79,8 @@ namespace lwlog::details::pattern_bytecode
         return instr;
     }
 
-    instruction instruction::make_custom_field_center(std::uint16_t field_offset, std::uint8_t field_size,
-        std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment)
+    instruction instruction::make_custom_field_center(std::uint16_t field_offset, std::uint16_t name_offset,
+        std::uint8_t field_size, std::uint8_t name_size, const alignment_info& alignment)
     {
         instruction instr{};
         instr.code = op_code::custom_field_align_center;
