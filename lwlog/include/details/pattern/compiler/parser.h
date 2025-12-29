@@ -4,7 +4,7 @@
 #include <cstdint>
 
 #include "details/pattern/pattern_instruction.h"
-#include "details/sgr_resolver.h"
+#include "details/terminal/sgr_resolver.h"
 
 namespace lwlog::details::pattern_compiler
 {
@@ -23,15 +23,14 @@ namespace lwlog::details::pattern_compiler
         bool parse_sequence(pattern_bytecode::instruction_list& out, char until = '\0', bool allow_color = true);
 
     private:
-        void emit_literal_instruction(pattern_bytecode::instruction_list& out, std::uint16_t offset, std::uint8_t size);
+        void emit_literal_instruction(pattern_bytecode::instruction_list& out, std::uint16_t offset, std::uint16_t size);
         void emit_field_instruction(pattern_bytecode::instruction_list& out, pattern_bytecode::builtin_field field,
             const pattern_bytecode::alignment_info& alignment);
         void emit_custom_instruction(pattern_bytecode::instruction_list& out, 
             std::uint16_t field_offset, std::uint16_t name_offset, 
             std::uint8_t field_size, std::uint8_t name_size, const pattern_bytecode::alignment_info& alignment);
-        void emit_sgr_begin_instruction(pattern_bytecode::instruction_list& out, std::uint8_t code);
-        void emit_sgr_end_instruction(pattern_bytecode::instruction_list& out);
-        void emit_sgr_begin_level_instruction(pattern_bytecode::instruction_list& out);
+        void emit_sgr_instruction(pattern_bytecode::instruction_list& out, std::uint8_t code);
+        void emit_sgr_level_instruction(pattern_bytecode::instruction_list& out);
 
         void flush_pending_literal(pattern_bytecode::instruction_list& out, std::uint16_t literal_end_offset);
 

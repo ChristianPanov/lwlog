@@ -22,9 +22,8 @@ namespace lwlog::details::pattern_bytecode
         custom_field_align_right,
         custom_field_align_center,
 
-        sgr_begin,
-        sgr_reset, 
-        sgr_begin_level
+        sgr,
+        sgr_level
     };
      
     enum class builtin_field : std::uint8_t
@@ -79,13 +78,12 @@ namespace lwlog::details::pattern_bytecode
     struct literal_payload 
     { 
         std::uint16_t offset; 
-        std::uint8_t size;
+        std::uint16_t size;
     };
 
     struct sgr_payload 
     { 
-        char seq[6]; 
-        std::uint8_t size; 
+        std::uint8_t code; 
     };
 
     struct field_noalign_payload 
@@ -128,8 +126,8 @@ namespace lwlog::details::pattern_bytecode
         {
             literal_payload literal;
 
-            field_align_payload field_align;
             field_noalign_payload field_noalign;
+            field_align_payload field_align;
 
             custom_field_noalign_payload custom_field_noalign;
             custom_field_align_payload custom_field_align;
@@ -137,7 +135,7 @@ namespace lwlog::details::pattern_bytecode
             sgr_payload sgr;
         } u;
 
-        static instruction make_literal(std::uint16_t offset, std::uint8_t size);
+        static instruction make_literal(std::uint16_t offset, std::uint16_t size);
 
         static instruction make_field_noalign(builtin_field field);
         static instruction make_field_left(builtin_field field, const alignment_info& alignment);
@@ -153,9 +151,8 @@ namespace lwlog::details::pattern_bytecode
         static instruction make_custom_field_center(std::uint16_t field_offset, std::uint16_t name_offset,
             std::uint8_t field_size, std::uint8_t name_size, const alignment_info& alignment);
 
-        static instruction make_sgr_begin(std::uint8_t code);
-        static instruction make_sgr_end();
-        static instruction make_sgr_begin_level();
+        static instruction make_sgr(std::uint8_t code);
+        static instruction make_sgr_level();
     };
 
     using instruction_list = std::vector<instruction>;

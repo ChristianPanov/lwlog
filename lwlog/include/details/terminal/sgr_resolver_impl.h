@@ -1,6 +1,6 @@
 #pragma once
 
-namespace lwlog::details
+namespace lwlog::details::terminal
 {
 	inline bool sgr_resolver::try_resolve_code(std::string_view token, std::uint8_t& out_code)
 	{

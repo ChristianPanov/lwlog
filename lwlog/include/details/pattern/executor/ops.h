@@ -3,7 +3,7 @@
 #include "context.h"
 #include "field_resolver.h"
 #include "details/pattern/pattern_instruction.h"
-#include "details/sgr_resolver.h"
+#include "details/terminal/sgr_table.h"
 
 namespace lwlog::details::pattern_executor::op
 {
@@ -146,19 +146,14 @@ namespace lwlog::details::pattern_executor::op
     }
 
     template<typename BufferLimits>
-    void sgr_begin(pattern_context<BufferLimits>& ctx, const pattern_bytecode::sgr_payload& payload)
+    void sgr(pattern_context<BufferLimits>& ctx, const pattern_bytecode::sgr_payload& payload)
     {
-        ctx.out.append(payload.seq, payload.size);
+        const auto& entry{ terminal::sgr_table[payload.code] };
+        ctx.out.append(entry.seq, entry.size);
     }
 
     template<typename BufferLimits>
-    void sgr_reset(pattern_context<BufferLimits>& ctx)
-    {
-        ctx.out.append(sgr_resolver::reset, sgr_resolver::reset_size);
-    }
-
-    template<typename BufferLimits>
-    void sgr_begin_level(pattern_context<BufferLimits>& ctx)
+    void sgr_level(pattern_context<BufferLimits>& ctx)
     {
         ctx.out.append(level_details::to_color(ctx.record.log_level));
     }

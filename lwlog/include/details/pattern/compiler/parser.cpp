@@ -50,7 +50,7 @@ namespace lwlog::details::pattern_compiler
                 }
                 else
                 {
-                    const std::uint8_t literal_size{ static_cast<std::uint8_t>((start + 1 < m_size) ? 2 : 1) };
+                    const std::uint16_t literal_size{ static_cast<std::uint16_t>((start + 1 < m_size) ? 2 : 1) };
                     this->emit_literal_instruction(out, start, literal_size);
 
                     m_pos = start + literal_size;
@@ -95,7 +95,7 @@ namespace lwlog::details::pattern_compiler
     }
 
     void parser::emit_literal_instruction(pattern_bytecode::instruction_list& out,
-        std::uint16_t offset, std::uint8_t size)
+        std::uint16_t offset, std::uint16_t size)
     {
         out.push_back(pattern_bytecode::instruction::make_literal(offset, size));
     }
@@ -143,26 +143,21 @@ namespace lwlog::details::pattern_compiler
         }
     }
 
-    void parser::emit_sgr_begin_instruction(pattern_bytecode::instruction_list& out, std::uint8_t code)
+    void parser::emit_sgr_instruction(pattern_bytecode::instruction_list& out, std::uint8_t code)
     {
-        out.push_back(pattern_bytecode::instruction::make_sgr_begin(code));
+        out.push_back(pattern_bytecode::instruction::make_sgr(code));
     }
 
-    void parser::emit_sgr_end_instruction(pattern_bytecode::instruction_list& out)
+    void parser::emit_sgr_level_instruction(pattern_bytecode::instruction_list& out)
     {
-        out.push_back(pattern_bytecode::instruction::make_sgr_end());
-    }
-
-    void parser::emit_sgr_begin_level_instruction(pattern_bytecode::instruction_list& out)
-    {
-        out.push_back(pattern_bytecode::instruction::make_sgr_begin_level());
+        out.push_back(pattern_bytecode::instruction::make_sgr_level());
     }
 
     void parser::flush_pending_literal(pattern_bytecode::instruction_list& out, std::uint16_t literal_end_offset)
     {
         if (literal_end_offset > m_pending_literal_begin)
         {
-            const std::uint8_t literal_size{ static_cast<std::uint8_t>(literal_end_offset - m_pending_literal_begin) };
+            const std::uint16_t literal_size{ static_cast<std::uint16_t>(literal_end_offset - m_pending_literal_begin) };
             this->emit_literal_instruction(out, m_pending_literal_begin, literal_size);
 
             m_pending_literal_begin = literal_end_offset;
@@ -235,7 +230,7 @@ namespace lwlog::details::pattern_compiler
             return field_parse_result::builtin;
         }
 
-        out_name_offset = static_cast<std::uint16_t>(name_begin);
+        out_name_offset = name_begin;
         out_name_size = name_length;
 
         return field_parse_result::custom;
@@ -250,7 +245,7 @@ namespace lwlog::details::pattern_compiler
 
         char fill_char{ ' ' };
         char side_char{};
-        std::uint32_t width{};
+        std::uint8_t width{};
 
         if (parser::is_align(m_src[m_pos]))
         {
@@ -283,9 +278,9 @@ namespace lwlog::details::pattern_compiler
 
         while (m_pos < m_size && parser::is_digit(m_src[m_pos]))
         {
-            width = width * 10U + unsigned(m_src[m_pos] - '0');
+            width = static_cast<std::uint8_t>(width * 10U + unsigned(m_src[m_pos] - '0'));
 
-            if (width > 255u) 
+            if (width > 255U) 
             {
                 return false;
             }
@@ -295,7 +290,7 @@ namespace lwlog::details::pattern_compiler
 
         out.fill_char = fill_char;
         out.side_char = side_char;
-        out.width = static_cast<std::uint8_t>(width);
+        out.width = width;
 
         return true;
     }
@@ -307,7 +302,7 @@ namespace lwlog::details::pattern_compiler
 
         std::uint16_t name_end{ name_begin };
 
-        while (name_end < m_size && sgr_resolver::is_base_name_char(m_src[name_end]))
+        while (name_end < m_size && terminal::sgr_resolver::is_base_name_char(m_src[name_end]))
         {
             ++name_end;
         }
@@ -323,7 +318,7 @@ namespace lwlog::details::pattern_compiler
         const bool is_level_name{ (name == "level") };
 
         std::uint8_t sgr_code{};
-        const bool is_valid_sgr{ sgr_resolver::try_resolve_code(name, sgr_code) };
+        const bool is_valid_sgr{ terminal::sgr_resolver::try_resolve_code(name, sgr_code) };
 
 
         if (!is_level_name && !is_valid_sgr)
@@ -342,11 +337,11 @@ namespace lwlog::details::pattern_compiler
         {
             if (is_level_name)
             {
-                this->emit_sgr_begin_level_instruction(out);
+                this->emit_sgr_level_instruction(out);
             }
             else
             {
-                this->emit_sgr_begin_instruction(out, sgr_code);
+                this->emit_sgr_instruction(out, sgr_code);
             }
         }
 
@@ -361,7 +356,7 @@ namespace lwlog::details::pattern_compiler
 
         if (m_enable_color)
         {
-            this->emit_sgr_end_instruction(out);
+            this->emit_sgr_instruction(out, 0);
         }
 
         return true;
@@ -428,7 +423,7 @@ namespace lwlog::details::pattern_compiler
         }
         case field_parse_result::custom:
         {
-            const std::uint16_t field_offset{ static_cast<std::uint16_t>(start) };
+            const std::uint16_t field_offset{ start };
             const std::uint8_t field_size{ static_cast<std::uint8_t>(m_pos - start) };
             this->emit_custom_instruction(out, field_offset, name_offset, field_size, name_size, alignment);
             break;

@@ -5,7 +5,7 @@
 
 #include "details/memory_buffer.h"
 
-namespace lwlog::details
+namespace lwlog::details::terminal
 {
 	struct sgr_color_spec
 	{
@@ -30,10 +30,6 @@ namespace lwlog::details
 	{
 		enum class color_channel_offset { foreground = 0, background = 10 };
 		static constexpr std::uint8_t intensity_offset{ 60 };
-
-	public:
-		static constexpr const char* reset{ "\x1b[0m" };
-		static constexpr std::size_t reset_size{ 4 };
 
 	public:
 		static bool try_resolve_code(std::string_view token, std::uint8_t& out_code);

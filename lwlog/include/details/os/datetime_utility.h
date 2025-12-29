@@ -60,9 +60,9 @@ namespace lwlog::details::os::datetime
 		#endif
 	}();
 
-	static std::uint8_t handle_timezone(std::uint8_t hour);
+	std::uint8_t handle_timezone(std::uint8_t hour);
 
-	static std::uint8_t to_12h(std::uint8_t hour);
+	std::uint8_t to_12h(std::uint8_t hour);
 
     template<std::size_t Size>
     struct timestamp_builder

@@ -7,7 +7,7 @@
 namespace lwlog::details::pattern_executor
 {
     template<typename BufferLimits>
-    static void execute(pattern_context<BufferLimits>& ctx, const pattern_bytecode::instruction_list& instructions)
+    void execute(pattern_context<BufferLimits>& ctx, const pattern_bytecode::instruction_list& instructions)
     {
         for (const auto& instr : instructions)
         {
@@ -25,9 +25,8 @@ namespace lwlog::details::pattern_executor
             case pattern_bytecode::op_code::custom_field_align_right:op::custom_field_align_right(ctx, instr.u.custom_field_align); break;
             case pattern_bytecode::op_code::custom_field_align_center:op::custom_field_align_center(ctx, instr.u.custom_field_align); break;
 
-            case pattern_bytecode::op_code::sgr_begin: op::sgr_begin(ctx, instr.u.sgr); break;
-            case pattern_bytecode::op_code::sgr_reset: op::sgr_reset(ctx); break;
-            case pattern_bytecode::op_code::sgr_begin_level: op::sgr_begin_level(ctx); break;
+            case pattern_bytecode::op_code::sgr: op::sgr(ctx, instr.u.sgr); break;
+            case pattern_bytecode::op_code::sgr_level: op::sgr_level(ctx); break;
             }
         }
     }

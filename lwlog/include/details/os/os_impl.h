@@ -2,7 +2,7 @@
 
 namespace lwlog::details::os
 {
-	static std::uint64_t get_thread_id()
+	inline std::uint64_t get_thread_id()
 	{
 		std::uint64_t thread_id{};
 
@@ -19,7 +19,7 @@ namespace lwlog::details::os
 		return thread_id;
 	}
 
-	static std::uint64_t get_process_id()
+	inline std::uint64_t get_process_id()
 	{		
 		#if defined(_WIN32)
 				return static_cast<std::uint64_t>(::GetCurrentProcessId());
@@ -28,7 +28,7 @@ namespace lwlog::details::os
 		#endif
 	}
 
-	static void set_thread_affinity(std::uint64_t affinity_mask)
+	inline void set_thread_affinity(std::uint64_t affinity_mask)
 	{
 		#ifdef _WIN32
 			const ::DWORD_PTR mask = static_cast<::DWORD_PTR>(affinity_mask);
@@ -58,34 +58,6 @@ namespace lwlog::details::os
 			if(::thread_policy_set(mach_thread, 
 				THREAD_AFFINITY_POLICY, reinterpret_cast<thread_policy_t>(&policy),
 				THREAD_AFFINITY_POLICY_COUNT) != KERN_SUCCESS) return;
-		#endif
-	}
-
-	static bool are_ansi_colors_enabled()
-	{
-		#ifdef _WIN32
-			const ::HANDLE handle{ ::GetStdHandle(STD_OUTPUT_HANDLE) };
-			::DWORD mode{};
-
-			return ::GetConsoleMode(handle, &mode) &&
-				(mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING);
-		#else
-			return true;
-		#endif
-	}
-
-	static void enable_ansi_colors()
-	{
-		#ifdef _WIN32
-			const ::HANDLE handle{ ::GetStdHandle(STD_OUTPUT_HANDLE) };
-			::DWORD mode{};
-
-			if (handle == INVALID_HANDLE_VALUE) return;
-			if (!::GetConsoleMode(handle, &mode)) return;
-
-			mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-
-			if (!::SetConsoleMode(handle, mode)) return;
 		#endif
 	}
 }

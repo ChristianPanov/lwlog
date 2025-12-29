@@ -5,9 +5,9 @@ namespace lwlog::sinks
 	template<bool EnableAnsiColors, typename BufferLimits, typename ThreadingPolicy>
 	sink<EnableAnsiColors, BufferLimits, ThreadingPolicy>::sink()
 	{
-		if (!details::os::are_ansi_colors_enabled())
+		if (!details::terminal::are_colors_supported())
 		{
-			details::os::enable_ansi_colors();
+			details::terminal::enable_colors();
 		}
 
 		m_pattern.set_pattern("[%d, %T] [%l] [%n]: %v", EnableAnsiColors);

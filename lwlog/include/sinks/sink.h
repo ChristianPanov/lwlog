@@ -1,6 +1,7 @@
 #pragma once
 
 #include "level.h"
+#include "details/terminal/terminal.h"
 #include "details/pattern/pattern.h"
 #include "policy/flush_policy.h"
 #include "policy/threading_policy.h"

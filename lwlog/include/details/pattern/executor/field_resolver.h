@@ -9,7 +9,7 @@
 namespace lwlog::details::pattern_executor
 {
 	template<typename BufferLimits>
-	static std::string_view resolve_field(pattern_bytecode::builtin_field field, char* conv, const record<BufferLimits>& record)
+	std::string_view resolve_field(pattern_bytecode::builtin_field field, char* conv, const record<BufferLimits>& record)
 	{
 		switch (field)
 		{

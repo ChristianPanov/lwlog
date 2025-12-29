@@ -2,7 +2,7 @@
 
 namespace lwlog::details::pattern_bytecode
 {
-    instruction instruction::make_literal(std::uint16_t offset, std::uint8_t size)
+    instruction instruction::make_literal(std::uint16_t offset, std::uint16_t size)
     {
         instruction instr{};
         instr.code = op_code::literal;
@@ -52,7 +52,8 @@ namespace lwlog::details::pattern_bytecode
     {
         instruction instr{};
         instr.code = op_code::custom_field_noalign;
-        instr.u.custom_field_noalign = { field_offset, name_offset, field_size, name_size, invalid_custom_index };
+        instr.u.custom_field_noalign = custom_field_noalign_payload{ field_offset, name_offset, 
+            field_size, name_size, invalid_custom_index };
 
         return instr;
     }
@@ -62,7 +63,7 @@ namespace lwlog::details::pattern_bytecode
     {
         instruction instr{};
         instr.code = op_code::custom_field_align_left;
-        instr.u.custom_field_align = { field_offset, name_offset, field_size, name_size, 
+        instr.u.custom_field_align = custom_field_align_payload{ field_offset, name_offset, field_size, name_size, 
             invalid_custom_index, alignment.fill_char, alignment.width };
 
         return instr;
@@ -73,7 +74,7 @@ namespace lwlog::details::pattern_bytecode
     {
         instruction instr{};
         instr.code = op_code::custom_field_align_right;
-        instr.u.custom_field_align = { field_offset, name_offset, field_size, name_size,
+        instr.u.custom_field_align = custom_field_align_payload{ field_offset, name_offset, field_size, name_size,
             invalid_custom_index, alignment.fill_char, alignment.width };
 
         return instr;
@@ -84,53 +85,25 @@ namespace lwlog::details::pattern_bytecode
     {
         instruction instr{};
         instr.code = op_code::custom_field_align_center;
-        instr.u.custom_field_align = { field_offset, name_offset, field_size, name_size,
+        instr.u.custom_field_align = custom_field_align_payload{ field_offset, name_offset, field_size, name_size,
             invalid_custom_index, alignment.fill_char, alignment.width };
 
         return instr;
     }
 
-    instruction instruction::make_sgr_begin(std::uint8_t code)
-    {
+    instruction instruction::make_sgr(std::uint8_t code)
+    { 
         instruction instr{};
-        instr.code = op_code::sgr_begin;
-
-        char* seq{ instr.u.sgr.seq };
-        std::uint8_t n{ 2 };
-
-        seq[0] = '\x1b';
-        seq[1] = '[';
-
-        if (code >= 100)
-        {
-            seq[n++] = '1';
-            seq[n++] = char('0' + (code / 10) % 10);
-            seq[n++] = char('0' + (code % 10));
-        }
-        else
-        {
-            seq[n++] = char('0' + (code / 10));
-            seq[n++] = char('0' + (code % 10));
-        }
-
-        seq[n++] = 'm';
-        instr.u.sgr.size = n;
+        instr.code = op_code::sgr;
+        instr.u.sgr = sgr_payload{ code };
 
         return instr;
     }
 
-    instruction instruction::make_sgr_end()
+    instruction instruction::make_sgr_level()
     {
         instruction instr{};
-        instr.code = op_code::sgr_reset;
-
-        return instr;
-    }
-
-    instruction instruction::make_sgr_begin_level()
-    {
-        instruction instr{};
-        instr.code = op_code::sgr_begin_level;
+        instr.code = op_code::sgr_level;
 
         return instr;
     }

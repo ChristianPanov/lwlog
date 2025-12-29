@@ -16,24 +16,16 @@
 
 namespace lwlog::details::os
 {
-	static std::uint64_t get_thread_id();
-	static std::uint64_t get_process_id();
+	std::uint64_t get_thread_id();
+	std::uint64_t get_process_id();
 
 	struct execution_context
 	{
-		execution_context()
-			: thread_id{ get_thread_id() }
-			, process_id{ get_process_id() }
-		{}
-
-		std::uint64_t thread_id;
-		std::uint64_t process_id;
+		std::uint64_t thread_id{ get_thread_id() };
+		std::uint64_t process_id{ get_process_id() };
 	};
 
-	static void set_thread_affinity(std::uint64_t affinity_mask);
-
-	static bool are_ansi_colors_enabled();
-	static void enable_ansi_colors();
+	void set_thread_affinity(std::uint64_t affinity_mask);
 }
 
 #include "os_impl.h"
