@@ -245,7 +245,7 @@ namespace lwlog::details::pattern_compiler
 
         char fill_char{ ' ' };
         char side_char{};
-        std::uint8_t width{};
+        std::uint32_t width{};
 
         if (parser::is_align(m_src[m_pos]))
         {
@@ -278,7 +278,7 @@ namespace lwlog::details::pattern_compiler
 
         while (m_pos < m_size && parser::is_digit(m_src[m_pos]))
         {
-            width = static_cast<std::uint8_t>(width * 10U + unsigned(m_src[m_pos] - '0'));
+            width = width * 10U + unsigned(m_src[m_pos] - '0');
 
             if (width > 255U) 
             {
@@ -290,7 +290,7 @@ namespace lwlog::details::pattern_compiler
 
         out.fill_char = fill_char;
         out.side_char = side_char;
-        out.width = width;
+        out.width = static_cast<std::uint8_t>(width);
 
         return true;
     }
