@@ -65,11 +65,11 @@ namespace lwlog::details
 
         const char* src{ m_pattern_src.c_str() };
 
-        auto find_index{ [&](std::uint16_t offset, std::uint8_t size) -> std::uint16_t
+        auto find_index{ [&](std::uint16_t offset, std::uint8_t size) -> std::uint8_t
             {
                 const std::string_view name{ src + offset, size };
 
-                for (std::uint16_t i = 0; i < m_attributes.size(); ++i)
+                for (std::size_t i = 0; i < m_attributes.size(); ++i)
                 {
                     if (m_attributes[i].name == name)
                     {

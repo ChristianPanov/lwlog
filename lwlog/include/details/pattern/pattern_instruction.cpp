@@ -2,7 +2,7 @@
 
 namespace lwlog::details::pattern_bytecode
 {
-    instruction instruction::make_literal(std::uint16_t offset, std::uint16_t size)
+    instruction instruction::make_literal(std::uint16_t offset, std::uint8_t size)
     {
         instruction instr{};
         instr.code = op_code::literal;
@@ -47,45 +47,45 @@ namespace lwlog::details::pattern_bytecode
         return instr;
     }
 
-    instruction instruction::make_custom_field_noalign(std::uint16_t field_offset, std::uint16_t field_size,
+    instruction instruction::make_custom_field_noalign(std::uint16_t field_offset, std::uint8_t field_size,
         std::uint16_t name_offset, std::uint8_t name_size)
     {
         instruction instr{};
         instr.code = op_code::custom_field_noalign;
-        instr.u.custom_field_noalign = { invalid_custom_index, field_offset, field_size, name_offset, name_size };
+        instr.u.custom_field_noalign = { field_offset, name_offset, field_size, name_size, invalid_custom_index };
 
         return instr;
     }
 
-    instruction instruction::make_custom_field_left(std::uint16_t field_offset, std::uint16_t field_size,
+    instruction instruction::make_custom_field_left(std::uint16_t field_offset, std::uint8_t field_size,
         std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment)
     {
         instruction instr{};
         instr.code = op_code::custom_field_align_left;
-        instr.u.custom_field_align = { invalid_custom_index, field_offset, field_size,
-            name_offset, name_size, alignment.fill_char, alignment.width };
+        instr.u.custom_field_align = { field_offset, name_offset, field_size, name_size, 
+            invalid_custom_index, alignment.fill_char, alignment.width };
 
         return instr;
     }
 
-    instruction instruction::make_custom_field_right(std::uint16_t field_offset, std::uint16_t field_size,
+    instruction instruction::make_custom_field_right(std::uint16_t field_offset, std::uint8_t field_size,
         std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment)
     {
         instruction instr{};
         instr.code = op_code::custom_field_align_right;
-        instr.u.custom_field_align = { invalid_custom_index, field_offset, field_size,
-            name_offset, name_size, alignment.fill_char, alignment.width };
+        instr.u.custom_field_align = { field_offset, name_offset, field_size, name_size,
+            invalid_custom_index, alignment.fill_char, alignment.width };
 
         return instr;
     }
 
-    instruction instruction::make_custom_field_center(std::uint16_t field_offset, std::uint16_t field_size,
+    instruction instruction::make_custom_field_center(std::uint16_t field_offset, std::uint8_t field_size,
         std::uint16_t name_offset, std::uint8_t name_size, const alignment_info& alignment)
     {
         instruction instr{};
         instr.code = op_code::custom_field_align_center;
-        instr.u.custom_field_align = { invalid_custom_index, field_offset, field_size,
-            name_offset, name_size, alignment.fill_char, alignment.width };
+        instr.u.custom_field_align = { field_offset, name_offset, field_size, name_size,
+            invalid_custom_index, alignment.fill_char, alignment.width };
 
         return instr;
     }

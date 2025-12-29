@@ -4,7 +4,7 @@
 
 namespace lwlog::details::pattern_compiler
 {
-    void parser::init(const char* src, std::size_t size, bool enable_color)
+    void parser::init(const char* src, std::uint16_t size, bool enable_color)
     {
         m_src = src;
         m_size = size;
@@ -43,17 +43,17 @@ namespace lwlog::details::pattern_compiler
                 this->flush_pending_literal(out, m_pos);
 
                 pattern_bytecode::builtin_field field{};
-                const std::size_t start{ m_pos };
+                const std::uint16_t start{ m_pos };
                 if (this->parse_field_short_alias(field) == field_parse_result::builtin)
                 {
                     this->emit_field_instruction(out, field, {});
                 }
                 else
                 {
-                    const std::size_t len{ static_cast<std::size_t>((start + 1 < m_size) ? 2 : 1) };
-                    this->emit_literal_instruction(out, start, len);
+                    const std::uint8_t literal_size{ static_cast<std::uint8_t>((start + 1 < m_size) ? 2 : 1) };
+                    this->emit_literal_instruction(out, start, literal_size);
 
-                    m_pos = start + len;
+                    m_pos = start + literal_size;
                     m_pending_literal_begin = m_pos;
                 }
 
@@ -95,7 +95,7 @@ namespace lwlog::details::pattern_compiler
     }
 
     void parser::emit_literal_instruction(pattern_bytecode::instruction_list& out,
-        std::uint16_t offset, std::uint16_t size)
+        std::uint16_t offset, std::uint8_t size)
     {
         out.push_back(pattern_bytecode::instruction::make_literal(offset, size));
     }
@@ -120,7 +120,7 @@ namespace lwlog::details::pattern_compiler
     }
 
     void parser::emit_custom_instruction(pattern_bytecode::instruction_list& out, std::uint16_t field_offset,
-        std::uint16_t field_size, std::uint16_t name_offset, std::uint8_t name_size,
+        std::uint8_t field_size, std::uint16_t name_offset, std::uint8_t name_size,
         const pattern_bytecode::alignment_info& alignment)
     {
         m_pending_literal_begin = m_pos;
@@ -158,12 +158,12 @@ namespace lwlog::details::pattern_compiler
         out.push_back(pattern_bytecode::instruction::make_sgr_begin_level());
     }
 
-    void parser::flush_pending_literal(pattern_bytecode::instruction_list& out, std::size_t literal_end_offset)
+    void parser::flush_pending_literal(pattern_bytecode::instruction_list& out, std::uint16_t literal_end_offset)
     {
         if (literal_end_offset > m_pending_literal_begin)
         {
-            const std::size_t len{ literal_end_offset - m_pending_literal_begin };
-            this->emit_literal_instruction(out, m_pending_literal_begin, len);
+            const std::uint8_t literal_size{ static_cast<std::uint8_t>(literal_end_offset - m_pending_literal_begin) };
+            this->emit_literal_instruction(out, m_pending_literal_begin, literal_size);
 
             m_pending_literal_begin = literal_end_offset;
         }
@@ -208,7 +208,7 @@ namespace lwlog::details::pattern_compiler
     field_parse_result parser::parse_field_name(pattern_bytecode::builtin_field& out_id,
         std::uint16_t& out_name_offset, std::uint8_t& out_name_size)
     {
-        const std::size_t name_begin{ m_pos };
+        const std::uint16_t name_begin{ m_pos };
 
         while (m_pos < m_size && m_src[m_pos] != '}' && m_src[m_pos] != ':')
         {
@@ -220,8 +220,8 @@ namespace lwlog::details::pattern_compiler
             return field_parse_result::error;
         }
 
-        const std::size_t name_end{ m_pos };
-        const std::size_t name_length{ name_end - name_begin };
+        const std::uint16_t name_end{ m_pos };
+        const std::uint8_t name_length{ static_cast<std::uint8_t>(name_end - name_begin) };
 
         if (name_length == 0)
         {
@@ -236,7 +236,7 @@ namespace lwlog::details::pattern_compiler
         }
 
         out_name_offset = static_cast<std::uint16_t>(name_begin);
-        out_name_size = static_cast<std::uint8_t>(name_length);
+        out_name_size = name_length;
 
         return field_parse_result::custom;
     }
@@ -302,10 +302,10 @@ namespace lwlog::details::pattern_compiler
 
     bool parser::parse_color(pattern_bytecode::instruction_list& out)
     {
-        const std::size_t dot_pos{ m_pos };
-        const std::size_t name_begin{ dot_pos + 1 };
+        const std::uint16_t dot_pos{ m_pos };
+        const std::uint16_t name_begin{ static_cast<std::uint16_t>(dot_pos + 1) };
 
-        std::size_t name_end{ name_begin };
+        std::uint16_t name_end{ name_begin };
 
         while (name_end < m_size && sgr_resolver::is_base_name_char(m_src[name_end]))
         {
@@ -317,29 +317,30 @@ namespace lwlog::details::pattern_compiler
             return false;
         }
 
-        const std::string_view token{ m_src + name_begin, name_end - name_begin };
+        const std::uint8_t name_size{ static_cast<std::uint8_t>(name_end - name_begin) };
+        const std::string_view name{ m_src + name_begin, name_size };
 
-        const bool is_level_token{ (token == "level") };
+        const bool is_level_name{ (name == "level") };
 
         std::uint8_t sgr_code{};
-        const bool is_valid_sgr{ sgr_resolver::try_resolve_code(token, sgr_code) };
+        const bool is_valid_sgr{ sgr_resolver::try_resolve_code(name, sgr_code) };
 
 
-        if (!is_level_token && !is_valid_sgr)
+        if (!is_level_name && !is_valid_sgr)
         {
             return false;
         }
 
-        const std::size_t saved_pos{ m_pos };
-        const std::size_t saved_literal_begin{ m_pending_literal_begin };
-        const std::size_t saved_out_size{ out.size() };
+        const std::uint16_t saved_pos{ m_pos };
+        const std::uint16_t saved_literal_begin{ m_pending_literal_begin };
+        const std::uint16_t saved_out_size{ static_cast<std::uint16_t>(out.size()) };
 
         m_pos = name_end + 1;
         m_pending_literal_begin = m_pos;
 
         if (m_enable_color)
         {
-            if (is_level_token)
+            if (is_level_name)
             {
                 this->emit_sgr_begin_level_instruction(out);
             }
@@ -368,7 +369,7 @@ namespace lwlog::details::pattern_compiler
 
     bool parser::parse_field(pattern_bytecode::instruction_list& out)
     {
-        const std::size_t start{ m_pos };
+        const std::uint16_t start{ m_pos };
         ++m_pos;
 
         m_pending_literal_begin = start;
@@ -380,7 +381,7 @@ namespace lwlog::details::pattern_compiler
 
         pattern_bytecode::builtin_field field{};
         std::uint16_t name_offset{};
-        std::uint8_t name_length{};
+        std::uint8_t name_size{};
         field_parse_result parse_result{ field_parse_result::literal };
         if (m_pos < m_size && m_src[m_pos] == '%')
         {
@@ -388,7 +389,7 @@ namespace lwlog::details::pattern_compiler
         }
         else
         {   
-            parse_result = this->parse_field_name(field, name_offset, name_length);
+            parse_result = this->parse_field_name(field, name_offset, name_size);
             if(parse_result == field_parse_result::error)
             {
                 return false;
@@ -428,8 +429,8 @@ namespace lwlog::details::pattern_compiler
         case field_parse_result::custom:
         {
             const std::uint16_t field_offset{ static_cast<std::uint16_t>(start) };
-            const std::uint16_t field_size{ static_cast<std::uint16_t>(m_pos - start) };
-            this->emit_custom_instruction(out, field_offset, field_size, name_offset, name_length, alignment);
+            const std::uint8_t field_size{ static_cast<std::uint8_t>(m_pos - start) };
+            this->emit_custom_instruction(out, field_offset, field_size, name_offset, name_size, alignment);
             break;
         }
         default:
