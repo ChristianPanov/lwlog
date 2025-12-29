@@ -27,12 +27,19 @@ namespace lwlog
                 backend.args_buffers, arg_lengths, arg_count);
         }
 
+        const details::record<BufferLimits> record{ 
+            backend.message_buffer.data(), 
+            log_level, 
+            meta, 
+            backend.topics, 
+            backend.topics.topic_index() 
+        };
+
         for (const auto& sink : backend.sink_storage)
         {
             if (sink->should_sink(log_level))
             {
-                sink->sink_it({ backend.message_buffer.data(), log_level, meta, 
-                    backend.topics, backend.topics.topic_index() });
+                sink->sink_it(record);
             }
         }
     }
@@ -86,16 +93,29 @@ namespace lwlog
             backend.arg_buffers_pool.release_args_buffer(item.args_slot_index);
         }
 
-        for (const auto& sink : backend.sink_storage)
+        if (item.meta.is_initialized())
         {
-            if (!item.meta.is_initialized())
+            const details::record<BufferLimits> record{ 
+                backend.message_buffer.data(), 
+                item.log_level, 
+                item.meta, 
+                backend.topics, 
+                item.topic_index 
+            };
+
+            for (const auto& sink : backend.sink_storage)
+            {
+                if (sink->should_sink(item.log_level))
+                {
+                    sink->sink_it(std::move(record));
+                }
+            }
+        }
+        else
+        {
+            for (const auto& sink : backend.sink_storage)
             {
                 sink->sink_it(backend.message_buffer.c_str());
-            }
-            else if (sink->should_sink(item.log_level))
-            {
-                sink->sink_it({ backend.message_buffer.data(), item.log_level,
-                    item.meta, backend.topics, item.topic_index });
             }
         }
     }

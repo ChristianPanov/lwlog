@@ -26,6 +26,7 @@ namespace lwlog::details
                 {
                     out.append("{}");
                     pos += 2;
+                    last = pos;
                     continue;
                 }
 
