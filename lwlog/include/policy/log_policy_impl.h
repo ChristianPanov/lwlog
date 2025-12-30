@@ -18,8 +18,8 @@ namespace lwlog
             std::uint8_t arg_count{ 0 };
 
             ((arg_lengths[arg_count] = details::convert_to_chars(
-                backend.args_buffers[arg_count],
-                BufferLimits::argument,
+                backend.args_buffers[arg_count], 
+                BufferLimits::argument, 
                 std::forward<Args>(args)
             ), ++arg_count), ...);
 
@@ -65,7 +65,7 @@ namespace lwlog
         std::string_view message;
         level log_level;
 
-        std::uint16_t args_slot_index{ 0 };
+        std::uint8_t args_slot_index{ 0 };
         std::uint8_t arg_count{ 0 };
         std::uint8_t topic_index{ 0 };
     };
@@ -73,10 +73,9 @@ namespace lwlog
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
     template<typename BufferLimits, typename ConcurrencyModelPolicy>
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::process_item(
-        backend<BufferLimits, ConcurrencyModelPolicy>& backend)
+        backend<BufferLimits, ConcurrencyModelPolicy>& backend, 
+        const queue_item_t<BufferLimits, ConcurrencyModelPolicy>& item)
     {
-        const auto item{ backend.queue.dequeue() };
-
         backend.message_buffer.reset();
 
         if (item.arg_count == 0)
@@ -107,7 +106,7 @@ namespace lwlog
             {
                 if (sink->should_sink(item.log_level))
                 {
-                    sink->sink_it(std::move(record));
+                    sink->sink_it(record);
                 }
             }
         }
@@ -125,7 +124,7 @@ namespace lwlog
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::init(
         backend<BufferLimits, ConcurrencyModelPolicy>& backend)
     {
-        backend.has_work.clear(std::memory_order_release);
+        backend.has_work.store(false, std::memory_order_relaxed);
         backend.shutdown.store(false, std::memory_order_relaxed);
 
         backend.worker_thread = std::thread([&backend]() 
@@ -139,20 +138,19 @@ namespace lwlog
 
                 while (!backend.shutdown.load(std::memory_order_relaxed) || !backend.queue.is_empty())
                 {
-                    if (backend.has_work.test_and_set(std::memory_order_acquire) || !backend.queue.is_empty())
-                    {
-                        adaptive_waiter.reset();
-
-                        while (!backend.queue.is_empty())
-                        {
-                            asynchronous_policy::process_item(backend);
-                        }
-
-                        backend.has_work.clear(std::memory_order_release);
-                    }
-                    else
+                    const bool signaled{ backend.has_work.exchange(false, std::memory_order_acq_rel) };
+                    if (!signaled && backend.queue.is_empty())
                     {
                         adaptive_waiter.wait();
+                        continue;
+                    }
+
+                    adaptive_waiter.reset();
+
+                    queue_item_t<BufferLimits, ConcurrencyModelPolicy> out_item;
+                    while (backend.queue.try_dequeue(out_item))
+                    {
+                        asynchronous_policy::process_item(backend, out_item);
                     }
                 }
             });
@@ -169,7 +167,7 @@ namespace lwlog
                 meta, 
                 message, 
                 log_level, 
-                static_cast<std::uint16_t>(0), 
+                static_cast<std::uint8_t>(0),
                 static_cast<std::uint8_t>(0), 
                 backend.topics.topic_index()
             );
@@ -190,7 +188,7 @@ namespace lwlog
             backend.queue.enqueue(meta, message, log_level, slot_index, arg_count, backend.topics.topic_index());
         }
 
-        backend.has_work.test_and_set(std::memory_order_release);
+        backend.has_work.store(true, std::memory_order_release);
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
@@ -202,12 +200,12 @@ namespace lwlog
             details::source_meta{}, 
             message, 
             level{}, 
-            std::uint16_t{}, 
+            std::uint8_t{},
             std::uint8_t{}, 
             std::uint8_t{}
         );
 
-        backend.has_work.test_and_set(std::memory_order_release);
+        backend.has_work.store(true, std::memory_order_release);
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>

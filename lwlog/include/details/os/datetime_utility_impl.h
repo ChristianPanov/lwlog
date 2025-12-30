@@ -5,14 +5,6 @@
 
 namespace lwlog::details::os::datetime
 {
-	inline std::uint8_t handle_timezone(std::uint8_t hour)
-    {
-		hour += cached_timezone_offset;
-		hour = (hour <= 23) ? hour : hour - 24;
-
-		return hour;
-	}
-
 	inline std::uint8_t to_12h(std::uint8_t hour)
 	{
 		return hour > 12 ? hour - 12 : hour;

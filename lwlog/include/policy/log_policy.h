@@ -56,7 +56,7 @@ namespace lwlog
 			std::vector<sink_ptr<BufferLimits>> sink_storage;
 			details::topic_registry topics;
 
-			std::atomic_flag has_work;
+			std::atomic_bool has_work;
 			std::atomic_bool shutdown;
 			std::thread worker_thread;
 
@@ -70,6 +70,10 @@ namespace lwlog
 		};
 
 		template<typename BufferLimits, typename ConcurrencyModelPolicy>
+		using queue_item_t = typename asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::
+			backend<BufferLimits, ConcurrencyModelPolicy>::queue_item;
+
+		template<typename BufferLimits, typename ConcurrencyModelPolicy>
 		static void init(backend<BufferLimits, ConcurrencyModelPolicy>& backend);
 
 		template<typename BufferLimits, typename ConcurrencyModelPolicy, typename... Args>
@@ -81,7 +85,8 @@ namespace lwlog
 
 	private:
 		template<typename BufferLimits, typename ConcurrencyModelPolicy>
-		static void process_item(backend<BufferLimits, ConcurrencyModelPolicy>& backend);
+		static void process_item(backend<BufferLimits, ConcurrencyModelPolicy>& backend, 
+			const queue_item_t<BufferLimits, ConcurrencyModelPolicy>& item);
 	};
 }
 

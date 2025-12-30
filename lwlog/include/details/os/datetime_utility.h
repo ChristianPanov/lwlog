@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <array>
 #include <charconv>
+#include <string_view>
 
 #ifdef _WIN32
 	#include "details/windows_lightweight.h"
@@ -23,44 +24,52 @@ namespace lwlog::details::os::datetime
 
 	inline const std::array<std::string_view, 7> weekday_name_short = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 
-	inline const std::int8_t cached_timezone_offset = []() {
+	inline const std::int32_t cached_timezone_offset_minutes = []() -> std::int32_t {
 		#ifdef LWLOG_LOCALTIME
-			#ifdef _WIN32
-					::TIME_ZONE_INFORMATION tz_info;
-					::GetTimeZoneInformation(&tz_info);
+            #ifdef _WIN32
+                ::TIME_ZONE_INFORMATION time_zone_info{};
+                const ::DWORD time_zone_id{ ::GetTimeZoneInformation(&time_zone_info) };
 
-					::LONG bias{ tz_info.Bias };
+                ::LONG bias_minutes = time_zone_info.Bias;
 
-					if (tz_info.StandardDate.wMonth != 0)
-					{
-						bias += tz_info.DaylightBias;
-					}
+                if (time_zone_id == TIME_ZONE_ID_DAYLIGHT)
+                {
+                    bias_minutes += time_zone_info.DaylightBias;
+                }
+                else if (time_zone_id == TIME_ZONE_ID_STANDARD)
+                {
+                    bias_minutes += time_zone_info.StandardBias;
+                }
 
-					return -bias / 60;
-			#else
-					const std::time_t now{ std::time(nullptr) };
+                return -static_cast<std::int32_t>(bias_minutes);
+            #else
+                const ::time_t now_seconds{ ::time(nullptr) };
 
-					std::tm gm_time;
-					std::tm local_time;
+                ::tm local_time{};
+                if (::localtime_r(&now_seconds, &local_time) == nullptr)
+                {
+                    return 0;
+                }
+                #if defined(__GLIBC__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
+                    return static_cast<std::int32_t>(local_time.tm_gmtoff / 60);
+                #else
+                    ::tm utc_time{};
+                    if (::gmtime_r(&now_seconds, &utc_time) == nullptr)
+                    {
+                        return 0;
+                    }
 
-					gmtime_r(&now, &gm_time);
-					localtime_r(&now, &local_time);
+                    const ::time_t local_epoch{ ::mktime(&local_time) };
+                    const ::time_t utc_epoch_as_local{ ::mktime(&utc_time) };
 
-					const std::time_t local_epoch{ std::mktime(&local_time) };
-					const std::time_t gm_epoch{ std::mktime(&gm_time) };
-
-					const std::int8_t difference{ static_cast<std::int8_t>(
-						std::difftime(local_epoch, gm_epoch) / 3600)
-					};
-
-					return difference;
-			#endif
+                    const double offset_seconds{ ::difftime(local_epoch, utc_epoch_as_local) };
+                    return static_cast<std::int32_t>(offset_seconds / 60.0);
+                #endif
+            #endif
 		#else
 			return 0;
 		#endif
 	}();
-
-	std::uint8_t handle_timezone(std::uint8_t hour);
 
 	std::uint8_t to_12h(std::uint8_t hour);
 

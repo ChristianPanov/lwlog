@@ -37,9 +37,9 @@ namespace lwlog::details
 		constexpr bool is_initialized() const;
 
 	private:
-		std::uint32_t m_line{};
 		std::string_view m_file{};
 		std::string_view m_function{};
+		std::uint32_t m_line{};
 	};
 }
 

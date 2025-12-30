@@ -1,3 +1,4 @@
+#include "bounded_queue.h"
 #pragma once
 
 namespace lwlog::details
@@ -122,30 +123,27 @@ namespace lwlog::details
     }
 
     template<std::size_t Capacity, typename T, typename OverflowPolicy, typename ConcurrencyModelPolicy>
-    T bounded_queue<Capacity, T, OverflowPolicy, ConcurrencyModelPolicy>::dequeue()
+    bool bounded_queue<Capacity, T, OverflowPolicy, ConcurrencyModelPolicy>::try_dequeue(T& out)
     {
-        for (;;)
+        const std::size_t write_index{ m_write_index.load(std::memory_order_acquire) };
+        const std::size_t read_index{ m_read_index.load(std::memory_order_relaxed) };
+
+        if (write_index - read_index == 0)
         {
-            const std::size_t write_index{ m_write_index.load(std::memory_order_acquire) };
-            const std::size_t read_index{ m_read_index.load(std::memory_order_relaxed) };
-
-            if ((write_index - read_index) != 0)
-            {
-                T out{ m_storage.extract_at(read_index) };
-                m_read_index.fetch_add(1, std::memory_order_release);
-
-                return out;
-            }
-
-            overflow_adapter::handle_empty();
+            return false;
         }
+
+        out = m_storage.extract_at(read_index);
+        m_read_index.fetch_add(1, std::memory_order_release);
+
+        return true;
     }
 
     template<std::size_t Capacity, typename T, typename OverflowPolicy, typename ConcurrencyModelPolicy>
     bool bounded_queue<Capacity, T, OverflowPolicy, ConcurrencyModelPolicy>::is_empty() const
     {
-        return m_read_index.load(std::memory_order_relaxed) 
-            == m_write_index.load(std::memory_order_relaxed);
+        return m_read_index.load(std::memory_order_relaxed)
+            == m_write_index.load(std::memory_order_acquire);
     }
 
     template<std::size_t Capacity, typename T, typename OverflowPolicy, typename ConcurrencyModelPolicy>

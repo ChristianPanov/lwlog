@@ -24,7 +24,7 @@ namespace lwlog::details
         template<typename... Args>
         void enqueue(Args&&... args);
 
-        T dequeue();
+        bool try_dequeue(T& out);
         bool is_empty() const;
 
     private:
