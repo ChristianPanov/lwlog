@@ -29,7 +29,6 @@ namespace lwlog::sinks
 	protected:
 		mutable Mutex m_mtx;
 		details::pattern<BufferLimits> m_pattern;
-		level m_current_level{ level::all };
 		level m_level_filter{ level::all };
 	};
 }
