@@ -1,24 +1,29 @@
 #pragma once
 
-namespace lwlog::details
+#include "argument.h"
+
+namespace lwlog::details::async_args
 {
     template<typename BufferLimits>
     struct args_slot
     {
-        char args[BufferLimits::arg_count][BufferLimits::argument];
-        std::uint16_t lengths[BufferLimits::arg_count];
+        template<typename T>
+        void set(std::uint8_t index, T&& value);
+
+        argument args[BufferLimits::arg_count];
+        char string_storage[BufferLimits::arg_count][BufferLimits::argument];
     };
 
     template<typename BufferLimits>
-    class argument_buffers_pool
+    class pool
     {
         static constexpr std::uint8_t invalid{ 0xFF };
 
     public:
-        argument_buffers_pool();
+        pool();
 
-        std::uint8_t acquire_args_buffer();
-        void release_args_buffer(std::uint8_t slot_index);
+        std::uint8_t acquire_slot_index();
+        void release_slot_index(std::uint8_t slot_index);
 
         args_slot<BufferLimits>& get_slot(std::uint8_t slot_index);
         const args_slot<BufferLimits>& get_slot(std::uint8_t slot_index) const;

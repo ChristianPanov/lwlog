@@ -47,7 +47,7 @@ namespace lwlog::details
 	}
 
 	template<typename BufferLimits>
-	void pattern<BufferLimits>::add_custom_field(std::string_view name, custom_value value, const custom_format_fn& fn)
+	void pattern<BufferLimits>::add_custom_field(std::string_view name, custom_value value, custom_format_fn fn)
 	{
 		m_attributes.emplace_back(name, value, fn);
         this->link_custom_fields();

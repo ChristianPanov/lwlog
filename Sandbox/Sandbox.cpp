@@ -39,10 +39,11 @@ int main()
 
 	{
 		Timer timer("timer");
-		console->critical("First {} critical message {}");
-		console->info("First {} critical message {}");
-		console->debug("First {} critical message {}");
-		console->warning("First {} critical message {}");
+		console->critical("First {} critical message {}", 1, '!');
+		console->info("First {} critical message {}", std::string("str_temp"), std::string_view("strview_temp"));
+		//console->raw("Some raw log\n");
+		console->debug("First {} critical message {}", "str_literal");
+		console->warning("First {} critical message {}", 4.5324234f);
 	}
 
 	std::cout << "Total allocations: " << allocation_count << "\n";

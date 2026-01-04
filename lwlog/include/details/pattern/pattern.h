@@ -22,7 +22,7 @@ namespace lwlog::details
 	public:
 		void set_pattern(std::string_view pattern, bool enable_color);
 		void add_custom_field(std::string_view name, custom_value value);
-		void add_custom_field(std::string_view name, custom_value value, const custom_format_fn& fn);
+		void add_custom_field(std::string_view name, custom_value value, custom_format_fn fn);
 
 	private:
 		void link_custom_fields();
