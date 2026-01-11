@@ -57,14 +57,36 @@ namespace lwlog
     struct asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::backend<
         BufferLimits, ConcurrencyModelPolicy>::queue_item
     {
+        queue_item() = default;
+        template<typename... Args>
+        queue_item(const details::source_meta& meta, std::string_view message, level log_level,
+            std::uint8_t topic_index, Args&&... args);
+
         details::source_meta meta;
         std::string_view message;
         level log_level;
 
-        std::uint8_t args_slot_index{ 0 };
-        std::uint8_t arg_count{ 0 };
         std::uint8_t topic_index{ 0 };
+        std::uint8_t arg_count{ 0 };
+
+        details::async_args::captured_args<BufferLimits> arguments;
     };
+
+    template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
+    template<typename BufferLimits, typename ConcurrencyModelPolicy>
+    template<typename... Args>
+    asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::backend<
+        BufferLimits, ConcurrencyModelPolicy>::queue_item::queue_item(const details::source_meta& meta, 
+            std::string_view message, level log_level, std::uint8_t topic_index, Args&&... args)
+        : meta{ meta }
+        , message{ message }
+        , log_level{ log_level }
+        , topic_index{ topic_index }
+        , arg_count{ sizeof...(Args) }
+    {
+        std::uint8_t i{ 0 };
+        (arguments.set(i++, std::forward<Args>(args)), ...);
+    }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
     template<typename BufferLimits, typename ConcurrencyModelPolicy>
@@ -80,11 +102,7 @@ namespace lwlog
         }
         else
         {
-            const auto& slot{ backend.argument_pool.get_slot(item.args_slot_index) };
-
-            details::fmt::format_args_typed<BufferLimits>(backend.message_buffer, item.message, slot, item.arg_count);
-
-            backend.argument_pool.release_slot_index(item.args_slot_index);
+            details::fmt::format_args_typed<BufferLimits>(backend.message_buffer, item.message, item.arguments, item.arg_count);
         }
 
         if (item.meta.is_initialized())
@@ -152,18 +170,7 @@ namespace lwlog
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::log(backend<BufferLimits, ConcurrencyModelPolicy>& backend, 
         std::string_view message, level log_level, const details::source_meta& meta, Args&&... args)
     {
-        std::uint8_t slot_index{ 0 };
-        std::uint8_t arg_count{ 0 };
-
-        if constexpr (sizeof...(args) > 0)
-        {
-            slot_index = backend.argument_pool.acquire_slot_index();
-            auto& slot{ backend.argument_pool.get_slot(slot_index) };
-
-            (slot.set(arg_count++, std::forward<Args>(args)), ...);
-        }
-
-        backend.queue.enqueue(meta, message, log_level, slot_index, arg_count, backend.topics.topic_index());
+        backend.queue.enqueue(meta, message, log_level, backend.topics.topic_index(), std::forward<Args>(args)...);
 
         backend.has_work.store(true, std::memory_order_release);
     }
@@ -173,7 +180,7 @@ namespace lwlog
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::log(
         backend<BufferLimits, ConcurrencyModelPolicy>& backend, std::string_view message)
     {
-        backend.queue.enqueue(details::source_meta{}, message, level{}, std::uint8_t{}, std::uint8_t{}, std::uint8_t{});
+        backend.queue.enqueue(details::source_meta{}, message, level{}, std::uint8_t{});
 
         backend.has_work.store(true, std::memory_order_release);
     }

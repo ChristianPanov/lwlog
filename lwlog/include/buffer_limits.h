@@ -30,8 +30,6 @@ namespace lwlog
 		static constexpr std::size_t argument{ ArgumentLimit::Value };
 		static constexpr std::size_t arg_count{ ArgCountLimit::Value };
 		static constexpr std::size_t conversion{ ConvLimit::Value };
-
-		static constexpr std::size_t pool_size{ 8 };
 	};
 
 	using default_pattern_limit = pattern_limit<256>;

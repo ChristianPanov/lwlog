@@ -7,8 +7,8 @@
 #include "details/topic_registry.h"
 #include "details/adaptive_waiter.h"
 
+#include "details/argument_formatter/argument.h"
 #include "details/argument_formatter/argument_format.h"
-#include "details/argument_formatter/argument_buffers_pool.h"
 
 namespace lwlog
 {
@@ -51,7 +51,6 @@ namespace lwlog
 			~backend();
 
 			details::memory_buffer<BufferLimits::message> message_buffer;
-			details::async_args::pool<BufferLimits> argument_pool;
 
 			std::vector<sink_ptr<BufferLimits>> sink_storage;
 			details::topic_registry topics;

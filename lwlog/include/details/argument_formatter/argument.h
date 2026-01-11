@@ -37,4 +37,16 @@ namespace lwlog::details::async_args
             string_ref str;
         } u;
     };
+
+    template<typename BufferLimits>
+    struct captured_args
+    {
+        template<typename T>
+        void set(std::uint8_t index, T&& value);
+
+        argument args[BufferLimits::arg_count];
+        char string_storage[BufferLimits::arg_count][BufferLimits::argument];
+    };
 }
+
+#include "argument_impl.h"

@@ -95,7 +95,7 @@ namespace lwlog::details::fmt
 
     template<typename BufferLimits>
     void format_args_typed(memory_buffer<BufferLimits::message>& out, std::string_view fmt, 
-        const async_args::args_slot<BufferLimits>& slot, std::uint8_t arg_count)
+        const async_args::captured_args<BufferLimits>& args, std::uint8_t arg_count)
     {
         std::size_t pos{ 0 };
         std::size_t last{ 0 };
@@ -118,7 +118,7 @@ namespace lwlog::details::fmt
                     continue;
                 }
 
-                format_arg_typed<BufferLimits>(out, slot.args[argument_index]);
+                format_arg_typed<BufferLimits>(out, args.args[argument_index]);
                 ++argument_index;
 
                 pos += 2;

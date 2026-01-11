@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "argument_buffers_pool.h"
+#include "argument.h"
 #include "details/memory_buffer.h"
 
 namespace lwlog::details::fmt
@@ -17,7 +17,7 @@ namespace lwlog::details::fmt
 
     template<typename BufferLimits>
     static void format_args_typed(memory_buffer<BufferLimits::message>& out, std::string_view fmt,
-        const async_args::args_slot<BufferLimits>& slot, std::uint8_t arg_count);
+        const async_args::captured_args<BufferLimits>& args, std::uint8_t arg_count);
 }
 
 #include "argument_format_impl.h"
