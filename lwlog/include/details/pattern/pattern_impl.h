@@ -5,7 +5,7 @@
 namespace lwlog::details
 {
 	template<typename BufferLimits>
-	const char* pattern<BufferLimits>::compile(const details::record<BufferLimits>& record)
+    std::string_view pattern<BufferLimits>::compile(const details::record<BufferLimits>& record)
 	{
         m_out.reset();
 
@@ -20,7 +20,7 @@ namespace lwlog::details
 
 		pattern_executor::execute(ctx, m_instructions);
 
-		return m_out.c_str();
+		return m_out.data();
 	}
 
 	template<typename BufferLimits>
