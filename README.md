@@ -31,7 +31,7 @@ cmake -S . -B ./build -DCMAKE_INSTALL_PREFIX="./install"
 cmake --build ./build --target install --config Release
 ```
 
-This installs lwlog into:
+This installs ***lwlog*** into:
 
 ```text
 install/
@@ -43,7 +43,7 @@ install/
 
 ## Linking lwlog to your project with CMake
 
-When configuring your own project, pass the lwlog installation directory through `CMAKE_PREFIX_PATH`:
+When configuring your own project, pass the ***lwlog*** installation directory through `CMAKE_PREFIX_PATH`:
 
 ```bash
 cmake -S . -B ./build -DCMAKE_PREFIX_PATH=<installation-directory>
@@ -59,7 +59,7 @@ add_executable(MyExe main.cpp)
 target_link_libraries(MyExe PRIVATE lwlog::lwlog_lib)
 ```
 
-Then include lwlog headers like this:
+Then include ***lwlog*** headers like this:
 
 ```cpp
 #include <lwlog/logger.h>
