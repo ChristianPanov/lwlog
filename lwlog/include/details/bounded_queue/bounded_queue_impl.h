@@ -123,7 +123,8 @@ namespace lwlog::details
     }
 
     template<std::size_t Capacity, typename T, typename OverflowPolicy, typename ConcurrencyModelPolicy>
-    bool bounded_queue<Capacity, T, OverflowPolicy, ConcurrencyModelPolicy>::try_dequeue(T& out)
+    template<typename Fn>
+    bool bounded_queue<Capacity, T, OverflowPolicy, ConcurrencyModelPolicy>::try_consume_one(Fn&& fn)
     {
         const std::size_t write_index{ m_write_index.load(std::memory_order_acquire) };
         const std::size_t read_index{ m_read_index.load(std::memory_order_relaxed) };
@@ -133,8 +134,12 @@ namespace lwlog::details
             return false;
         }
 
-        out = m_storage.extract_at(read_index);
-        m_read_index.fetch_add(1, std::memory_order_release);
+        const T& item{ *m_storage.ptr_at(read_index) };
+
+        std::forward<Fn>(fn)(item);
+
+        m_storage.destroy_at(read_index);
+        m_read_index.store(read_index + 1, std::memory_order_release);
 
         return true;
     }

@@ -14,10 +14,11 @@ namespace lwlog::details
     public:
         template<typename... Args>
         void construct_at(std::size_t index, Args&&... args);
-        T extract_at(std::size_t index);
 
-    private:
-        T* slot_ptr(std::size_t index);
+        T* ptr_at(std::size_t index);
+        const T* ptr_at(std::size_t index) const;
+
+        void destroy_at(std::size_t index);
 
     private:
         alignas(T) std::byte m_storage[Capacity * sizeof(T)];

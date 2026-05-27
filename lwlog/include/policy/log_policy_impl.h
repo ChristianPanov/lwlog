@@ -156,11 +156,12 @@ namespace lwlog
 
                     adaptive_waiter.reset();
 
-                    queue_item_t<BufferLimits, ConcurrencyModelPolicy> out_item;
-                    while (backend.queue.try_dequeue(out_item))
-                    {
-                        asynchronous_policy::process_item(backend, out_item);
-                    }
+                    while (backend.queue.try_consume_one(
+                        [&backend](const queue_item_t<BufferLimits, ConcurrencyModelPolicy>& item)
+                        {
+                            asynchronous_policy::process_item(backend, item);
+                        }))
+                    {}
                 }
             });
     }
