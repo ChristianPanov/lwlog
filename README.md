@@ -14,19 +14,55 @@
 
 Very fast C++17 logging library
 # Install
-```sh
+```bash
 git clone --recursive https://github.com/ChristianPanov/lwlog
 ```
 ## Installing the CMake Package
-```sh
-cmake -B <Build Directory> -S <Directory of CMakeLists.txt> -DCMAKE_INSTALL_PREFIX=<Installation Directory>
-cmake --build <Build Directory> --target install --config <Debug/Release>
-```
-## Linking lwlog to your project with CMake
-```
-find_package(lwlog_lib HINTS <Installation Directory>/lib/cmake)
 
+```bash
+cmake -S . -B <build-directory> -DCMAKE_INSTALL_PREFIX=<installation-directory>
+cmake --build <build-directory> --target install --config Release
+```
+
+Example:
+
+```bash
+cmake -S . -B ./build -DCMAKE_INSTALL_PREFIX="./install"
+cmake --build ./build --target install --config Release
+```
+
+This installs lwlog into:
+
+```text
+install/
+  include/
+    lwlog/
+  lib/
+  lib/cmake/lwlog_lib/
+```
+
+## Linking lwlog to your project with CMake
+
+When configuring your own project, pass the lwlog installation directory through `CMAKE_PREFIX_PATH`:
+
+```bash
+cmake -S . -B ./build -DCMAKE_PREFIX_PATH=<installation-directory>
+cmake --build ./build --config Release
+```
+
+Then in your `CMakeLists.txt`:
+
+```cmake
+find_package(lwlog_lib CONFIG REQUIRED)
+
+add_executable(MyExe main.cpp)
 target_link_libraries(MyExe PRIVATE lwlog::lwlog_lib)
+```
+
+Then include lwlog headers like this:
+
+```cpp
+#include <lwlog/logger.h>
 ```
 # Supported Platforms and Compilers
 The project is continuously tested on the following platforms and compilers:
