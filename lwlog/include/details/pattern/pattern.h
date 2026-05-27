@@ -34,7 +34,7 @@ namespace lwlog::details
 		char m_conv_buffer[BufferLimits::conversion];
 
 	private:
-		std::vector<custom_field> m_attributes;
+		std::vector<custom_field> m_custom_fields;
 		pattern_bytecode::instruction_list m_instructions;
 	};
 }

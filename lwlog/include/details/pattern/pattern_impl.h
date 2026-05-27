@@ -14,8 +14,8 @@ namespace lwlog::details
 			record,
 			m_pattern_src.c_str(),
 			m_conv_buffer,
-			m_attributes.data(),
-			m_attributes.size()
+            m_custom_fields.data(),
+            m_custom_fields.size()
 		};
 
 		pattern_executor::execute(ctx, m_instructions);
@@ -42,14 +42,14 @@ namespace lwlog::details
 	template<typename BufferLimits>
 	void pattern<BufferLimits>::add_custom_field(std::string_view name, custom_value value)
 	{
-		m_attributes.emplace_back(name, value);
+        m_custom_fields.emplace_back(name, value);
         this->link_custom_fields();
 	}
 
 	template<typename BufferLimits>
 	void pattern<BufferLimits>::add_custom_field(std::string_view name, custom_value value, custom_format_fn fn)
 	{
-		m_attributes.emplace_back(name, value, fn);
+        m_custom_fields.emplace_back(name, value, fn);
         this->link_custom_fields();
 	}
 
@@ -62,9 +62,9 @@ namespace lwlog::details
             {
                 const std::string_view name{ src + offset, size };
 
-                for (std::size_t i = 0; i < m_attributes.size(); ++i)
+                for (std::size_t i = 0; i < m_custom_fields.size(); ++i)
                 {
-                    if (m_attributes[i].name == name)
+                    if (m_custom_fields[i].name == name)
                     {
                         return i;
                     }
