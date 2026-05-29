@@ -52,11 +52,15 @@ namespace lwlog::details::fmt
         switch (arg.type)
         {
         case async_args::argument_type::boolean:
+        {
             out.append(arg.u.b ? "true" : "false", arg.u.b ? 4 : 5);
             break;
+        }
         case async_args::argument_type::character:
+        {
             out.append(arg.u.ch);
             break;
+        }
         case async_args::argument_type::int64:
         {
             char buffer[32]{};
