@@ -55,7 +55,6 @@ namespace lwlog
 			std::vector<sink_ptr<BufferLimits>> sink_storage;
 			details::topic_registry topics;
 
-			std::atomic_bool has_work;
 			std::atomic_bool shutdown;
 			std::thread worker_thread;
 

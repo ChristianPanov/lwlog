@@ -133,7 +133,6 @@ namespace lwlog
     void asynchronous_policy<OverflowPolicy, Capacity, ThreadAffinity>::init(
         backend<BufferLimits, ConcurrencyModelPolicy>& backend)
     {
-        backend.has_work.store(false, std::memory_order_relaxed);
         backend.shutdown.store(false, std::memory_order_relaxed);
 
         backend.worker_thread = std::thread([&backend]() 
@@ -147,21 +146,24 @@ namespace lwlog
 
                 while (!backend.shutdown.load(std::memory_order_relaxed) || !backend.queue.is_empty())
                 {
-                    const bool signaled{ backend.has_work.exchange(false, std::memory_order_acq_rel) };
-                    if (!signaled && backend.queue.is_empty())
-                    {
-                        adaptive_waiter.wait();
-                        continue;
-                    }
-
-                    adaptive_waiter.reset();
+                    bool consumed_any{ false };
 
                     while (backend.queue.try_consume_one(
-                        [&backend](const queue_item_t<BufferLimits, ConcurrencyModelPolicy>& item)
+                        [&backend, &consumed_any](const queue_item_t<BufferLimits, ConcurrencyModelPolicy>& item)
                         {
+                            consumed_any = true;
                             asynchronous_policy::process_item(backend, item);
                         }))
                     {}
+
+                    if (consumed_any)
+                    {
+                        adaptive_waiter.reset();
+                    }
+                    else
+                    {
+                        adaptive_waiter.wait();
+                    }
                 }
             });
     }
@@ -172,8 +174,6 @@ namespace lwlog
         std::string_view message, level log_level, const details::source_meta& meta, Args&&... args)
     {
         backend.queue.enqueue(meta, message, log_level, backend.topics.topic_index(), std::forward<Args>(args)...);
-
-        backend.has_work.store(true, std::memory_order_release);
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
@@ -182,8 +182,6 @@ namespace lwlog
         backend<BufferLimits, ConcurrencyModelPolicy>& backend, std::string_view message)
     {
         backend.queue.enqueue(details::source_meta{}, message, level{}, std::uint8_t{});
-
-        backend.has_work.store(true, std::memory_order_release);
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>

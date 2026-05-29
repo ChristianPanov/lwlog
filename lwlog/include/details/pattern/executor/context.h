@@ -10,7 +10,7 @@ namespace lwlog::details::pattern_executor
     struct pattern_context
     {
         memory_buffer<BufferLimits::pattern>& out;
-        const record<BufferLimits>& record;
+        const record<BufferLimits>& log_record;
 
         const char* pattern_src{};
 

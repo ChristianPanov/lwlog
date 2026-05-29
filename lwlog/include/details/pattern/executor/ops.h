@@ -16,14 +16,14 @@ namespace lwlog::details::pattern_executor::op
     template<typename BufferLimits>
     void field_noalign(pattern_context<BufferLimits>& ctx, const pattern_bytecode::field_noalign_payload& payload)
     {
-        const auto field_data{ resolve_field<BufferLimits>(payload.field, ctx.conversion_buffer, ctx.record) };
+        const auto field_data{ resolve_field<BufferLimits>(payload.field, ctx.conversion_buffer, ctx.log_record) };
         ctx.out.append(field_data);
     }
 
     template<typename BufferLimits>
     void field_align_left(pattern_context<BufferLimits>& ctx, const pattern_bytecode::field_align_payload& payload)
     {
-        const auto field_data{ resolve_field<BufferLimits>(payload.field, ctx.conversion_buffer, ctx.record) };
+        const auto field_data{ resolve_field<BufferLimits>(payload.field, ctx.conversion_buffer, ctx.log_record) };
         const auto field_size{ field_data.size() };
 
         if (payload.width <= field_size)
@@ -41,7 +41,7 @@ namespace lwlog::details::pattern_executor::op
     template<typename BufferLimits>
     void field_align_right(pattern_context<BufferLimits>& ctx, const pattern_bytecode::field_align_payload& payload)
     {
-        const auto field_data{ resolve_field<BufferLimits>(payload.field, ctx.conversion_buffer, ctx.record) };
+        const auto field_data{ resolve_field<BufferLimits>(payload.field, ctx.conversion_buffer, ctx.log_record) };
         const auto field_size{ field_data.size() };
 
         if (payload.width <= field_size)
@@ -59,7 +59,7 @@ namespace lwlog::details::pattern_executor::op
     template<typename BufferLimits>
     void field_align_center(pattern_context<BufferLimits>& ctx, const pattern_bytecode::field_align_payload& payload)
     {
-        const auto field_data{ resolve_field<BufferLimits>(payload.field, ctx.conversion_buffer, ctx.record) };
+        const auto field_data{ resolve_field<BufferLimits>(payload.field, ctx.conversion_buffer, ctx.log_record) };
         const auto field_size{ field_data.size() };
 
         if (payload.width <= field_size)
@@ -155,6 +155,6 @@ namespace lwlog::details::pattern_executor::op
     template<typename BufferLimits>
     void sgr_level(pattern_context<BufferLimits>& ctx)
     {
-        ctx.out.append(level_details::to_color(ctx.record.log_level));
+        ctx.out.append(level_details::to_color(ctx.log_record.log_level));
     }
 }
