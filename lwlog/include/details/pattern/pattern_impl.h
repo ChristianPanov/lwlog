@@ -14,8 +14,7 @@ namespace lwlog::details
 			record,
 			m_pattern_src.c_str(),
 			m_conv_buffer,
-            m_custom_fields.data(),
-            m_custom_fields.size()
+            m_custom_fields.data()
 		};
 
 		pattern_executor::execute(ctx, m_instructions);

@@ -17,6 +17,5 @@ namespace lwlog::details::pattern_executor
         char* conversion_buffer;
 
         const details::custom_field* custom_fields{};
-        std::uint16_t custom_field_count{};
     };
 }
