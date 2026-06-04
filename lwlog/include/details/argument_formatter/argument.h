@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace lwlog::details::async_args
+namespace lwlog::details::log_args
 {
     enum class argument_type : std::uint8_t
     {
@@ -47,6 +47,9 @@ namespace lwlog::details::async_args
         argument args[BufferLimits::arg_count];
         char string_storage[BufferLimits::arg_count][BufferLimits::argument];
     };
+
+    template<typename BufferLimits, typename... Args>
+    std::uint8_t capture_args(captured_args<BufferLimits>& out, Args&&... args);
 }
 
 #include "argument_impl.h"

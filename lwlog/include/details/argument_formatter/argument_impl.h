@@ -1,6 +1,6 @@
 #pragma once
 
-namespace lwlog::details::async_args
+namespace lwlog::details::log_args
 {
     template<typename BufferLimits>
     template<typename T>
@@ -58,5 +58,14 @@ namespace lwlog::details::async_args
             arg_ref.type = argument_type::string;
             arg_ref.u.str = string_ref{ string_storage[index], static_cast<std::uint16_t>(value_size) };
         }
+    }
+
+    template<typename BufferLimits, typename... Args>
+    std::uint8_t capture_args(captured_args<BufferLimits>& out, Args&&... args)
+    {
+        std::uint8_t i{ 0 };
+        (out.set(i++, std::forward<Args>(args)), ...);
+
+        return i;
     }
 }

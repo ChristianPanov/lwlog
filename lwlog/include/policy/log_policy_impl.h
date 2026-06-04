@@ -14,17 +14,10 @@ namespace lwlog
         }
         else
         {
-            std::uint16_t arg_lengths[BufferLimits::arg_count]{};
-            std::uint8_t arg_count{ 0 };
+            details::log_args::captured_args<BufferLimits> captured_args;
+            const std::uint8_t arg_count{ details::log_args::capture_args(captured_args, std::forward<Args>(args)...) };
 
-            ((arg_lengths[arg_count] = details::convert_to_chars(
-                backend.arguments[arg_count],
-                BufferLimits::argument, 
-                std::forward<Args>(args)
-            ), ++arg_count), ...);
-
-            details::fmt::format_args_append<BufferLimits>(backend.message_buffer, message,
-                backend.arguments, arg_lengths, arg_count);
+            details::fmt::format_args_typed<BufferLimits>(backend.message_buffer, message, captured_args, arg_count);
         }
 
         const details::record<BufferLimits> record{ backend.message_buffer.data(), log_level, meta, 
@@ -69,7 +62,7 @@ namespace lwlog
         std::uint8_t topic_index{ 0 };
         std::uint8_t arg_count{ 0 };
 
-        details::async_args::captured_args<BufferLimits> arguments;
+        details::log_args::captured_args<BufferLimits> captured_args;
     };
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
@@ -84,8 +77,7 @@ namespace lwlog
         , topic_index{ topic_index }
         , arg_count{ sizeof...(Args) }
     {
-        std::uint8_t i{ 0 };
-        (arguments.set(i++, std::forward<Args>(args)), ...);
+        details::log_args::capture_args(captured_args, std::forward<Args>(args)...);
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
@@ -102,7 +94,7 @@ namespace lwlog
         }
         else
         {
-            details::fmt::format_args_typed<BufferLimits>(backend.message_buffer, item.message, item.arguments, item.arg_count);
+            details::fmt::format_args_typed<BufferLimits>(backend.message_buffer, item.message, item.captured_args, item.arg_count);
         }
 
         if (item.meta.is_initialized())
