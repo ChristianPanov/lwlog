@@ -1,8 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include <string_view>
-#include <vector>
+#include <array>
 
 namespace lwlog::details::pattern_bytecode
 {
@@ -120,7 +119,7 @@ namespace lwlog::details::pattern_bytecode
 
     struct instruction
     {
-        op_code code{ op_code::literal };
+        op_code code;
 
         union 
         {
@@ -138,22 +137,35 @@ namespace lwlog::details::pattern_bytecode
         static instruction make_literal(std::uint16_t offset, std::uint16_t size);
 
         static instruction make_field_noalign(builtin_field field);
-        static instruction make_field_left(builtin_field field, const alignment_info& alignment);
-        static instruction make_field_right(builtin_field field, const alignment_info& alignment);
-        static instruction make_field_center(builtin_field field, const alignment_info& alignment);
+        static instruction make_field_aligned(builtin_field field, const alignment_info& alignment);
 
         static instruction make_custom_field_noalign(std::uint16_t field_offset, std::uint16_t name_offset, 
             std::uint8_t field_size, std::uint8_t name_size);
-        static instruction make_custom_field_left(std::uint16_t field_offset, std::uint16_t name_offset, 
-            std::uint8_t field_size, std::uint8_t name_size, const alignment_info& alignment);
-        static instruction make_custom_field_right(std::uint16_t field_offset, std::uint16_t name_offset,
-            std::uint8_t field_size, std::uint8_t name_size, const alignment_info& alignment);
-        static instruction make_custom_field_center(std::uint16_t field_offset, std::uint16_t name_offset,
+        static instruction make_custom_field_aligned(std::uint16_t field_offset, std::uint16_t name_offset, 
             std::uint8_t field_size, std::uint8_t name_size, const alignment_info& alignment);
 
         static instruction make_sgr(std::uint8_t code);
         static instruction make_sgr_level();
     };
 
-    using instruction_list = std::vector<instruction>;
+    class instruction_list
+    {
+        static constexpr std::uint8_t capacity{ 32 };
+
+    public:
+        void push_back(const instruction& instr) { m_data[m_size++] = instr; }
+        void clear()                             { m_size = 0;               }
+        void resize(std::uint8_t n)              { m_size = n;               }
+        std::uint8_t size() const                { return m_size;            }
+
+    public:
+        instruction* begin()             { return m_data.data();            }
+        instruction* end()               { return m_data.data() + m_size;   }
+        const instruction* begin() const { return m_data.data();            }
+        const instruction* end()   const { return m_data.data() + m_size;   }
+
+    private:
+        std::array<instruction, capacity> m_data;
+        std::uint8_t m_size{ 0 };
+    };
 }

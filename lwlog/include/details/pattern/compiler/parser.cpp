@@ -111,12 +111,7 @@ namespace lwlog::details::pattern_compiler
             return;
         }
 
-        switch (alignment.side_char)
-        {
-            case '<': out.push_back(pattern_bytecode::instruction::make_field_left(field, alignment)); return;
-            case '>': out.push_back(pattern_bytecode::instruction::make_field_right(field, alignment)); return;
-            case '^': out.push_back(pattern_bytecode::instruction::make_field_center(field, alignment)); return;
-        }
+        out.push_back(pattern_bytecode::instruction::make_field_aligned(field, alignment));
     }
 
     void parser::emit_custom_instruction(pattern_bytecode::instruction_list& out, 
@@ -132,15 +127,8 @@ namespace lwlog::details::pattern_compiler
             return;
         }
 
-        switch (alignment.side_char)
-        {
-        case '<': out.push_back(pattern_bytecode::instruction::make_custom_field_left(
-            field_offset, name_offset, field_size, name_size, alignment)); return;
-        case '>': out.push_back(pattern_bytecode::instruction::make_custom_field_right(
-            field_offset, name_offset, field_size, name_size, alignment)); return;
-        case '^': out.push_back(pattern_bytecode::instruction::make_custom_field_center(
-            field_offset, name_offset, field_size, name_size, alignment)); return;
-        }
+        out.push_back(pattern_bytecode::instruction::make_custom_field_aligned(
+            field_offset, name_offset, field_size, name_size, alignment));
     }
 
     void parser::emit_sgr_instruction(pattern_bytecode::instruction_list& out, std::uint8_t code)
