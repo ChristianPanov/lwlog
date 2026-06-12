@@ -16,7 +16,6 @@ namespace lwlog::details
         void construct_at(std::size_t index, Args&&... args);
 
         T* ptr_at(std::size_t index);
-        const T* ptr_at(std::size_t index) const;
 
         void destroy_at(std::size_t index);
 

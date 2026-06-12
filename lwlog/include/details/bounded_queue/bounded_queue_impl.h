@@ -1,5 +1,6 @@
-#include "bounded_queue.h"
 #pragma once
+
+#include "bounded_queue.h"
 
 namespace lwlog::details
 {

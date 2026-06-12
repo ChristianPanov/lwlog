@@ -21,28 +21,28 @@ namespace lwlog::details::fmt
         }
         case log_args::argument_type::int64:
         {
-            char buffer[32]{};
+            char buffer[32];
             const auto result{ std::to_chars(buffer, buffer + sizeof(buffer), arg.u.i64) };
             out.append(buffer, static_cast<std::size_t>(result.ptr - buffer));
             break;
         }
         case log_args::argument_type::uint64:
         {
-            char buffer[32]{};
+            char buffer[32];
             const auto result{ std::to_chars(buffer, buffer + sizeof(buffer), arg.u.u64) };
             out.append(buffer, static_cast<std::size_t>(result.ptr - buffer));
             break;
         }
         case log_args::argument_type::f32:
         {
-            char buffer[32]{};
+            char buffer[32];
             const auto result{ std::to_chars(buffer, buffer + sizeof(buffer), arg.u.f32, std::chars_format::general) };
             out.append(buffer, static_cast<std::size_t>(result.ptr - buffer));
             break;
         }
         case log_args::argument_type::f64:
         {
-            char buffer[32]{};
+            char buffer[32];
             const auto result{ std::to_chars(buffer, buffer + sizeof(buffer), arg.u.f64, std::chars_format::general) };
             out.append(buffer, static_cast<std::size_t>(result.ptr - buffer));
             break;
