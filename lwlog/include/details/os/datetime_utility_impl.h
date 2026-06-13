@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "details/memory_buffer.h"
 #include "datetime_utility.h"
 
 namespace lwlog::details::os::datetime
@@ -10,14 +9,12 @@ namespace lwlog::details::os::datetime
 		return hour > 12 ? hour - 12 : hour;
 	}
 
-	template<std::size_t Size>
-	timestamp_builder<Size>::timestamp_builder(char* buffer)
+	inline timestamp_builder::timestamp_builder(char* buffer)
 		: m_buffer{ buffer }
 	{}
 
-	template<std::size_t Size>
 	template<std::uint8_t Width>
-	timestamp_builder<Size>& timestamp_builder<Size>::append(std::size_t value)
+	timestamp_builder& timestamp_builder::append(std::size_t value)
 	{
 		std::size_t remaining{ value };
 
@@ -52,8 +49,7 @@ namespace lwlog::details::os::datetime
 		return *this;
 	}
 
-	template<std::size_t Size>
-	timestamp_builder<Size>& timestamp_builder<Size>::append_ampm(std::size_t hour)
+	inline timestamp_builder& timestamp_builder::append_ampm(std::size_t hour)
 	{
 		m_buffer[m_pos] = (hour >= 12) ? 'p' : 'a';
 		m_buffer[m_pos + 1] = 'm';
@@ -63,22 +59,19 @@ namespace lwlog::details::os::datetime
 		return *this;
 	}
 
-	template<std::size_t Size>
-	timestamp_builder<Size>& timestamp_builder<Size>::separate(char separator)
+	inline timestamp_builder& timestamp_builder::separate(char separator)
 	{
 		m_buffer[m_pos++] = separator;
 
 		return *this;
 	}
 
-	template<std::size_t Size>
-	const char* timestamp_builder<Size>::data() const
+	inline const char* timestamp_builder::data() const
 	{
 		return m_buffer;
 	}
 
-	template<std::size_t Size>
-	std::size_t timestamp_builder<Size>::size() const
+	inline std::size_t timestamp_builder::size() const
 	{
 		return m_pos;
 	}

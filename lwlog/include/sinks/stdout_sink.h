@@ -15,7 +15,7 @@ namespace lwlog::sinks
 
 	public:
 		stdout_sink();
-		void sink_it(const details::record<BufferLimits>& record) override;
+		void sink_it(const details::record& record) override;
 		void sink_it(std::string_view message) override;
 	};
 
@@ -25,7 +25,7 @@ namespace lwlog::sinks
 	{}
 
 	template<typename BufferLimits, typename FlushPolicy, typename ThreadingPolicy>
-	void stdout_sink<BufferLimits, FlushPolicy, ThreadingPolicy>::sink_it(const details::record<BufferLimits>& record)
+	void stdout_sink<BufferLimits, FlushPolicy, ThreadingPolicy>::sink_it(const details::record& record)
 	{
 		details::stream_writer<FlushPolicy>::write(sink_t::m_pattern.compile(record));
 	}

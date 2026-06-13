@@ -5,7 +5,7 @@
 namespace lwlog::details
 {
 	template<typename BufferLimits>
-    std::string_view pattern<BufferLimits>::compile(const details::record<BufferLimits>& record)
+    std::string_view pattern<BufferLimits>::compile(const details::record& record)
 	{
         m_out.reset();
 

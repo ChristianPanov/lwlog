@@ -4,11 +4,9 @@
 #include "topic_registry.h"
 #include "os/time_point.h"
 #include "os/os.h"
-#include "details/memory_buffer.h"
 
 namespace lwlog::details
 {
-	template<typename BufferLimits>
 	struct record
 	{
 		record() = default;

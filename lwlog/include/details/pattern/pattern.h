@@ -17,7 +17,7 @@ namespace lwlog::details
 	class pattern
 	{
 	public:
-        std::string_view compile(const details::record<BufferLimits>& record);
+        std::string_view compile(const details::record& record);
 
 	public:
 		void set_pattern(std::string_view pattern, bool enable_color);

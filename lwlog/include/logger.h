@@ -15,13 +15,13 @@ namespace lwlog
 		template<typename Iterator, typename... SinkParams>
 		logger(std::string_view name, Iterator begin, Iterator end, SinkParams&&... params);
 		template<typename... SinkParams>
-		logger(std::string_view name, sink_list<BufferLimits> sink_list, SinkParams&&... params);
+		logger(std::string_view name, sink_list sink_list, SinkParams&&... params);
 		template<typename... SinkParams>
-		logger(std::string_view name, sink_ptr<BufferLimits> sink, SinkParams&&... params);
+		logger(std::string_view name, sink_ptr sink, SinkParams&&... params);
 
 	public:
-		void add_sink(sink_ptr<BufferLimits> sink);
-		void remove_sink(sink_ptr<BufferLimits> sink);
+		void add_sink(sink_ptr sink);
+		void remove_sink(sink_ptr sink);
 
 		void set_level_filter(level log_level);
 		void set_pattern(std::string_view pattern);
@@ -33,7 +33,7 @@ namespace lwlog
 		void end_topic();
 
 		std::string_view name() const;
-		std::vector<sink_ptr<BufferLimits>>& sinks();
+		std::vector<sink_ptr>& sinks();
 
 	public:
 		void raw(std::string_view message);

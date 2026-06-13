@@ -10,7 +10,7 @@
 namespace lwlog::sinks
 {
 	template<bool EnableAnsiColors, typename BufferLimits, typename ThreadingPolicy>
-	class sink : public interface::sink<BufferLimits>
+	class sink : public interface::sink
 	{
 	private:
 		using Mutex = typename ThreadingPolicy::mutex_t;

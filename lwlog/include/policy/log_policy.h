@@ -22,7 +22,7 @@ namespace lwlog
 		{
 			details::memory_buffer<BufferLimits::message> message_buffer;
 
-			std::vector<sink_ptr<BufferLimits>> sink_storage;
+			std::vector<sink_ptr> sink_storage;
 			details::topic_registry topics;
 		};
 
@@ -51,7 +51,7 @@ namespace lwlog
 
 			details::memory_buffer<BufferLimits::message> message_buffer;
 
-			std::vector<sink_ptr<BufferLimits>> sink_storage;
+			std::vector<sink_ptr> sink_storage;
 			details::topic_registry topics;
 
 			std::atomic_bool shutdown;

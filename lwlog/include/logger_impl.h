@@ -13,8 +13,8 @@ namespace lwlog
 	{
 		LogExecutionPolicy::template init<BufferLimits>(m_backend);
 
-		m_backend.sink_storage = { sinks::sink_factory<BufferLimits, 
-			Sinks<BufferLimits, FlushPolicy, ThreadingPolicy>>::request(std::forward<SinkParams>(params)...)... 
+		m_backend.sink_storage = { sinks::sink_factory<Sinks<BufferLimits, 
+			FlushPolicy, ThreadingPolicy>>::request(std::forward<SinkParams>(params)...)... 
 		};
 
 		logger::add_custom_field("name", m_name);
@@ -36,7 +36,7 @@ namespace lwlog
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
 	template<typename... SinkParams>
 	logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name, 
-		sink_list<BufferLimits> sink_list, SinkParams&&... params)
+		sink_list sink_list, SinkParams&&... params)
 		: logger{ name, sink_list.begin(), sink_list.end(), params... }
 	{}
 
@@ -44,21 +44,20 @@ namespace lwlog
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
 	template<typename... SinkParams>
 	logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::logger(std::string_view name, 
-		sink_ptr<BufferLimits> sink, SinkParams&&... params)
+		sink_ptr sink, SinkParams&&... params)
 		: logger{ name, { sink }, params... }
 	{}
 
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
-	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_sink(sink_ptr<BufferLimits> sink)
+	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::add_sink(sink_ptr sink)
 	{
 		m_backend.sink_storage.push_back(sink);
 	}
 
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
-	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::remove_sink(
-		sink_ptr<BufferLimits> sink)
+	void logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::remove_sink(sink_ptr sink)
 	{
 		for (std::size_t i = 0; i < m_backend.sink_storage.size(); ++i)
 		{
@@ -142,7 +141,7 @@ namespace lwlog
 
 	template<typename BufferLimits, typename LogExecutionPolicy, typename FlushPolicy,
 		typename ThreadingPolicy, template<typename, typename, typename> typename... Sinks>
-	std::vector<sink_ptr<BufferLimits>>& logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::sinks()
+	std::vector<sink_ptr>& logger<BufferLimits, LogExecutionPolicy, FlushPolicy, ThreadingPolicy, Sinks...>::sinks()
 	{
 		return m_backend.sink_storage;
 	}

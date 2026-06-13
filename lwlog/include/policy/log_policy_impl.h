@@ -99,8 +99,8 @@ namespace lwlog
 
         if (item.meta.is_initialized())
         {
-            const details::record<BufferLimits> record{ backend.message_buffer.data(), item.log_level, item.meta, 
-                backend.topics, item.topic_index 
+            const details::record record{ backend.message_buffer.data(), 
+                item.log_level, item.meta, backend.topics, item.topic_index 
             };
 
             for (const auto& sink : backend.sink_storage)

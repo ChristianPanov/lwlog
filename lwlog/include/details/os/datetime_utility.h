@@ -2,7 +2,6 @@
 
 #include <cstdint>
 #include <array>
-#include <charconv>
 #include <string_view>
 
 #ifdef _WIN32
@@ -73,7 +72,6 @@ namespace lwlog::details::os::datetime
 
 	std::uint8_t to_12h(std::uint8_t hour);
 
-    template<std::size_t Size>
     struct timestamp_builder
     {
 	public:

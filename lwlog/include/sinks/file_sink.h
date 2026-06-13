@@ -18,7 +18,7 @@ namespace lwlog::sinks
 		explicit file_sink(std::string_view path);
 
 	public:
-		void sink_it(const details::record<BufferLimits>& record) override;
+		void sink_it(const details::record& record) override;
 		void sink_it(std::string_view message) override;
 	};
 
@@ -28,7 +28,7 @@ namespace lwlog::sinks
 	{}
 
 	template<typename BufferLimits, typename FlushPolicy, typename ThreadingPolicy>
-	void file_sink<BufferLimits, FlushPolicy, ThreadingPolicy>::sink_it(const details::record<BufferLimits>& record)
+	void file_sink<BufferLimits, FlushPolicy, ThreadingPolicy>::sink_it(const details::record& record)
 	{
 		details::stream_writer<FlushPolicy>::write(sink_t::m_pattern.compile(record));
 	}

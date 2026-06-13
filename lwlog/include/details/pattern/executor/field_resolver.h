@@ -9,7 +9,7 @@
 namespace lwlog::details::pattern_executor
 {
 	template<typename BufferLimits>
-	std::string_view resolve_field(pattern_bytecode::builtin_field field, char* conv, const record<BufferLimits>& record)
+	std::string_view resolve_field(pattern_bytecode::builtin_field field, char* conv, const record& record)
 	{
 		switch (field)
 		{
@@ -63,7 +63,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<10>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<4>(time_point.year)
 				.separate('-')
 				.template append<2>(time_point.month)
@@ -77,7 +77,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<8>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<2>(time_point.month)
 				.separate('/')
 				.template append<2>(time_point.day)
@@ -91,7 +91,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<4>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<4>(time_point.year)
 			};
 
@@ -101,7 +101,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<2>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<2>(time_point.year % 100)
 			};
 
@@ -111,7 +111,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<2>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<2>(time_point.month)
 			};
 
@@ -129,7 +129,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<2>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<2>(time_point.day)
 			};
 
@@ -147,7 +147,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<8>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<2>(time_point.hour)
 				.separate(':')
 				.template append<2>(time_point.minute)
@@ -161,7 +161,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<5>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<2>(time_point.hour)
 				.separate(':')
 				.template append<2>(time_point.minute)
@@ -175,7 +175,7 @@ namespace lwlog::details::pattern_executor
 
 			const auto hour_12{ os::datetime::to_12h(time_point.hour) };
 
-			const auto timestamp{ os::datetime::timestamp_builder<10>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<2>(hour_12)
 				.separate(':')
 				.template append<2>(time_point.minute)
@@ -198,7 +198,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<2>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<2>(time_point.hour)
 			};
 
@@ -210,7 +210,7 @@ namespace lwlog::details::pattern_executor
 
 			const auto hour_12{ os::datetime::to_12h(time_point.hour) };
 
-			const auto timestamp{ os::datetime::timestamp_builder<2>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<2>(hour_12)
 			};
 
@@ -220,7 +220,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<2>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<2>(time_point.minute)
 			};
 
@@ -230,7 +230,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<2>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<2>(time_point.second)
 			};
 
@@ -240,7 +240,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<3>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<3>(time_point.millisecond)
 			};
 
@@ -250,7 +250,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<6>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<6>(time_point.microsecond)
 			};
 
@@ -260,7 +260,7 @@ namespace lwlog::details::pattern_executor
 		{
 			const auto& time_point{ record.time_point };
 
-			const auto timestamp{ os::datetime::timestamp_builder<9>(conv)
+			const auto timestamp{ os::datetime::timestamp_builder(conv)
 				.template append<9>(time_point.nanosecond)
 			};
 
