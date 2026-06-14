@@ -4,64 +4,77 @@
 
 namespace lwlog::details::fmt
 {
-    template<typename BufferLimits>
-    void format_arg_typed(memory_buffer<BufferLimits::message>& out, const log_args::argument& arg)
+    template<typename BufferLimits, std::size_t Capacity>
+    void format_next_arg(memory_buffer<BufferLimits::message>& out, 
+        const log_args::argument_buffer<Capacity>& args, std::size_t& cursor)
     {
-        switch (arg.type)
+        switch (args.decode_type(cursor))
         {
         case log_args::argument_type::boolean:
         {
-            out.append(arg.u.b ? "true" : "false", arg.u.b ? 4 : 5);
+            const bool value{ args.template decode_scalar<bool>(cursor) };
+            out.append(value ? "true" : "false", value ? 4 : 5);
             break;
         }
         case log_args::argument_type::character:
         {
-            out.append(arg.u.ch);
+            out.append(args.template decode_scalar<char>(cursor));
             break;
         }
         case log_args::argument_type::int64:
         {
-            char buffer[32];
-            const auto result{ std::to_chars(buffer, buffer + sizeof(buffer), arg.u.i64) };
+            const std::int64_t value{ args.template decode_scalar<std::int64_t>(cursor) };
+
+            char buffer[24];
+            const auto result{ std::to_chars(buffer, buffer + sizeof(buffer), value) };
             out.append(buffer, static_cast<std::size_t>(result.ptr - buffer));
             break;
         }
         case log_args::argument_type::uint64:
         {
-            char buffer[32];
-            const auto result{ std::to_chars(buffer, buffer + sizeof(buffer), arg.u.u64) };
+            const std::uint64_t value{ args.template decode_scalar<std::uint64_t>(cursor) };
+
+            char buffer[24];
+            const auto result{ std::to_chars(buffer, buffer + sizeof(buffer), value) };
             out.append(buffer, static_cast<std::size_t>(result.ptr - buffer));
             break;
         }
         case log_args::argument_type::f32:
         {
+            const float value{ args.template decode_scalar<float>(cursor) };
+
             char buffer[32];
-            const auto result{ std::to_chars(buffer, buffer + sizeof(buffer), arg.u.f32, std::chars_format::general) };
+            const auto result{ std::to_chars(buffer, buffer + sizeof(buffer), value) };
             out.append(buffer, static_cast<std::size_t>(result.ptr - buffer));
             break;
         }
         case log_args::argument_type::f64:
         {
+            const double value{ args.template decode_scalar<double>(cursor) };
+
             char buffer[32];
-            const auto result{ std::to_chars(buffer, buffer + sizeof(buffer), arg.u.f64, std::chars_format::general) };
+            const auto result{ std::to_chars(buffer, buffer + sizeof(buffer), value) };
             out.append(buffer, static_cast<std::size_t>(result.ptr - buffer));
             break;
         }
         case log_args::argument_type::string:
         {
-            out.append(arg.u.str.data, arg.u.str.size);
+            std::string_view value{ args.decode_string(cursor) };
+            out.append(value);
             break;
         }
         }
     }
 
-    template<typename BufferLimits>
+    template<typename BufferLimits, std::size_t Capacity>
     void format_args_typed(memory_buffer<BufferLimits::message>& out, std::string_view fmt, 
-        const log_args::captured_args<BufferLimits>& args, std::uint8_t arg_count)
+        const log_args::argument_buffer<Capacity>& args, std::uint8_t arg_count)
     {
+        std::size_t cursor{ 0 };
+        std::uint8_t consumed{ 0 };
+
         std::size_t pos{ 0 };
         std::size_t last{ 0 };
-        std::size_t argument_index{ 0 };
 
         while (pos + 1 < fmt.size())
         {
@@ -72,16 +85,15 @@ namespace lwlog::details::fmt
                     out.append(fmt.data() + last, pos - last);
                 }
 
-                if (argument_index >= arg_count)
+                if (consumed < arg_count)
                 {
-                    out.append("{}");
-                    pos += 2;
-                    last = pos;
-                    continue;
+                    format_next_arg<BufferLimits>(out, args, cursor);
+                    ++consumed;
                 }
-
-                format_arg_typed<BufferLimits>(out, args.args[argument_index]);
-                ++argument_index;
+                else
+                {
+                    out.append("{}", 2);
+                }
 
                 pos += 2;
                 last = pos;

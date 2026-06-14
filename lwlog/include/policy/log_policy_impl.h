@@ -15,12 +15,13 @@ namespace lwlog
         else
         {
             details::log_args::captured_args<BufferLimits> captured_args;
-            const std::uint8_t arg_count{ details::log_args::capture_args(captured_args, std::forward<Args>(args)...) };
+            captured_args.capture(std::forward<Args>(args)...);
 
-            details::fmt::format_args_typed<BufferLimits>(backend.message_buffer, message, captured_args, arg_count);
+            details::fmt::format_args_typed<BufferLimits>(backend.message_buffer, message, 
+                captured_args, captured_args.count());
         }
 
-        const details::record<BufferLimits> record{ backend.message_buffer.data(), log_level, meta, 
+        const details::record record{ backend.message_buffer.data(), log_level, meta, 
             backend.topics, backend.topics.topic_index() 
         };
 
@@ -60,7 +61,6 @@ namespace lwlog
         level log_level;
 
         std::uint8_t topic_index{ 0 };
-        std::uint8_t arg_count{ 0 };
 
         details::log_args::captured_args<BufferLimits> captured_args;
     };
@@ -75,9 +75,8 @@ namespace lwlog
         , message{ message }
         , log_level{ log_level }
         , topic_index{ topic_index }
-        , arg_count{ sizeof...(Args) }
     {
-        details::log_args::capture_args(captured_args, std::forward<Args>(args)...);
+        captured_args.capture(std::forward<Args>(args)...);
     }
 
     template<typename OverflowPolicy, std::size_t Capacity, std::uint64_t ThreadAffinity>
@@ -88,13 +87,13 @@ namespace lwlog
     {
         backend.message_buffer.reset();
 
-        if (item.arg_count == 0)
+        if (item.captured_args.count() == 0)
         {
             backend.message_buffer.append(item.message);
         }
         else
         {
-            details::fmt::format_args_typed<BufferLimits>(backend.message_buffer, item.message, item.captured_args, item.arg_count);
+            details::fmt::format_args_typed<BufferLimits>(backend.message_buffer, item.message, item.captured_args, item.captured_args.count());
         }
 
         if (item.meta.is_initialized())

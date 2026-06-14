@@ -7,7 +7,7 @@
 #include "details/topic_registry.h"
 #include "details/adaptive_waiter.h"
 
-#include "details/argument_formatter/argument.h"
+#include "details/argument_formatter/argument_buffer.h"
 #include "details/argument_formatter/argument_format.h"
 
 namespace lwlog
