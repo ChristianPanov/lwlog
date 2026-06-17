@@ -103,7 +103,7 @@ namespace lwlog::details::log_args
     template<std::size_t Capacity>
     void argument_buffer<Capacity>::encode_string(const char* str, std::size_t size)
     {
-        const std::size_t header_end{ m_size + 1u + sizeof(std::uint16_t) };
+        const std::size_t header_end{ m_size + 1U + sizeof(std::uint16_t) };
         const std::size_t avail{ Capacity > header_end ? Capacity - header_end : 0 };
         const std::uint16_t len{ static_cast<std::uint16_t>(size < avail ? size : avail) };
 
