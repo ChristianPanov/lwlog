@@ -33,7 +33,6 @@ namespace lwlog::details::terminal
 
 	public:
 		static bool try_resolve_code(std::string_view token, std::uint8_t& out_code);
-		static bool try_resolve_code_parts(std::string_view base, bool bg, bool dark, std::uint8_t& out_code);
 
 	public:
 		static bool is_base_name_char(unsigned char ch);

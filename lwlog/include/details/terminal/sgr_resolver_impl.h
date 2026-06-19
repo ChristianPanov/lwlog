@@ -22,20 +22,6 @@ namespace lwlog::details::terminal
 		return true;
 	}
 
-	inline bool sgr_resolver::try_resolve_code_parts(std::string_view base, bool bg, bool dark, std::uint8_t& out_code)
-	{
-		const sgr_color_spec* spec{ sgr_resolver::find_color_spec(base) };
-
-		if (!spec)
-		{
-			return false;
-		}
-
-		out_code = sgr_resolver::resolve_color(*spec, bg, dark);
-
-		return true;
-	}
-
 	inline bool sgr_resolver::is_base_name_char(unsigned char ch)
 	{
 		return (ch >= 'a' && ch <= 'z') || ch == '_';
