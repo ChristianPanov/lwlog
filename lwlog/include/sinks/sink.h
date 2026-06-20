@@ -13,8 +13,10 @@ namespace lwlog::sinks
 	class sink : public interface::sink
 	{
 	private:
-		using Mutex = typename ThreadingPolicy::mutex_t;
-		using Lock = typename ThreadingPolicy::lock;
+		template<typename T>
+        using atomic_t = typename ThreadingPolicy::template atomic_t<T>;
+		using mutex_t = typename ThreadingPolicy::mutex_t;
+		using lock_t = typename ThreadingPolicy::lock_t;
 
 	public:
 		sink();
@@ -27,9 +29,9 @@ namespace lwlog::sinks
 		void add_custom_field(std::string_view name, details::custom_value value, details::custom_format_fn fn) override;
 
 	protected:
-		mutable Mutex m_mtx;
+		mutable mutex_t m_mtx;
 		details::pattern<BufferLimits> m_pattern;
-		level m_level_filter{ level::all };
+		atomic_t<level> m_level_filter{ level::all };
 	};
 }
 

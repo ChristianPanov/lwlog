@@ -16,10 +16,10 @@ namespace lwlog::sinks
 	template<bool EnableAnsiColors, typename BufferLimits, typename ThreadingPolicy>
 	bool sink<EnableAnsiColors, BufferLimits, ThreadingPolicy>::should_sink(level log_level) const
 	{
-		Lock lock(m_mtx);
-		
-		if (level_details::has_level(m_level_filter, log_level) ||
-			level_details::has_level(m_level_filter, level::all))
+        const auto filter{ m_level_filter.load(std::memory_order_relaxed) };
+
+		if (level_details::has_level(filter, log_level) 
+			|| level_details::has_level(filter, level::all))
 		{
 			return true;
 		}
@@ -30,14 +30,14 @@ namespace lwlog::sinks
 	template<bool EnableAnsiColors, typename BufferLimits, typename ThreadingPolicy>
 	void sink<EnableAnsiColors, BufferLimits, ThreadingPolicy>::set_level_filter(level level_filter)
 	{
-		Lock lock(m_mtx);
-		m_level_filter = level_filter;
+		lock_t lock(m_mtx);
+		m_level_filter.store(level_filter, std::memory_order_relaxed);
 	}
 
 	template<bool EnableAnsiColors, typename BufferLimits, typename ThreadingPolicy>
 	void sink<EnableAnsiColors, BufferLimits, ThreadingPolicy>::set_pattern(std::string_view pattern)
 	{
-		Lock lock(m_mtx);
+		lock_t lock(m_mtx);
 		m_pattern.set_pattern(pattern, EnableAnsiColors);
 	}
 
@@ -45,7 +45,7 @@ namespace lwlog::sinks
 	void sink<EnableAnsiColors, BufferLimits, ThreadingPolicy>::add_custom_field(std::string_view name,
 		details::custom_value value)
 	{
-		Lock lock(m_mtx);
+		lock_t lock(m_mtx);
 		m_pattern.add_custom_field(name, value);
 	}
 
@@ -53,7 +53,7 @@ namespace lwlog::sinks
 	void sink<EnableAnsiColors, BufferLimits, ThreadingPolicy>::add_custom_field(std::string_view name,
 		details::custom_value value, details::custom_format_fn fn)
 	{
-		Lock lock(m_mtx);
+		lock_t lock(m_mtx);
 		m_pattern.add_custom_field(name, value, fn);
 	}
 }
