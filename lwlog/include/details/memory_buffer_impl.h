@@ -1,3 +1,4 @@
+#include "memory_buffer.h"
 #pragma once
 
 namespace lwlog::details
@@ -7,6 +8,16 @@ namespace lwlog::details
         : m_buffer{ m_inline_buffer }
         , m_capacity{ Capacity }
     {}
+
+    template<std::size_t Capacity>
+    memory_buffer<Capacity>::~memory_buffer()
+    {
+        if (m_buffer != m_inline_buffer)
+        {
+            delete[] m_buffer;
+            m_buffer = nullptr;
+        }
+    }
 
     template<std::size_t Capacity>
     void memory_buffer<Capacity>::grow(std::size_t new_capacity)

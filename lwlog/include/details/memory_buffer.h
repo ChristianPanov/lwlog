@@ -13,6 +13,7 @@ namespace lwlog::details
     {
     public:
         memory_buffer();
+        ~memory_buffer();
 
     private:
         void grow(std::size_t new_capacity);
